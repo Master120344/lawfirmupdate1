@@ -1,65 +1,74 @@
 window.addEventListener('DOMContentLoaded', () => {
     const bodyElement = document.body;
 
-    // --- Loader ---
-    const loaderWrapper = document.getElementById('loader-wrapper');
-    if (loaderWrapper) {
-        setTimeout(() => {
+    // --- Loader Overlay ---
+    const loaderOverlay = document.getElementById('loader-overlay');
+    if (loaderOverlay) {
+        setTimeout(() => { // Ensure loader shows for a minimum perceptible time
             bodyElement.classList.add('loaded');
-            setTimeout(() => bodyElement.classList.remove('no-scroll-transition'), 700);
-        }, 300); // Min display time for loader
+            setTimeout(() => bodyElement.classList.remove('no-scroll-transition'), 700); // Allow scroll anims after loader
+        }, 600); // Minimum loader display time (adjust as needed)
     } else {
         bodyElement.classList.add('loaded');
         bodyElement.classList.remove('no-scroll-transition');
     }
 
-    // --- Mobile Menu Toggle ---
-    const menuToggleBtn = document.querySelector('.menu-toggle-button');
-    const closeMenuBtn = document.querySelector('.close-menu-button');
-    const mobileMenu = document.getElementById('mobileMenu');
-    const navLinksMobile = mobileMenu ? mobileMenu.querySelectorAll('a') : [];
+    // --- Mobile Navigation Panel Toggle ---
+    const menuToggleBtn = document.querySelector('.menu-toggle');
+    const closeMenuBtn = document.querySelector('.close-menu-toggle');
+    const mobileNavPanel = document.getElementById('mobileNavPanel');
+    const navPanelLinks = mobileNavPanel ? mobileNavPanel.querySelectorAll('.nav-panel-link') : [];
 
-    function openMenu() {
-        if (mobileMenu && menuToggleBtn) {
-            mobileMenu.classList.add('open');
-            bodyElement.classList.add('menu-open');
+    function openNavPanel() {
+        if (mobileNavPanel && menuToggleBtn) {
+            mobileNavPanel.classList.add('open');
+            bodyElement.classList.add('nav-panel-open');
             menuToggleBtn.setAttribute('aria-expanded', 'true');
         }
     }
-    function closeMenu() {
-        if (mobileMenu && menuToggleBtn) {
-            mobileMenu.classList.remove('open');
-            bodyElement.classList.remove('menu-open');
+    function closeNavPanel() {
+        if (mobileNavPanel && menuToggleBtn) {
+            mobileNavPanel.classList.remove('open');
+            bodyElement.classList.remove('nav-panel-open');
             menuToggleBtn.setAttribute('aria-expanded', 'false');
         }
     }
-    if (menuToggleBtn) menuToggleBtn.addEventListener('click', openMenu);
-    if (closeMenuBtn) closeMenuBtn.addEventListener('click', closeMenu);
-    navLinksMobile.forEach(link => link.addEventListener('click', closeMenu)); // Close menu on link click
+
+    if (menuToggleBtn) menuToggleBtn.addEventListener('click', openNavPanel);
+    if (closeMenuBtn) closeMenuBtn.addEventListener('click', closeNavPanel);
+    // Close panel when a link is clicked
+    navPanelLinks.forEach(link => {
+        link.addEventListener('click', (e) => {
+            // If it's an anchor link on the same page, smooth scroll then close
+            if (link.getAttribute('href').startsWith('#') && window.location.pathname === link.pathname) {
+                // Smooth scroll handled by separate function below
+            }
+            // For other links, just close. The browser will navigate.
+            closeNavPanel();
+        });
+    });
 
 
-    // --- Active Tab Navigation (Bottom Bar) ---
-    function setActiveBottomTab() {
+    // --- Active State for Navigation Links ---
+    function setActiveNavLinks() {
         const currentPath = window.location.pathname.split("/").pop() || "index_mobile.html";
-        const bottomNavLinks = document.querySelectorAll('.tabs-navigation .tab-item');
+
+        // Bottom Tab Navigation
+        const bottomNavLinks = document.querySelectorAll('.bottom-tab-navigation .tab-item');
         bottomNavLinks.forEach(link => {
             const linkPath = link.getAttribute('href').split("/").pop();
             link.classList.toggle('active', linkPath === currentPath);
             if (linkPath === currentPath) link.setAttribute('aria-current', 'page');
             else link.removeAttribute('aria-current');
         });
-    }
-    setActiveBottomTab();
 
-    // --- Active Link in Mobile Menu ---
-    function setActiveMobileMenuLink() {
-        const currentPath = window.location.pathname.split("/").pop() || "index_mobile.html";
-         navLinksMobile.forEach(link => {
+        // Mobile Navigation Panel
+        navPanelLinks.forEach(link => {
             const linkPath = link.getAttribute('href').split("/").pop();
             link.classList.toggle('active', linkPath === currentPath);
         });
     }
-    if(mobileMenu) setActiveMobileMenuLink();
+    setActiveNavLinks();
 
 
     // --- Scroll Animations ---
@@ -67,19 +76,14 @@ window.addEventListener('DOMContentLoaded', () => {
         const animatedElements = document.querySelectorAll('.animate-on-scroll');
         if (!animatedElements.length) return;
 
-        const observerOptions = { root: null, rootMargin: '0px 0px -10% 0px', threshold: 0.1 };
+        const observerOptions = { root: null, rootMargin: '0px 0px -10% 0px', threshold: 0.05 };
 
         const animationObserver = new IntersectionObserver((entries, observer) => {
-            entries.forEach((entry, index) => {
+            entries.forEach(entry => {
                 if (entry.isIntersecting) {
                     const el = entry.target;
                     const delay = parseInt(el.dataset.delay) || 0;
-                    const staggerOrder = parseInt(el.dataset.stagger) || index; // For group staggering
-
-                    // Use CSS variables for dynamic delay if preferred, or direct style
                     el.style.setProperty('--animation-delay-override', `${delay}ms`);
-                    // el.style.setProperty('--animation-stagger', `${staggerOrder * 100}ms`); // Example stagger
-
                     el.classList.add('is-visible');
                     // observer.unobserve(el); // Optional: unobserve after first animation
                 }
@@ -87,11 +91,11 @@ window.addEventListener('DOMContentLoaded', () => {
         }, observerOptions);
         animatedElements.forEach(el => animationObserver.observe(el));
     }
-    const scrollAnimTimeout = bodyElement.classList.contains('no-scroll-transition') ? 1200 : 100;
+    const scrollAnimTimeout = bodyElement.classList.contains('no-scroll-transition') ? 1300 : 100;
     setTimeout(setupScrollAnimations, scrollAnimTimeout);
 
 
-    // --- Smooth Scroll for # links (e.g., hero "learn more") ---
+    // --- Smooth Scroll for Internal Anchor Links ---
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         anchor.addEventListener('click', function (e) {
             const href = this.getAttribute('href');
@@ -99,24 +103,28 @@ window.addEventListener('DOMContentLoaded', () => {
                 const targetElement = document.querySelector(href);
                 if (targetElement) {
                     e.preventDefault();
-                    targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    // Calculate offset if header is fixed and sticky (not an issue with current setup)
+                    // const headerOffset = 0; // document.querySelector('.site-header').offsetHeight;
+                    // const elementPosition = targetElement.getBoundingClientRect().top;
+                    // const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+
+                    targetElement.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
                 }
             }
         });
     });
 
-    // --- Dynamic Current Year for Footer ---
-    const currentYearSpan = document.getElementById('currentYear');
-    if (currentYearSpan) currentYearSpan.textContent = new Date().getFullYear();
 
-    // --- Testimonial Placeholder Interaction ---
-    const testimonialCard = document.querySelector('.testimonial-card');
-    if (testimonialCard) {
-        const prevBtn = testimonialCard.querySelector('.testimonial-nav-btn[aria-label="Previous testimonial"]');
-        const nextBtn = testimonialCard.querySelector('.testimonial-nav-btn[aria-label="Next testimonial"]');
-        if(prevBtn) prevBtn.addEventListener('click', () => alert("Previous Testimonial (Demo)"));
-        if(nextBtn) nextBtn.addEventListener('click', () => alert("Next Testimonial (Demo)"));
-    }
+    // --- Dynamic Current Year for Footer in Nav Panel ---
+    const currentYearSpanMobileNav = document.getElementById('currentYearMobileNav');
+    if (currentYearSpanMobileNav) currentYearSpanMobileNav.textContent = new Date().getFullYear();
 
-    console.log("Kershaw Law Mobile JS - Superior Edition Initialized");
+    // --- Testimonial Placeholder (If you want to make it a simple slider later) ---
+    // const testimonialBox = document.querySelector('.testimonial-quote-box');
+    // Add simple next/prev logic if multiple testimonials are ever added.
+
+    console.log("Kershaw Law Mobile JS - Luxury Edition Initialized");
 });
