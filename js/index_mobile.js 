@@ -1,38 +1,131 @@
-window.addEventListener('load', () => {
-    const loader = document.getElementById('loader');
+window.addEventListener('DOMContentLoaded', () => {
     const bodyElement = document.body;
 
-    if (bodyElement) {
-        bodyElement.classList.add('loaded');
-    } else {
-        console.error("Body element not found.");
-    }
-
-    if (loader) {
-        // Add a slight delay to ensure content is painted, then hide loader
+    // --- Loader Functionality ---
+    const loaderWrapper = document.getElementById('loader-wrapper');
+    if (loaderWrapper) {
+        // Wait for a minimum display time or specific assets to load if needed
         setTimeout(() => {
-            loader.classList.add('hidden');
-            // Consider removing the loader from DOM after transition if it causes issues
-            // setTimeout(() => loader.style.display = 'none', 500);
-        }, 300); // Adjust timing as needed
+            bodyElement.classList.add('loaded');
+            // Allow scroll transitions after loader is done
+            setTimeout(() => {
+                bodyElement.classList.remove('no-scroll-transition');
+            }, 700); // Match loader transition time
+        }, 500); // Minimum loader display time
     } else {
-        console.error("Loader element not found.");
+        console.warn("Loader wrapper not found. Page will show immediately.");
+        bodyElement.classList.add('loaded');
+        bodyElement.classList.remove('no-scroll-transition');
     }
 
-    // Activate current tab based on URL (Simple version)
-    // This assumes your HTML files are named like 'index_mobile.html', 'services_mobile.html' etc.
-    const currentPath = window.location.pathname.split("/").pop();
-    const navLinks = document.querySelectorAll('.tabs a');
-    navLinks.forEach(link => {
-        const linkPath = link.getAttribute('href').split("/").pop();
-        if (linkPath === currentPath) {
-            link.classList.add('active');
-        } else {
-            link.classList.remove('active'); // Ensure only one is active
-        }
-    });
-});
+    // --- Active Tab Navigation ---
+    function setActiveTab() {
+        const currentPath = window.location.pathname.split("/").pop() || "index_mobile.html";
+        const navLinks = document.querySelectorAll('.tabs-navigation .tab-item');
+        navLinks.forEach(link => {
+            const linkPath = link.getAttribute('href').split("/").pop();
+            if (linkPath === currentPath) {
+                link.classList.add('active');
+                link.setAttribute('aria-current', 'page');
+            } else {
+                link.classList.remove('active');
+                link.removeAttribute('aria-current');
+            }
+        });
+    }
+    setActiveTab(); // Call on initial load
 
-// Add any other non-Firebase related JS enhancements here if needed in the future.
-// For example, handling a mobile menu toggle if the tab bar becomes too crowded,
-// or smooth scroll for on-page anchors.
+    // --- Scroll Animations ---
+    function setupScrollAnimations() {
+        const animatedElements = document.querySelectorAll('.animate-on-scroll');
+        if (!animatedElements.length) return;
+
+        const observerOptions = {
+            root: null, // relative to document viewport
+            rootMargin: '0px',
+            threshold: 0.1 // 10% of item is visible
+        };
+
+        const animationObserver = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const el = entry.target;
+                    const delay = parseInt(el.dataset.delay) || 0;
+
+                    setTimeout(() => {
+                        el.classList.add('is-visible');
+                    }, delay);
+                    
+                    // Optional: unobserve after animation to save resources
+                    // observer.unobserve(el);
+                }
+                // Optional: To re-animate when scrolling up
+                // else {
+                //     entry.target.classList.remove('is-visible');
+                // }
+            });
+        }, observerOptions);
+
+        animatedElements.forEach(el => {
+            // Set custom delay property if data-delay is present
+            if (el.dataset.delay) {
+                el.style.setProperty('--animation-delay', `${parseInt(el.dataset.delay)}ms`);
+            }
+            animationObserver.observe(el);
+        });
+    }
+    // Delay scroll animation setup slightly to ensure layout is stable
+    // Especially after the loader transition
+    const scrollAnimTimeout = bodyElement.classList.contains('no-scroll-transition') ? 1300 : 100;
+    setTimeout(setupScrollAnimations, scrollAnimTimeout);
+
+
+    // --- Smooth Scroll for internal links (if any added in future) ---
+    // document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    //     anchor.addEventListener('click', function (e) {
+    //         e.preventDefault();
+    //         const targetId = this.getAttribute('href');
+    //         const targetElement = document.querySelector(targetId);
+    //         if (targetElement) {
+    //             targetElement.scrollIntoView({
+    //                 behavior: 'smooth'
+    //             });
+    //         }
+    //     });
+    // });
+
+
+    // --- Placeholder for Testimonial Slider Logic ---
+    // This is just a very basic idea. A real slider would need more robust code or a library.
+    const testimonialSlider = document.querySelector('.testimonial-slider-placeholder');
+    if (testimonialSlider) {
+        // console.log("Testimonial slider placeholder found. Implement slider logic here.");
+        // Example: Cycle through dummy items or integrate a lightweight slider.
+        const prevButton = testimonialSlider.querySelector('.slider-nav-button[aria-label="Previous Testimonial"]');
+        const nextButton = testimonialSlider.querySelector('.slider-nav-button[aria-label="Next Testimonial"]');
+
+        if (prevButton && nextButton) {
+            prevButton.addEventListener('click', () => alert("Previous testimonial (placeholder)"));
+            nextButton.addEventListener('click', () => alert("Next testimonial (placeholder)"));
+        }
+    }
+
+    // --- Dynamic Header Styling on Scroll (Optional Example) ---
+    // const header = document.querySelector('.header');
+    // if (header) {
+    //     window.addEventListener('scroll', () => {
+    //         if (window.scrollY > 50) { // After scrolling 50px
+    //             header.classList.add('scrolled');
+    //         } else {
+    //             header.classList.remove('scrolled');
+    //         }
+    //     });
+    // }
+    // CSS for .header.scrolled:
+    // .header.scrolled {
+    //     background-color: rgba(10, 35, 66, 0.95); /* More opaque */
+    //     box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+    // }
+
+    console.log("Kershaw Law Firm Mobile JS Initialized - Expanded Version");
+});
