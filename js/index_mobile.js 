@@ -1,128 +1,174 @@
 document.addEventListener('DOMContentLoaded', function() {
     const body = document.body;
-    const loaderWrapper = document.getElementById('loader-wrapper');
-    const menuButton = document.getElementById('menuButton');
-    const mobileNavMenu = document.getElementById('mobileNavMenu');
+    const pageLoader = document.getElementById('page-loader');
+    const menuToggleButton = document.getElementById('menuToggleButton');
+    const slideOutNavigation = document.getElementById('slideOutNavigation');
+    const closeNavigationButton = document.getElementById('closeNavigationButton');
 
-    // --- Loader ---
-    if (loaderWrapper) {
-        body.classList.add('loading'); // Hide content initially
+    // --- Page Loader ---
+    if (pageLoader) {
+        body.classList.add('preload'); // Initially hide content if loader present
         window.addEventListener('load', () => {
-            setTimeout(() => { // Ensure loader shows for a bit
-                body.classList.remove('loading');
-                body.classList.add('loaded'); // For potential further transitions
-            }, 300);
+            setTimeout(() => { // Ensure loader is visible for a moment
+                body.classList.remove('preload');
+                body.classList.add('loaded');
+            }, 300); // Adjust timing as needed
         });
     } else {
-        body.classList.add('loaded'); // If no loader, show content
+        body.classList.add('loaded'); // If no loader, show content immediately
     }
 
-    // --- Mobile Menu Toggle ---
-    if (menuButton && mobileNavMenu) {
-        menuButton.addEventListener('click', function() {
-            const isOpen = mobileNavMenu.classList.toggle('open');
-            menuButton.classList.toggle('active', isOpen);
-            menuButton.setAttribute('aria-expanded', isOpen.toString());
-            body.classList.toggle('nav-open', isOpen);
-        });
+    // --- Slide-Out Navigation Menu ---
+    function openNavMenu() {
+        if (slideOutNavigation && menuToggleButton) {
+            slideOutNavigation.classList.add('open');
+            menuToggleButton.classList.add('active');
+            menuToggleButton.setAttribute('aria-expanded', 'true');
+            body.classList.add('nav-menu-open');
+        }
+    }
 
-        // Close menu when a link is clicked
-        const navLinks = mobileNavMenu.querySelectorAll('.nav-menu-link');
+    function closeNavMenu() {
+        if (slideOutNavigation && menuToggleButton) {
+            slideOutNavigation.classList.remove('open');
+            menuToggleButton.classList.remove('active');
+            menuToggleButton.setAttribute('aria-expanded', 'false');
+            body.classList.remove('nav-menu-open');
+        }
+    }
+
+    if (menuToggleButton) {
+        menuToggleButton.addEventListener('click', () => {
+            if (slideOutNavigation.classList.contains('open')) {
+                closeNavMenu();
+            } else {
+                openNavMenu();
+            }
+        });
+    }
+
+    if (closeNavigationButton) {
+        closeNavigationButton.addEventListener('click', closeNavMenu);
+    }
+
+    // Close menu when a link inside it is clicked
+    if (slideOutNavigation) {
+        const navLinks = slideOutNavigation.querySelectorAll('.navigation-link');
         navLinks.forEach(link => {
             link.addEventListener('click', () => {
-                if (mobileNavMenu.classList.contains('open')) {
-                    mobileNavMenu.classList.remove('open');
-                    menuButton.classList.remove('active');
-                    menuButton.setAttribute('aria-expanded', 'false');
-                    body.classList.remove('nav-open');
-                }
+                // Smooth scroll for # links handled by separate function
+                // For other links, browser navigates, menu should close
+                closeNavMenu();
             });
         });
     }
 
-    // --- Active State for Navigation Links ---
-    function setActiveNavLinks() {
+    // --- Active Navigation Link States ---
+    function setActiveLinks() {
         const currentPath = window.location.pathname.split("/").pop() || "index_mobile.html";
 
-        // Bottom Nav Bar
-        const bottomNavItems = document.querySelectorAll('.bottom-nav-bar .bottom-nav-item');
-        bottomNavItems.forEach(item => {
-            const itemHref = item.getAttribute('href').split("/").pop();
-            item.classList.toggle('active', itemHref === currentPath);
-        });
-
-        // Mobile Nav Menu
-        const mobileNavLinks = document.querySelectorAll('.mobile-nav-menu .nav-menu-link');
-        mobileNavLinks.forEach(link => {
+        // Slide-Out Navigation
+        const slideOutNavLinks = document.querySelectorAll('.slide-out-navigation .navigation-link');
+        slideOutNavLinks.forEach(link => {
             const linkHref = link.getAttribute('href').split("/").pop();
             link.classList.toggle('active', linkHref === currentPath);
         });
-    }
-    setActiveNavLinks();
 
-    // --- Animations on Load/Scroll ---
-    function handleAnimations() {
-        const elementsToAnimate = document.querySelectorAll('.animate-on-load, .animate-on-scroll');
-        
-        const observer = new IntersectionObserver((entries) => {
+        // Bottom Fixed Navigation
+        const bottomNavLinks = document.querySelectorAll('.bottom-fixed-navigation .bottom-nav-link');
+        bottomNavLinks.forEach(link => {
+            const linkHref = link.getAttribute('href').split("/").pop();
+            link.classList.toggle('active', linkHref === currentPath);
+            if(linkHref === currentPath) link.setAttribute('aria-current', 'page');
+            else link.removeAttribute('aria-current');
+        });
+    }
+    setActiveLinks();
+
+    // --- Scroll-triggered Animations ---
+    function initializeScrollAnimations() {
+        const animatedElements = document.querySelectorAll('.animate-on-scroll, .animate-on-load');
+        if (!animatedElements.length) return;
+
+        const observerOptions = {
+            root: null, // observes intersections relative to the viewport
+            rootMargin: '0px 0px -10% 0px', // Trigger when 10% of element is visible from bottom
+            threshold: 0.1 // At least 10% of the element is visible
+        };
+
+        const animationObserver = new IntersectionObserver((entries, observer) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
                     const el = entry.target;
                     const delay = parseInt(el.dataset.delay) || 0;
-                    el.style.setProperty('--animation-override-delay', `${delay}ms`); // For CSS to use
+                    
+                    // Apply delay using a CSS custom property
+                    el.style.setProperty('--animation-actual-delay', `${delay}ms`);
+                    
                     el.classList.add('is-visible');
-                    if (!el.classList.contains('animate-on-load')) { // Keep observing scroll items if needed
-                        // observer.unobserve(el); // Unobserve if only animate once
+                    
+                    // Unobserve after animation if it should only run once
+                    if (!el.classList.contains('animate-on-load')) { // Keep observing for scroll items
+                         // observer.unobserve(el); // Uncomment to animate only once
                     }
                 }
             });
-        }, { threshold: 0.1 });
+        }, observerOptions);
 
-        elementsToAnimate.forEach(el => {
+        animatedElements.forEach(el => {
             if (el.classList.contains('animate-on-load')) {
-                // Trigger load animations almost immediately or after loader
-                 const delay = parseInt(el.dataset.delay) || 0;
-                 el.style.setProperty('--animation-override-delay', `${delay}ms`);
-                 el.classList.add('is-visible');
+                // Trigger 'animate-on-load' elements after a slight delay (e.g., after loader)
+                const delay = parseInt(el.dataset.delay) || 0;
+                el.style.setProperty('--animation-actual-delay', `${delay}ms`);
+                // Ensure these are triggered after the main page load sequence
+                if (document.body.classList.contains('loaded')) {
+                    el.classList.add('is-visible');
+                } else {
+                    window.addEventListener('load', () => setTimeout(() => el.classList.add('is-visible'), 350 + delay));
+                }
             } else {
-                observer.observe(el);
+                animationObserver.observe(el);
             }
         });
     }
-    // Delay animation setup slightly if loader is present
-    if (loaderWrapper) {
-         window.addEventListener('load', () => setTimeout(handleAnimations, 350));
+    // Initialize animations after loader logic has a chance to complete
+    if (pageLoader) {
+        window.addEventListener('load', () => setTimeout(initializeScrollAnimations, 400));
     } else {
-        handleAnimations();
+        initializeScrollAnimations();
     }
-    
 
-    // --- Dynamic Current Year ---
-    const currentYearSpan = document.getElementById('currentYearMobile');
-    if (currentYearSpan) {
-        currentYearSpan.textContent = new Date().getFullYear();
-    }
-    
-    // --- Smooth Scroll for #hash links ---
+
+    // --- Smooth Scroll for Anchor Links (#) ---
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         anchor.addEventListener('click', function (e) {
-            const href = this.getAttribute('href');
-            if (href.length > 1 && href.startsWith('#')) { // Ensure it's a valid hash
-                const targetElement = document.querySelector(href);
-                if (targetElement) {
-                    e.preventDefault();
-                    const headerHeight = document.querySelector('.main-header')?.offsetHeight || 0;
-                    const elementPosition = targetElement.getBoundingClientRect().top;
-                    const offsetPosition = elementPosition + window.pageYOffset - headerHeight;
+            const hrefAttribute = this.getAttribute('href');
+            if (hrefAttribute.length > 1 && hrefAttribute.startsWith('#')) {
+                try {
+                    const targetElement = document.querySelector(hrefAttribute);
+                    if (targetElement) {
+                        e.preventDefault();
+                        const headerOffset = document.querySelector('.site-main-header')?.offsetHeight || 0;
+                        const elementPosition = targetElement.getBoundingClientRect().top;
+                        const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
 
-                    window.scrollTo({
-                        top: offsetPosition,
-                        behavior: 'smooth'
-                    });
+                        window.scrollTo({
+                            top: offsetPosition,
+                            behavior: 'smooth'
+                        });
+                    }
+                } catch (error) {
+                    console.warn("Smooth scroll target not found or invalid selector:", hrefAttribute, error);
                 }
             }
         });
     });
 
-    console.log("Simplified Mobile JS Initialized");
+    // --- Dynamic Year in Footer ---
+    const currentYearSpan = document.getElementById('currentYearNav');
+    if (currentYearSpan) {
+        currentYearSpan.textContent = new Date().getFullYear();
+    }
+
+    console.log("Kershaw Law Mobile - Final Attempt JS Initialized");
 });
