@@ -1,0 +1,38 @@
+window.addEventListener('load', () => {
+    const loader = document.getElementById('loader');
+    const bodyElement = document.body;
+
+    if (bodyElement) {
+        bodyElement.classList.add('loaded');
+    } else {
+        console.error("Body element not found.");
+    }
+
+    if (loader) {
+        // Add a slight delay to ensure content is painted, then hide loader
+        setTimeout(() => {
+            loader.classList.add('hidden');
+            // Consider removing the loader from DOM after transition if it causes issues
+            // setTimeout(() => loader.style.display = 'none', 500);
+        }, 300); // Adjust timing as needed
+    } else {
+        console.error("Loader element not found.");
+    }
+
+    // Activate current tab based on URL (Simple version)
+    // This assumes your HTML files are named like 'index_mobile.html', 'services_mobile.html' etc.
+    const currentPath = window.location.pathname.split("/").pop();
+    const navLinks = document.querySelectorAll('.tabs a');
+    navLinks.forEach(link => {
+        const linkPath = link.getAttribute('href').split("/").pop();
+        if (linkPath === currentPath) {
+            link.classList.add('active');
+        } else {
+            link.classList.remove('active'); // Ensure only one is active
+        }
+    });
+});
+
+// Add any other non-Firebase related JS enhancements here if needed in the future.
+// For example, handling a mobile menu toggle if the tab bar becomes too crowded,
+// or smooth scroll for on-page anchors.
