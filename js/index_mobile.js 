@@ -1,131 +1,122 @@
 window.addEventListener('DOMContentLoaded', () => {
     const bodyElement = document.body;
 
-    // --- Loader Functionality ---
+    // --- Loader ---
     const loaderWrapper = document.getElementById('loader-wrapper');
     if (loaderWrapper) {
-        // Wait for a minimum display time or specific assets to load if needed
         setTimeout(() => {
             bodyElement.classList.add('loaded');
-            // Allow scroll transitions after loader is done
-            setTimeout(() => {
-                bodyElement.classList.remove('no-scroll-transition');
-            }, 700); // Match loader transition time
-        }, 500); // Minimum loader display time
+            setTimeout(() => bodyElement.classList.remove('no-scroll-transition'), 700);
+        }, 300); // Min display time for loader
     } else {
-        console.warn("Loader wrapper not found. Page will show immediately.");
         bodyElement.classList.add('loaded');
         bodyElement.classList.remove('no-scroll-transition');
     }
 
-    // --- Active Tab Navigation ---
-    function setActiveTab() {
+    // --- Mobile Menu Toggle ---
+    const menuToggleBtn = document.querySelector('.menu-toggle-button');
+    const closeMenuBtn = document.querySelector('.close-menu-button');
+    const mobileMenu = document.getElementById('mobileMenu');
+    const navLinksMobile = mobileMenu ? mobileMenu.querySelectorAll('a') : [];
+
+    function openMenu() {
+        if (mobileMenu && menuToggleBtn) {
+            mobileMenu.classList.add('open');
+            bodyElement.classList.add('menu-open');
+            menuToggleBtn.setAttribute('aria-expanded', 'true');
+        }
+    }
+    function closeMenu() {
+        if (mobileMenu && menuToggleBtn) {
+            mobileMenu.classList.remove('open');
+            bodyElement.classList.remove('menu-open');
+            menuToggleBtn.setAttribute('aria-expanded', 'false');
+        }
+    }
+    if (menuToggleBtn) menuToggleBtn.addEventListener('click', openMenu);
+    if (closeMenuBtn) closeMenuBtn.addEventListener('click', closeMenu);
+    navLinksMobile.forEach(link => link.addEventListener('click', closeMenu)); // Close menu on link click
+
+
+    // --- Active Tab Navigation (Bottom Bar) ---
+    function setActiveBottomTab() {
         const currentPath = window.location.pathname.split("/").pop() || "index_mobile.html";
-        const navLinks = document.querySelectorAll('.tabs-navigation .tab-item');
-        navLinks.forEach(link => {
+        const bottomNavLinks = document.querySelectorAll('.tabs-navigation .tab-item');
+        bottomNavLinks.forEach(link => {
             const linkPath = link.getAttribute('href').split("/").pop();
-            if (linkPath === currentPath) {
-                link.classList.add('active');
-                link.setAttribute('aria-current', 'page');
-            } else {
-                link.classList.remove('active');
-                link.removeAttribute('aria-current');
-            }
+            link.classList.toggle('active', linkPath === currentPath);
+            if (linkPath === currentPath) link.setAttribute('aria-current', 'page');
+            else link.removeAttribute('aria-current');
         });
     }
-    setActiveTab(); // Call on initial load
+    setActiveBottomTab();
+
+    // --- Active Link in Mobile Menu ---
+    function setActiveMobileMenuLink() {
+        const currentPath = window.location.pathname.split("/").pop() || "index_mobile.html";
+         navLinksMobile.forEach(link => {
+            const linkPath = link.getAttribute('href').split("/").pop();
+            link.classList.toggle('active', linkPath === currentPath);
+        });
+    }
+    if(mobileMenu) setActiveMobileMenuLink();
+
 
     // --- Scroll Animations ---
     function setupScrollAnimations() {
         const animatedElements = document.querySelectorAll('.animate-on-scroll');
         if (!animatedElements.length) return;
 
-        const observerOptions = {
-            root: null, // relative to document viewport
-            rootMargin: '0px',
-            threshold: 0.1 // 10% of item is visible
-        };
+        const observerOptions = { root: null, rootMargin: '0px 0px -10% 0px', threshold: 0.1 };
 
         const animationObserver = new IntersectionObserver((entries, observer) => {
-            entries.forEach(entry => {
+            entries.forEach((entry, index) => {
                 if (entry.isIntersecting) {
                     const el = entry.target;
                     const delay = parseInt(el.dataset.delay) || 0;
+                    const staggerOrder = parseInt(el.dataset.stagger) || index; // For group staggering
 
-                    setTimeout(() => {
-                        el.classList.add('is-visible');
-                    }, delay);
-                    
-                    // Optional: unobserve after animation to save resources
-                    // observer.unobserve(el);
+                    // Use CSS variables for dynamic delay if preferred, or direct style
+                    el.style.setProperty('--animation-delay-override', `${delay}ms`);
+                    // el.style.setProperty('--animation-stagger', `${staggerOrder * 100}ms`); // Example stagger
+
+                    el.classList.add('is-visible');
+                    // observer.unobserve(el); // Optional: unobserve after first animation
                 }
-                // Optional: To re-animate when scrolling up
-                // else {
-                //     entry.target.classList.remove('is-visible');
-                // }
             });
         }, observerOptions);
-
-        animatedElements.forEach(el => {
-            // Set custom delay property if data-delay is present
-            if (el.dataset.delay) {
-                el.style.setProperty('--animation-delay', `${parseInt(el.dataset.delay)}ms`);
-            }
-            animationObserver.observe(el);
-        });
+        animatedElements.forEach(el => animationObserver.observe(el));
     }
-    // Delay scroll animation setup slightly to ensure layout is stable
-    // Especially after the loader transition
-    const scrollAnimTimeout = bodyElement.classList.contains('no-scroll-transition') ? 1300 : 100;
+    const scrollAnimTimeout = bodyElement.classList.contains('no-scroll-transition') ? 1200 : 100;
     setTimeout(setupScrollAnimations, scrollAnimTimeout);
 
 
-    // --- Smooth Scroll for internal links (if any added in future) ---
-    // document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-    //     anchor.addEventListener('click', function (e) {
-    //         e.preventDefault();
-    //         const targetId = this.getAttribute('href');
-    //         const targetElement = document.querySelector(targetId);
-    //         if (targetElement) {
-    //             targetElement.scrollIntoView({
-    //                 behavior: 'smooth'
-    //             });
-    //         }
-    //     });
-    // });
+    // --- Smooth Scroll for # links (e.g., hero "learn more") ---
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            const href = this.getAttribute('href');
+            if (href.length > 1) { // Ensure it's not just "#"
+                const targetElement = document.querySelector(href);
+                if (targetElement) {
+                    e.preventDefault();
+                    targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            }
+        });
+    });
 
+    // --- Dynamic Current Year for Footer ---
+    const currentYearSpan = document.getElementById('currentYear');
+    if (currentYearSpan) currentYearSpan.textContent = new Date().getFullYear();
 
-    // --- Placeholder for Testimonial Slider Logic ---
-    // This is just a very basic idea. A real slider would need more robust code or a library.
-    const testimonialSlider = document.querySelector('.testimonial-slider-placeholder');
-    if (testimonialSlider) {
-        // console.log("Testimonial slider placeholder found. Implement slider logic here.");
-        // Example: Cycle through dummy items or integrate a lightweight slider.
-        const prevButton = testimonialSlider.querySelector('.slider-nav-button[aria-label="Previous Testimonial"]');
-        const nextButton = testimonialSlider.querySelector('.slider-nav-button[aria-label="Next Testimonial"]');
-
-        if (prevButton && nextButton) {
-            prevButton.addEventListener('click', () => alert("Previous testimonial (placeholder)"));
-            nextButton.addEventListener('click', () => alert("Next testimonial (placeholder)"));
-        }
+    // --- Testimonial Placeholder Interaction ---
+    const testimonialCard = document.querySelector('.testimonial-card');
+    if (testimonialCard) {
+        const prevBtn = testimonialCard.querySelector('.testimonial-nav-btn[aria-label="Previous testimonial"]');
+        const nextBtn = testimonialCard.querySelector('.testimonial-nav-btn[aria-label="Next testimonial"]');
+        if(prevBtn) prevBtn.addEventListener('click', () => alert("Previous Testimonial (Demo)"));
+        if(nextBtn) nextBtn.addEventListener('click', () => alert("Next Testimonial (Demo)"));
     }
 
-    // --- Dynamic Header Styling on Scroll (Optional Example) ---
-    // const header = document.querySelector('.header');
-    // if (header) {
-    //     window.addEventListener('scroll', () => {
-    //         if (window.scrollY > 50) { // After scrolling 50px
-    //             header.classList.add('scrolled');
-    //         } else {
-    //             header.classList.remove('scrolled');
-    //         }
-    //     });
-    // }
-    // CSS for .header.scrolled:
-    // .header.scrolled {
-    //     background-color: rgba(10, 35, 66, 0.95); /* More opaque */
-    //     box-shadow: 0 4px 15px rgba(0,0,0,0.15);
-    // }
-
-    console.log("Kershaw Law Firm Mobile JS Initialized - Expanded Version");
+    console.log("Kershaw Law Mobile JS - Superior Edition Initialized");
 });
