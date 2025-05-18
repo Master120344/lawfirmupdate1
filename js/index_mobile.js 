@@ -4,10 +4,10 @@ window.addEventListener('DOMContentLoaded', () => {
     // --- Loader Overlay ---
     const loaderOverlay = document.getElementById('loader-overlay');
     if (loaderOverlay) {
-        setTimeout(() => { // Ensure loader shows for a minimum perceptible time
+        setTimeout(() => {
             bodyElement.classList.add('loaded');
-            setTimeout(() => bodyElement.classList.remove('no-scroll-transition'), 700); // Allow scroll anims after loader
-        }, 600); // Minimum loader display time (adjust as needed)
+            setTimeout(() => bodyElement.classList.remove('no-scroll-transition'), 700);
+        }, 600);
     } else {
         bodyElement.classList.add('loaded');
         bodyElement.classList.remove('no-scroll-transition');
@@ -36,24 +36,18 @@ window.addEventListener('DOMContentLoaded', () => {
 
     if (menuToggleBtn) menuToggleBtn.addEventListener('click', openNavPanel);
     if (closeMenuBtn) closeMenuBtn.addEventListener('click', closeNavPanel);
-    // Close panel when a link is clicked
     navPanelLinks.forEach(link => {
         link.addEventListener('click', (e) => {
-            // If it's an anchor link on the same page, smooth scroll then close
             if (link.getAttribute('href').startsWith('#') && window.location.pathname === link.pathname) {
                 // Smooth scroll handled by separate function below
             }
-            // For other links, just close. The browser will navigate.
             closeNavPanel();
         });
     });
 
-
     // --- Active State for Navigation Links ---
     function setActiveNavLinks() {
         const currentPath = window.location.pathname.split("/").pop() || "index_mobile.html";
-
-        // Bottom Tab Navigation
         const bottomNavLinks = document.querySelectorAll('.bottom-tab-navigation .tab-item');
         bottomNavLinks.forEach(link => {
             const linkPath = link.getAttribute('href').split("/").pop();
@@ -61,8 +55,6 @@ window.addEventListener('DOMContentLoaded', () => {
             if (linkPath === currentPath) link.setAttribute('aria-current', 'page');
             else link.removeAttribute('aria-current');
         });
-
-        // Mobile Navigation Panel
         navPanelLinks.forEach(link => {
             const linkPath = link.getAttribute('href').split("/").pop();
             link.classList.toggle('active', linkPath === currentPath);
@@ -70,14 +62,11 @@ window.addEventListener('DOMContentLoaded', () => {
     }
     setActiveNavLinks();
 
-
     // --- Scroll Animations ---
     function setupScrollAnimations() {
         const animatedElements = document.querySelectorAll('.animate-on-scroll');
         if (!animatedElements.length) return;
-
         const observerOptions = { root: null, rootMargin: '0px 0px -10% 0px', threshold: 0.05 };
-
         const animationObserver = new IntersectionObserver((entries, observer) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
@@ -85,7 +74,6 @@ window.addEventListener('DOMContentLoaded', () => {
                     const delay = parseInt(el.dataset.delay) || 0;
                     el.style.setProperty('--animation-delay-override', `${delay}ms`);
                     el.classList.add('is-visible');
-                    // observer.unobserve(el); // Optional: unobserve after first animation
                 }
             });
         }, observerOptions);
@@ -94,37 +82,23 @@ window.addEventListener('DOMContentLoaded', () => {
     const scrollAnimTimeout = bodyElement.classList.contains('no-scroll-transition') ? 1300 : 100;
     setTimeout(setupScrollAnimations, scrollAnimTimeout);
 
-
     // --- Smooth Scroll for Internal Anchor Links ---
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         anchor.addEventListener('click', function (e) {
             const href = this.getAttribute('href');
-            if (href.length > 1) { // Ensure it's not just "#"
+            if (href.length > 1) {
                 const targetElement = document.querySelector(href);
                 if (targetElement) {
                     e.preventDefault();
-                    // Calculate offset if header is fixed and sticky (not an issue with current setup)
-                    // const headerOffset = 0; // document.querySelector('.site-header').offsetHeight;
-                    // const elementPosition = targetElement.getBoundingClientRect().top;
-                    // const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
-
-                    targetElement.scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'start'
-                    });
+                    targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
                 }
             }
         });
     });
 
-
     // --- Dynamic Current Year for Footer in Nav Panel ---
     const currentYearSpanMobileNav = document.getElementById('currentYearMobileNav');
     if (currentYearSpanMobileNav) currentYearSpanMobileNav.textContent = new Date().getFullYear();
 
-    // --- Testimonial Placeholder (If you want to make it a simple slider later) ---
-    // const testimonialBox = document.querySelector('.testimonial-quote-box');
-    // Add simple next/prev logic if multiple testimonials are ever added.
-
-    console.log("Kershaw Law Mobile JS - Luxury Edition Initialized");
+    console.log("Kershaw Law Mobile JS - Corrected Luxury Edition Initialized");
 });
