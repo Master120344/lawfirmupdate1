@@ -1,572 +1,88 @@
-/* === GLOBAL RESETS & BASE STYLES === */
+/* css/test_minimal.css */
+
+/* === BASIC RESET === */
 *, *::before, *::after {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-}
-
-html {
-    scroll-behavior: smooth;
-    font-size: 16px; /* Base for REM units */
 }
 
 body {
-    font-family: 'Roboto', sans-serif; /* Clean, modern sans-serif */
-    font-weight: 400;
-    line-height: 1.65;
-    background-color: #121820; /* Fallback if image fails */
-    color: #333D4B; /* Default text for light cards */
     min-height: 100vh;
-    padding-top: 65px; /* Header height */
-    padding-bottom: 60px; /* Bottom navigation height */
-    opacity: 0; /* Start hidden for loader */
-    transition: opacity 0.5s ease-out;
-    position: relative; /* For fixed background and overlay */
-    display: flex;
-    flex-direction: column;
+    position: relative; /* Essential for fixed children positioning */
+    background-color: #111; /* Fallback */
+    font-family: sans-serif; /* Basic font for test content */
 }
 
-body.preload {
-    opacity: 0; /* Keep hidden until JS adds .loaded */
-}
-body.loaded {
-    opacity: 1;
-}
-body.nav-menu-open {
-    overflow: hidden; /* Prevent body scroll when slide-out menu is open */
-}
-
-/* === PAGE LOADER === */
-#page-loader {
+/* === WALLPAPER STYLES === */
+#wallpaper-background {
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: #1A2B3C; /* Dark blue loader background */
-    z-index: 10000;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    transition: opacity 0.4s ease-out 0.3s, visibility 0s 0.7s;
-}
-body.loaded #page-loader {
-    opacity: 0;
-    visibility: hidden;
-}
-.loader-dual-ring {
-    display: inline-block;
-    width: 50px;
-    height: 50px;
-}
-.loader-dual-ring:after {
-    content: " ";
-    display: block;
-    width: 42px;
-    height: 42px;
-    margin: 4px;
-    border-radius: 50%;
-    border: 4px solid #fff;
-    border-color: #fff transparent #fff transparent;
-    animation: loader-dual-ring-spin 1.2s linear infinite;
-}
-@keyframes loader-dual-ring-spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-}
-
-
-/* === SITE BACKGROUND IMAGE & OVERLAY === */
-#site-background-image {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-image: url('../assets/austin.jpg'); /* THE WALLPAPER */
+    /* --- THIS IS THE CRITICAL LINE FOR THE WALLPAPER --- */
+    background-image: url('../assets/austin.jpg'); /* Path from css/ to assets/ */
     background-size: cover;
     background-position: center center;
     background-repeat: no-repeat;
-    z-index: -2; /* Behind everything except body background color */
-    animation: backgroundZoomEffect 80s infinite alternate ease-in-out;
-}
-@keyframes backgroundZoomEffect {
-    from { transform: scale(1); }
-    to { transform: scale(1.04); }
+    z-index: -2; /* Behind overlay and content */
 }
 
-#site-background-image-overlay {
+#wallpaper-overlay {
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(26, 43, 60, 0.75); /* Dark blueish overlay, adjust opacity as needed */
-    z-index: -1; /* Between background image and page content */
+    background-color: rgba(20, 30, 40, 0.7); /* Adjust overlay color/opacity as needed */
+    z-index: -1; /* Above wallpaper, behind content */
 }
 
-/* === MAIN HEADER === */
-.site-main-header {
-    position: fixed;
+/* === HEADER STYLES (Minimal for logo placement) === */
+.test-header {
+    position: fixed; /* Or 'sticky' if preferred, but fixed for this test */
     top: 0;
     left: 0;
     width: 100%;
-    height: 65px; /* Slightly taller header */
-    z-index: 1000;
-    background-color: rgba(20, 30, 45, 0.9); /* Dark, slightly transparent */
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.12);
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.25);
-    color: #FFFFFF;
-}
-.header-content-wrapper {
+    height: 60px; /* Standard header height */
+    background-color: rgba(10, 20, 30, 0.8); /* Example header background */
+    padding: 0 15px; /* Horizontal padding */
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    height: 100%;
-    padding: 0 15px;
-    max-width: 1200px; /* For consistency if ever used on larger screens */
-    margin: 0 auto;
+    justify-content: space-between; /* Pushes elements to ends */
+    z-index: 10;
 }
-.header-title-area {
-    flex-grow: 1; /* Allows title to take available space */
-    text-align: left; /* Or center if preferred */
+
+.header-text-title {
+    /* This will hold "The Kershaw Law Firm P.C." text later */
+    /* For now, it helps push the logo to the right using space-between */
+    flex-grow: 1; /* Allow it to take up available space */
+    /* Placeholder for visibility during test */
+    /* content: 'Firm Title Area'; */
+    /* color: white; */
+    /* font-size: 10px; */
 }
-.firm-name-heading {
-    font-family: 'Playfair Display', serif; /* Elegant serif for firm name */
-    font-size: clamp(1.1rem, 4.5vw, 1.4rem); /* Responsive */
-    font-weight: 700;
-    color: #FFFFFF;
-    margin: 0;
-    letter-spacing: 0.5px;
-}
-.header-logo-link {
-    display: flex; /* For alignment if needed */
+
+.test-logo-link {
+    display: flex; /* Helps with vertical alignment of image if needed */
     align-items: center;
-    margin-left: 10px; /* Space between title and logo */
-    flex-shrink: 0; /* Prevent logo from shrinking */
-}
-.header-logo-image {
-    max-height: 38px; /* SMALL LOGO */
-    width: auto; /* Maintain aspect ratio */
-    object-fit: contain; /* Ensure logo.jpg displays correctly */
-    border-radius: 3px; /* Optional: slight rounding for JPG */
-}
-.menu-toggle-button {
-    background: none;
-    border: none;
-    color: #FFFFFF;
-    font-size: 1.3rem; /* Size of the hamburger icon bars */
-    padding: 10px;
-    cursor: pointer;
-    z-index: 1005; /* Above slide-out nav temporarily during transition */
-    display: flex;
-    flex-direction: column;
-    justify-content: space-around;
-    width: 30px; /* Width of the button */
-    height: 24px; /* Height of the button */
-    margin-left: 10px;
-}
-.menu-icon-bar {
-    width: 100%;
-    height: 2px;
-    background-color: #FFFFFF;
-    border-radius: 1px;
-    transition: all 0.3s ease;
-}
-/* Hamburger to X animation */
-.menu-toggle-button.active .menu-icon-bar:nth-child(1) {
-    transform: translateY(7px) rotate(45deg);
-}
-.menu-toggle-button.active .menu-icon-bar:nth-child(2) {
-    opacity: 0;
-}
-.menu-toggle-button.active .menu-icon-bar:nth-child(3) {
-    transform: translateY(-7px) rotate(-45deg);
+    /* No margin-left: auto needed if header-text-title flex-grows */
 }
 
-
-/* === SLIDE-OUT NAVIGATION MENU === */
-.slide-out-navigation {
-    position: fixed;
-    top: 0;
-    right: -100%; /* Start off-screen */
-    width: 85%;
-    max-width: 300px;
-    height: 100%;
-    background-color: #1A2B3C; /* Dark blue, matching header accents */
-    box-shadow: -3px 0 15px rgba(0,0,0,0.3);
-    z-index: 999; /* Below header but above content */
-    padding: 20px;
-    display: flex;
-    flex-direction: column;
-    transition: right 0.4s cubic-bezier(0.25, 0.1, 0.25, 1);
-    overflow-y: auto;
-}
-.slide-out-navigation.open {
-    right: 0;
-}
-.navigation-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding-bottom: 15px;
-    margin-bottom: 15px;
-    border-bottom: 1px solid rgba(255,255,255,0.15);
-    color: #E2E8F0;
-    font-family: 'Roboto', sans-serif;
-    font-size: 1.1rem;
-    font-weight: 500;
-}
-.close-navigation-button {
-    background: none;
-    border: none;
-    color: #E2E8F0;
-    font-size: 1.5rem;
-    padding: 5px;
-    cursor: pointer;
-    line-height: 1;
-}
-.close-navigation-button:hover { color: #FFFFFF; }
-.navigation-links-list {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    flex-grow: 1;
-}
-.navigation-link {
-    display: block;
-    color: #CBD5E0; /* Lighter text for links */
-    text-decoration: none;
-    font-size: 1.05rem;
-    font-weight: 400;
-    padding: 12px 5px;
-    border-bottom: 1px solid rgba(255,255,255,0.08);
-    transition: background-color 0.2s ease, color 0.2s ease, padding-left 0.2s ease;
-}
-.navigation-link:last-child { border-bottom: none; }
-.navigation-link:hover, .navigation-link.active {
-    background-color: rgba(255,255,255,0.05);
-    color: #FFFFFF;
-    padding-left: 10px;
-}
-.navigation-footer {
-    text-align: center;
-    padding-top: 20px;
-    margin-top: auto; /* Pushes to bottom */
-    border-top: 1px solid rgba(255,255,255,0.15);
-    font-size: 0.8rem;
-    color: #A0AEC0;
+.test-logo-image {
+    /* --- THIS IS CRITICAL FOR A SMALL LOGO --- */
+    max-height: 35px;   /* Adjust this value to make logo smaller/larger */
+    /* For example, try 30px, 35px, 40px */
+    width: auto;        /* Maintain aspect ratio */
+    object-fit: contain; /* Good for JPGs if they have whitespace */
+    display: block;     /* Removes any extra space below inline images */
 }
 
-/* === MAIN CONTENT AREA === */
-.main-content-area {
-    flex-grow: 1;
-    position: relative; /* For z-index context against fixed background */
+/* === PAGE CONTENT (Minimal for testing visibility) === */
+.test-page-content {
+    position: relative; /* Ensure it's above the overlay */
     z-index: 1;
-    width: 100%;
-    overflow-x: hidden; /* Prevent horizontal scroll from animations */
-}
-
-/* === HERO BANNER SECTION === */
-.hero-banner-section {
-    min-height: 60vh; /* Adjust height as desired */
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    color: #FFFFFF;
-    padding: 3rem 15px; /* Vertical and horizontal padding */
-    position: relative; /* For z-index stacking if needed later */
-}
-.hero-content-container {
-    max-width: 550px; /* Control width of hero text */
-}
-.hero-main-title {
-    font-family: 'Playfair Display', serif;
-    font-size: clamp(2.2rem, 8vw, 3.2rem); /* Responsive title size */
-    font-weight: 700;
-    line-height: 1.15;
-    margin-bottom: 0.75rem;
-    text-shadow: 1px 2px 5px rgba(0,0,0,0.5); /* Enhanced text shadow for legibility */
-}
-.hero-sub-title {
-    font-size: clamp(1rem, 4vw, 1.2rem);
-    font-weight: 300; /* Lighter weight for subtitle */
-    margin-bottom: 1.75rem;
-    opacity: 0.9;
-    line-height: 1.5;
-    text-shadow: 1px 1px 3px rgba(0,0,0,0.4);
-}
-
-/* === CONTENT SECTIONS & CARDS ("BOXES") === */
-.content-section {
-    padding: 2.5rem 15px; /* Standard vertical padding for sections */
-}
-.content-card {
-    background-color: rgba(255, 255, 255, 0.98); /* Very slightly transparent white cards */
-    padding: 1.75rem; /* Inner padding for cards */
-    border-radius: 8px; /* Rounded corners */
-    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.12), 0 2px 8px rgba(0,0,0,0.08); /* Softer, layered shadow */
-    border: 1px solid rgba(0,0,0,0.05); /* Very subtle border */
-    margin-bottom: 2rem; /* Space below cards */
-}
-.content-card:last-child { margin-bottom: 0; }
-
-.card-title {
-    font-family: 'Playfair Display', serif;
-    font-size: clamp(1.5rem, 5.5vw, 1.9rem);
-    font-weight: 700;
-    color: #1A2B3C; /* Dark blue for titles inside cards */
-    margin-bottom: 1rem;
-    text-align: center;
-}
-.card-paragraph {
-    font-size: 1rem;
-    line-height: 1.7;
-    color: #4A5568; /* Softer grey for paragraphs */
-    margin-bottom: 1.25rem;
-}
-.card-feature-list {
-    list-style: none;
-    padding-left: 0;
-    margin: 1.25rem 0;
-}
-.card-feature-list li {
-    display: flex;
-    align-items: center;
-    margin-bottom: 0.6rem;
-    font-size: 0.95rem;
-    color: #333D4B;
-}
-.card-feature-list i {
-    color: #3182CE; /* Accent blue for checkmarks */
-    margin-right: 0.6rem;
-    font-size: 1.1em;
-}
-/* Section title styling (for titles outside cards) */
-.section-title-container {
-    text-align: center;
-    margin-bottom: 2rem;
-}
-.section-main-title {
-    font-family: 'Playfair Display', serif;
-    font-size: clamp(1.7rem, 6vw, 2.2rem);
-    font-weight: 700;
-    color: #FFFFFF; /* For titles directly on dark background/overlay */
-    text-shadow: 1px 1px 3px rgba(0,0,0,0.3);
-    padding-bottom: 0.5rem;
-    border-bottom: 2px solid rgba(255,255,255,0.2); /* Subtle underline */
-    display: inline-block; /* For underline to not span full width */
-}
-
-/* SERVICES HIGHLIGHT SECTION (Uses cards within a section) */
-.services-highlight-section {
-    /* Section itself might not need a card background if individual services are cards */
-}
-.services-grid {
-    display: grid;
-    gap: 1.5rem; /* Space between service cards */
-}
-/* Single column on small, two on slightly wider if space allows */
-@media (min-width: 500px) {
-    .services-grid {
-        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-    }
-}
-.service-card {
-    text-align: center;
-    /* Inherits .content-card styles for background, padding, shadow, border */
-}
-.service-card-icon {
-    font-size: 2.5rem; /* Larger icons */
-    color: #3182CE; /* Accent blue */
-    margin-bottom: 1rem;
-    line-height: 1; /* Prevent extra space from icon font */
-}
-.service-card-title {
-    font-family: 'Roboto', sans-serif; /* Using body font for service titles for clarity */
-    font-size: 1.2rem;
-    font-weight: 700;
-    color: #1A2B3C;
-    margin-bottom: 0.5rem;
-}
-.service-card-description {
-    font-size: 0.9rem;
-    color: #4A5568;
-    line-height: 1.6;
-    min-height: 3.2em; /* Ensure roughly same height for description area */
-}
-.section-cta-container {
-    text-align: center;
-    margin-top: 2rem;
-}
-
-
-/* FINAL CALL TO ACTION BANNER */
-.final-cta-banner {
-    background-color: rgba(26, 43, 60, 0.85); /* Darker, more solid banner */
-    color: #FFFFFF;
-    padding: 2.5rem 15px;
-    text-align: center;
-    border-top: 1px solid rgba(255,255,255,0.1);
-    border-bottom: 1px solid rgba(255,255,255,0.1);
-}
-.cta-banner-title {
-    font-family: 'Playfair Display', serif;
-    font-size: clamp(1.6rem, 5.5vw, 2.1rem);
-    margin-bottom: 0.75rem;
-}
-.cta-banner-text {
-    font-size: 1rem;
-    margin-bottom: 1.5rem;
-    opacity: 0.9;
-    max-width: 450px;
-    margin-left: auto;
-    margin-right: auto;
-}
-
-
-/* === BUTTONS === */
-.cta-button {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    font-family: 'Roboto', sans-serif;
-    font-weight: 500; /* Medium weight for buttons */
-    text-decoration: none;
-    border-radius: 6px;
-    border: 1px solid transparent;
-    padding: 0.8rem 1.75rem;
-    font-size: 0.95rem;
-    letter-spacing: 0.5px;
-    transition: all 0.25s ease-in-out;
-    cursor: pointer;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    text-transform: uppercase;
-}
-.cta-button i {
-    margin-left: 0.6em;
-    font-size: 0.9em;
-}
-.primary-cta {
-    background-color: #3182CE; /* Primary accent blue */
-    color: #FFFFFF;
-    border-color: #3182CE;
-}
-.primary-cta:hover {
-    background-color: #2B6CB0; /* Darker blue on hover */
-    border-color: #2B6CB0;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(49, 130, 206, 0.3);
-}
-.secondary-cta {
-    background-color: transparent;
-    color: #2C5282; /* Dark blue text for secondary button on light card */
-    border: 2px solid #CBD5E0; /* Light grey border */
-}
-.secondary-cta:hover {
-    background-color: #E2E8F0; /* Very light grey background */
-    border-color: #A0AEC0;
-    color: #1A2B3C; /* Darker text on hover */
-}
-.large-cta {
-    padding: 0.9rem 2rem;
-    font-size: 1rem;
-}
-
-/* === BOTTOM FIXED NAVIGATION === */
-.bottom-fixed-navigation {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    height: 60px;
-    background-color: #1A202C; /* Dark slate, slightly different from header */
-    box-shadow: 0 -2px 8px rgba(0,0,0,0.2);
-    border-top: 1px solid rgba(255,255,255,0.1);
-    display: flex;
-    justify-content: space-around;
-    align-items: stretch; /* Ensure items fill height */
-    z-index: 900;
-}
-.bottom-nav-link {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    flex-grow: 1;
-    padding: 6px 3px; /* Adjust padding for optimal look */
-    text-decoration: none;
-    color: #A0AEC0; /* Muted color for inactive items */
-    font-family: 'Roboto', sans-serif;
-    font-size: 0.65rem; /* Small text for labels */
-    font-weight: 500;
-    text-transform: uppercase;
-    letter-spacing: 0.3px;
-    line-height: 1.2;
-    transition: color 0.2s ease;
-    text-align: center;
-}
-.bottom-nav-link i {
-    font-size: 1.25rem; /* Icon size */
-    margin-bottom: 3px;
-    line-height: 1;
-}
-.bottom-nav-link:hover {
-    color: #E2E8F0; /* Lighter on hover */
-}
-.bottom-nav-link.active {
-    color: #FFFFFF; /* White for active item */
-    font-weight: 700;
-}
-.bottom-nav-link.active i {
-    color: #63B3ED; /* Light blue accent for active icon */
-}
-
-/* === ANIMATIONS (More subtle and professional) === */
-.animate-on-load, .animate-on-scroll {
-    opacity: 0;
-    transition-property: opacity, transform;
-    transition-duration: 0.7s; /* Default duration */
-    transition-timing-function: cubic-bezier(0.175, 0.885, 0.32, 1.1); /* Softer ease */
-}
-.animate-on-load.is-visible, .animate-on-scroll.is-visible {
-    opacity: 1;
-    transform: none !important; /* Remove any transform */
-}
-
-/* Specific animation types */
-[data-animation="fade-in"] { /* Simple fade in */
-    /* Default state is opacity 0 */
-}
-[data-animation="fade-in-up"] {
-    transform: translateY(25px); /* Start slightly down */
-}
-[data-animation="slide-in-from-bottom"] {
-    transform: translateY(40px);
-    transition-duration: 0.8s;
-}
-[data-animation="zoom-in"] {
-    transform: scale(0.92);
-    transition-duration: 0.6s;
-}
-
-/* Apply delays using CSS custom property if JS sets it */
-.animate-on-load[data-delay], .animate-on-scroll[data-delay] {
-    transition-delay: var(--animation-actual-delay, 0ms);
-}
-
-/* === ACCESSIBILITY FOCUS STYLES === */
-a:focus-visible, button:focus-visible, [tabindex]:not([tabindex="-1"]):focus-visible {
-    outline: 2px solid #63B3ED; /* Light blue accent */
-    outline-offset: 2px;
-    border-radius: 4px;
-    box-shadow: 0 0 0 2px rgba(99, 179, 237, 0.3); /* Subtle glow */
-}
-*:focus {
-    outline: none; /* Remove default if :focus-visible is used */
+    padding: 80px 20px 20px; /* Top padding for fixed header */
+    color: white; /* Example text color */
 }
