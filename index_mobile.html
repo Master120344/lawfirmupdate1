@@ -3,92 +3,219 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>The Kershaw Law Firm - H-2A & H-2B Visas (Mobile)</title>
-    <meta name="description" content="The Kershaw Law Firm P.C. specializes in H-2A and H-2B visa services for employers. Mobile optimized site.">
+    <title>The Kershaw Law Firm - Premier H-2A & H-2B Visa Services (Mobile)</title>
+    <meta name="description" content="The Kershaw Law Firm P.C. offers expert legal counsel for employers seeking H-2A and H-2B visa solutions. Your trusted partner in immigration law. Mobile optimized.">
     <link rel="stylesheet" href="css/index_mobile.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Roboto:wght@300;400;500;700&family=Lora:wght@400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <!-- Add your actual favicon links here -->
     <link rel="apple-touch-icon" sizes="180x180" href="assets/favicon/apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="assets/favicon/favicon-16x16.png">
     <link rel="manifest" href="assets/favicon/site.webmanifest">
-    <meta name="theme-color" content="#003355">
+    <meta name="theme-color" content="#0A2342"> <!-- Darker theme color -->
 </head>
-<body>
-    <div id="loader" class="loader"></div>
+<body class="no-scroll-transition"> <!-- Initially prevent scroll transition -->
+    <div id="loader-wrapper">
+        <div id="loader" class="loader"></div>
+        <div class="loader-section section-left"></div>
+        <div class="loader-section section-right"></div>
+    </div>
 
     <div id="background-static"></div>
     <div class="background-overlay"></div>
 
     <header class="header">
-        <div class="header-content">
-            <div class="logo-container">
-                 <a href="index_mobile.html" class="logo-link">
-                    <h1>The Kershaw Law Firm P.C.</h1>
-                    <span class="logo-tagline">Immigration Law Specialists</span>
+        <div class="header-content container">
+            <div class="logo-area">
+                 <a href="index_mobile.html" class="logo-link" aria-label="The Kershaw Law Firm Homepage">
+                    <img src="assets/logo-placeholder-light.png" alt="Kershaw Law Firm Logo" class="logo-image">
+                    <div class="logo-text-group">
+                        <h1 class="logo-main-text">The Kershaw Law Firm P.C.</h1>
+                        <span class="logo-tagline">Strategic Immigration Counsel</span>
+                    </div>
                  </a>
             </div>
+            <!-- Placeholder for a potential very simple action like a phone icon if needed later -->
         </div>
     </header>
 
     <main class="main-content-area">
-        <div class="main-content-container">
-            <section class="hero">
-                <div class="hero-text-content">
-                    <h2 class="hero-subtitle">Expert Guidance For Employers</h2>
-                    <h3 class="hero-title">H-2A & H-2B Visa Solutions</h3>
+        <!-- Section 1: Hero -->
+        <section id="hero" class="hero-section content-section text-shadow-strong">
+            <div class="container hero-container">
+                <div class="hero-text-content animate-on-scroll" data-animation="fadeInUp">
+                    <h2 class="hero-main-title">Navigating Complexity, Delivering Results.</h2>
+                    <p class="hero-subtitle">Your Dedicated Partner for H-2A & H-2B Visa Success.</p>
                     <p class="hero-description">
-                        Navigating the complexities of H-2A and H-2B visas requires specialized knowledge.
-                        The Kershaw Law Firm is dedicated to providing comprehensive legal support for your workforce needs.
+                        At The Kershaw Law Firm, we understand the critical role a reliable workforce plays in your success. We specialize in providing comprehensive legal strategies for employers navigating the intricate H-2A and H-2B visa programs.
                     </p>
+                    <div class="hero-cta-group">
+                        <a href="getstarted_mobile.html" class="cta-button cta-button-primary animate-on-scroll" data-animation="pulse">
+                            <i class="fa-solid fa-handshake"></i> Partner With Us
+                        </a>
+                        <a href="services_mobile.html" class="cta-button cta-button-secondary animate-on-scroll" data-animation="fadeIn">
+                            <i class="fa-solid fa-list-check"></i> Our Services
+                        </a>
+                    </div>
                 </div>
-                <a href="getstarted_mobile.html" class="cta-button">
-                    <i class="fa-solid fa-briefcase"></i> Explore Our Services
-                </a>
-            </section>
+            </div>
+        </section>
 
-            <section class="usp-section">
-                <div class="usp-item">
-                    <i class="fa-solid fa-gavel usp-icon"></i>
-                    <h4>Experienced Counsel</h4>
-                    <p>Years of focused experience in employment-based immigration law.</p>
+        <!-- Section 2: Introduction / Firm Value Proposition -->
+        <section id="introduction" class="introduction-section content-section bg-light-shade">
+            <div class="container intro-container">
+                <div class="section-title-container animate-on-scroll" data-animation="fadeIn">
+                    <h3 class="section-title-main"><span class="accent-text">Expert Guidance</span> For Your Workforce Needs</h3>
+                    <p class="section-title-subtitle">Decades of combined experience in employment-based immigration.</p>
                 </div>
-                <div class="usp-item">
-                    <i class="fa-solid fa-handshake-angle usp-icon"></i>
-                    <h4>Client-Focused</h4>
-                    <p>Personalized strategies tailored to your unique business requirements.</p>
+                <div class="intro-content-grid">
+                    <div class="intro-text-block animate-on-scroll" data-animation="fadeInLeft">
+                        <h4>Our Commitment to You</h4>
+                        <p>The Kershaw Law Firm P.C. is built on a foundation of integrity, diligence, and a client-first approach. We recognize that each client's situation is unique, requiring tailored strategies and proactive communication. Our mission is to demystify the visa application process, ensuring compliance and maximizing your chances of success.</p>
+                        <p>We stay at the forefront of evolving immigration laws and policies, providing you with timely and accurate counsel. Trust us to be your advocates and advisors every step of the way.</p>
+                    </div>
+                    <div class="intro-image-block animate-on-scroll" data-animation="fadeInRight">
+                        <!-- Placeholder for an image, e.g., a professional office shot or abstract legal graphic -->
+                        <img src="assets/placeholder-firm-image.jpg" alt="Professional legal consultation" class="intro-image">
+                    </div>
                 </div>
-                <div class="usp-item">
-                    <i class="fa-solid fa-bullseye usp-icon"></i>
-                    <h4>Results-Driven</h4>
-                    <p>Committed to achieving successful outcomes for our clients.</p>
+            </div>
+        </section>
+
+        <!-- Section 3: Core Services Highlight -->
+        <section id="core-services" class="core-services-section content-section">
+            <div class="container services-container">
+                <div class="section-title-container animate-on-scroll" data-animation="fadeIn">
+                    <h3 class="section-title-main">Specialized <span class="accent-text">Visa Solutions</span></h3>
+                    <p class="section-title-subtitle">Focused expertise in H-2A and H-2B programs.</p>
                 </div>
-            </section>
-        </div>
+                <div class="services-grid">
+                    <div class="service-card animate-on-scroll" data-animation="zoomIn">
+                        <div class="service-card-icon-wrapper"><i class="fa-solid fa-tractor service-icon"></i></div>
+                        <h4 class="service-card-title">H-2A Visas: Agricultural Workforce</h4>
+                        <p class="service-card-description">Securing temporary agricultural workers to meet seasonal demands. We handle everything from prevailing wage requests to DOL and USCIS filings.</p>
+                        <a href="services_mobile.html#h2a" class="service-card-link">Learn More <i class="fa-solid fa-arrow-right-long"></i></a>
+                    </div>
+                    <div class="service-card animate-on-scroll" data-animation="zoomIn" data-delay="200">
+                        <div class="service-card-icon-wrapper"><i class="fa-solid fa-people-carry-box service-icon"></i></div>
+                        <h4 class="service-card-title">H-2B Visas: Non-Agricultural Workforce</h4>
+                        <p class="service-card-description">Assisting employers in industries like landscaping, hospitality, and construction to fill temporary non-agricultural job openings.</p>
+                        <a href="services_mobile.html#h2b" class="service-card-link">Learn More <i class="fa-solid fa-arrow-right-long"></i></a>
+                    </div>
+                    <div class="service-card animate-on-scroll" data-animation="zoomIn" data-delay="400">
+                        <div class="service-card-icon-wrapper"><i class="fa-solid fa-file-signature service-icon"></i></div>
+                        <h4 class="service-card-title">Compliance & Consulting</h4>
+                        <p class="service-card-description">Ongoing support for employers, including audit preparation, compliance checks, and strategic advice on immigration policies.</p>
+                        <a href="services_mobile.html#compliance" class="service-card-link">Learn More <i class="fa-solid fa-arrow-right-long"></i></a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 4: Why Choose Us / Differentiators -->
+        <section id="why-choose-us" class="why-choose-us-section content-section bg-dark-shade text-light">
+            <div class="container why-us-container">
+                <div class="section-title-container animate-on-scroll" data-animation="fadeIn">
+                    <h3 class="section-title-main">The Kershaw <span class="accent-text-light">Advantage</span></h3>
+                    <p class="section-title-subtitle">Partnering with us means dedicated support and strategic insight.</p>
+                </div>
+                <div class="differentiators-grid">
+                    <div class="differentiator-item animate-on-scroll" data-animation="fadeInUp">
+                        <div class="differentiator-icon"><i class="fa-solid fa-microscope"></i></div>
+                        <h4 class="differentiator-title">Meticulous Preparation</h4>
+                        <p class="differentiator-description">We leave no stone unturned, ensuring every petition is thorough and compelling.</p>
+                    </div>
+                    <div class="differentiator-item animate-on-scroll" data-animation="fadeInUp" data-delay="150">
+                        <div class="differentiator-icon"><i class="fa-solid fa-comments"></i></div>
+                        <h4 class="differentiator-title">Transparent Communication</h4>
+                        <p class="differentiator-description">You'll be informed at every stage, with clear explanations and responsive service.</p>
+                    </div>
+                    <div class="differentiator-item animate-on-scroll" data-animation="fadeInUp" data-delay="300">
+                        <div class="differentiator-icon"><i class="fa-solid fa-chart-line"></i></div>
+                        <h4 class="differentiator-title">Strategic Approach</h4>
+                        <p class="differentiator-description">We develop customized strategies aligned with your long-term business goals.</p>
+                    </div>
+                    <div class="differentiator-item animate-on-scroll" data-animation="fadeInUp" data-delay="450">
+                        <div class="differentiator-icon"><i class="fa-solid fa-shield-halved"></i></div>
+                        <h4 class="differentiator-title">Proactive Compliance</h4>
+                        <p class="differentiator-description">Helping you navigate complex regulations to maintain impeccable compliance records.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 5: Testimonials (Placeholder) -->
+        <section id="testimonials" class="testimonials-section content-section bg-light-shade">
+            <div class="container testimonials-container">
+                <div class="section-title-container animate-on-scroll" data-animation="fadeIn">
+                    <h3 class="section-title-main">Client <span class="accent-text">Success Stories</span></h3>
+                    <p class="section-title-subtitle">Hear from businesses we've proudly served.</p>
+                </div>
+                <div class="testimonial-slider-placeholder animate-on-scroll" data-animation="fadeIn">
+                    <!-- This would be replaced by an actual slider -->
+                    <div class="testimonial-item">
+                        <blockquote class="testimonial-quote">
+                            "The Kershaw Law Firm was instrumental in securing our H-2B visas. Their expertise and dedication were unmatched. Highly recommend!"
+                        </blockquote>
+                        <p class="testimonial-author">- John D., CEO of AgriCorp Solutions</p>
+                    </div>
+                    <div class="testimonial-item-navigation" style="text-align: center; padding-top: 15px;">
+                        <button class="slider-nav-button" aria-label="Previous Testimonial"><i class="fa-solid fa-chevron-left"></i></button>
+                        <button class="slider-nav-button" aria-label="Next Testimonial"><i class="fa-solid fa-chevron-right"></i></button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 6: Call To Action -->
+        <section id="final-cta" class="final-cta-section content-section text-shadow-light">
+            <div class="container cta-container">
+                <div class="cta-content animate-on-scroll" data-animation="pulse">
+                    <h3 class="cta-title">Ready to Secure Your Workforce?</h3>
+                    <p class="cta-description">
+                        Let The Kershaw Law Firm guide you through the H-2A and H-2B visa process with confidence.
+                        Contact us today for a consultation.
+                    </p>
+                    <a href="contact_mobile.html" class="cta-button cta-button-accent">
+                        <i class="fa-solid fa-phone-volume"></i> Schedule a Consultation
+                    </a>
+                </div>
+            </div>
+        </section>
     </main>
 
-    <nav class="tabs">
-        <a href="index_mobile.html" class="active" aria-label="Home">
-            <i class="fa-solid fa-house-chimney"></i><span>Home</span>
+    <nav class="tabs-navigation">
+        <a href="index_mobile.html" class="tab-item active" aria-label="Home"  aria-current="page">
+            <i class="tab-icon fa-solid fa-house-chimney-window"></i>
+            <span class="tab-label">Home</span>
         </a>
-        <a href="services_mobile.html" aria-label="Services">
-            <i class="fa-solid fa-briefcase"></i><span>Services</span>
+        <a href="services_mobile.html" class="tab-item" aria-label="Services">
+            <i class="tab-icon fa-solid fa-briefcase"></i>
+            <span class="tab-label">Services</span>
         </a>
-        <a href="about_us_mobile.html" aria-label="About Us">
-            <i class="fa-solid fa-users"></i><span>About Us</span>
+        <a href="about_us_mobile.html" class="tab-item" aria-label="About Us">
+            <i class="tab-icon fa-solid fa-building-shield"></i> <!-- Changed icon -->
+            <span class="tab-label">About Us</span>
         </a>
-        <a href="meet_the_team_mobile.html" aria-label="Meet The Team">
-            <i class="fa-solid fa-user-tie"></i><span>The Team</span>
+        <a href="meet_the_team_mobile.html" class="tab-item" aria-label="Meet The Team">
+            <i class="tab-icon fa-solid fa-users-rectangle"></i> <!-- Changed icon -->
+            <span class="tab-label">The Team</span>
         </a>
-        <a href="faq_mobile.html" aria-label="FAQ">
-            <i class="fa-solid fa-circle-question"></i><span>FAQ</span>
+        <a href="faq_mobile.html" class="tab-item" aria-label="FAQ">
+            <i class="tab-icon fa-solid fa-person-circle-question"></i> <!-- Changed icon -->
+            <span class="tab-label">FAQ</span>
         </a>
-        <a href="contact_mobile.html" aria-label="Contact">
-            <i class="fa-solid fa-envelope"></i><span>Contact</span>
+        <a href="contact_mobile.html" class="tab-item" aria-label="Contact">
+            <i class="tab-icon fa-solid fa-blender-phone"></i> <!-- Changed icon -->
+            <span class="tab-label">Contact</span>
         </a>
     </nav>
+
+    <!-- Placeholder for potential modal popups if needed in future -->
+    <!-- <div id="contact-modal" class="modal"></div> -->
 
     <script src="js/index_mobile.js" defer></script>
 </body>
