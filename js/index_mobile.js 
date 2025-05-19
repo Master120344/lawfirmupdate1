@@ -1,60 +1,75 @@
-document.addEventListener('DOMContentLoaded', () => {
+// --- Initial Page Load Loader Fade Out ---
+window.addEventListener('load', () => {
     const loader = document.getElementById('loader');
     const bodyElement = document.body;
-    const menuButton = document.querySelector('.menu-button');
-    const mobileNav = document.querySelector('.mobile-nav');
-    const navLinks = document.querySelectorAll('.mobile-nav a');
-    const testimonialSlider = document.querySelector('.testimonial-slider');
-    let testimonialIndex = 0;
 
-    // Fade out loader when the page is loaded
     if (bodyElement) {
         bodyElement.classList.add('loaded');
     } else {
         console.error("Body element not found.");
     }
 
+    // Use a timeout to ensure the fade-out transition is visible
     if (loader) {
         setTimeout(() => {
             loader.classList.add('hidden');
-        }, 600); // Slightly longer for smoother perceived transition
+        }, 400); // Duration should match CSS transition or be slightly longer
     } else {
         console.error("Loader element not found.");
     }
+});
 
-    // Toggle mobile navigation
-    if (menuButton && mobileNav) {
-        menuButton.addEventListener('click', () => {
-            mobileNav.style.display = mobileNav.style.display === 'block' ? 'none' : 'block';
-            menuButton.classList.toggle('open');
-        });
+// --- Page Transition Loader ---
+document.addEventListener('DOMContentLoaded', () => {
+    const loader = document.getElementById('loader');
+    const internalLinks = document.querySelectorAll('a[href]'); // Select all links with href
 
-        // Close mobile nav when a link is clicked
-        navLinks.forEach(link => {
-            link.addEventListener('click', () => {
-                mobileNav.style.display = 'none';
-                menuButton.classList.remove('open');
-            });
-        });
-    }
+    internalLinks.forEach(link => {
+        // Check if it's an internal link and not an anchor or special link
+        const href = link.getAttribute('href');
+        if (href &&
+            !href.startsWith('#') && // Exclude anchor links
+            !href.startsWith('tel:') && // Exclude tel links
+            !href.startsWith('mailto:') && // Exclude mailto links
+            !href.startsWith('javascript:') && // Exclude script links
+            !href.startsWith('http') // Exclude external links
+            // You might need more checks depending on your link structure
+            // e.g., !link.target || link.target === '_self'
+           )
+        {
+            link.addEventListener('click', (e) => {
+                // Prevent default navigation immediately
+                e.preventDefault();
 
-    // Basic testimonial slider functionality
-    if (testimonialSlider) {
-        const testimonials = testimonialSlider.children;
-        if (testimonials.length > 0) {
-            function showTestimonial(index) {
-                for (let i = 0; i < testimonials.length; i++) {
-                    testimonials[i].style.display = 'none';
+                // Show the loader overlay
+                if (loader) {
+                     loader.classList.remove('hidden');
+                     // Remove initial centering style if it was applied
+                     loader.style.position = 'fixed';
+                     loader.style.top = '0';
+                     loader.style.left = '0';
+                     loader.style.transform = 'none';
+                     loader.style.width = '100%';
+                     loader.style.height = '100%';
+                     // If using the ::after spinner, ensure its position is correct
+                     const spinner = loader.querySelector('::after'); // This won't work directly
+                     // A better way is to control visibility/position via CSS classes
+
                 }
-                testimonials[index].style.display = 'block';
-            }
 
-            showTestimonial(testimonialIndex); // Show the first testimonial initially
+                // Get the destination URL
+                const destination = href;
 
-            setInterval(() => {
-                testimonialIndex = (testimonialIndex + 1) % testimonials.length;
-                showTestimonial(testimonialIndex);
-            }, 5000); // Change testimonial every 5 seconds
+                // Wait a brief moment for the loader animation to start
+                // before navigating
+                setTimeout(() => {
+                    window.location.href = destination;
+                }, 300); // Adjust delay as needed (e.g., 200ms - 500ms)
+            });
         }
-    }
+    });
+
+    // --- Removed Firebase Authentication Code ---
+    // All Firebase-related functions and event listeners are removed
+    // from this file as per the user's request.
 });
