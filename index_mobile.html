@@ -3,30 +3,131 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Wallpaper & Logo Test</title>
-    <link rel="stylesheet" href="css/test_minimal.css"> <!-- Link to the new minimal CSS -->
+    <title>The Kershaw Law Firm P.C. - Your Immigration Experts</title>
+    <meta name="description" content="The Kershaw Law Firm P.C. specializes in H-2A and H-2B visas, providing expert legal services. Mobile-friendly.">
+    <link rel="stylesheet" href="css/index_mobile.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" integrity="sha512-c42qSqq3izgPEqyWTcTBqmBYmhJgG9IpSutiKHmgcPE/lPKKHtgZT7Vhc6oEYxvMqoe0fhoJfYz1KgjoQjrQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 <body>
+    <div id="loader" class="loader"></div>
 
-    <!-- This div is ONLY for the austin.jpg wallpaper -->
-    <div id="wallpaper-background"></div>
-    <div id="wallpaper-overlay"></div> <!-- Overlay for legibility -->
+    <div id="background-static"></div>
 
-    <header class="test-header">
-        <div class="header-text-title">
-            <!-- We will add "The Kershaw Law Firm P.C." here LATER -->
-            <!-- For now, just ensuring logo placement is correct -->
+    <header class="header">
+        <div class="header-content">
+            <a href="index_mobile.html" class="logo-link">
+                <img src="assets/logo.jpg" alt="The Kershaw Law Firm P.C. Logo" class="logo animate__animated animate__fadeInLeft">
+                <h1 class="animate__animated animate__fadeInDown">The Kershaw Law Firm P.C.</h1>
+            </a>
+            <button class="menu-button" aria-label="Menu">
+                <i class="fa-solid fa-bars"></i>
+            </button>
         </div>
-        <a href="index_mobile.html" class="test-logo-link">
-            <img src="assets/logo.jpg" alt="Firm Logo" class="test-logo-image">
-        </a>
+        <nav class="mobile-nav">
+            <ul>
+                <li><a href="index_mobile.html" class="active"><i class="fa-solid fa-house"></i> Home</a></li>
+                <li><a href="about_us_mobile.html"><i class="fa-solid fa-info-circle"></i> About Us</a></li>
+                <li><a href="services_mobile.html"><i class="fa-solid fa-briefcase"></i> Services</a></li>
+                <li><a href="faq_mobile.html"><i class="fa-solid fa-question-circle"></i> FAQ</a></li>
+                <li><a href="contact_mobile.html"><i class="fa-solid fa-envelope"></i> Contact</a></li>
+            </ul>
+        </nav>
     </header>
 
-    <main class="test-page-content">
-        <h1>Testing Wallpaper and Logo</h1>
-        <p>If you see the Austin, TX wallpaper and a SMALL logo in the top right, then the basics are working.</p>
-        <div style="height: 150vh;"></div> <!-- To enable scrolling and test fixed background -->
-    </main>
+    <div class="main-content-area">
+        <div class="main-content-container">
+            <section class="hero animate__animated animate__fadeIn">
+                <div class="hero-content">
+                    <h2 class="hero-title">Your Pathway to Legal Immigration</h2>
+                    <p class="hero-subtitle">Specializing in H-2A and H-2B Visa Solutions</p>
+                    <a href="getstarted_mobile.html" class="cta-button animate__animated animate__pulse animate__infinite">
+                        <i class="fa-solid fa-handshake"></i> Begin Your Journey
+                    </a>
+                </div>
+                <div class="hero-image">
+                    </div>
+            </section>
 
+            <section class="our-promise animate__animated animate__fadeInUp">
+                <h3>Our Commitment to You</h3>
+                <p>At The Kershaw Law Firm P.C., we understand the complexities of immigration law. Our dedicated team provides personalized guidance and unwavering support to help you navigate the H-2A and H-2B visa processes with confidence.</p>
+                <ul>
+                    <li><i class="fa-solid fa-check-circle"></i> Expert Legal Counsel</li>
+                    <li><i class="fa-solid fa-compass"></i> Clear and Transparent Process</li>
+                    <li><i class="fa-solid fa-hand-holding-heart"></i> Client-Focused Approach</li>
+                </ul>
+            </section>
+
+            <section class="featured-services animate__animated animate__fadeIn">
+                <h3>Explore Our Services</h3>
+                <div class="services-grid">
+                    <div class="service-card animate__animated animate__slideInLeft">
+                        <i class="fa-solid fa-tractor"></i>
+                        <h4>H-2A Agricultural Visas</h4>
+                        <p>Facilitating the entry of temporary agricultural workers to meet the needs of U.S. employers.</p>
+                        <a href="services_mobile.html#h2a">Learn More <i class="fa-solid fa-arrow-right"></i></a>
+                    </div>
+                    <div class="service-card animate__animated animate__slideInUp">
+                        <i class="fa-solid fa-hammer"></i>
+                        <h4>H-2B Non-Agricultural Visas</h4>
+                        <p>Assisting employers in hiring temporary non-agricultural workers for various industries.</p>
+                        <a href="services_mobile.html#h2b">Learn More <i class="fa-solid fa-arrow-right"></i></a>
+                    </div>
+                    <div class="service-card animate__animated animate__slideInRight">
+                        <i class="fa-solid fa-briefcase"></i>
+                        <h4>Comprehensive Legal Support</h4>
+                        <p>From initial consultation to final approval, we are with you every step of the way.</p>
+                        <a href="services_mobile.html">View All Services <i class="fa-solid fa-arrow-right"></i></a>
+                    </div>
+                </div>
+            </section>
+
+            <section class="testimonials animate__animated animate__fadeInUp">
+                <h3>Client Success Stories</h3>
+                <div class="testimonial-slider">
+                    <div class="testimonial">
+                        <p>"The Kershaw Law Firm provided exceptional service and made the H-2A process seamless for our farm."</p>
+                        <cite>- John M., Agricultural Employer</cite>
+                    </div>
+                    <div class="testimonial">
+                        <p>"We are grateful for their expertise in securing H-2B visas for our seasonal staff. Highly recommended!"</p>
+                        <cite>- Sarah L., Hospitality Manager</cite>
+                    </div>
+                    </div>
+            </section>
+
+            <section class="contact-preview animate__animated animate__fadeIn">
+                <h3>Ready to Get Started?</h3>
+                <p>Contact us today for a consultation and let us help you with your immigration needs.</p>
+                <a href="contact_mobile.html" class="contact-button"><i class="fa-solid fa-phone"></i> Contact Us</a>
+            </section>
+        </div>
+    </div>
+
+    <nav class="tabs">
+        <a href="index_mobile.html" class="active"><i class="fa-solid fa-house"></i> Home</a>
+        <a href="about_us_mobile.html"><i class="fa-solid fa-info-circle"></i> About Us</a>
+        <a href="services_mobile.html"><i class="fa-solid fa-briefcase"></i> Services</a>
+        <a href="faq_mobile.html"><i class="fa-solid fa-question-circle"></i> FAQ</a>
+        <a href="contact_mobile.html"><i class="fa-solid fa-envelope"></i> Contact</a>
+    </nav>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <p>&copy; 2025 The Kershaw Law Firm P.C. | <a href="privacy_policy_mobile.html">Privacy Policy</a></p>
+            <p>123 Main Street, Austin, TX 78701 | <a href="tel:+15125551212">Tel: (512) 555-1212</a></p>
+            <div class="social-links">
+                <a href="#" aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
+                <a href="#" aria-label="Twitter"><i class="fa-brands fa-twitter"></i></a>
+                <a href="#" aria-label="LinkedIn"><i class="fa-brands fa-linkedin-in"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/index_mobile.js" defer></script>
 </body>
 </html>
