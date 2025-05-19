@@ -10,21 +10,21 @@ html {
 }
 
 :root {
-    --color-bg-header-footer: rgba(255, 255, 255, 0.97); /* Slightly more opaque for readability */
-    --color-text-header-footer: #1A2B48; /* Darker, more classic blue for text */
-    --color-text-dark: #2c3e50; /* Kept for general body text */
+    --color-bg-header-footer: rgba(255, 255, 255, 0.97);
+    --color-text-header-footer: #1A2B48;
+    --color-text-dark: #2c3e50;
     --color-text-on-dark-bg: #FFFFFF;
-    --color-accent-blue-primary: #003366; /* Deep, authoritative navy blue */
-    --color-accent-blue-secondary: #0A58A6; /* Slightly brighter blue for interactions */
-    --color-accent-gold: #C09553; /* Muted, elegant gold */
-    --color-accent-grey: #f0f2f5; /* Softer grey for section backgrounds */
+    --color-accent-blue-primary: #003366;
+    --color-accent-blue-secondary: #0A58A6;
+    --color-accent-gold: #C09553;
+    --color-accent-grey: #f0f2f5;
     --color-shadow-text: 1px 1px 8px rgba(0, 0, 0, 0.8);
     --color-shadow-subtle: rgba(26, 43, 72, 0.08);
-    --color-shadow-medium: rgba(26, 43, 72, 0.12); /* Shadow based on new dark blue */
+    --color-shadow-medium: rgba(26, 43, 72, 0.12);
     --color-border-subtle: rgba(26, 43, 72, 0.1);
-    --font-primary: 'Cinzel', serif;        /* For headings, firm name - elegant, traditional */
-    --font-secondary: 'EB Garamond', serif; /* For body text, navigation - classic, readable */
-    --footer-height: 70px; /* Increased for better tap targets and visuals */
+    --font-primary: 'Cinzel', serif;
+    --font-secondary: 'EB Garamond', serif;
+    --footer-height: 70px;
     --content-max-width-mobile: 700px;
 }
 
@@ -32,17 +32,17 @@ body {
     font-family: var(--font-secondary);
     min-height: 100vh;
     color: var(--color-text-dark);
-    line-height: 1.7; /* Slightly less than 1.8 for Garamond */
-    background-color: #EAEBEF; /* Lighter overall page background */
+    line-height: 1.7;
+    background-color: #EAEBEF;
     overflow-x: hidden;
     position: relative;
     opacity: 0;
     transition: opacity 0.7s ease-in-out;
-    padding-top: 0; /* Header is part of flow or fixed */
+    padding-top: 0;
     padding-bottom: var(--footer-height);
     display: flex;
     flex-direction: column;
-    font-size: 17px; /* EB Garamond can look good slightly smaller */
+    font-size: 17px;
 }
 
 body.loaded {
@@ -52,12 +52,12 @@ body.loaded {
 /* Loader Styles */
 .loader {
     position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-    background: rgba(255, 255, 255, 0.98); /* Very opaque */
+    background: rgba(255, 255, 255, 0.98);
     display: flex; align-items: center; justify-content: center;
     z-index: 3000;
     opacity: 1;
-    transition: opacity 0.5s ease-out, visibility 0.5s ease-out; /* Added visibility transition */
-    visibility: visible; /* Explicitly visible */
+    transition: opacity 0.5s ease-out, visibility 0.5s ease-out;
+    visibility: visible;
     pointer-events: auto;
     border: none;
     transform: none;
@@ -65,7 +65,7 @@ body.loaded {
 
 .loader.hidden {
     opacity: 0;
-    visibility: hidden; /* Hide completely */
+    visibility: hidden;
     pointer-events: none;
 }
 
@@ -73,7 +73,7 @@ body.loaded {
     content: '';
     display: block;
     width: 55px; height: 55px;
-    border: 7px solid rgba(0, 51, 102, 0.2); /* Lighter border for primary blue */
+    border: 7px solid rgba(0, 51, 102, 0.2);
     border-top: 7px solid var(--color-accent-blue-primary);
     border-radius: 50%;
     animation: spin 0.9s linear infinite;
@@ -95,82 +95,72 @@ body.loaded {
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
-    background-image: url('austin.jpg'); /* MAKE SURE THIS IMAGE EXISTS */
+    background-image: url('austin.jpg');
     animation: subtleZoom 50s infinite alternate ease-in-out;
-    filter: brightness(0.55) contrast(1.05); /* Slightly darker for text contrast */
+    /* Increased brightness */
+    filter: brightness(0.75) contrast(1.05);
 }
 
 @keyframes subtleZoom {
-    from { transform: scale(1); } /* Start without zoom */
-    to { transform: scale(1.03); } /* Less aggressive zoom */
+    from { transform: scale(1); }
+    to { transform: scale(1.03); }
 }
 
 /* Header */
 .header {
     width: 100%;
-    z-index: 100; /* Ensure header is above content but below loader */
-    padding: 15px 0; /* More vertical padding */
+    z-index: 100;
+    padding: 10px 0; /* Adjusted padding slightly for new logo focus */
     background: var(--color-bg-header-footer);
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
     box-shadow: 0 3px 10px var(--color-shadow-medium);
     color: var(--color-text-header-footer);
     border-bottom: 1px solid var(--color-border-subtle);
-    position: sticky; /* Make header sticky */
+    position: sticky;
     top: 0;
 }
 
 .header-content {
-    width: 90%; /* Slightly less width for better padding illusion */
+    width: 90%;
     margin: 0 auto;
     display: flex;
     flex-direction: column;
-    align-items: center; /* Center everything in the header */
-    gap: 8px;
+    align-items: center;
+    /* gap: 0; /* Removed gap as H1 is gone */
 }
 
 .logo-container {
-    display: flex;
-    flex-direction: column; /* Stack logo and H1 */
+    display: flex; /* Remains flex to center the link/image */
     align-items: center;
-    gap: 8px;
+    justify-content: center; /* Ensure link/image is centered */
+    width: 100%; /* Allow logo container to take full width for centering purposes */
+    /* gap: 0; /* Removed gap */
 }
 
 .logo-link {
     text-decoration: none;
     color: inherit;
-    display: flex;
-    flex-direction: column; /* Stack logo image and text within link if needed */
-    align-items: center;
-    gap: 8px;
+    display: inline-block; /* Make it an inline block for sizing */
+    /* gap: 0; /* Removed gap */
 }
 
 .header-logo {
-    height: 70px; /* Significantly larger logo */
-    width: auto;
-    border-radius: 8px; /* More refined rounding */
+    height: 75px; /* Increased logo height */
+    width: auto;   /* Maintain aspect ratio */
+    max-width: 280px; /* Prevent logo from being excessively wide on mobile */
+    display: block; /* Ensures it behaves like a block for centering */
+    margin: 0 auto; /* Centers the logo if its container is wider */
+    border-radius: 8px;
     box-shadow: 0 3px 8px var(--color-shadow-subtle);
-    border: 1px solid rgba(0,0,0,0.05); /* Subtle border for definition */
+    border: 1px solid rgba(0,0,0,0.05);
 }
-
-.logo-container h1 {
-    font-family: var(--font-primary);
-    font-size: 1.8rem; /* Larger and more impactful */
-    color: var(--color-text-header-footer);
-    font-weight: 700;
-    margin: 0;
-    line-height: 1.1;
-    text-align: center;
-    letter-spacing: 0.5px; /* Slight letter spacing for Cinzel */
-}
-.logo-container .logo-link:hover h1 { color: var(--color-accent-blue-primary); }
-
 
 /* Main Content Wrapper */
 .page-content-wrapper {
     flex-grow: 1;
     width: 100%;
-    padding: 0 15px; /* Adjust side padding */
+    padding: 0 15px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -182,14 +172,13 @@ body.loaded {
 .content-section {
     width: 100%;
     max-width: var(--content-max-width-mobile);
-    margin: 30px auto; /* Consistent vertical margin */
-    padding: 30px 25px; /* More padding */
-    /* MODIFIED for transparency */
-    background-color: rgba(255, 255, 255, 0.92); /* High opacity white for readability */
+    margin: 30px auto;
+    padding: 30px 25px;
+    background-color: rgba(255, 255, 255, 0.92);
     border-radius: 12px;
     box-shadow: 0 5px 20px var(--color-shadow-medium);
     color: var(--color-text-dark);
-    border: 1px solid rgba(0,0,0,0.05); /* Very subtle border */
+    border: 1px solid rgba(0,0,0,0.05);
 }
 
 .section-container {
@@ -223,7 +212,7 @@ body.loaded {
 .content-section p, .content-section ul {
     margin-bottom: 20px;
     line-height: 1.75;
-    font-size: 1.05rem; /* Relative to body 17px */
+    font-size: 1.05rem;
 }
 
 .service-list { list-style: none; padding-left: 0; }
@@ -233,27 +222,26 @@ body.loaded {
     position: absolute;
     left: 0;
     top: 6px;
-    font-size: 1em; /* Icon same size as text */
+    font-size: 1em;
 }
 
 /* Hero Section */
 .hero {
     width: 100%;
-    max-width: none; /* Full width */
-    margin: 20px auto 30px auto; /* Adjust margins */
+    max-width: none;
+    margin: 20px auto 30px auto;
     padding: 50px 20px;
     text-align: center;
     background: none;
     box-shadow: none;
     color: var(--color-text-on-dark-bg);
-    position: relative; /* For pseudo-elements if needed */
+    position: relative;
 }
 
 .hero-content {
     max-width: 600px;
     margin: 0 auto;
-    /* MODIFIED for transparency and better look */
-    background: linear-gradient(rgba(10, 25, 49, 0.65), rgba(10, 25, 49, 0.8)); /* Dark blueish tint */
+    background: linear-gradient(rgba(10, 25, 49, 0.65), rgba(10, 25, 49, 0.8));
     padding: 35px;
     border-radius: 10px;
     box-shadow: 0 6px 20px rgba(0,0,0,0.5);
@@ -261,7 +249,7 @@ body.loaded {
 
 .hero h2 {
     font-family: var(--font-primary);
-    font-size: 2.4rem; /* Adjusted for mobile readability */
+    font-size: 2.4rem;
     color: var(--color-text-on-dark-bg);
     font-weight: 700;
     text-shadow: var(--color-shadow-text);
@@ -278,7 +266,7 @@ body.loaded {
     text-shadow: 1px 1px 5px rgba(0,0,0,0.7);
     color: rgba(255, 255, 255, 0.95);
     animation: fadeIn 1s ease-out 0.4s backwards;
-    font-family: var(--font-secondary); /* Use secondary for subtitle */
+    font-family: var(--font-secondary);
     font-weight: 400;
 }
 
@@ -287,14 +275,14 @@ body.loaded {
     display: inline-flex; align-items: center; justify-content: center;
     gap: 12px;
     padding: 15px 38px;
-    background: var(--color-accent-gold); /* Gold CTA */
-    color: var(--color-text-on-dark-bg); /* White text on gold */
+    background: var(--color-accent-gold);
+    color: var(--color-text-on-dark-bg);
     text-decoration: none;
     font-family: var(--font-primary); font-size: 1.15rem; font-weight: 700;
-    border-radius: 8px; /* Less rounded, more formal */
+    border-radius: 8px;
     border: none;
     transition: all 0.3s ease;
-    box-shadow: 0 4px 12px rgba(192, 149, 83, 0.5); /* Shadow matching gold */
+    box-shadow: 0 4px 12px rgba(192, 149, 83, 0.5);
     cursor: pointer;
     animation: fadeIn 1s ease-out 0.6s backwards;
     text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
@@ -305,7 +293,7 @@ body.loaded {
 }
 .cta-button i { font-size: 1em; }
 .cta-button:hover {
-    background: #d4a15a; /* Darker gold on hover */
+    background: #d4a15a;
     transform: translateY(-2px);
     box-shadow: 0 6px 16px rgba(192, 149, 83, 0.6);
 }
@@ -318,7 +306,7 @@ body.loaded {
     background: none;
     color: var(--color-accent-blue-primary);
     border: 2px solid var(--color-accent-blue-primary);
-    border-radius: 6px; /* Consistent rounding */
+    border-radius: 6px;
     text-decoration: none;
     font-family: var(--font-secondary);
     font-size: 1.05rem;
@@ -334,14 +322,14 @@ body.loaded {
 
 /* Testimonials Section */
 .testimonials-section {
-    background-color: rgba(240, 242, 245, 0.92); /* Use accent grey with transparency */
+    background-color: rgba(240, 242, 245, 0.92);
 }
 .testimonial-grid { display: grid; gap: 25px; }
 .testimonial-item {
     font-style: italic;
     padding: 25px;
-    border-left: 5px solid var(--color-accent-gold); /* Gold accent */
-    background-color: rgba(255, 255, 255, 0.95); /* Almost opaque for readability */
+    border-left: 5px solid var(--color-accent-gold);
+    background-color: rgba(255, 255, 255, 0.95);
     border-radius: 0 8px 8px 0;
     box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.08);
 }
@@ -358,7 +346,7 @@ body.loaded {
 .google-reviews-callout {
     margin-top: 45px;
     padding-top: 30px;
-    border-top: 1px solid rgba(0, 0, 0, 0.15); /* Subtle dashed */
+    border-top: 1px solid rgba(0, 0, 0, 0.15);
     text-align: center;
 }
 .google-reviews-callout h3 {
@@ -395,7 +383,7 @@ body.loaded {
 
 /* Bottom CTA Section */
 .call-to-action-bottom {
-    background: linear-gradient(135deg, var(--color-accent-blue-primary), #002244); /* Deeper gradient */
+    background: linear-gradient(135deg, var(--color-accent-blue-primary), #002244);
     color: var(--color-text-on-dark-bg);
     text-shadow: 1px 1px 3px rgba(0,0,0,0.4);
     padding: 40px 25px;
@@ -409,12 +397,12 @@ body.loaded {
 .call-to-action-bottom h2::after { display: none; }
 .call-to-action-bottom p { color: rgba(255, 255, 255, 0.92); }
 .call-to-action-bottom .cta-button {
-    background: var(--color-accent-gold); /* Gold CTA */
+    background: var(--color-accent-gold);
     color: var(--color-text-on-dark-bg);
     box-shadow: 0 5px 15px rgba(192, 149, 83, 0.4);
 }
 .call-to-action-bottom .cta-button:hover {
-    background: #d4a15a; /* Darker gold */
+    background: #d4a15a;
     color: var(--color-text-on-dark-bg);
     box-shadow: 0 7px 18px rgba(192, 149, 83, 0.5);
 }
@@ -429,47 +417,47 @@ body.loaded {
     box-shadow: 0 -3px 10px var(--color-shadow-medium);
     border-top: 1px solid var(--color-border-subtle);
     display: flex;
-    justify-content: space-around; /* Even distribution */
-    align-items: stretch; /* Make items fill height */
+    justify-content: space-around;
+    align-items: stretch;
     color: var(--color-text-header-footer);
 }
 .tabs a {
     color: var(--color-text-header-footer);
     text-decoration: none;
-    font-family: var(--font-secondary); /* Using EB Garamond for tabs */
-    font-size: 0.85rem; /* Slightly smaller for more text room if needed, but padding makes it feel larger */
+    font-family: var(--font-secondary);
+    font-size: 0.85rem;
     font-weight: 500;
-    padding: 5px 5px; /* Vertical padding to center, horizontal for some spacing */
+    padding: 5px 5px;
     transition: all 0.3s ease;
     position: relative;
     text-transform: uppercase;
     letter-spacing: 0.6px;
     text-align: center;
-    flex-grow: 1; /* Allow to grow and fill space */
-    flex-basis: 0; /* Start from 0 basis for equal distribution */
-    display: flex; /* To center text vertically */
+    flex-grow: 1;
+    flex-basis: 0;
+    display: flex;
     align-items: center;
     justify-content: center;
-    white-space: nowrap; /* Keep on one line */
-    overflow: hidden; /* Hide overflow */
-    text-overflow: ellipsis; /* Add ... if too long */
-    min-width: 0; /* Allow shrinking */
-    border-right: 1px solid var(--color-border-subtle); /* Subtle separator */
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    min-width: 0;
+    border-right: 1px solid var(--color-border-subtle);
 }
 .tabs a:last-child {
-    border-right: none; /* No separator for the last tab */
+    border-right: none;
 }
-.tabs a::after { /* Underline effect */
+.tabs a::after {
     content: '';
     position: absolute;
     width: 0;
     height: 3.5px;
-    bottom: 0px; /* Position at the bottom of the tab link */
+    bottom: 0px;
     left: 50%;
     transform: translateX(-50%);
     background: var(--color-accent-blue-primary);
     transition: width 0.35s ease;
-    border-radius: 2px 2px 0 0; /* Rounded top corners for underline */
+    border-radius: 2px 2px 0 0;
 }
 .tabs a:hover { color: var(--color-accent-blue-primary); }
 .tabs a.active { color: var(--color-accent-blue-primary); font-weight: 700; }
@@ -487,29 +475,28 @@ a:focus-visible, button:focus-visible, input:focus-visible {
     outline: 3px solid var(--color-accent-blue-secondary);
     outline-offset: 2px;
     border-radius: 4px;
-    box-shadow: 0 0 0 3px rgba(10, 88, 166, 0.3); /* Softer focus shadow */
+    box-shadow: 0 0 0 3px rgba(10, 88, 166, 0.3);
 }
 
 /* Responsive adjustments for tablets/larger phones */
 @media (min-width: 600px) {
-    body { font-size: 18px; } /* Base size for larger screens */
+    body { font-size: 18px; }
 
-    .header { padding: 20px 0; }
+    .header { padding: 15px 0; } /* Adjusted padding for larger logo */
     .header-content {
         width: 90%;
         flex-direction: row;
-        justify-content: space-between; /* Space between logo/title and any future elements */
+        justify-content: flex-start; /* Align logo to the left */
         align-items: center;
     }
      .logo-container {
-        flex-direction: row; /* Logo and H1 side-by-side */
-        align-items: center;
-        gap: 15px;
+        justify-content: flex-start; /* Align logo to the left */
+        /* No gap needed as H1 is gone */
     }
-    .header-logo { height: 75px; }
-    .logo-container h1 {
-        font-size: 2.2rem;
-        text-align: left; /* Align left when next to logo */
+    .header-logo {
+         height: 85px; /* Further increased logo size for tablet+ */
+         max-width: 320px; /* Max width for tablet+ */
+         margin: 0; /* Remove auto margin if container is flex-start */
     }
 
     .hero h2 { font-size: 2.8rem; }
@@ -521,7 +508,7 @@ a:focus-visible, button:focus-visible, input:focus-visible {
     }
      .content-section h2 { font-size: 2.5rem; padding-bottom: 18px; }
      .content-section h2::after { width: 90px; height: 4px; }
-    .content-section p, .content-section ul { font-size: 1.1rem; } /* Relative to 18px body */
+    .content-section p, .content-section ul { font-size: 1.1rem; }
 
     .testimonial-grid {
         grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
@@ -529,12 +516,12 @@ a:focus-visible, button:focus-visible, input:focus-visible {
     }
     .tabs {
         justify-content: center;
-        gap: 0; /* Separators handle gap */
+        gap: 0;
     }
     .tabs a {
         font-size: 0.95rem;
         padding: 10px 15px;
-        flex-grow: 0; flex-basis: auto; /* Don't grow excessively, size based on content */
+        flex-grow: 0; flex-basis: auto;
         min-width: 110px; max-width: 160px;
     }
      .tabs a::after { width: 85%; }
