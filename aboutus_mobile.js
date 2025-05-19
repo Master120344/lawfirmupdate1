@@ -2,7 +2,7 @@
 
 // --- Strict Mode & Global Constants ---
 "use strict";
-const INITIAL_SPLASH_DURATION_MS = 5000; // Consistent splash duration
+const INITIAL_SPLASH_DURATION_MS = 100; // Changed from 5000ms to 100ms (0.1 second)
 const PAGE_TRANSITION_ANIMATION_MS = 300;
 
 // --- Utility Functions (Ideally from a shared utils.js) ---
@@ -76,10 +76,10 @@ window.addEventListener('pageshow', (event) => {
             }, 50);
         }
         if (typeof initScrollAnimations === 'function') {
-            setTimeout(initScrollAnimations, 100);
+            setTimeout(window.initScrollAnimations, 100); // Ensure it calls the global one
         }
     } else {
-        if (mainContent && !splashLoader?.classList.contains('hidden')) {
+        if (mainContent && splashLoader && !splashLoader.classList.contains('hidden')) { // Check splashLoader existence
             mainContent.style.visibility = 'hidden';
             mainContent.style.opacity = '0';
         } else if (mainContent) {
@@ -135,7 +135,7 @@ document.addEventListener('DOMContentLoaded', () => {
     updateFooterYear();
 
     // 3. Scroll-triggered Animations
-    function initScrollAnimations() {
+    function initScrollAnimationsGlobal() { // Renamed to avoid conflict if another script also defines it locally
         const animatedElements = document.querySelectorAll('.animate-on-scroll');
         if (!animatedElements.length || !('IntersectionObserver' in window)) return;
 
@@ -158,8 +158,8 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
     // Expose globally or ensure it's callable by pageshow if needed
-    window.initScrollAnimations = initScrollAnimations;
-    initScrollAnimations();
+    window.initScrollAnimations = initScrollAnimationsGlobal; // Assign to window scope
+    initScrollAnimationsGlobal();
 
 
     // 4. Smooth Scroll for Anchor Links (if any on this page)
@@ -212,7 +212,5 @@ document.addEventListener('DOMContentLoaded', () => {
         window.addEventListener('scroll', handleScroll, { passive: true });
     }
     initStickyHeaderBehavior();
-
-    // Add any "About Us" page specific JS here, e.g. accordions for team members etc.
 
 }); // End DOMContentLoaded
