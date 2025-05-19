@@ -25,14 +25,14 @@ html {
     --font-primary: 'Cinzel', serif;
     --font-secondary: 'EB Garamond', serif;
     --footer-height: 70px;
-    --content-max-width-mobile: 700px; /* Max content width remains mobile friendly */
+    --content-max-width-mobile: 700px;
 }
 
 body {
     font-family: var(--font-secondary);
     min-height: 100vh;
     color: var(--color-text-dark);
-    line-height: 1.75; /* Increased base line-height */
+    line-height: 1.75;
     background-color: #EAEBEF;
     overflow-x: hidden;
     position: relative;
@@ -42,14 +42,14 @@ body {
     padding-bottom: var(--footer-height);
     display: flex;
     flex-direction: column;
-    font-size: 18px; /* Increased base font size */
+    font-size: 18px;
 }
 
 body.loaded {
     opacity: 1;
 }
 
-/* Loader Styles */
+/* Loader Styles (omitted for brevity - no changes from previous version) */
 .loader {
     position: fixed; top: 0; left: 0; width: 100%; height: 100%;
     background: rgba(255, 255, 255, 0.98);
@@ -62,13 +62,11 @@ body.loaded {
     border: none;
     transform: none;
 }
-
 .loader.hidden {
     opacity: 0;
     visibility: hidden;
     pointer-events: none;
 }
-
 .loader::after {
     content: '';
     display: block;
@@ -81,13 +79,13 @@ body.loaded {
     top: 50%; left: 50%;
     transform: translate(-50%, -50%);
 }
-
 @keyframes spin {
      0% { transform: translate(-50%, -50%) rotate(0deg); }
     100% { transform: translate(-50%, -50%) rotate(360deg); }
 }
 
-/* Background */
+
+/* Background (omitted for brevity - no changes) */
 #background-static {
     position: fixed;
     top: 0; left: 0; width: 100%; height: 100%;
@@ -99,66 +97,68 @@ body.loaded {
     animation: subtleZoom 50s infinite alternate ease-in-out;
     filter: brightness(0.75) contrast(1.05);
 }
-
 @keyframes subtleZoom {
     from { transform: scale(1); }
     to { transform: scale(1.03); }
 }
 
-/* Header */
+/* Header - REVISED FOR LARGER LOGO */
 .header {
     width: 100%;
     z-index: 100;
-    padding: 10px 0; /* Minimal vertical padding, logo size will dictate height */
+    padding: 8px 0; /* Reduced vertical padding to let logo define more height */
     background: var(--color-bg-header-footer);
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
     box-shadow: 0 3px 10px var(--color-shadow-medium);
-    color: var(--color-text-header-footer);
-    border-bottom: 1px solid var(--color-border-subtle);
     position: sticky;
     top: 0;
+    display: flex;     /* Use flex to center content easily */
+    align-items: center;/* Vertically align items in the header */
+    min-height: 60px;  /* Minimum height for the header bar */
 }
 
 .header-content {
-    width: 90%; /* Content within header takes 90% of screen width */
+    width: 90%;        /* Container for logo takes 90% of screen width */
     margin: 0 auto;
     display: flex;
-    justify-content: center; /* Center the logo container */
+    justify-content: center; /* Center the logo within this container */
     align-items: center;
 }
 
-.logo-container {
+.logo-container { /* This container might be redundant if .header-content does the job */
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 100%; /* Allow logo container to use the full width of header-content */
+    width: 100%; /* Take full width of .header-content */
 }
 
 .logo-link {
     text-decoration: none;
     color: inherit;
-    display: inline-block;
-    line-height: 0; /* Prevent extra space below image if it's an inline block */
+    display: inline-block; /* Important for sizing image correctly */
+    line-height: 0;        /* Prevents extra space below image */
 }
 
 .header-logo {
-    width: 70%; /* Logo takes up 70% of the .header-content width */
-    max-width: 380px; /* But not more than 380px (prevents huge logo on wider mobiles) */
-    height: auto; /* Height adjusts to maintain aspect ratio */
-    max-height: 90px; /* Cap maximum height to prevent overly tall header */
-    display: block;
-    margin: 0 auto; /* Centers logo if its actual width is less than container */
-    border-radius: 6px; /* Slightly reduced border radius */
-    /* box-shadow: 0 2px 6px var(--color-shadow-subtle); /* Softer shadow */
-    /* border: 1px solid rgba(0,0,0,0.03); /* Very subtle border */
+    /* --- MOBILE LOGO SIZE INCREASED --- */
+    height: 75px;      /* Set a TARGET HEIGHT for the logo image on mobile. */
+                       /* This is key for making text in the logo legible. */
+    width: auto;       /* Width will adjust to maintain the logo's aspect ratio. */
+    max-width: 90%;    /* IMPORTANT: Logo won't exceed 90% of its container's width. */
+                       /* (The container is .logo-container or .header-content). */
+                       /* This prevents an extremely wide logo from overflowing. */
+    display: block;    /* Better for margin auto and sizing. */
+    margin: 0 auto;    /* Centers the logo if its 'auto' width is less than max-width. */
+    border-radius: 6px;
+    object-fit: contain; /* Ensures the entire logo is visible without being cropped if aspect ratio is odd */
 }
 
-/* Main Content Wrapper */
+/* Main Content Wrapper (omitted for brevity - no changes) */
 .page-content-wrapper {
     flex-grow: 1;
     width: 100%;
-    padding: 0 15px; /* Keep side gutters for mobile */
+    padding: 0 15px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -166,88 +166,82 @@ body.loaded {
     z-index: 1;
 }
 
-/* Sections - Increased Spacing and Padding */
+/* Sections - Increased Spacing and Padding (omitted for brevity - no changes) */
 .content-section {
     width: 100%;
     max-width: var(--content-max-width-mobile);
-    margin: 45px auto; /* Increased vertical margin between sections */
-    padding: 35px 30px; /* Increased internal padding */
-    background-color: rgba(255, 255, 255, 0.93); /* Slightly more opaque for readability */
+    margin: 45px auto;
+    padding: 35px 30px;
+    background-color: rgba(255, 255, 255, 0.93);
     border-radius: 12px;
-    box-shadow: 0 6px 22px var(--color-shadow-medium); /* Slightly stronger shadow */
+    box-shadow: 0 6px 22px var(--color-shadow-medium);
     color: var(--color-text-dark);
     border: 1px solid rgba(0,0,0,0.06);
 }
-
+/* ... (rest of .content-section and its children styles remain as in previous "bigger page" version) */
 .section-container {
      width: 100%;
      margin: 0 auto;
 }
-
 .content-section h2 {
     font-family: var(--font-primary);
-    font-size: 2.4rem; /* Larger section headings */
+    font-size: 2.4rem;
     color: var(--color-accent-blue-primary);
     font-weight: 700;
-    margin-bottom: 30px; /* More space below heading */
+    margin-bottom: 30px;
     text-align: center;
     position: relative;
-    padding-bottom: 18px; /* More space for underline */
+    padding-bottom: 18px;
 }
-
 .content-section h2::after {
     content: '';
     position: absolute;
     bottom: 0;
     left: 50%;
     transform: translateX(-50%);
-    width: 80px; /* Wider line */
-    height: 4px; /* Thicker line */
+    width: 80px;
+    height: 4px;
     background-color: var(--color-accent-gold);
     border-radius: 2px;
 }
-
 .content-section p, .content-section ul {
-    margin-bottom: 22px; /* Increased margin after paragraphs/lists */
-    line-height: 1.85; /* Increased line height */
-    font-size: 1.1rem; /* Slightly larger text (18px * 1.1 = 19.8px) */
+    margin-bottom: 22px;
+    line-height: 1.85;
+    font-size: 1.1rem;
 }
-
 .service-list { list-style: none; padding-left: 0; }
-.service-list li { margin-bottom: 16px; padding-left: 35px; position: relative; } /* More space */
+.service-list li { margin-bottom: 16px; padding-left: 35px; position: relative; }
 .service-list li i {
     color: var(--color-accent-blue-primary);
     position: absolute;
     left: 0;
-    top: 7px; /* Adjust vertical alignment for larger text */
+    top: 7px;
     font-size: 1.05em;
 }
 
-/* Hero Section */
+/* Hero Section (omitted for brevity - no changes) */
 .hero {
     width: 100%;
     max-width: none;
-    margin: 25px auto 40px auto; /* Adjusted margins */
-    padding: 60px 20px; /* More padding */
+    margin: 25px auto 40px auto;
+    padding: 60px 20px;
     text-align: center;
     background: none;
     box-shadow: none;
     color: var(--color-text-on-dark-bg);
     position: relative;
 }
-
 .hero-content {
     max-width: 600px;
     margin: 0 auto;
-    background: linear-gradient(rgba(10, 25, 49, 0.7), rgba(10, 25, 49, 0.85)); /* Slightly darker tint */
-    padding: 40px; /* More padding */
+    background: linear-gradient(rgba(10, 25, 49, 0.7), rgba(10, 25, 49, 0.85));
+    padding: 40px;
     border-radius: 10px;
     box-shadow: 0 6px 20px rgba(0,0,0,0.5);
 }
-
 .hero h2 {
     font-family: var(--font-primary);
-    font-size: 2.6rem; /* Larger hero heading */
+    font-size: 2.6rem;
     color: var(--color-text-on-dark-bg);
     font-weight: 700;
     text-shadow: var(--color-shadow-text);
@@ -257,10 +251,9 @@ body.loaded {
     padding-bottom: 0;
 }
 .hero h2::after { display: none; }
-
 .hero-subtitle {
-    font-size: 1.35rem; /* Larger subtitle */
-    margin-bottom: 40px; /* More space */
+    font-size: 1.35rem;
+    margin-bottom: 40px;
     text-shadow: 1px 1px 5px rgba(0,0,0,0.7);
     color: rgba(255, 255, 255, 0.96);
     animation: fadeIn 1s ease-out 0.4s backwards;
@@ -268,15 +261,16 @@ body.loaded {
     font-weight: 400;
 }
 
-/* CTA Button - More Padding */
+
+/* CTA Button - More Padding (omitted for brevity - no changes) */
 .cta-button {
     display: inline-flex; align-items: center; justify-content: center;
     gap: 12px;
-    padding: 18px 42px; /* Increased padding */
+    padding: 18px 42px;
     background: var(--color-accent-gold);
     color: var(--color-text-on-dark-bg);
     text-decoration: none;
-    font-family: var(--font-primary); font-size: 1.2rem; font-weight: 700; /* Larger font */
+    font-family: var(--font-primary); font-size: 1.2rem; font-weight: 700;
     border-radius: 8px;
     border: none;
     transition: all 0.3s ease;
@@ -284,7 +278,7 @@ body.loaded {
     cursor: pointer;
     animation: fadeIn 1s ease-out 0.6s backwards;
     text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
-    min-width: 240px; /* Wider button */
+    min-width: 240px;
     text-align: center;
     text-transform: uppercase;
     letter-spacing: 0.8px;
@@ -296,18 +290,18 @@ body.loaded {
     box-shadow: 0 7px 18px rgba(192, 149, 83, 0.6);
 }
 
-/* Secondary Button Style - More Padding */
+/* Secondary Button Style - More Padding (omitted for brevity - no changes) */
 .secondary-button {
     display: inline-block;
-    margin-top: 30px; /* More space */
-    padding: 14px 35px; /* Increased padding */
+    margin-top: 30px;
+    padding: 14px 35px;
     background: none;
     color: var(--color-accent-blue-primary);
     border: 2px solid var(--color-accent-blue-primary);
     border-radius: 6px;
     text-decoration: none;
     font-family: var(--font-secondary);
-    font-size: 1.1rem; /* Larger font */
+    font-size: 1.1rem;
     font-weight: 600;
     transition: all 0.3s ease;
     text-align: center;
@@ -318,17 +312,17 @@ body.loaded {
     box-shadow: 0 4px 12px rgba(0, 51, 102, 0.3);
 }
 
-/* Testimonials Section */
+/* Testimonials Section (omitted for brevity - no changes) */
 .testimonials-section {
     background-color: rgba(240, 242, 245, 0.93);
 }
-.testimonial-grid { display: grid; gap: 30px; } /* Increased gap */
+.testimonial-grid { display: grid; gap: 30px; }
 .testimonial-item {
     font-style: italic;
-    padding: 30px; /* More padding */
-    border-left: 6px solid var(--color-accent-gold); /* Thicker accent */
+    padding: 30px;
+    border-left: 6px solid var(--color-accent-gold);
     background-color: rgba(255, 255, 255, 0.96);
-    border-radius: 0 10px 10px 0; /* More rounded */
+    border-radius: 0 10px 10px 0;
     box-shadow: 3px 3px 12px rgba(0, 0, 0, 0.09);
 }
 .testimonial-item p:first-child { margin-bottom: 20px; }
@@ -340,33 +334,31 @@ body.loaded {
     color: var(--color-accent-blue-primary);
     font-size: 1.05rem;
 }
-
 .google-reviews-callout {
-    margin-top: 50px; /* More space */
-    padding-top: 35px; /* More padding */
+    margin-top: 50px;
+    padding-top: 35px;
     border-top: 1px solid rgba(0, 0, 0, 0.15);
     text-align: center;
 }
 .google-reviews-callout h3 {
     font-family: var(--font-secondary);
-    font-size: 1.4rem; /* Larger */
+    font-size: 1.4rem;
     color: var(--color-text-dark);
     margin-bottom: 20px;
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 10px; /* More gap */
+    gap: 10px;
 }
 .google-reviews-callout h3 i { color: var(--color-accent-gold); font-size: 1.1em; }
-
 .google-reviews-button {
     display: inline-flex; align-items: center; gap: 12px;
     margin-top: 20px;
-    padding: 15px 35px; /* More padding */
+    padding: 15px 35px;
     background: #DB4437;
     color: var(--color-text-on-dark-bg);
     text-decoration: none; font-family: var(--font-primary);
-    font-size: 1.15rem; font-weight: 700; /* Larger */
+    font-size: 1.15rem; font-weight: 700;
     border-radius: 6px; transition: all 0.3s ease;
     box-shadow: 0 4px 10px rgba(219, 68, 55, 0.4);
     text-transform: uppercase;
@@ -379,24 +371,25 @@ body.loaded {
 }
 .google-reviews-button i { font-size: 1.25em; }
 
-/* Bottom CTA Section */
+/* Bottom CTA Section (omitted for brevity - no changes) */
 .call-to-action-bottom {
     background: linear-gradient(135deg, var(--color-accent-blue-primary), #002244);
     color: var(--color-text-on-dark-bg);
     text-shadow: 1px 1px 3px rgba(0,0,0,0.4);
-    padding: 45px 30px; /* More padding */
+    padding: 45px 30px;
     margin-bottom: 0;
 }
 .call-to-action-bottom h2 {
      color: var(--color-text-on-dark-bg);
      text-shadow: 1px 1px 3px rgba(0,0,0,0.4);
      padding-bottom: 0;
-     font-size: 2.4rem; /* Match other section headings */
+     font-size: 2.4rem;
 }
 .call-to-action-bottom h2::after { display: none; }
 .call-to-action-bottom p { color: rgba(255, 255, 255, 0.94); font-size: 1.15rem; }
 
-/* Fixed Mobile Tabs */
+
+/* Fixed Mobile Tabs (omitted for brevity - no changes) */
 .tabs {
     position: fixed; bottom: 0; left: 0; width: 100%;
     z-index: 1000; padding: 0 5px;
@@ -414,7 +407,7 @@ body.loaded {
     color: var(--color-text-header-footer);
     text-decoration: none;
     font-family: var(--font-secondary);
-    font-size: 0.9rem; /* Slightly larger tab text for better tap target feel */
+    font-size: 0.9rem;
     font-weight: 500;
     padding: 5px 5px;
     transition: all 0.3s ease;
@@ -450,13 +443,14 @@ body.loaded {
 .tabs a.active { color: var(--color-accent-blue-primary); font-weight: 700; }
 .tabs a:hover::after, .tabs a.active::after { width: 75%; }
 
-/* Animations */
+
+/* Animations (omitted for brevity - no changes) */
 @keyframes fadeIn {
     from { opacity: 0; transform: translateY(20px); }
     to { opacity: 1; transform: translateY(0); }
 }
 
-/* Focus outline for accessibility */
+/* Focus outline for accessibility (omitted for brevity - no changes) */
 a:focus-visible, button:focus-visible, input:focus-visible {
     outline: 3px solid var(--color-accent-blue-secondary);
     outline-offset: 2px;
@@ -464,48 +458,41 @@ a:focus-visible, button:focus-visible, input:focus-visible {
     box-shadow: 0 0 0 3px rgba(10, 88, 166, 0.3);
 }
 
+
 /* Responsive adjustments for tablets/larger phones */
 @media (min-width: 600px) {
-    body { font-size: 19px; } /* Slightly larger base for tablet+ */
+    body { font-size: 19px; }
 
-    .header { padding: 12px 0; }
-    .header-content { width: 85%; } /* Can be a bit narrower on tablet */
-    .header-logo {
-        width: auto; /* Let height primarily dictate size on tablet */
-        height: 75px; /* Specific height for tablet */
-        max-width: 300px; /* Max width for logo on tablet */
-        max-height: none; /* Remove mobile max-height if height is set */
-        /* Align left on tablet if header content justifies start */
-        /* For centered logo, margin: 0 auto still works */
+    .header {
+        padding: 10px 0; /* Adjust tablet header padding if needed */
     }
-    /* If you wanted logo left and something else right on tablet: */
-    /* .header-content { justify-content: space-between; } */
-    /* .header-logo { margin: 0; } */
+    .header-logo {
+        height: 90px;      /* Larger height for tablet */
+        max-width: 75%;    /* Adjust max-width % for tablet if needed */
+                               /* OR use a pixel value: max-width: 400px; */
+    }
 
-
+    /* ... (rest of tablet styles from previous "bigger page" version remain) */
     .page-content-wrapper { padding: 0 20px; }
-
     .content-section {
-        padding: 45px 35px; /* More padding */
-        margin: 50px auto; /* More vertical space */
-        max-width: 800px; /* Max content width for tablet */
+        padding: 45px 35px;
+        margin: 50px auto;
+        max-width: 800px;
     }
      .content-section h2 {
-        font-size: 2.7rem; /* Larger section headings for tablet */
+        font-size: 2.7rem;
         padding-bottom: 20px;
         margin-bottom: 35px;
     }
      .content-section h2::after { width: 100px; height: 4.5px; }
     .content-section p, .content-section ul {
-        font-size: 1.15rem; /* (19px * 1.15 = ~21.85px) */
+        font-size: 1.15rem;
         line-height: 1.9;
     }
-
     .hero h2 { font-size: 3rem; }
     .hero-subtitle { font-size: 1.5rem; }
-
     .testimonial-grid {
-        grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); /* Wider items */
+        grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
         gap: 35px;
     }
     .tabs {
@@ -514,20 +501,21 @@ a:focus-visible, button:focus-visible, input:focus-visible {
     }
     .tabs a {
         font-size: 1rem;
-        padding: 10px 18px; /* More padding */
+        padding: 10px 18px;
         flex-grow: 0; flex-basis: auto;
         min-width: 120px; max-width: 170px;
     }
      .tabs a::after { width: 85%; }
 }
 
-/* Specific adjustments for VERY NARROW mobile screens, if logo feels too big */
+/* Specific adjustments for VERY NARROW mobile screens */
 @media (max-width: 360px) {
     .header-logo {
-        width: 60%; /* Reduce width percentage on very small screens */
-        max-height: 70px; /* Further cap height if needed */
+        height: 60px; /* Reduce logo height slightly on very narrow screens */
+        max-width: 95%; /* Allow it to be very wide % if height is reduced */
     }
-    body { font-size: 17px; } /* Slightly smaller base font for tiny screens */
+    /* ... (rest of very narrow screen styles from previous "bigger page" version remain) */
+    body { font-size: 17px; }
     .content-section p, .content-section ul { font-size: 1.05rem; }
     .content-section h2 { font-size: 2.1rem; }
     .hero h2 { font-size: 2.2rem; }
