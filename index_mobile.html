@@ -12,7 +12,13 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
 </head>
 <body>
-    <div id="loader" class="loader"></div>
+    <!-- MODIFIED LOADER STRUCTURE -->
+    <div id="loader" class="loader">
+        <img src="logo.jpg" alt="Kershaw Law Firm Loading" class="loader-logo-img">
+        <h1 class="loader-title">The Kershaw Law Firm P.C.</h1>
+        <!-- The spinner will be created by the .loader::after pseudo-element in CSS -->
+    </div>
+
     <div id="background-static"></div>
 
     <header class="header">
@@ -20,7 +26,6 @@
             <div class="logo-container">
                  <a href="index_mobile.html" class="logo-link" aria-label="Home - The Kershaw Law Firm">
                     <img src="logo.jpg" alt="Kershaw Law Firm Logo" class="header-logo">
-                    <!-- The H1 title "The Kershaw Law Firm P.C." has been removed as per request -->
                  </a>
             </div>
         </div>
