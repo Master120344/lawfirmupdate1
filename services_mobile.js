@@ -2,10 +2,10 @@
 
 // --- Strict Mode & Global Constants ---
 "use strict";
-const INITIAL_SPLASH_DURATION_MS = 5000;
+const INITIAL_SPLASH_DURATION_MS = 100; // Significantly reduced for faster load feel
 const PAGE_TRANSITION_ANIMATION_MS = 300;
 
-// --- Utility Functions (Ideally from a shared utils.js) ---
+// --- Utility Functions ---
 function debounce(func, wait, immediate) {
     let timeout;
     return function executedFunction() {
@@ -29,28 +29,65 @@ function initPageLoad() {
     const mainContent = document.getElementById('main-content');
 
     if (!splashLoader || !bodyElement || !mainContent) {
-        console.warn("Essential elements for page load not found on Services page.");
+        console.warn("Essential elements for page load (splashLoader, body, mainContent) not found on Services page.");
         if (bodyElement) bodyElement.classList.add('loaded');
-        if (mainContent) mainContent.style.visibility = 'visible';
+        if (mainContent) {
+             mainContent.style.visibility = 'visible';
+             mainContent.style.opacity = '1';
+        }
         return;
     }
 
     mainContent.style.visibility = 'hidden';
     mainContent.style.opacity = '0';
 
+    // document.documentElement.style.setProperty('--loader-display-duration', `${INITIAL_SPLASH_DURATION_MS / 1000}s`); // Not needed for text splash
+
     setTimeout(() => {
-        splashLoader.classList.add('hidden');
+        if (splashLoader) {
+            splashLoader.classList.add('hidden');
+        }
+        
         mainContent.style.visibility = 'visible';
         mainContent.style.transition = `opacity ${PAGE_TRANSITION_ANIMATION_MS / 1000}s ease-out`;
         mainContent.style.opacity = '1';
         bodyElement.classList.add('loaded');
-        splashLoader.addEventListener('transitionend', () => {
-            // if (splashLoader.classList.contains('hidden')) splashLoader.remove();
-        }, { once: true });
+
+        if (splashLoader) {
+            splashLoader.addEventListener('transitionend', () => {
+                // if (splashLoader.classList.contains('hidden')) splashLoader.remove(); // Optional
+            }, { once: true });
+        }
     }, INITIAL_SPLASH_DURATION_MS);
 }
 
 window.addEventListener('load', initPageLoad);
+
+// Scroll-triggered Animations (defined globally for access by pageshow)
+window.initScrollAnimations = function() {
+    const animatedElements = document.querySelectorAll('.animate-on-scroll');
+    if (!animatedElements.length || !('IntersectionObserver' in window)) return;
+
+    const observerOptions = {
+        root: null,
+        rootMargin: '0px 0px -10% 0px',
+        threshold: 0.1
+    };
+    const animationObserver = new IntersectionObserver((entries, observer) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                const delay = parseInt(entry.target.dataset.animationDelay) || 0;
+                setTimeout(() => entry.target.classList.add('is-visible'), delay);
+                observer.unobserve(entry.target);
+            }
+        });
+    }, observerOptions);
+    animatedElements.forEach(el => {
+        if (!el.classList.contains('is-visible')) {
+            animationObserver.observe(el);
+        }
+    });
+};
 
 // Handle bfcache
 window.addEventListener('pageshow', (event) => {
@@ -72,48 +109,60 @@ window.addEventListener('pageshow', (event) => {
                 mainContent.style.transition = `opacity ${PAGE_TRANSITION_ANIMATION_MS / 1000}s ease-out`;
             }, 50);
         }
-        if (typeof initScrollAnimations === 'function') {
-            setTimeout(initScrollAnimations, 100);
+        if (typeof window.initScrollAnimations === 'function') {
+            setTimeout(window.initScrollAnimations, 100);
         }
     } else {
-        if (mainContent && !splashLoader?.classList.contains('hidden')) {
+        // For fresh loads, initPageLoad handles initial splash and main content visibility.
+        // This ensures main content is hidden if splash is still (briefly) visible.
+        if (mainContent && splashLoader && !splashLoader.classList.contains('hidden')) {
             mainContent.style.visibility = 'hidden';
             mainContent.style.opacity = '0';
-        } else if (mainContent) {
-            mainContent.style.visibility = 'visible';
-            mainContent.style.opacity = '1';
         }
+        // Note: initPageLoad is primary controller for fresh load main content appearance.
     }
 });
 
 // --- DOMContentLoaded Event Listener ---
 document.addEventListener('DOMContentLoaded', () => {
-    const bodyElement = document.body;
     const mainContent = document.getElementById('main-content');
 
     // 1. Page Transition Logic
     function initPageTransitions() {
         const transitionLoader = document.getElementById('page-transition-loader');
         if (!transitionLoader || !mainContent) return;
-        const internalLinks = document.querySelectorAll('a[href]:not([href^="#"]):not([href^="tel:"]):not([href^="mailto:"]):not([href^="javascript:"]):not([target="_blank"])');
+
+        const internalLinks = document.querySelectorAll(
+            'a[href]:not([href^="#"]):not([href^="tel:"]):not([href^="mailto:"]):not([href^="javascript:"]):not([target="_blank"])'
+        );
+
         internalLinks.forEach(link => {
             link.addEventListener('click', (e) => {
                 const destination = link.getAttribute('href');
-                if (!destination || destination.startsWith('javascript:')) return;
+                if (!destination || destination.startsWith('javascript:void(0)')) return;
+
+                let isExternalOrProtocol = false;
                 try {
                     const currentHostname = window.location.hostname;
                     const destinationUrl = new URL(destination, window.location.href);
-                    if (destinationUrl.hostname !== currentHostname) return;
+                    if (destinationUrl.hostname !== currentHostname && destinationUrl.hostname !== "") {
+                        isExternalOrProtocol = true;
+                    }
                 } catch (error) { return; }
+                if (isExternalOrProtocol) return;
+
                 const currentPagePath = window.location.pathname.replace(/\/$/, "");
                 const destinationPathObject = new URL(destination, window.location.href);
-                const destinationPath = destinationPathObject.pathname.replace(/\/$/, "");
-                if (destinationPath === currentPagePath && destinationPathObject.hash) return;
-                if (destinationPath === currentPagePath && !destinationPathObject.hash) { e.preventDefault(); return; }
+                const destinationPathClean = destinationPathObject.pathname.replace(/\/$/, "");
+
+                if (destinationPathClean === currentPagePath && destinationPathObject.hash) return;
+                if (destinationPathClean === currentPagePath && !destinationPathObject.hash) { e.preventDefault(); return; }
+
                 e.preventDefault();
                 mainContent.style.transition = `opacity ${PAGE_TRANSITION_ANIMATION_MS / 1000}s ease-out`;
                 mainContent.style.opacity = '0';
-                transitionLoader.classList.remove('hidden');
+                if (transitionLoader) transitionLoader.classList.remove('hidden');
+
                 setTimeout(() => { window.location.href = destination; }, PAGE_TRANSITION_ANIMATION_MS + 50);
             });
         });
@@ -127,26 +176,10 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     updateFooterYear();
 
-    // 3. Scroll-triggered Animations
-    function initScrollAnimations() {
-        const animatedElements = document.querySelectorAll('.animate-on-scroll');
-        if (!animatedElements.length || !('IntersectionObserver' in window)) return;
-        const observerOptions = { root: null, rootMargin: '0px 0px -10% 0px', threshold: 0.1 };
-        const animationObserver = new IntersectionObserver((entries, observer) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    const delay = parseInt(entry.target.dataset.animationDelay) || 0;
-                    setTimeout(() => entry.target.classList.add('is-visible'), delay);
-                    observer.unobserve(entry.target);
-                }
-            });
-        }, observerOptions);
-        animatedElements.forEach(el => {
-            if (!el.classList.contains('is-visible')) animationObserver.observe(el);
-        });
+    // 3. Initialize Scroll Animations
+    if (typeof window.initScrollAnimations === 'function') {
+        window.initScrollAnimations();
     }
-    window.initScrollAnimations = initScrollAnimations; // Expose for bfcache handler
-    initScrollAnimations();
 
     // 4. Smooth Scroll
     function initSmoothScroll() {
@@ -159,12 +192,13 @@ document.addEventListener('DOMContentLoaded', () => {
                         if (targetElement) {
                             e.preventDefault();
                             const header = document.getElementById('site-header');
-                            const headerOffset = header ? header.offsetHeight : 70;
+                            const headerOffset = header ? header.offsetHeight : 
+                                               (parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--header-height-mobile').replace('px', '')) || 70);
                             const elementPosition = targetElement.getBoundingClientRect().top;
                             const offsetPosition = elementPosition + window.pageYOffset - headerOffset - 20;
                             window.scrollTo({ top: offsetPosition, behavior: "smooth" });
                         }
-                    } catch (error) { console.warn(`Smooth scroll target not found: ${targetId}`); }
+                    } catch (error) { console.warn(`Smooth scroll target not found or invalid: ${targetId}`, error); }
                 }
             });
         });
@@ -179,16 +213,18 @@ document.addEventListener('DOMContentLoaded', () => {
         const delta = 10;
         const headerHeight = header.offsetHeight;
         let isHeaderHidden = false;
+
         const handleScroll = debounce(() => {
             const nowScrollTop = window.pageYOffset || document.documentElement.scrollTop;
             if (Math.abs(lastScrollTop - nowScrollTop) <= delta) return;
+
             if (nowScrollTop > lastScrollTop && nowScrollTop > headerHeight) {
                 if (!isHeaderHidden) {
                     header.style.transform = `translateY(-${headerHeight}px)`;
                     isHeaderHidden = true;
                 }
             } else {
-                if (isHeaderHidden || nowScrollTop <= headerHeight) {
+                if (isHeaderHidden || nowScrollTop <= headerHeight / 2 ) {
                     header.style.transform = 'translateY(0)';
                     isHeaderHidden = false;
                 }
@@ -198,8 +234,5 @@ document.addEventListener('DOMContentLoaded', () => {
         window.addEventListener('scroll', handleScroll, { passive: true });
     }
     initStickyHeaderBehavior();
-
-    // Add any "Services" page specific JS here
-    // e.g., if service items were expandable/collapsible.
 
 }); // End DOMContentLoaded
