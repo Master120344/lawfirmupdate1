@@ -21,7 +21,7 @@
 /* 1. VARIABLES & GLOBAL RESETS
 -------------------------------------------------- */
 :root {
-    /* Primary Palette - Refined and Expanded */
+    /* Primary Palette */
     --color-primary-brand: #0A2342;
     --color-primary-brand-rgb: 10, 35, 66;
     --color-secondary-brand: #2C5D92;
@@ -30,9 +30,9 @@
     --color-accent-gold-darker: #A8884F;
     --color-accent-gold-rgb: 192, 160, 98;
 
-    /* Neutral Palette - Expanded for subtlety */
-    --color-text-dark: #1D2025;
-    --color-text-medium: #4A5568;
+    /* Neutral Palette */
+    --color-text-dark: #181A1D; /* Slightly darker for better contrast on transparent BGs */
+    --color-text-medium: #424750; /* Adjusted medium text */
     --color-text-light: #F0F4F8;
     --color-text-on-gold: #FFFFFF;
     --color-text-on-primary: #FFFFFF;
@@ -40,9 +40,9 @@
     --color-text-link-hover: var(--color-accent-gold);
 
     --color-bg-light: #FFFFFF;
-    --color-bg-light-rgb: 255, 255, 255; /* Added for rgba */
+    --color-bg-light-rgb: 255, 255, 255;
     --color-bg-off-white: #F8F9FA;
-    --color-bg-off-white-rgb: 248, 249, 250; /* Added for rgba */
+    --color-bg-off-white-rgb: 248, 249, 250;
     --color-bg-light-accent: #EBF0F5;
     --color-bg-light-accent-rgb: 235, 240, 245;
     --color-bg-medium-grey: #E9ECEF;
@@ -54,12 +54,12 @@
     --color-loader-bg: var(--color-primary-brand);
     --color-loader-logo-filter: brightness(0) invert(1);
 
-    /* UI Elements - Refined */
-    --color-border-subtle: rgba(var(--color-primary-brand-rgb), 0.1);
-    --color-border-medium: rgba(var(--color-primary-brand-rgb), 0.2);
-    --color-shadow-soft: rgba(10, 35, 66, 0.04);
-    --color-shadow-medium: rgba(10, 35, 66, 0.08);
-    --color-shadow-strong: rgba(10, 35, 66, 0.15);
+    /* UI Elements */
+    --color-border-subtle: rgba(var(--color-primary-brand-rgb), 0.12); /* Slightly more visible border */
+    --color-border-medium: rgba(var(--color-primary-brand-rgb), 0.22);
+    --color-shadow-soft: rgba(10, 35, 66, 0.05); /* Slightly increased opacity for shadows */
+    --color-shadow-medium: rgba(10, 35, 66, 0.1);
+    --color-shadow-strong: rgba(10, 35, 66, 0.18);
     --color-shadow-gold-cta: rgba(var(--color-accent-gold-rgb), 0.3);
 
     /* Typography */
@@ -83,17 +83,18 @@
     --content-max-width-capped: 780px;
     --border-radius-small: 4px;
     --border-radius-medium: 8px;
-    --border-radius-large: 16px;
+    --border-radius-large: 16px; /* Increased for softer feel */
 
     /* Transitions & Animations */
     --transition-short: 0.15s ease-out;
     --transition-base: 0.25s ease-out;
     --transition-long: 0.4s cubic-bezier(0.25, 0.1, 0.25, 1);
-    --transition-very-fast: 0.1s ease-out; /* For near-instant changes */
+    --transition-very-fast: 0.1s ease-out;
 
     /* Social Colors */
     --color-facebook: #1877F2;
     --color-linkedin: #0A66C2;
+    --color-x-twitter: #000000; /* X is typically black or white */
 }
 
 *, *::before, *::after {
@@ -125,11 +126,10 @@ body {
     font-size: 1.1rem;
     line-height: 1.75;
     color: var(--color-text-dark);
-    background-color: var(--color-bg-off-white); /* This will be mostly covered by background image */
+    background-color: var(--color-bg-off-white);
     overflow-x: hidden;
     position: relative;
     opacity: 0;
-    /* FASTER page content fade-in */
     transition: opacity 0.2s var(--transition-base);
     padding-top: var(--header-height-mobile);
     padding-bottom: var(--tabs-height-mobile);
@@ -174,14 +174,16 @@ h2.section-title {
     position: relative;
     padding-bottom: var(--spacing-md);
 }
-h2.hero-main-title {
+h2.hero-main-title { /* For Hero Section */
     font-family: var(--font-display);
-    font-size: clamp(2.2rem, 8vw, 3.5rem);
-    font-weight: 800;
+    font-size: clamp(2.1rem, 7.5vw, 3.3rem); /* Adjusted for new wording */
+    font-weight: 800; /* Cinzel Black for impact */
     color: var(--color-text-light);
-    text-shadow: 1px 2px 4px rgba(var(--color-primary-brand-rgb), 0.6); /* Adjusted shadow for readability */
-    margin-bottom: var(--spacing-md);
-    letter-spacing: 0.5px;
+    /* Enhanced text shadow for readability on more transparent BG */
+    text-shadow: 0px 1px 2px rgba(var(--color-primary-brand-rgb), 0.5),
+                 0px 2px 5px rgba(var(--color-primary-brand-rgb), 0.4);
+    margin-bottom: var(--spacing-sm); /* Tighter margin for sub-headline */
+    letter-spacing: 0.3px;
 }
 
 h3 { font-size: clamp(1.4rem, 5.5vw, 2rem); font-weight: 600;}
@@ -202,16 +204,17 @@ p.section-intro-text {
     font-style: italic;
     font-weight: 500;
 }
-p.hero-subtitle {
+p.hero-subtitle { /* For Hero Section */
     font-family: var(--font-body);
-    font-size: clamp(1.1rem, 4.5vw, 1.4rem);
-    color: rgba(255,255,255,0.95); /* Slightly increased opacity for hero subtitle */
+    font-size: clamp(1.05rem, 4vw, 1.35rem); /* Adjusted for new wording */
+    color: rgba(255,255,255,0.9); /* Maintained opacity */
     margin-bottom: var(--spacing-xl);
-    font-weight: 500;
-    line-height: 1.6;
-    max-width: 550px;
+    font-weight: 500; /* EB Garamond Medium */
+    line-height: 1.65;
+    max-width: 580px; /* Slightly wider */
     margin-left: auto;
     margin-right: auto;
+    text-shadow: 0px 1px 3px rgba(var(--color-primary-brand-rgb), 0.3);
 }
 p:last-child { margin-bottom: 0; }
 
@@ -255,7 +258,6 @@ figcaption {
     z-index: 10000;
     opacity: 1;
     visibility: visible;
-    /* FASTER splash screen fade-out */
     transition: opacity 0.3s ease-out, visibility 0.3s ease-out;
 }
 .splash-loader.hidden {
@@ -314,7 +316,7 @@ figcaption {
     background-position: center center;
     background-attachment: fixed;
     animation: subtleZoomInOut 80s infinite alternate ease-in-out;
-    filter: saturate(0.3) brightness(0.45) contrast(1.1);
+    filter: saturate(0.4) brightness(0.5) contrast(1.05); /* Slightly brighter background */
 }
 @keyframes subtleZoomInOut {
     0% { transform: scale(1.05); }
@@ -325,9 +327,9 @@ figcaption {
     position: fixed; top: 0; left: 0; width: 100%; height: 100%;
     z-index: -1;
     background: linear-gradient(to bottom,
-        rgba(var(--color-primary-brand-rgb), 0.6) 0%,  /* Slightly less opaque at top */
-        rgba(var(--color-primary-brand-rgb), 0.75) 40%,
-        rgba(var(--color-primary-brand-rgb), 0.85) 80%, /* Slightly less opaque towards bottom */
+        rgba(var(--color-primary-brand-rgb), 0.5) 0%,  /* Even less opaque at top */
+        rgba(var(--color-primary-brand-rgb), 0.65) 40%, /* Less opaque mid */
+        rgba(var(--color-primary-brand-rgb), 0.75) 80%,
         var(--color-primary-brand) 100%
     );
     pointer-events: none;
@@ -339,10 +341,10 @@ figcaption {
     position: fixed; top: 0; left: 0; width: 100%;
     z-index: 1000;
     height: var(--header-height-mobile);
-    /* INCREASED TRANSPARENCY */
-    background-color: rgba(var(--color-bg-light-rgb), 0.75);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
+    /* FURTHER INCREASED TRANSPARENCY */
+    background-color: rgba(var(--color-bg-light-rgb), 0.6); /* e.g., 60% opacity */
+    backdrop-filter: blur(16px); /* Stronger blur for more transparency */
+    -webkit-backdrop-filter: blur(16px);
     box-shadow: 0 2px 10px var(--color-shadow-medium);
     border-bottom: 1px solid var(--color-border-subtle);
     display: flex;
@@ -385,27 +387,24 @@ figcaption {
     padding: var(--spacing-xxl) var(--spacing-lg);
     position: relative;
     overflow: hidden;
-    /* ADDED for backdrop-filter context */
-    border-radius: var(--border-radius-medium); /* Optional: if sections look better slightly rounded */
+    border-radius: var(--border-radius-large); /* Softer, larger radius for sections */
     margin-left: auto;
     margin-right: auto;
-    /* Consider max-width for sections if not full bleed for better backdrop effect */
 }
-/* Enhanced alternating section backgrounds with MORE TRANSPARENCY & BLUR */
+/* FURTHER INCREASED TRANSPARENCY & BLUR */
 .content-section:nth-child(odd) {
-     background-color: rgba(var(--color-bg-light-rgb), 0.8); /* More transparent */
-     backdrop-filter: blur(10px);
-     -webkit-backdrop-filter: blur(10px);
+     background-color: rgba(var(--color-bg-light-rgb), 0.65); /* e.g., 65% opacity */
+     backdrop-filter: blur(14px); /* Stronger blur */
+     -webkit-backdrop-filter: blur(14px);
 }
 .content-section:nth-child(even) {
-     background-color: rgba(var(--color-bg-light-accent-rgb), 0.8); /* More transparent */
-     backdrop-filter: blur(10px);
-     -webkit-backdrop-filter: blur(10px);
+     background-color: rgba(var(--color-bg-light-accent-rgb), 0.65); /* e.g., 65% opacity */
+     backdrop-filter: blur(14px); /* Stronger blur */
+     -webkit-backdrop-filter: blur(14px);
 }
-/* Ensure text in these sections remains highly readable */
 .content-section h2, .content-section h3, .content-section p, .content-section li {
-    /* text-shadow: 0 0 5px rgba(255,255,255,0.3); /* Subtle shadow if needed for light text on light blur */
-    /* color: var(--color-text-dark); /* Ensure strong contrast */
+    /* text-shadow: 0 0 1px rgba(255,255,255,0.1); /* Very subtle text shadow if needed */
+    /* Ensure text colors like --color-text-dark and --color-text-medium provide good contrast */
 }
 
 .section-container {
@@ -428,7 +427,7 @@ figcaption {
     box-shadow: 0 1px 3px rgba(var(--color-accent-gold-rgb),0.3);
 }
 
-/* 7. HERO SECTION
+/* 7. HERO SECTION (ENHANCED)
 -------------------------------------------------- */
 .hero-section {
     min-height: 70vh;
@@ -443,19 +442,19 @@ figcaption {
     overflow: hidden;
 }
 .hero-content-box {
-    /* INCREASED TRANSPARENCY & BLUR */
-    background-color: rgba(var(--color-primary-brand-rgb), 0.65);
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
+    /* FURTHER INCREASED TRANSPARENCY & REFINED STYLE */
+    background-color: rgba(var(--color-primary-brand-rgb), 0.45); /* e.g. 45-50% opacity, adjust based on wallpaper */
+    backdrop-filter: blur(12px); /* Adjust blur strength */
+    -webkit-backdrop-filter: blur(12px);
     padding: var(--spacing-xl) var(--spacing-lg);
-    border-radius: var(--border-radius-large);
-    box-shadow: 0 8px 30px rgba(0,0,0,0.3);
-    max-width: calc(var(--content-max-width-capped) - 40px);
+    border-radius: var(--border-radius-large); /* Consistent larger radius */
+    box-shadow: 0 6px 25px rgba(0,0,0,0.25); /* Softer, more diffused shadow */
+    max-width: calc(var(--content-max-width-capped) - 20px); /* Slightly wider */
     width: var(--content-max-width);
     z-index: 2;
-    border: 1px solid rgba(var(--color-accent-gold-rgb), 0.25); /* Slightly more prominent border */
+    border: 1px solid rgba(var(--color-accent-gold-rgb), 0.35); /* Thinner, more elegant gold border */
 }
-.hero-cta { margin-top: var(--spacing-lg); }
+.hero-cta { margin-top: var(--spacing-xl); } /* Increased margin for new layout */
 
 
 /* 8. CONTENT SECTIONS (About, Services, etc.) */
@@ -476,15 +475,15 @@ figcaption {
     font-size: 1.1rem;
     padding: var(--spacing-md) var(--spacing-md) var(--spacing-md) calc(var(--spacing-md) + var(--spacing-xxl));
     position: relative;
-    border-bottom: 1px solid rgba(var(--color-primary-brand-rgb), 0.08); /* Subtler border with transparent sections */
+    border-bottom: 1px solid rgba(var(--color-primary-brand-rgb), 0.08);
     margin-bottom: var(--spacing-md);
     transition: background-color var(--transition-base), transform var(--transition-base);
     border-radius: var(--border-radius-medium);
-    background-color: transparent; /* Ensure no override from section BG for hover effect */
+    background-color: transparent;
 }
 .service-list-detailed li:last-child { border-bottom: none; }
 .service-list-detailed li:hover {
-    background-color: rgba(var(--color-accent-gold-rgb), 0.08); /* Slightly stronger hover for transparent BG */
+    background-color: rgba(var(--color-accent-gold-rgb), 0.08);
     transform: translateX(5px);
     border-bottom-color: transparent;
 }
@@ -517,7 +516,6 @@ figcaption {
 /* 9. TESTIMONIAL SECTION & CAROUSEL
 -------------------------------------------------- */
 .testimonials-section {
-    /* This section has its own specific background color logic in :nth-child, which now includes backdrop-filter */
     padding-bottom: var(--spacing-xxxl);
 }
 
@@ -525,13 +523,13 @@ figcaption {
     position: relative;
     max-width: 600px;
     margin: 0 auto var(--spacing-xxl) auto;
-    overflow: hidden; /* Important for border-radius with backdrop-filter */
+    overflow: hidden;
     border-radius: var(--border-radius-large);
     box-shadow: 0 10px 35px var(--color-shadow-strong);
-    /* INCREASED TRANSPARENCY & BLUR */
-    background-color: rgba(var(--color-bg-light-rgb), 0.75); /* Match odd content sections */
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
+    /* FURTHER INCREASED TRANSPARENCY & BLUR */
+    background-color: rgba(var(--color-bg-light-rgb), 0.6); /* e.g., 60% opacity */
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
 }
 .testimonial-carousel {
     display: flex;
@@ -541,7 +539,6 @@ figcaption {
     min-width: 100%; flex-shrink: 0;
     padding: var(--spacing-xl) var(--spacing-lg);
     text-align: center;
-    /* Text inside needs to be clearly readable against the blurred background */
 }
 .testimonial-icon-quote {
     font-size: 2.8rem;
@@ -555,7 +552,7 @@ figcaption {
     font-style: italic;
     font-size: 1.15rem;
     line-height: 1.8;
-    color: var(--color-text-medium); /* Ensure this has good contrast */
+    color: var(--color-text-medium);
     margin-bottom: var(--spacing-lg);
     font-weight: 500;
 }
@@ -563,7 +560,7 @@ figcaption {
     font-family: var(--font-headings);
     font-weight: 600;
     text-align: center;
-    color: var(--color-primary-brand); /* Ensure this has good contrast */
+    color: var(--color-primary-brand);
     font-size: 1.05rem;
     margin-top: var(--spacing-sm);
     letter-spacing: 0.3px;
@@ -628,18 +625,18 @@ figcaption {
 .google-reviews-callout {
     margin-top: var(--spacing-xxxl);
     padding: var(--spacing-xl) var(--spacing-lg);
-    /* INCREASED TRANSPARENCY & BLUR */
+    /* FURTHER INCREASED TRANSPARENCY & BLUR */
     background: linear-gradient(135deg,
-        rgba(var(--color-bg-light-rgb), 0.75) 0%,          /* More transparent */
-        rgba(var(--color-bg-off-white-rgb), 0.75) 100%  /* More transparent */
+        rgba(var(--color-bg-light-rgb), 0.6) 0%,
+        rgba(var(--color-bg-off-white-rgb), 0.6) 100%
     );
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
     border-radius: var(--border-radius-large);
     text-align: center;
     box-shadow: 0 5px 20px var(--color-shadow-medium);
     border: 1px solid var(--color-border-subtle);
-    overflow: hidden; /* For border-radius with backdrop-filter */
+    overflow: hidden;
 }
 .google-reviews-title {
     font-family: var(--font-headings);
@@ -770,11 +767,10 @@ figcaption {
 
 .final-cta-section {
     background: linear-gradient(135deg, var(--color-primary-brand) 0%, var(--color-secondary-brand) 100%);
-    /* This section should remain opaque as it's a dark, strong CTA */
     color: var(--color-text-light);
     padding: var(--spacing-xxxl) var(--spacing-lg);
     border-top: 4px solid var(--color-accent-gold);
-    border-radius: 0; /* Full bleed, no rounding needed here */
+    border-radius: 0;
 }
 .final-cta-section .section-title {
     color: var(--color-text-light);
@@ -789,10 +785,10 @@ figcaption {
 .mobile-tabs {
     position: fixed; bottom: 0; left: 0; width: 100%;
     height: var(--tabs-height-mobile);
-    /* INCREASED TRANSPARENCY */
-    background-color: rgba(var(--color-bg-off-white-rgb), 0.8); /* Using off-white base like content for consistency */
-    backdrop-filter: blur(15px);
-    -webkit-backdrop-filter: blur(15px);
+    /* FURTHER INCREASED TRANSPARENCY */
+    background-color: rgba(var(--color-bg-off-white-rgb), 0.7); /* e.g., 70% opacity */
+    backdrop-filter: blur(18px); /* Stronger blur */
+    -webkit-backdrop-filter: blur(18px);
     box-shadow: 0 -3px 15px var(--color-shadow-medium);
     border-top: 1px solid rgba(var(--color-primary-brand-rgb),0.08);
     display: flex;
@@ -857,14 +853,13 @@ figcaption {
 -------------------------------------------------- */
 .site-footer {
     background-color: var(--color-bg-footer);
-    /* Footer should remain opaque for strong grounding */
     color: #A0AEC0;
     text-align: center;
     padding: var(--spacing-xl) var(--spacing-lg) var(--spacing-lg);
     font-size: 0.9rem;
     line-height: 1.7;
     border-top: 3px solid var(--color-primary-brand);
-    border-radius: 0; /* No rounding for footer */
+    border-radius: 0;
 }
 .footer-content {
     max-width: var(--content-max-width-capped);
@@ -894,18 +889,21 @@ figcaption {
     margin-bottom: var(--spacing-lg);
     padding-top: var(--spacing-sm);
 }
+/* SOCIAL ICON PREFILLED COLORS */
 .social-icon {
-    color: #CBD5E0 !important;
     font-size: 1.8rem;
     margin: 0 var(--spacing-md);
-    transition: color var(--transition-base), transform var(--transition-base);
+    transition: transform var(--transition-base), opacity var(--transition-base); /* Added opacity transition */
     display: inline-block;
+    opacity: 0.9; /* Slightly transparent initially */
 }
 .social-icon:hover, .social-icon:focus-visible {
     transform: scale(1.2) translateY(-2px);
+    opacity: 1; /* Full opacity on hover */
 }
-.social-icon.facebook:hover, .social-icon.facebook:focus-visible { color: var(--color-facebook) !important; }
-.social-icon.linkedin:hover, .social-icon.linkedin:focus-visible { color: var(--color-linkedin) !important; }
+.social-icon.facebook { color: var(--color-facebook) !important; }
+.social-icon.linkedin { color: var(--color-linkedin) !important; }
+.social-icon.x-twitter { color: var(--color-x-twitter) !important; } /* If X is black, this is fine. If white for dark BG, adjust if footer gets light */
 
 .footer-links {
     margin-bottom: var(--spacing-md);
@@ -983,6 +981,8 @@ figcaption {
         --tabs-height-mobile: 70px;
     }
     h1.firm-name-header { font-size: clamp(1.4rem, 5vw, 1.9rem); }
+    h2.hero-main-title { font-size: clamp(2.3rem, 7.8vw, 3.6rem); }
+    p.hero-subtitle { font-size: clamp(1.1rem, 4.2vw, 1.4rem); }
     .tab-icon { font-size: 1.6rem; }
     .tab-label { font-size: 0.8rem; }
     .hero-section { min-height: 65vh; }
@@ -995,8 +995,8 @@ figcaption {
         --content-max-width-capped: 820px;
     }
     h2.section-title { font-size: clamp(2rem, 6vw, 3rem); }
-    h2.hero-main-title { font-size: clamp(2.5rem, 7.5vw, 4rem); }
-    p.hero-subtitle { font-size: clamp(1.2rem, 4vw, 1.5rem); }
+    h2.hero-main-title { font-size: clamp(2.6rem, 8vw, 4rem); }
+    p.hero-subtitle { font-size: clamp(1.2rem, 4.5vw, 1.55rem); }
     .cta-button { font-size: 1.2rem; letter-spacing: 1px; }
     .secondary-button { font-size: 1.1rem; }
 }
@@ -1006,10 +1006,9 @@ figcaption {
       --spacing-unit: 9px;
     }
      p.section-intro-text { font-size: 1.2rem; }
-     /* Make content sections slightly less wide on tablets to better see background */
     .content-section .section-container {
         max-width: var(--content-max-width-capped);
-        width: 88vw; /* Slightly narrower than full viewport width */
+        width: 88vw;
     }
 }
 
@@ -1032,9 +1031,10 @@ figcaption {
         background-color: #fff !important;
         background-image: none !important;
     }
-    .site-header, .mobile-tabs, .splash-loader, .page-transition-loader, #background-static, #background-overlay, .carousel-control, .carousel-dots, .google-reviews-button, .cta-button, .secondary-button, .hero-content-box {
+    .site-header, .mobile-tabs, .splash-loader, .page-transition-loader, #background-static, #background-overlay, .carousel-control, .carousel-dots, .google-reviews-button, .cta-button, .secondary-button {
         display: none !important;
     }
+    .hero-content-box { display: block !important; background: none !important; box-shadow: none !important; border: none !important; backdrop-filter: none !important; -webkit-backdrop-filter: none !important;}
     .content-section, .hero-section {
         padding: 20pt 0 !important;
         background-color: #fff !important;
