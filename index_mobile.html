@@ -3,114 +3,110 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>H-2A & H-2B Visa Solutions - Mobile</title>
+    <title>The Kershaw Law Firm - H-2A & H-2B Visas</title>
+    <meta name="description" content="The Kershaw Law Firm provides expert legal services for H-2A and H-2B work visas. Serving businesses and individuals with tailored solutions. Mobile optimized site.">
     <link rel="stylesheet" href="index_mobile.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=EB+Garamond:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
 </head>
 <body>
-    <header class="hero-section">
-        <div class="hero-content">
-            <!-- Assume this is where the text was -->
-            <h1 class="main-hero-title">Guidance Through Complexity</h1>
-            <p class="hero-subtitle">Expert Legal Solutions for H-2A & H-2B Visa Programs Nationwide.</p>
-            <a href="#contact" class="cta-button">Get a Free Consultation</a>
+    <div id="loader" class="loader">
+        <img src="logo.jpg" alt="Kershaw Law Firm Loading" class="loader-logo-img">
+        <h1 class="loader-title">The Kershaw Law Firm P.C.</h1>
+        <div class="loading-bar-container">
+             <div class="loading-bar-progress"></div>
+        </div>
+    </div>
+
+    <div id="background-static"></div>
+
+    <header class="header">
+        <div class="header-content">
+             <a href="index_mobile.html" class="logo-link" aria-label="Home - The Kershaw Law Firm">
+                <!-- If you want the text title here instead of only in loader -->
+                <h1 class="header-firm-title">The Kershaw Law Firm P.C.</h1>
+                <!-- Or if you want the logo in the header:
+                <img src="logo.jpg" alt="Kershaw Law Firm Logo" class="header-logo">
+                Your CSS for .header-logo was missing, so I'm defaulting to the text title.
+                -->
+             </a>
         </div>
     </header>
 
-    <nav class="navbar">
-        <a href="#home" class="nav-logo">VisaSolutions</a>
-        <button class="nav-toggle" aria-label="toggle navigation">
-            <span class="hamburger"></span>
-        </button>
-        <ul class="nav-menu">
-            <li><a href="#about">About Us</a></li>
-            <li><a href="#services">Services</a></li>
-            <li><a href="#process">Our Process</a></li>
-            <li><a href="#testimonials">Testimonials</a></li>
-            <li><a href="#contact">Contact</a></li>
-        </ul>
+    <div class="page-content-wrapper">
+        <section class="hero">
+            <div class="hero-content">
+                <h2 class="hero-main-title">Specializing in H-2B and H-2A Visas</h2>
+                <p class="hero-subtitle">Expert legal guidance for temporary work programs across the U.S.</p>
+                <a href="getstarted_mobile.html" class="cta-button">
+                    <i class="fa-solid fa-rocket"></i> Get Started Today
+                </a>
+            </div>
+        </section>
+
+        <section id="about" class="content-section about-section">
+            <div class="section-container">
+                <h2>About Our Firm</h2>
+                <p>Founded on principles of integrity, expertise, and client-focused service, The Kershaw Law Firm, P.C. is a leading provider of legal solutions for U.S. businesses requiring temporary foreign workers through the H-2A (agricultural) and H-2B (non-agricultural) visa programs.</p>
+                <p>Our seasoned team navigates the intricate regulations set by the Department of Labor (DOL) and U.S. Citizenship and Immigration Services (USCIS) with precision, ensuring your petitions are prepared accurately and processed efficiently. We understand the critical need for timely workforce solutions and are committed to achieving successful outcomes for your business.</p>
+                <a href="aboutus_mobile.html" class="secondary-button">Learn More About Our Approach</a>
+            </div>
+        </section>
+
+        <section id="services-overview" class="content-section services-overview-section">
+             <div class="section-container">
+                <h2>Focused Visa Services</h2>
+                <p>We dedicate our practice to H-2A and H-2B visas, offering specialized knowledge that covers the entire process:</p>
+                <ul class="service-list">
+                    <li><i class="fas fa-check-circle"></i> Comprehensive Case Assessment & Strategy</li>
+                    <li><i class="fas fa-check-circle"></i> Meticulous Application & Petition Filing</li>
+                    <li><i class="fas fa-check-circle"></i> Navigating DOL Recruitment Requirements</li>
+                    <li><i class="fas fa-check-circle"></i> Responding to Government Audits & RFEs</li>
+                    <li><i class="fas fa-check-circle"></i> Ongoing Compliance Guidance</li>
+                </ul>
+                <p>Let our focused expertise streamline your temporary labor certification and visa process.</p>
+                <a href="services_mobile.html" class="secondary-button">View All Services</a>
+             </div>
+        </section>
+
+        <section id="testimonials" class="content-section testimonials-section">
+             <div class="section-container">
+                <h2>Client Successes</h2>
+                 <div id="google-reviews-container">
+                     <p class="loading-reviews-text">Loading reviews...</p>
+                     <!-- Google Reviews will be dynamically injected here -->
+                 </div>
+                <div class="google-reviews-callout">
+                     <h3><i class="fas fa-star"></i> <i class="fas fa-star"></i> <i class="fas fa-star"></i> <i class="fas fa-star"></i> <i class="fas fa-star"></i> See More 5-Star Reviews!</h3>
+                     <p>Client satisfaction is our priority. Read authentic feedback from businesses like yours on Google.</p>
+                     <a href="#" id="google-reviews-main-link" class="google-reviews-button" aria-label="Read Google Reviews" target="_blank" rel="noopener noreferrer">
+                         <i class="fab fa-google"></i> Read All Google Reviews
+                     </a>
+                </div>
+             </div>
+        </section>
+
+        <section class="content-section call-to-action-bottom">
+            <div class="section-container text-center">
+                 <h2>Start Your Visa Process Today</h2>
+                 <p>Reach out to discuss your business's H-2A or H-2B needs with our experienced legal team.</p>
+                 <a href="contact_mobile.html" class="cta-button">
+                    <i class="fa-solid fa-phone-alt"></i> Contact Us Now
+                </a>
+            </div>
+        </section>
+    </div>
+
+    <nav class="tabs">
+        <a href="index_mobile.html" class="active" aria-current="page">Home</a>
+        <a href="aboutus_mobile.html">About Us</a>
+        <a href="services_mobile.html">Services</a>
+        <a href="faq_mobile.html">FAQ</a>
+        <a href="contact_mobile.html">Contact</a>
     </nav>
 
-    <main>
-        <section id="about" class="content-section">
-            <h2>About Us</h2>
-            <p class="transparent-white-text">Welcome to H-2A & H-2B Visa Solutions, your dedicated partner in navigating the complexities of U.S. agricultural and non-agricultural temporary worker programs. We specialize in providing comprehensive support to employers seeking to legally hire foreign workers.</p>
-            <p class="transparent-white-text">Our team is committed to simplifying the visa application process, ensuring compliance, and helping you secure the workforce you need.</p>
-        </section>
-
-        <section id="services" class="content-section">
-            <h2>Our Services</h2>
-            <div class="service-item">
-                <h3>H-2A Visa Program</h3>
-                <p class="transparent-white-text">Tailored assistance for agricultural employers needing seasonal workers. From initial application to worker arrival, we manage it all.</p>
-            </div>
-            <div class="service-item">
-                <h3>H-2B Visa Program</h3>
-                <p class="transparent-white-text">Support for non-agricultural employers seeking temporary workers for peak load, seasonal, or intermittent needs.</p>
-            </div>
-            <div class="service-item">
-                <h3>Compliance & Support</h3>
-                <p class="transparent-white-text">Ongoing guidance to ensure adherence to all DOL and USCIS regulations, including audits and record-keeping.</p>
-            </div>
-        </section>
-
-        <section id="process" class="content-section">
-            <h2>Our Streamlined Process</h2>
-            <ol class="process-steps">
-                <li>Initial Consultation & Assessment</li>
-                <li>Documentation & Application Preparation</li>
-                <li>Filing with Government Agencies (DOL, USCIS)</li>
-                <li>Consular Processing & Worker Arrival Coordination</li>
-                <li>Ongoing Compliance Monitoring</li>
-            </ol>
-        </section>
-
-        <section id="testimonials" class="content-section">
-            <h2>What Our Clients Say</h2>
-            <div id="google-reviews-container">
-                <p>Loading reviews...</p>
-                <!-- Reviews will be injected here by JavaScript -->
-            </div>
-        </section>
-
-        <section id="contact" class="content-section contact-form-section">
-            <h2>Contact Us</h2>
-            <p class="transparent-white-text">Ready to discuss your H-2A or H-2B visa needs? Fill out the form below or call us directly.</p>
-            <form id="contact-form">
-                <label for="name">Name:</label>
-                <input type="text" id="name" name="name" required>
-
-                <label for="email">Email:</label>
-                <input type="email" id="email" name="email" required>
-
-                <label for="phone">Phone (Optional):</label>
-                <input type="tel" id="phone" name="phone">
-
-                <label for="visa_type">Visa Type of Interest:</label>
-                <select id="visa_type" name="visa_type">
-                    <option value="h2a">H-2A (Agricultural)</option>
-                    <option value="h2b">H-2B (Non-Agricultural)</option>
-                    <option value="unsure">Unsure/Other</option>
-                </select>
-
-                <label for="message">Message:</label>
-                <textarea id="message" name="message" rows="5" required></textarea>
-
-                <button type="submit" class="cta-button">Send Message</button>
-            </form>
-            <div class="contact-info">
-                <p><i class="fas fa-phone"></i> <a href="tel:+1234567890">+1 (234) 567-890</a></p>
-                <p><i class="fas fa-envelope"></i> <a href="mailto:info@h2visasolutions.com">info@h2visasolutions.com</a></p>
-                <p><i class="fas fa-map-marker-alt"></i> 123 Visa Lane, Immigration City, USA</p>
-            </div>
-        </section>
-    </main>
-
-    <footer>
-        <p>© 2023 H-2A & H-2B Visa Solutions. All rights reserved.</p>
-        <p><a href="#privacypolicy">Privacy Policy</a> | <a href="#termsofservice">Terms of Service</a></p>
-    </footer>
-
-    <script src="index_mobile.js"></script>
+    <script src="index_mobile.js" defer></script>
 </body>
 </html>
