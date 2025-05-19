@@ -75,9 +75,9 @@
              </div>
         </section>
 
-        <section id="testimonials" class="content-section testimonials-section"> <!-- ID kept as "testimonials" for CSS/JS consistency, but content is now Google Reviews -->
+        <section id="testimonials" class="content-section testimonials-section"> <!-- ID kept for CSS/JS consistency -->
              <div class="section-container">
-                <h2 class="section-title decorative-title animate-on-scroll fade-in-up">Google Reviews</h2> <!-- CHANGED TITLE -->
+                <h2 class="section-title decorative-title animate-on-scroll fade-in-up">Google Reviews</h2>
                  <div class="testimonial-carousel-wrapper animate-on-scroll fade-in-scale" data-animation-delay="100">
                      <div class="testimonial-carousel">
                          <!-- Review 1 -->
@@ -123,6 +123,7 @@
                             <p class="review-source">Reviewed on Google</p>
                         </div>
                      </div>
+                     <!-- Carousel controls are now hidden via CSS if not needed by JS logic -->
                      <button class="carousel-control prev" aria-label="Previous testimonial"><i class="fas fa-chevron-left"></i></button>
                      <button class="carousel-control next" aria-label="Next testimonial"><i class="fas fa-chevron-right"></i></button>
                      <div class="carousel-dots"></div>
@@ -133,7 +134,7 @@
                         Esteemed by Our Clients
                      </h3>
                      <p>Client satisfaction is the cornerstone of our practice. Discover authentic feedback from businesses like yours.</p>
-                     <a href="https://www.google.com/search?q=The+Kershaw+Law+Firm+P.C.+reviews" class="google-reviews-button" aria-label="Read Google Reviews for The Kershaw Law Firm P.C." target="_blank" rel="noopener noreferrer">
+                     <a href="https://g.co/kgs/6jVBWbH" class="google-reviews-button" aria-label="Read Google Reviews for The Kershaw Law Firm P.C." target="_blank" rel="noopener noreferrer"> <!-- UPDATED LINK -->
                          <i class="fab fa-google"></i> Read Our Google Reviews
                      </a>
                 </div>
@@ -193,6 +194,7 @@
         </div>
     </footer>
 
+    <script src="google_reviews.js" defer></script> <!-- NEW SCRIPT FILE -->
     <script src="index_mobile.js" defer></script>
 </body>
 </html>
