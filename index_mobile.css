@@ -10,29 +10,31 @@ html {
 }
 
 :root {
-    --color-bg-header-footer: rgba(255, 255, 255, 0.97);
-    --color-text-header-footer: #1A2B48; /* Deep Blue for text on light bg */
-    --color-text-dark: #2c3e50; /* Standard dark text */
-    --color-text-light: #333; /* Slightly lighter dark text for some elements */
+    --color-bg-header-footer: rgba(255, 255, 255, 0.96); /* Consistent light bg for header/footer */
+    --color-text-header-footer: #1A2B48;
+    --color-text-dark: #2c3e50;
+    --color-text-light: #333;
     --color-text-on-dark-bg: #FFFFFF;
-    --color-accent-blue-primary: #003366; /* Authoritative Navy Blue */
-    --color-accent-blue-secondary: #0A58A6; /* Brighter Blue for interactions */
-    --color-accent-gold: #B08D57; /* More antique/muted gold for elegance */
-    --color-accent-grey: #f0f2f5; /* Soft grey for some backgrounds */
+    --color-accent-blue-primary: #003366;
+    --color-accent-blue-secondary: #0A58A6;
+    --color-accent-gold: #B08D57;
+    --color-accent-grey: #f0f2f5; /* Background for loader */
+    --color-loader-bar: var(--color-accent-blue-primary); /* Color for the new loading bar */
     --color-shadow-text: 1px 1px 8px rgba(0, 0, 0, 0.8);
     --color-shadow-subtle: rgba(26, 43, 72, 0.08);
     --color-shadow-medium: rgba(26, 43, 72, 0.12);
     --color-border-subtle: rgba(26, 43, 72, 0.1);
-    --font-primary: 'Cinzel', serif;        /* Headings, Titles - Elegant, Traditional */
-    --font-secondary: 'EB Garamond', serif; /* Body Text, Navigation - Classic, Readable */
+    --font-primary: 'Cinzel', serif;
+    --font-secondary: 'EB Garamond', serif;
     --footer-height: 70px;
     --content-max-width-mobile: 700px;
+    --loader-transition-duration: 1.2s; /* For page transition, slightly longer */
 }
 
 body {
     font-family: var(--font-secondary);
     min-height: 100vh;
-    color: var(--color-text-light); /* Using slightly lighter dark text */
+    color: var(--color-text-light);
     line-height: 1.75;
     background-color: #EAEBEF;
     overflow-x: hidden;
@@ -50,21 +52,21 @@ body.loaded {
     opacity: 1;
 }
 
-/* --- MODIFIED LOADER STYLES --- */
+/* --- REVISED LOADER STYLES --- */
 .loader {
     position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-    background: rgba(250, 250, 250, 0.98); /* Slightly off-white, very opaque */
+    background: var(--color-accent-grey); /* Light grey background for loader */
     display: flex;
-    flex-direction: column; /* Stack logo, title, spinner */
+    flex-direction: column;
     align-items: center;
     justify-content: center;
     text-align: center;
     z-index: 3000;
     opacity: 1;
-    transition: opacity 0.6s ease-out, visibility 0.6s ease-out; /* Slightly longer transition */
+    transition: opacity 0.7s ease-out, visibility 0.7s ease-out;
     visibility: visible;
     pointer-events: auto;
-    padding: 20px; /* Add some padding */
+    padding: 20px;
 }
 
 .loader.hidden {
@@ -74,45 +76,55 @@ body.loaded {
 }
 
 .loader-logo-img {
-    max-width: 65%; /* Logo takes up a good portion of width */
-    max-height: 180px; /* But not excessively tall */
+    max-width: 50%;      /* Logo width scaled down */
+    max-height: 120px;   /* Max height for logo */
     height: auto;
-    margin-bottom: 25px;
-    animation: pulseLogo 1.8s infinite ease-in-out alternate;
-    filter: drop-shadow(0 4px 8px rgba(0,0,0,0.1)); /* Subtle shadow for logo */
+    margin-bottom: 20px; /* Space between logo and title */
+    animation: pulseLogo 2s infinite ease-in-out alternate;
+    filter: drop-shadow(0 3px 6px rgba(0,0,0,0.08));
 }
 
 @keyframes pulseLogo {
-    from { transform: scale(0.97); opacity: 0.85; }
-    to { transform: scale(1.03); opacity: 1; }
+    from { transform: scale(0.98); opacity: 0.9; }
+    to { transform: scale(1.02); opacity: 1; }
 }
 
 .loader-title {
-    font-family: var(--font-primary); /* Cinzel for the title */
-    font-size: 1.9rem; /* Prominent title */
-    color: var(--color-accent-blue-primary); /* Navy blue title */
-    margin-bottom: 35px;
-    line-height: 1.25;
+    font-family: var(--font-primary);
+    font-size: 1.6rem;   /* Title size scaled down */
+    color: var(--color-accent-blue-primary);
+    margin-bottom: 25px; /* Space between title and loading bar */
+    line-height: 1.3;
     font-weight: 700;
     letter-spacing: 0.5px;
 }
 
-/* Spinner (existing style, just ensuring it's positioned correctly after title) */
-.loader::after {
-    content: '';
-    display: block;
-    width: 50px; height: 50px; /* Standard spinner size */
-    border: 6px solid rgba(0, 51, 102, 0.25); /* Lighter border for primary blue */
-    border-top: 6px solid var(--color-accent-blue-primary); /* Primary color spinner */
-    border-radius: 50%;
-    animation: spin 0.9s linear infinite;
-    /* No absolute positioning needed, it will flow after the title */
+/* NEW LOADING BAR STYLES */
+.loading-bar-container {
+    width: 60%;          /* Width of the loading bar track */
+    max-width: 250px;    /* Max width of the track */
+    height: 8px;         /* Height of the track */
+    background-color: rgba(0, 51, 102, 0.15); /* Light track color */
+    border-radius: 4px;
+    overflow: hidden;    /* Important to clip the progress bar */
 }
 
-@keyframes spin {
-     0% { transform: rotate(0deg); } /* Simpler spin if not translated */
-    100% { transform: rotate(360deg); }
+.loading-bar-progress {
+    width: 0%;           /* Start with 0 width */
+    height: 100%;
+    background-color: var(--color-loader-bar); /* Use defined blue */
+    border-radius: 4px;
+    animation: loadProgress var(--loader-transition-duration) ease-out forwards;
+    /* 'forwards' keeps it at 100% after animation */
 }
+
+@keyframes loadProgress {
+    0% { width: 0%; }
+    /* 30% { width: 20%; } Not needed for simple fill */
+    /* 70% { width: 75%; } */
+    100% { width: 100%; }
+}
+
 
 /* Background */
 #background-static {
@@ -124,7 +136,7 @@ body.loaded {
     background-repeat: no-repeat;
     background-image: url('austin.jpg');
     animation: subtleZoom 50s infinite alternate ease-in-out;
-    filter: brightness(0.70) contrast(1.05); /* Wallpaper slightly darker for contrast */
+    filter: brightness(0.70) contrast(1.05);
 }
 
 @keyframes subtleZoom {
@@ -132,48 +144,32 @@ body.loaded {
     to { transform: scale(1.03); }
 }
 
-/* Header (using previous "larger logo" attempt, focusing on height) */
+/* --- REVISED HEADER STYLES --- */
 .header {
     width: 100%;
     z-index: 100;
-    padding: 8px 0;
-    background: var(--color-bg-header-footer);
+    padding: 15px 0; /* Decent padding for text title */
+    background: var(--color-bg-header-footer); /* SEMI-TRANSPARENT WHITE BACKGROUND */
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
-    box-shadow: 0 3px 10px var(--color-shadow-medium);
+    box-shadow: 0 2px 8px var(--color-shadow-subtle); /* Softer shadow */
     position: sticky;
     top: 0;
-    display: flex;
-    align-items: center;
-    min-height: 60px;
+    text-align: center; /* Center the title */
 }
-.header-content {
+.header-content { /* This div might be optional if header is text-align: center */
     width: 90%;
     margin: 0 auto;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    /* display: flex; justify-content: center; align-items: center; */
 }
-.logo-container {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-}
-.logo-link {
-    text-decoration: none;
-    color: inherit;
-    display: inline-block;
-    line-height: 0;
-}
-.header-logo {
-    height: 65px;      /* Moderate, consistent height for header logo */
-    width: auto;
-    max-width: 85%;
-    display: block;
-    margin: 0 auto;
-    border-radius: 6px;
-    object-fit: contain;
+.header-firm-title { /* NEW STYLE FOR THE TEXT TITLE IN HEADER */
+    font-family: var(--font-primary); /* Cinzel */
+    font-size: 1.7rem; /* Prominent but not overly large for a header */
+    color: var(--color-text-header-footer); /* Dark blue text */
+    font-weight: 700;
+    margin: 0;
+    line-height: 1.2;
+    letter-spacing: 0.5px;
 }
 
 
@@ -189,36 +185,43 @@ body.loaded {
     z-index: 1;
 }
 
-/* Sections - MORE TRANSPARENT */
+/* Sections - INCREASED TRANSPARENCY */
 .content-section {
     width: 100%;
     max-width: var(--content-max-width-mobile);
     margin: 45px auto;
     padding: 35px 30px;
-    background-color: rgba(255, 255, 255, 0.88); /* INCREASED TRANSPARENCY */
+    background-color: rgba(255, 255, 255, 0.82); /* INCREASED TRANSPARENCY */
     border-radius: 12px;
-    box-shadow: 0 5px 18px rgba(44, 62, 80, 0.15); /* Softer shadow for transparent feel */
+    box-shadow: 0 5px 18px rgba(44, 62, 80, 0.12); /* Adjusted shadow */
     color: var(--color-text-light);
-    border: 1px solid rgba(0,0,0,0.04); /* Very subtle border */
+    border: 1px solid rgba(0,0,0,0.03);
 }
 
+.testimonials-section { /* Matching transparency */
+    background-color: rgba(240, 242, 245, 0.82);
+}
+.testimonial-item { /* Keep items slightly more opaque for readability */
+    background-color: rgba(255, 255, 255, 0.90);
+}
+
+
+/* Section Headings and Content (using styles from previous "Law Theme" attempt) */
 .section-container {
      width: 100%;
      margin: 0 auto;
 }
-
 .content-section h2 {
-    font-family: var(--font-primary); /* Cinzel */
-    font-size: 2.3rem; /* Adjusted for EB Garamond body text */
+    font-family: var(--font-primary);
+    font-size: 2.3rem;
     color: var(--color-accent-blue-primary);
     font-weight: 700;
     margin-bottom: 30px;
     text-align: center;
     position: relative;
     padding-bottom: 18px;
-    letter-spacing: 0.5px; /* For Cinzel */
+    letter-spacing: 0.5px;
 }
-
 .content-section h2::after {
     content: '';
     position: absolute;
@@ -227,16 +230,14 @@ body.loaded {
     transform: translateX(-50%);
     width: 75px;
     height: 3.5px;
-    background-color: var(--color-accent-gold); /* Muted gold underline */
+    background-color: var(--color-accent-gold);
     border-radius: 2px;
 }
-
 .content-section p, .content-section ul {
     margin-bottom: 22px;
-    line-height: 1.8; /* EB Garamond benefits from good line height */
-    font-size: 1.05rem; /* (18px * 1.05 = ~18.9px) */
+    line-height: 1.8;
+    font-size: 1.05rem;
 }
-
 .service-list { list-style: none; padding-left: 0; }
 .service-list li { margin-bottom: 16px; padding-left: 35px; position: relative; }
 .service-list li i {
@@ -247,71 +248,66 @@ body.loaded {
     font-size: 1.05em;
 }
 
-/* Hero Section - REVISED BACKGROUND */
+/* Hero Section (using styles from previous "Law Theme" attempt) */
 .hero {
     width: 100%;
     max-width: none;
     margin: 25px auto 40px auto;
-    padding: 50px 20px; /* Reduced top/bottom padding slightly */
+    padding: 50px 20px;
     text-align: center;
     background: none;
     box-shadow: none;
     color: var(--color-text-on-dark-bg);
     position: relative;
 }
-
 .hero-content {
     max-width: 600px;
     margin: 0 auto;
-    background: rgba(20, 25, 30, 0.78); /* Dark, elegant, semi-transparent overlay */
+    background: rgba(20, 25, 30, 0.78);
     padding: 35px;
     border-radius: 10px;
-    box-shadow: 0 5px 18px rgba(0,0,0,0.45); /* Refined shadow */
+    box-shadow: 0 5px 18px rgba(0,0,0,0.45);
 }
-
 .hero h2 {
-    font-family: var(--font-primary); /* Cinzel */
+    font-family: var(--font-primary);
     font-size: 2.5rem;
     color: var(--color-text-on-dark-bg);
     font-weight: 700;
-    text-shadow: 1px 1px 5px rgba(0,0,0,0.6); /* Refined text shadow */
+    text-shadow: 1px 1px 5px rgba(0,0,0,0.6);
     margin-bottom: 20px;
     animation: fadeIn 1s ease-out 0.2s backwards;
     line-height: 1.25;
-    letter-spacing: 0.5px; /* For Cinzel */
+    letter-spacing: 0.5px;
     padding-bottom: 0;
 }
 .hero h2::after { display: none; }
-
 .hero-subtitle {
     font-size: 1.3rem;
     margin-bottom: 35px;
     text-shadow: 1px 1px 4px rgba(0,0,0,0.5);
     color: rgba(255, 255, 255, 0.98);
     animation: fadeIn 1s ease-out 0.4s backwards;
-    font-family: var(--font-secondary); /* EB Garamond for readability */
+    font-family: var(--font-secondary);
     font-weight: 400;
     line-height: 1.6;
 }
 
-/* CTA Button */
+/* Buttons (using styles from previous "Law Theme" attempt) */
 .cta-button {
     display: inline-flex; align-items: center; justify-content: center;
     gap: 12px;
     padding: 17px 40px;
-    background: var(--color-accent-gold); /* Muted Gold CTA */
-    color: #20150C; /* Dark brown/black text on gold for better contrast if gold is lighter */
-    /* If gold is dark enough, --color-text-on-dark-bg (white) is fine */
-    /* color: var(--color-text-on-dark-bg); */
+    background: var(--color-accent-gold);
+    color: #20150C;
     text-decoration: none;
     font-family: var(--font-primary); font-size: 1.15rem; font-weight: 700;
     border-radius: 8px;
-    border: 1px solid rgba(0,0,0,0.1); /* Subtle border for definition */
+    border: 1px solid rgba(0,0,0,0.1);
     transition: all 0.3s ease;
-    box-shadow: 0 4px 12px rgba(176, 141, 87, 0.4); /* Shadow matching gold */
+    box-shadow: 0 4px 12px rgba(176, 141, 87, 0.4);
     cursor: pointer;
     animation: fadeIn 1s ease-out 0.6s backwards;
-    text-shadow: none; /* Remove text shadow if text is dark */
+    text-shadow: none;
     min-width: 230px;
     text-align: center;
     text-transform: uppercase;
@@ -319,12 +315,10 @@ body.loaded {
 }
 .cta-button i { font-size: 1.05em; }
 .cta-button:hover {
-    background: #c8a265; /* Darker muted gold on hover */
+    background: #c8a265;
     box-shadow: 0 6px 16px rgba(176, 141, 87, 0.5);
     transform: translateY(-1px);
 }
-
-/* Secondary Button Style */
 .secondary-button {
     display: inline-block;
     margin-top: 30px;
@@ -334,9 +328,9 @@ body.loaded {
     border: 2px solid var(--color-accent-blue-primary);
     border-radius: 6px;
     text-decoration: none;
-    font-family: var(--font-secondary); /* EB Garamond for secondary button text */
+    font-family: var(--font-secondary);
     font-size: 1.05rem;
-    font-weight: 600; /* Semi-bold for Garamond */
+    font-weight: 600;
     transition: all 0.3s ease;
     text-align: center;
     letter-spacing: 0.3px;
@@ -346,39 +340,14 @@ body.loaded {
     color: var(--color-text-on-dark-bg);
     box-shadow: 0 3px 10px rgba(0, 51, 102, 0.3);
 }
-
-/* Testimonials Section */
-.testimonials-section {
-    background-color: rgba(240, 242, 245, 0.88); /* Matching transparency */
-}
-.testimonial-grid { display: grid; gap: 30px; }
-.testimonial-item {
-    font-style: italic;
-    padding: 30px;
-    border-left: 5px solid var(--color-accent-gold); /* Gold accent */
-    background-color: rgba(255, 255, 255, 0.92); /* Slightly more opaque than section for standout */
-    border-radius: 0 10px 10px 0;
-    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
-}
-.testimonial-item p:first-child { margin-bottom: 20px; font-family: var(--font-secondary); } /* Ensure Garamond */
-.testimonial-author {
-    font-style: normal;
-    font-weight: 700; /* Bold for Garamond author */
-    text-align: right;
-    margin-top: 20px;
-    color: var(--color-accent-blue-primary);
-    font-size: 1.05rem;
-    font-family: var(--font-secondary); /* Garamond for author */
-}
-
 .google-reviews-callout {
     margin-top: 50px;
     padding-top: 35px;
-    border-top: 1px dashed rgba(0, 0, 0, 0.15); /* Dashed line for distinction */
+    border-top: 1px dashed rgba(0, 0, 0, 0.15);
     text-align: center;
 }
 .google-reviews-callout h3 {
-    font-family: var(--font-secondary); /* Garamond for this heading too */
+    font-family: var(--font-secondary);
     font-size: 1.35rem;
     color: var(--color-text-light);
     margin-bottom: 20px;
@@ -386,17 +355,16 @@ body.loaded {
     align-items: center;
     justify-content: center;
     gap: 10px;
-    font-weight: 600; /* Semi-bold for Garamond */
+    font-weight: 600;
 }
 .google-reviews-callout h3 i { color: var(--color-accent-gold); font-size: 1.05em; }
-
 .google-reviews-button {
     display: inline-flex; align-items: center; gap: 12px;
     margin-top: 20px;
     padding: 14px 32px;
     background: #DB4437;
     color: var(--color-text-on-dark-bg);
-    text-decoration: none; font-family: var(--font-primary); /* Cinzel for button */
+    text-decoration: none; font-family: var(--font-primary);
     font-size: 1.1rem; font-weight: 700;
     border-radius: 6px; transition: all 0.3s ease;
     box-shadow: 0 3px 8px rgba(219, 68, 55, 0.4);
@@ -409,46 +377,43 @@ body.loaded {
      box-shadow: 0 4px 10px rgba(219, 68, 55, 0.5);
 }
 .google-reviews-button i { font-size: 1.25em; }
-
-/* Bottom CTA Section */
 .call-to-action-bottom {
-    background: linear-gradient(135deg, var(--color-accent-blue-primary), #002855); /* Slightly different dark blue */
+    background: linear-gradient(135deg, var(--color-accent-blue-primary), #002855);
     color: var(--color-text-on-dark-bg);
     text-shadow: 1px 1px 3px rgba(0,0,0,0.4);
     padding: 45px 30px;
     margin-bottom: 0;
 }
-.call-to-action-bottom h2 { /* Cinzel */
+.call-to-action-bottom h2 {
      color: var(--color-text-on-dark-bg);
      text-shadow: 1px 1px 3px rgba(0,0,0,0.4);
      padding-bottom: 0;
-     font-size: 2.3rem; /* Consistent with other h2s */
+     font-size: 2.3rem;
      letter-spacing: 0.5px;
 }
 .call-to-action-bottom h2::after { display: none; }
-.call-to-action-bottom p { /* EB Garamond */
+.call-to-action-bottom p {
     color: rgba(255, 255, 255, 0.94);
     font-size: 1.1rem;
     line-height: 1.7;
 }
-.call-to-action-bottom .cta-button { /* Cinzel */
+.call-to-action-bottom .cta-button {
     background: var(--color-accent-gold);
-    color: #20150C; /* Dark text on gold */
-    /* color: var(--color-text-on-dark-bg); */
+    color: #20150C;
     box-shadow: 0 5px 15px rgba(176, 141, 87, 0.4);
-    margin-top: 25px; /* Added margin top */
+    margin-top: 25px;
 }
 .call-to-action-bottom .cta-button:hover {
     background: #c8a265;
     box-shadow: 0 7px 18px rgba(176, 141, 87, 0.5);
 }
 
-/* Fixed Mobile Tabs */
+/* Tabs (using styles from previous "Law Theme" attempt) */
 .tabs {
     position: fixed; bottom: 0; left: 0; width: 100%;
     z-index: 1000; padding: 0 5px;
     height: var(--footer-height);
-    background: var(--color-bg-header-footer);
+    background: var(--color-bg-header-footer); /* Consistent with header */
     backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
     box-shadow: 0 -3px 10px var(--color-shadow-medium);
     border-top: 1px solid var(--color-border-subtle);
@@ -460,14 +425,14 @@ body.loaded {
 .tabs a {
     color: var(--color-text-header-footer);
     text-decoration: none;
-    font-family: var(--font-secondary); /* EB Garamond for tabs */
-    font-size: 0.8rem; /* Slightly smaller for space, but uppercase helps */
-    font-weight: 600; /* Semi-bold Garamond */
-    padding: 5px 4px; /* Adjust padding */
+    font-family: var(--font-secondary);
+    font-size: 0.8rem;
+    font-weight: 600;
+    padding: 5px 4px;
     transition: all 0.3s ease;
     position: relative;
     text-transform: uppercase;
-    letter-spacing: 0.7px; /* Increased letter spacing */
+    letter-spacing: 0.7px;
     text-align: center;
     flex-grow: 1;
     flex-basis: 0;
@@ -485,7 +450,7 @@ body.loaded {
     content: '';
     position: absolute;
     width: 0;
-    height: 3px; /* Thinner underline for Garamond */
+    height: 3px;
     bottom: 0px;
     left: 50%;
     transform: translateX(-50%);
@@ -494,7 +459,7 @@ body.loaded {
     border-radius: 1.5px 1.5px 0 0;
 }
 .tabs a:hover { color: var(--color-accent-blue-primary); }
-.tabs a.active { color: var(--color-accent-blue-primary); font-weight: 700; /* Keep active bold */ }
+.tabs a.active { color: var(--color-accent-blue-primary); font-weight: 700; }
 .tabs a:hover::after, .tabs a.active::after { width: 70%; }
 
 /* Animations */
@@ -511,51 +476,43 @@ a:focus-visible, button:focus-visible, input:focus-visible {
     box-shadow: 0 0 0 3px rgba(10, 88, 166, 0.3);
 }
 
-/* Responsive adjustments for tablets/larger phones */
+/* Responsive adjustments */
 @media (min-width: 600px) {
     body { font-size: 19px; }
-
-    .header-logo { height: 75px; max-width: 70%; } /* Tablet header logo */
-    .loader-logo-img { max-width: 50%; max-height: 220px; }
-    .loader-title { font-size: 2.4rem; }
+    .header-firm-title { font-size: 2rem; }
+    .loader-logo-img { max-width: 40%; max-height: 180px; }
+    .loader-title { font-size: 2rem; }
+    .loading-bar-container { width: 50%; max-width: 300px; height: 10px; }
 
     .page-content-wrapper { padding: 0 20px; }
     .content-section {
-        padding: 45px 35px;
-        margin: 50px auto;
-        max-width: 800px;
-        background-color: rgba(255, 255, 255, 0.9); /* Slightly more opaque on tablet */
+        padding: 45px 35px; margin: 50px auto; max-width: 800px;
+        background-color: rgba(255, 255, 255, 0.85); /* Slightly more opaque on tablet for readability */
     }
+    .testimonials-section { background-color: rgba(240, 242, 245, 0.85); }
+    .testimonial-item { background-color: rgba(255, 255, 255, 0.92); }
+
      .content-section h2 { font-size: 2.6rem; padding-bottom: 20px; margin-bottom: 35px;}
      .content-section h2::after { width: 90px; height: 4px; }
     .content-section p, .content-section ul { font-size: 1.1rem; line-height: 1.85; }
-
     .hero h2 { font-size: 2.8rem; }
     .hero-subtitle { font-size: 1.45rem; }
-
-    .testimonial-grid {
-        grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
-        gap: 35px;
-    }
-    .tabs a {
-        font-size: 0.9rem;
-        padding: 10px 15px;
-        flex-grow: 0; flex-basis: auto;
-        min-width: 110px; max-width: 160px;
-        letter-spacing: 0.5px;
-    }
+    .testimonial-grid { grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 35px; }
+    .tabs a { font-size: 0.9rem; padding: 10px 15px; flex-grow: 0; flex-basis: auto; min-width: 110px; max-width: 160px; letter-spacing: 0.5px; }
      .tabs a::after { width: 80%; }
 }
 
-/* Specific adjustments for VERY NARROW mobile screens */
-@media (max-width: 360px) {
+@media (max-width: 360px) { /* Very narrow screens */
     body { font-size: 17px; }
-    .header-logo { height: 55px; }
-    .loader-logo-img { max-width: 70%; max-height: 150px; }
-    .loader-title { font-size: 1.6rem; margin-bottom: 25px; }
-    .loader::after { width: 40px; height: 40px; border-width: 5px;}
+    .header-firm-title { font-size: 1.4rem; }
+    .loader-logo-img { max-width: 55%; max-height: 100px; margin-bottom: 15px; }
+    .loader-title { font-size: 1.3rem; margin-bottom: 20px; }
+    .loading-bar-container { width: 70%; height: 6px; }
 
-    .content-section { padding: 30px 20px; margin: 35px auto; background-color: rgba(255, 255, 255, 0.86); }
+    .content-section { padding: 30px 20px; margin: 35px auto; background-color: rgba(255, 255, 255, 0.80); }
+    .testimonials-section { background-color: rgba(240, 242, 245, 0.80); }
+    .testimonial-item { background-color: rgba(255, 255, 255, 0.88); }
+
     .content-section p, .content-section ul { font-size: 1rem; line-height: 1.75; }
     .content-section h2 { font-size: 2rem; }
     .hero h2 { font-size: 2.1rem; }
