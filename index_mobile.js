@@ -16,7 +16,7 @@ window.addEventListener('load', () => {
         // Add the 'hidden' class to trigger the CSS fade-out transition
         setTimeout(() => {
             loader.classList.add('hidden');
-        }, 400); // Delay matches the CSS opacity transition duration
+        }, 500); // Increased delay slightly to match enhanced visuals
     } else {
         console.error("Loader element not found.");
     }
@@ -28,25 +28,19 @@ document.addEventListener('DOMContentLoaded', () => {
     const loader = document.getElementById('loader');
 
     // Select all internal links that navigate to a different page
-    // This selects <a> tags with an href that don't start with # (anchor),
-    // tel:, mailto:, javascript:, or http/https (external links)
-    const internalLinks = document.querySelectorAll('a[href]:not([href^="#"]):not([href^="tel:"]):not([href^="mailto:"]):not([href^="javascript:"]):not([href^="http"]):not([href^="https"])');
+    const internalLinks = document.querySelectorAll('a[href]:not([href^="#"]):not([href^="tel:"]):not([href^="mailto:"]):not([href^="javascript:"]):not([href^="http"]):not([href^="https"]):not([target="_blank"])'); // Exclude target="_blank" links
 
     internalLinks.forEach(link => {
         link.addEventListener('click', (e) => {
-            // Get the destination URL from the link's href
             const destination = link.getAttribute('href');
 
-            // Check if the destination is different from the current page
-            // This prevents the loader from showing if clicking the link
-            // to the page you're already on. You might adjust this logic
-            // depending on how strict you want it (e.g., handling index.html vs /)
-             const currentPage = window.location.pathname.split('/').pop(); // Get current file name
-             const destinationPage = destination.split('/').pop(); // Get destination file name
+            // Simple check if destination is potentially the current page
+            // This check is basic and might need refinement depending on your URL structure
+             const currentPagePath = window.location.pathname;
+             const destinationPath = new URL(destination, window.location.href).pathname; // Resolve destination path relative to current page
 
-             if (destinationPage === currentPage || destination === '#') {
-                 // If linking to the current page or an anchor on the current page,
-                 // let the default behavior happen (or handle smooth scroll for #)
+             if (destinationPath === currentPagePath || destination === '#') {
+                 // If linking to the current page or an anchor, do nothing (let default behavior happen)
                  return;
              }
 
@@ -59,28 +53,23 @@ document.addEventListener('DOMContentLoaded', () => {
                  loader.classList.remove('hidden');
 
                  // --- Ensure loader styling for transition ---
-                 // Remove any residual centering/initial styles
+                 // Override any initial centering/load styles to be a full overlay
                  loader.style.position = 'fixed';
                  loader.style.top = '0';
                  loader.style.left = '0';
                  loader.style.transform = 'none';
                  loader.style.width = '100%';
                  loader.style.height = '100%';
-                 loader.style.background = 'rgba(255, 255, 255, 0.9)'; // Ensure overlay background
+                 loader.style.background = 'rgba(255, 255, 255, 0.95)'; // Match CSS overlay background
                  loader.style.display = 'flex'; // Ensure flex display for centering spinner
             }
 
-            // Wait a brief moment (e.g., 300ms) for the loader animation
-            // or overlay to become clearly visible before navigating.
-            // Adjust this timeout based on how long you want the visual transition effect.
+            // Wait a brief moment for the loader animation to show, then navigate
             setTimeout(() => {
-                // Navigate to the destination URL
                 window.location.href = destination;
-            }, 300); // 300ms delay before navigation
+            }, 350); // Slightly increased delay for visual effect
         });
     });
 
-    // --- Removed Firebase Authentication Code ---
-    // All Firebase-related functions, imports, and event listeners are removed
-    // from this file as per the user's request.
+    // Firebase code remains removed.
 });
