@@ -118,6 +118,10 @@ window.addEventListener('pageshow', (event) => {
         if (typeof window.initScrollAnimations === 'function') {
             setTimeout(window.initScrollAnimations, 100); // Delay slightly for rendering
         }
+         // Re-initialize Google Reviews Carousel if it exists on the page
+        if (typeof window.initGoogleReviewsCarousel === 'function') {
+            setTimeout(window.initGoogleReviewsCarousel, 100);
+        }
     } else { // Page is a fresh load
         // initPageLoad handles initial splash and main content visibility for fresh loads.
         // This block can ensure main content is correctly set if initPageLoad hasn't run or finished.
@@ -269,5 +273,107 @@ document.addEventListener('DOMContentLoaded', () => {
         window.addEventListener('scroll', handleScroll, { passive: true });
     }
     initStickyHeaderBehavior();
+
+    // 6. Google Reviews Carousel (formerly Testimonials)
+    // Make it globally accessible for bfcache
+    window.initGoogleReviewsCarousel = function() {
+        const carouselWrapper = document.querySelector('.testimonial-carousel-wrapper');
+        if (!carouselWrapper) return;
+
+        const carousel = carouselWrapper.querySelector('.testimonial-carousel');
+        const items = carousel.querySelectorAll('.testimonial-item');
+        const prevButton = carouselWrapper.querySelector('.carousel-control.prev');
+        const nextButton = carouselWrapper.querySelector('.carousel-control.next');
+        const dotsContainer = carouselWrapper.querySelector('.carousel-dots');
+
+        if (!carousel || items.length === 0 || !prevButton || !nextButton || !dotsContainer) {
+            // If essential parts are missing, hide controls and exit
+            if(prevButton) prevButton.style.display = 'none';
+            if(nextButton) nextButton.style.display = 'none';
+            if(dotsContainer) dotsContainer.style.display = 'none';
+            return;
+        }
+
+        let currentIndex = 0;
+        const totalItems = items.length;
+        let autoPlayInterval;
+        const autoPlayDelay = 7000; // 7 seconds
+
+        function updateCarousel() {
+            carousel.style.transform = `translateX(-${currentIndex * 100}%)`;
+            updateDots();
+        }
+
+        function updateDots() {
+            dotsContainer.innerHTML = ''; // Clear existing dots
+            for (let i = 0; i < totalItems; i++) {
+                const dot = document.createElement('button');
+                dot.classList.add('carousel-dot');
+                if (i === currentIndex) {
+                    dot.classList.add('active');
+                }
+                dot.setAttribute('aria-label', `Go to review ${i + 1}`);
+                dot.addEventListener('click', () => {
+                    currentIndex = i;
+                    updateCarousel();
+                    resetAutoPlay();
+                });
+                dotsContainer.appendChild(dot);
+            }
+        }
+
+        function showNext() {
+            currentIndex = (currentIndex + 1) % totalItems;
+            updateCarousel();
+        }
+
+        function showPrev() {
+            currentIndex = (currentIndex - 1 + totalItems) % totalItems;
+            updateCarousel();
+        }
+
+        function startAutoPlay() {
+            stopAutoPlay(); // Clear existing interval before starting a new one
+            autoPlayInterval = setInterval(showNext, autoPlayDelay);
+        }
+
+        function stopAutoPlay() {
+            clearInterval(autoPlayInterval);
+        }
+
+        function resetAutoPlay() {
+            stopAutoPlay();
+            startAutoPlay();
+        }
+
+        nextButton.addEventListener('click', () => {
+            showNext();
+            resetAutoPlay();
+        });
+
+        prevButton.addEventListener('click', () => {
+            showPrev();
+            resetAutoPlay();
+        });
+        
+        // Initial setup
+        updateCarousel(); // Includes updateDots
+        startAutoPlay();
+
+        // Pause autoplay on hover (optional, good for UX)
+        carouselWrapper.addEventListener('mouseenter', stopAutoPlay);
+        carouselWrapper.addEventListener('mouseleave', startAutoPlay);
+        // Pause on focus for accessibility
+        carouselWrapper.addEventListener('focusin', stopAutoPlay);
+        carouselWrapper.addEventListener('focusout', startAutoPlay);
+
+
+    }; // End initGoogleReviewsCarousel
+
+    // Initialize it
+    if (typeof window.initGoogleReviewsCarousel === 'function') {
+        window.initGoogleReviewsCarousel();
+    }
+
 
 }); // End DOMContentLoaded
