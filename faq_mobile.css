@@ -1,20 +1,17 @@
 /* TABLE OF CONTENTS
 --------------------------------------------------
-1. Variables & Global Resets (Copied from index_mobile.css)
-2. Body & Typography Base (Copied from index_mobile.css)
-3. Loader Styles (Copied from index_mobile.css)
-4. Background Styles (Copied from index_mobile.css)
-5. Header Styles (Copied from index_mobile.css)
-6. Page Content Wrapper & Section Base (Copied from index_mobile.css)
+1. Variables & Global Resets
+2. Body & Typography Base
+3. Loader Styles
+4. Background Styles
+5. Header Styles
+6. Page Content Wrapper & Section Base
 7. FAQ Page Specific Styles
-   - .faq-page-section
-   - .faq-list, .faq-item
-   - .faq-question, .faq-answer
-8. Call to Action (CTA) Buttons (Covered by global styles)
-9. Mobile Tabs Navigation (Copied from index_mobile.css)
-10. Footer Styles (Copied from index_mobile.css)
-11. Animation & Utility Classes (Copied from index_mobile.css)
-12. Responsive Adjustments (Copied from index_mobile.css)
+8. Call to Action (CTA) Buttons
+9. Mobile Tabs Navigation
+10. Footer Styles
+11. Animation & Utility Classes
+12. Responsive Adjustments
 -------------------------------------------------- */
 
 /* 1. VARIABLES & GLOBAL RESETS
@@ -36,6 +33,7 @@
 
     --color-bg-light: #FFFFFF;
     --color-bg-off-white: #f8f9fa;
+    --color-bg-off-white-rgb: 248, 249, 250; /* Added for RGBA use */
     --color-bg-medium-grey: #e9ecef;
     --color-bg-dark: var(--color-primary-brand);
     --color-bg-footer: #111827;
@@ -45,7 +43,7 @@
     --color-loader-text: var(--color-text-light);
     --color-loader-bar-track: rgba(255, 255, 255, 0.2);
     --color-loader-bar-fill: var(--color-accent-gold);
-    --loader-display-duration: 0.1s; /* For splash screen */
+    --loader-display-duration: 0.1s; /* For splash screen JS to CSS var */
 
     /* UI Elements */
     --color-border-subtle: rgba(0, 0, 0, 0.08);
@@ -72,7 +70,7 @@
     --transition-fast: 0.2s ease-in-out;
     --transition-medium: 0.35s ease-in-out;
     --transition-slow: 0.5s ease-in-out;
-    --transition-accordion: 0.4s cubic-bezier(0.645, 0.045, 0.355, 1); /* Smooth accordion */
+    --transition-accordion: 0.4s cubic-bezier(0.645, 0.045, 0.355, 1);
 
     /* FAQ Specific */
     --color-faq-border: var(--color-border-medium);
@@ -99,7 +97,7 @@ body {
     font-size: 1.05rem;
     line-height: 1.7;
     color: var(--color-text-dark);
-    background-color: var(--color-bg-off-white); /* Fallback */
+    background-color: var(--color-bg-off-white);
     overflow-x: hidden;
     position: relative;
     opacity: 0;
@@ -153,14 +151,13 @@ ul ul, ul ol, ol ul, ol ol {
     margin-bottom: var(--spacing-unit);
 }
 
-
 img {
     max-width: 100%;
     height: auto;
     display: block;
 }
 
-/* 3. LOADER STYLES (From index_mobile.css)
+/* 3. LOADER STYLES
 -------------------------------------------------- */
 .splash-loader {
     position: fixed; top: 0; left: 0; width: 100%; height: 100vh;
@@ -173,13 +170,15 @@ img {
     z-index: 10000;
     opacity: 1;
     visibility: visible;
-    transition: opacity 0.6s ease-out var(--loader-display-duration), visibility 0.6s ease-out var(--loader-display-duration);
+    /* JS adds .hidden class after INITIAL_SPLASH_DURATION_MS */
+    /* Transition applied when .hidden is added */
     padding: calc(var(--spacing-unit) * 3);
 }
 .splash-loader.hidden {
     opacity: 0;
     visibility: hidden;
     pointer-events: none;
+    transition: opacity 0.4s ease-out, visibility 0s linear 0.4s; /* Matches index_mobile.css */
 }
 .splash-loader .splash-text-content {
     text-align: center;
@@ -206,18 +205,18 @@ img {
 
 .page-transition-loader {
     position: fixed; top: 0; left: 0; width: 100%; height: 100vh;
-    background-color: rgba(var(--color-primary-brand-rgb), 0.85);
-    backdrop-filter: blur(5px);
-    -webkit-backdrop-filter: blur(5px);
+    background-color: rgba(var(--color-primary-brand-rgb), 0.25); /* Subtle overlay */
+    backdrop-filter: blur(2px);
+    -webkit-backdrop-filter: blur(2px);
     display: flex;
     align-items: center;
     justify-content: center;
     z-index: 9999;
     opacity: 1; visibility: visible;
-    transition: opacity 0.3s ease-out, visibility 0.3s ease-out;
 }
 .page-transition-loader.hidden {
     opacity: 0; visibility: hidden; pointer-events: none;
+    transition: opacity 0.4s ease-out, visibility 0s linear 0.4s; /* Matches splash loader hidden transition */
 }
 .page-transition-loader .spinner {
     width: 50px; height: 50px;
@@ -230,17 +229,17 @@ img {
     to { transform: rotate(360deg); }
 }
 
-/* 4. BACKGROUND STYLES (From index_mobile.css)
+/* 4. BACKGROUND STYLES
 -------------------------------------------------- */
 #background-static {
     position: fixed; top: 0; left: 0; width: 100%; height: 100%;
     z-index: -2;
-    background-image: url('austin.jpg'); /* Ensure austin.jpg is in the same directory */
+    background-image: url('austin.jpg');
     background-size: cover;
     background-position: center center;
     background-repeat: no-repeat;
     animation: subtleZoomInOutBg 70s infinite alternate ease-in-out;
-    filter: saturate(0.6) brightness(0.5);
+    filter: saturate(0.7) brightness(0.75); /* UPDATED: Brighter background */
 }
 @keyframes subtleZoomInOutBg {
     0% { transform: scale(1); }
@@ -253,13 +252,13 @@ img {
     pointer-events: none;
 }
 
-/* 5. HEADER STYLES (From index_mobile.css)
+/* 5. HEADER STYLES
 -------------------------------------------------- */
 .site-header {
     position: fixed; top: 0; left: 0; width: 100%;
     z-index: 1000;
     height: var(--header-height-mobile);
-    background-color: rgba(255, 255, 255, 0.88); /* Slightly less transparent than index */
+    background-color: rgba(255, 255, 255, 0.92); /* Matches index_mobile.css */
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
     box-shadow: 0 1px 8px var(--color-shadow-medium);
@@ -279,21 +278,34 @@ img {
 .firm-title-link {
     display: flex; align-items: center; text-decoration: none !important;
 }
-.firm-title-link:hover .firm-name-header { color: var(--color-accent-gold); }
-.firm-name-header {
+.firm-title-link:hover .firm-name-header,
+.firm-title-link:hover .firm-name-header .firm-name-pc {
+    color: var(--color-accent-gold);
+}
+.firm-name-header { /* UPDATED to match index_mobile.css */
     font-family: var(--font-headings);
     font-size: clamp(1.05rem, 4.2vw, 1.3rem);
     color: var(--color-primary-brand);
-    font-weight: 600; margin: 0; line-height: 1.2; letter-spacing: 0.2px;
+    font-weight: 600;
+    margin: 0;
+    line-height: 1.2;
+    letter-spacing: 0.4px;
+    text-shadow: 0px 1px 3px rgba(var(--color-primary-brand-rgb), 0.2);
     transition: color var(--transition-fast);
-    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
-.firm-name-header .firm-name-pc {
-    font-weight: 500; font-size: 0.9em;
-    margin-left: calc(var(--spacing-unit) * 0.5);
+.firm-name-header .firm-name-pc { /* UPDATED to match index_mobile.css */
+    font-weight: 400;
+    font-size: 0.85em;
+    color: var(--color-secondary-brand);
+    margin-left: calc(var(--spacing-unit) * 0.35);
+    vertical-align: baseline;
+    transition: color var(--transition-fast);
 }
 
-/* 6. PAGE CONTENT WRAPPER & SECTION BASE (From index_mobile.css)
+/* 6. PAGE CONTENT WRAPPER & SECTION BASE
 -------------------------------------------------- */
 .page-content-wrapper {
     flex-grow: 1;
@@ -307,13 +319,12 @@ img {
     margin: 0 auto;
     position: relative;
 }
-/* FAQ page sections will primarily use the odd style for consistent white-ish background */
 .content-section,
-.content-section:nth-child(odd) { /* Defaulting to lighter for FAQ page */
-     background-color: rgba(255, 255, 255, 0.88); /* Transparency from index_mobile */
+.content-section:nth-child(odd) {
+     background-color: rgba(255, 255, 255, 0.82); /* UPDATED: More transparent */
 }
-.content-section:nth-child(even) { /* If other sections are added, this can be used */
-     background-color: rgba(248, 249, 250, 0.90);
+.content-section:nth-child(even) {
+     background-color: rgba(var(--color-bg-off-white-rgb), 0.85); /* UPDATED: More transparent */
 }
 .section-container {
     max-width: var(--content-max-width-capped);
@@ -350,7 +361,7 @@ img {
 /* 7. FAQ PAGE SPECIFIC STYLES
 -------------------------------------------------- */
 .faq-page-section {
-    /* Any specific padding or margins for the entire FAQ section */
+    /* No changes needed here, uses .content-section above */
 }
 
 .faq-list {
@@ -359,7 +370,7 @@ img {
     margin-top: calc(var(--spacing-unit) * 3);
     border: 1px solid var(--color-faq-border);
     border-radius: var(--border-radius-medium);
-    overflow: hidden; /* To make border-radius clip children */
+    overflow: hidden;
     box-shadow: 0 2px 10px var(--color-shadow-soft);
 }
 
@@ -372,7 +383,7 @@ img {
 
 .faq-question {
     font-family: var(--font-headings);
-    font-weight: 600; /* Cinzel Semibold */
+    font-weight: 600;
     font-size: clamp(1.05rem, 4vw, 1.2rem);
     color: var(--color-primary-brand);
     background-color: transparent;
@@ -381,8 +392,8 @@ img {
     text-align: left;
     padding: calc(var(--spacing-unit) * 2) calc(var(--spacing-unit) * 2.5);
     cursor: pointer;
-    transition: background-color var(--transition-fast);
-    position: relative; /* For icon positioning */
+    transition: background-color var(--transition-fast), color var(--transition-fast);
+    position: relative;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -394,16 +405,16 @@ img {
 }
 .faq-question:focus-visible {
     outline: 2px solid var(--color-secondary-brand);
-    outline-offset: -2px; /* Inside */
+    outline-offset: -2px;
 }
 .faq-question span {
     flex-grow: 1;
-    padding-right: var(--spacing-unit); /* Space for icon */
+    padding-right: var(--spacing-unit);
 }
 .faq-question .question-icon {
     font-size: 0.9em;
     color: var(--color-secondary-brand);
-    transition: transform var(--transition-accordion);
+    transition: transform var(--transition-accordion), color var(--transition-accordion);
     flex-shrink: 0;
 }
 .faq-item.active .faq-question .question-icon {
@@ -411,26 +422,24 @@ img {
     color: var(--color-accent-gold);
 }
 .faq-item.active .faq-question {
-    color: var(--color-accent-gold); /* Keep question text gold when active */
-    /* background-color: rgba(var(--color-accent-gold-rgb), 0.05); */
+    color: var(--color-accent-gold);
 }
-
 
 .faq-answer {
     font-family: var(--font-body);
     font-size: 1rem;
     line-height: 1.75;
     color: var(--color-text-medium);
-    background-color: rgba(var(--color-primary-brand-rgb), 0.015); /* Very subtle bg for answer */
+    background-color: rgba(var(--color-primary-brand-rgb), 0.015);
     max-height: 0;
     overflow: hidden;
-    padding: 0 calc(var(--spacing-unit) * 2.5); /* Horizontal padding matches question */
-    transition: max-height var(--transition-accordion), padding-top var(--transition-accordion), padding-bottom var(--transition-accordion), opacity var(--transition-accordion);
+    padding: 0 calc(var(--spacing-unit) * 2.5);
+    transition: max-height var(--transition-accordion), padding-top var(--transition-accordion), padding-bottom var(--transition-accordion), opacity var(--transition-accordion), border-top-color var(--transition-accordion);
     opacity: 0;
-    border-top: 1px solid transparent; /* Prepare for border */
+    border-top: 1px solid transparent;
 }
 .faq-item.active .faq-answer {
-    max-height: 1000px; /* Large enough for content */
+    max-height: 1500px; /* Increased for potentially very long answers */
     opacity: 1;
     padding-top: calc(var(--spacing-unit) * 2);
     padding-bottom: calc(var(--spacing-unit) * 2.5);
@@ -438,7 +447,7 @@ img {
 }
 .faq-answer p {
     margin-bottom: var(--spacing-unit);
-    font-size: 0.95rem; /* Slightly smaller for readability within accordion */
+    font-size: 0.95rem;
 }
 .faq-answer p:last-child {
     margin-bottom: 0;
@@ -446,19 +455,18 @@ img {
 .faq-answer ul {
     margin-top: var(--spacing-unit);
     margin-bottom: var(--spacing-unit);
-    padding-left: calc(var(--spacing-unit) * 2.5); /* Indent lists within answers */
+    padding-left: calc(var(--spacing-unit) * 2.5);
 }
 .faq-answer ul li {
     margin-bottom: calc(var(--spacing-unit) * 0.75);
     font-size: 0.9rem;
 }
 .faq-answer strong {
-    font-weight: 600; /* EB Garamond Semibold */
+    font-weight: 600;
     color: var(--color-primary-brand);
 }
 
-
-/* 8. CALL TO ACTION (CTA) BUTTONS (From index_mobile.css)
+/* 8. CALL TO ACTION (CTA) BUTTONS
 -------------------------------------------------- */
 .cta-button {
     display: inline-flex; align-items: center; justify-content: center;
@@ -487,32 +495,8 @@ img {
     transform: translateY(-2px) scale(1.01);
     color: var(--color-text-on-gold) !important;
 }
-.cta-button.large-cta { /* Example if needed */
-    padding: calc(var(--spacing-unit) * 2.25) calc(var(--spacing-unit) * 5);
-    font-size: 1.2rem;
-}
-/* Secondary button style if needed on FAQ, from index_mobile.css */
-.secondary-button {
-    display: inline-block;
-    padding: calc(var(--spacing-unit) * 1.25) calc(var(--spacing-unit) * 3);
-    background: transparent;
-    color: var(--color-secondary-brand) !important;
-    border: 2px solid var(--color-secondary-brand);
-    border-radius: var(--border-radius-small);
-    font-family: var(--font-headings);
-    font-size: 1rem; font-weight: 600;
-    transition: all var(--transition-medium);
-    text-align: center; letter-spacing: 0.2px; text-decoration: none !important;
-}
-.secondary-button:hover, .secondary-button:focus {
-    background: var(--color-secondary-brand);
-    color: var(--color-text-light) !important;
-    box-shadow: 0 3px 10px rgba(10, 88, 166, 0.25);
-    transform: translateY(-1px);
-}
 
-
-/* 9. MOBILE TABS NAVIGATION (From index_mobile.css)
+/* 9. MOBILE TABS NAVIGATION
 -------------------------------------------------- */
 .mobile-tabs {
     position: fixed; bottom: 0; left: 0; width: 100%;
@@ -562,7 +546,7 @@ img {
     border-radius: 0 0 3px 3px;
 }
 
-/* 10. FOOTER STYLES (From index_mobile.css)
+/* 10. FOOTER STYLES
 -------------------------------------------------- */
 .site-footer {
     background-color: var(--color-bg-footer);
@@ -587,20 +571,34 @@ img {
 }
 .footer-social-media { margin-bottom: calc(var(--spacing-unit) * 2.5); }
 .footer-social-media a {
-    color: #ced4da !important; font-size: 1.6rem;
+    font-size: 1.6rem;
     margin: 0 calc(var(--spacing-unit) * 1.25);
-    transition: color var(--transition-fast), transform var(--transition-fast);
+    transition: transform var(--transition-fast); /* Only transform on <a> tag */
     display: inline-block;
+    text-decoration: none !important;
+    /* Icon color set individually below */
 }
-.footer-social-media a:hover i,
-.footer-social-media a:focus i { color: var(--color-accent-gold); } /* Default hover for icon */
-.footer-social-media a:hover, .footer-social-media a:focus { transform: scale(1.15); }
+.footer-social-media a i {
+    /* No generic color transition here, colors are static or brand-specific on hover */
+}
 
-.footer-social-media a.facebook:hover i, .footer-social-media a.facebook:focus i { color: #1877F2 !important; }
-.footer-social-media a.linkedin:hover i, .footer-social-media a.linkedin:focus i { color: #0A66C2 !important; }
-.footer-social-media a.x-twitter:hover i, .footer-social-media a.x-twitter:focus i { color: #000000 !important; }
-.footer-social-media a.instagram:hover i, .footer-social-media a.instagram:focus i { color: #E1306C !important; }
-.footer-social-media a.tiktok:hover i, .footer-social-media a.tiktok:focus i { color: #EE1D52 !important; }
+.footer-social-media a:hover,
+.footer-social-media a:focus {
+    transform: scale(1.15);
+}
+/* UPDATED: Social media icons display brand colors by default */
+.footer-social-media a.facebook i { color: #1877F2 !important; }
+.footer-social-media a.linkedin i { color: #0A66C2 !important; }
+.footer-social-media a.x-twitter i { color: #FFFFFF !important; } /* White for X logo on dark background */
+.footer-social-media a.instagram i { color: #E1306C !important; }
+.footer-social-media a.tiktok i { color: #EE1D52 !important; }
+
+/* Optional: If you want a slight dimming then brand color on hover for already colored icons */
+/*
+.footer-social-media a { color: #ced4da !important; } // Default dim color for link
+.footer-social-media a.facebook i { color: #1877F2 !important; }
+.footer-social-media a.facebook:hover i { filter: brightness(1.2); } // Example subtle hover effect
+*/
 
 .footer-links {
     margin-bottom: calc(var(--spacing-unit) * 1.5); font-size: 0.8rem;
@@ -619,7 +617,7 @@ img {
     margin-top: calc(var(--spacing-unit) * 1.25);
 }
 
-/* 11. ANIMATION & UTILITY CLASSES (From index_mobile.css)
+/* 11. ANIMATION & UTILITY CLASSES
 -------------------------------------------------- */
 *:focus-visible {
     outline: 2px solid var(--color-secondary-brand);
@@ -649,7 +647,7 @@ img {
     transform: translateY(0) translateX(0) scale(1);
 }
 
-/* 12. RESPONSIVE ADJUSTMENTS (From index_mobile.css)
+/* 12. RESPONSIVE ADJUSTMENTS
 -------------------------------------------------- */
 @media (min-width: 480px) {
     body { font-size: 1.075rem; }
