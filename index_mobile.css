@@ -5,18 +5,18 @@
 1. Variables & Global Resets
 2. Body & Typography Base
 3. Splash & Page Transition Loader Styles
-4. Background Styles
-5. Site Header Styles
-6. Page Content Wrapper & Section Base
-   6.1. About Us Page Hero Banner
+4. Background Styles (Enhanced Visibility)
+5. Site Header Styles (Enhanced Transparency)
+6. Page Content Wrapper & Section Base (Enhanced Transparency)
+   6.1. About Us Page Hero Banner (Enhanced Transparency)
    6.2. Mission Section
    6.3. Expertise Section (Icon List)
-   6.4. Approach Section (Grid)
+   6.4. Approach Section (Grid - Enhanced Transparency)
    6.5. Commitment / Values Section (Grid)
 7. Call to Action (CTA) Sections & Buttons
-   7.1. About Us CTA Section
-8. Mobile Tabs Navigation
-9. Footer Styles
+   7.1. About Us CTA Section (Solid background retained for emphasis)
+8. Mobile Tabs Navigation (Enhanced Transparency)
+9. Footer Styles (Consistent with Index, Dark Background)
 10. Animation & Utility Classes
 11. Responsive Adjustments
 -------------------------------------------------- */
@@ -45,17 +45,17 @@
     --color-bg-light: #FFFFFF;
     --color-bg-light-rgb: 255, 255, 255;
     --color-bg-medium-grey: #E9ECEF; /* For scrollbar track */
-    --color-bg-footer: #071527;
+    --color-bg-footer: #071527; /* Solid dark footer background */
 
     /* Loader Specific */
     --color-loader-bg: var(--color-primary-brand);
     --color-loader-logo-filter: brightness(0) invert(1);
 
     /* UI Elements */
-    --color-border-subtle: rgba(var(--color-primary-brand-rgb), 0.12);
-    --color-shadow-soft: rgba(10, 35, 66, 0.05);
-    --color-shadow-medium: rgba(10, 35, 66, 0.1);
-    --color-shadow-strong: rgba(10, 35, 66, 0.18);
+    --color-border-subtle: rgba(var(--color-primary-brand-rgb), 0.08); /* Lighter for more transparent look */
+    --color-shadow-soft: rgba(10, 35, 66, 0.03); /* Softer shadows */
+    --color-shadow-medium: rgba(10, 35, 66, 0.07);
+    --color-shadow-strong: rgba(10, 35, 66, 0.12);
     --color-shadow-gold-cta: rgba(var(--color-accent-gold-rgb), 0.3);
 
     /* Typography */
@@ -123,7 +123,7 @@ body {
     font-size: 1.1rem;
     line-height: 1.75;
     color: var(--color-text-dark);
-    background-color: var(--color-bg-light);
+    background-color: transparent; /* Body itself is transparent to show #background-static */
     overflow-x: hidden;
     position: relative;
     opacity: 0;
@@ -208,7 +208,7 @@ img { max-width: 100%; height: auto; display: block; }
 }
 @keyframes spin { to { transform: rotate(360deg); } }
 
-/* 4. BACKGROUND STYLES
+/* 4. BACKGROUND STYLES (Enhanced Visibility)
 -------------------------------------------------- */
 #background-static {
     position: fixed; top: 0; left: 0; width: 100%; height: 100%;
@@ -216,7 +216,7 @@ img { max-width: 100%; height: auto; display: block; }
     background-size: cover; background-position: center center;
     background-attachment: fixed;
     animation: subtleZoomInOut 80s infinite alternate ease-in-out;
-    filter: saturate(0.4) brightness(0.5) contrast(1.05);
+    filter: saturate(0.7) brightness(0.8) contrast(1.0); /* Brighter and more saturated */
 }
 @keyframes subtleZoomInOut {
     0% { transform: scale(1.05); } 100% { transform: scale(1.1); }
@@ -225,22 +225,22 @@ img { max-width: 100%; height: auto; display: block; }
     position: fixed; top: 0; left: 0; width: 100%; height: 100%;
     z-index: -1;
     background: linear-gradient(to bottom,
-        rgba(var(--color-primary-brand-rgb), 0.5) 0%,
-        rgba(var(--color-primary-brand-rgb), 0.65) 40%,
-        rgba(var(--color-primary-brand-rgb), 0.75) 80%,
-        var(--color-primary-brand) 100%
+        rgba(var(--color-primary-brand-rgb), 0.25) 0%,  /* Reduced opacity */
+        rgba(var(--color-primary-brand-rgb), 0.40) 40%, /* Reduced opacity */
+        rgba(var(--color-primary-brand-rgb), 0.55) 80%, /* Reduced opacity */
+        rgba(var(--color-primary-brand-rgb), 0.75) 100% /* Reduced opacity */
     );
     pointer-events: none;
 }
 
-/* 5. SITE HEADER STYLES
+/* 5. SITE HEADER STYLES (Enhanced Transparency)
 -------------------------------------------------- */
 .site-header {
     position: fixed; top: 0; left: 0; width: 100%;
     z-index: 1000; height: var(--header-height-mobile);
-    background-color: rgba(var(--color-bg-light-rgb), 0.3); /* Highly transparent white */
+    background-color: rgba(var(--color-bg-light-rgb), 0.20); /* Highly transparent white */
     backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px);
-    box-shadow: 0 2px 10px var(--color-shadow-medium);
+    box-shadow: 0 2px 8px var(--color-shadow-medium); /* Softer shadow */
     border-bottom: 1px solid var(--color-border-subtle);
     display: flex; align-items: center;
     padding: 0 var(--spacing-lg);
@@ -255,7 +255,7 @@ img { max-width: 100%; height: auto; display: block; }
 .firm-title-link:hover .firm-name-header,
 .firm-title-link:focus-visible .firm-name-header { color: var(--color-accent-gold); }
 
-/* 6. PAGE CONTENT WRAPPER & SECTION BASE
+/* 6. PAGE CONTENT WRAPPER & SECTION BASE (Enhanced Transparency)
 -------------------------------------------------- */
 .page-content-wrapper { flex-grow: 1; width: 100%; position: relative; z-index: 1; }
 .content-section {
@@ -263,11 +263,17 @@ img { max-width: 100%; height: auto; display: block; }
     position: relative; overflow: hidden;
     border-radius: var(--border-radius-large);
     margin-left: auto; margin-right: auto;
-    background-color: rgba(var(--color-bg-light-rgb), 0.15); /* Very transparent white */
+    background-color: rgba(var(--color-bg-light-rgb), 0.10); /* Extremely transparent white */
     backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+    box-shadow: 0 4px 15px var(--color-shadow-soft); /* Very soft shadow for depth */
+    margin-bottom: var(--spacing-lg); /* Add some space between transparent sections */
 }
+.content-section:last-of-type {
+    margin-bottom: 0; /* No bottom margin for the last section before footer/tabs */
+}
+
 .content-section h2, .content-section h3, .content-section p, .content-section li {
-    color: var(--color-text-dark);
+    color: var(--color-text-dark); /* Text must remain dark for readability on light transparent BG */
 }
 .content-section p.section-intro-text {
     font-size: 1.15rem; line-height: 1.8;
@@ -279,8 +285,8 @@ img { max-width: 100%; height: auto; display: block; }
     max-width: var(--content-max-width-capped); margin: 0 auto;
     width: var(--content-max-width); position: relative;
 }
-.section-title {
-    font-size: clamp(1.7rem, 6vw, 2.6rem); /* Consistent for h3 on about page */
+.section-title { /* Applies to h3 on this page */
+    font-size: clamp(1.7rem, 6vw, 2.6rem);
     font-weight: 700; margin-bottom: var(--spacing-md);
     text-align: center; position: relative;
     padding-bottom: var(--spacing-md); color: var(--color-primary-brand);
@@ -292,44 +298,46 @@ img { max-width: 100%; height: auto; display: block; }
     border-radius: 2px; box-shadow: 0 1px 3px rgba(var(--color-accent-gold-rgb),0.3);
 }
 
-/* 6.1. About Us Page Hero Banner */
-.page-hero-banner {
+/* 6.1. About Us Page Hero Banner (Enhanced Transparency) */
+.page-hero-banner { /* This is a section, not a .content-section, so style separately */
     min-height: 35vh; max-height: 400px;
     display: flex; align-items: center; justify-content: center;
     text-align: center; padding: var(--spacing-xxl) var(--spacing-lg);
     color: var(--color-text-light); position: relative;
-    background: none; overflow: hidden;
+    background: transparent; /* Transparent itself, relies on background-static/overlay */
+    overflow: hidden;
+    margin-bottom: var(--spacing-lg);
 }
-.page-hero-content {
-    background-color: rgba(var(--color-primary-brand-rgb), 0.20); /* Very transparent dark blue for text contrast */
+.page-hero-content { /* The box within the hero banner */
+    background-color: rgba(var(--color-primary-brand-rgb), 0.15); /* Very transparent dark blue for text contrast */
     backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
     padding: var(--spacing-lg) var(--spacing-md);
     border-radius: var(--border-radius-medium);
-    box-shadow: 0 4px 20px rgba(0,0,0,0.2);
-    max-width: calc(var(--content-max-width-capped) - 40px); /* Adjusted for padding */
+    box-shadow: 0 4px 15px rgba(0,0,0,0.15); /* Softer shadow */
+    max-width: calc(var(--content-max-width-capped) - 40px);
     width: var(--content-max-width); z-index: 2;
-    border: 1px solid rgba(var(--color-accent-gold-rgb), 0.2);
+    border: 1px solid rgba(var(--color-accent-gold-rgb), 0.15); /* Lighter border */
 }
-.page-hero-title {
+.page-hero-title { /* h2 within .page-hero-content */
     font-family: var(--font-display);
     font-size: clamp(1.8rem, 7vw, 2.8rem);
     font-weight: 700; color: var(--color-text-light);
-    text-shadow: 1px 1px 3px rgba(var(--color-primary-brand-rgb), 0.4);
+    text-shadow: 1px 1px 2px rgba(var(--color-primary-brand-rgb), 0.3); /* Softer text shadow */
     margin-bottom: var(--spacing-sm);
 }
 .page-hero-subtitle {
     font-family: var(--font-body);
     font-size: clamp(1rem, 4vw, 1.25rem);
-    color: rgba(255,255,255,0.85); margin-bottom: 0;
+    color: rgba(255,255,255,0.80); margin-bottom: 0; /* Slightly less opaque */
     font-weight: 500; line-height: 1.5;
 }
 
 /* 6.2. Mission Section */
-.mission-section {} /* Inherits .content-section */
+.mission-section {} /* Inherits highly transparent .content-section */
 .mission-section p { font-size: 1.1em; line-height: 1.8; }
 
 /* 6.3. Expertise Section (Icon List) */
-.expertise-section {} /* Inherits .content-section */
+.expertise-section {} /* Inherits highly transparent .content-section */
 .icon-list { list-style: none; padding-left: 0; margin-top: var(--spacing-lg); }
 .icon-list li {
     font-size: 1.05rem;
@@ -342,20 +350,21 @@ img { max-width: 100%; height: auto; display: block; }
     width: var(--spacing-md); text-align: center; opacity: 0.9;
 }
 
-/* 6.4. Approach Section (Grid) */
-.approach-section {} /* Inherits .content-section */
+/* 6.4. Approach Section (Grid - Enhanced Transparency) */
+.approach-section {} /* Inherits highly transparent .content-section */
 .approach-grid {
     display: grid; grid-template-columns: 1fr;
     gap: var(--spacing-xl); margin-top: var(--spacing-lg);
 }
 .approach-item {
     text-align: center; padding: var(--spacing-lg) var(--spacing-md);
-    background-color: rgba(var(--color-bg-light-rgb), 0.1); /* Slightly more transparent than before */
+    background-color: rgba(var(--color-bg-light-rgb), 0.05); /* Even more transparent sub-item */
     border-radius: var(--border-radius-medium);
-    box-shadow: 0 3px 10px var(--color-shadow-soft);
+    box-shadow: 0 2px 8px var(--color-shadow-soft);
     transition: transform var(--transition-base), box-shadow var(--transition-base);
+    border: 1px solid rgba(var(--color-primary-brand-rgb), 0.05); /* very subtle border */
 }
-.approach-item:hover { transform: translateY(-5px); box-shadow: 0 6px 15px var(--color-shadow-medium); }
+.approach-item:hover { transform: translateY(-5px); box-shadow: 0 5px 12px var(--color-shadow-medium); }
 .approach-icon {
     font-size: 2.5rem; color: var(--color-secondary-brand);
     margin-bottom: var(--spacing-md); display: block;
@@ -367,12 +376,12 @@ img { max-width: 100%; height: auto; display: block; }
 .approach-item p { font-size: 0.95rem; color: var(--color-text-medium); line-height: 1.6; }
 
 /* 6.5. Commitment / Values Section (Grid) */
-.commitment-section {} /* Inherits .content-section */
+.commitment-section {} /* Inherits highly transparent .content-section */
 .values-grid {
     display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
     gap: var(--spacing-lg); margin-top: var(--spacing-lg);
 }
-.value-item { text-align: center; padding: var(--spacing-md); }
+.value-item { text-align: center; padding: var(--spacing-md); } /* No extra background, relies on section transparency */
 .value-item i.fas {
     font-size: 2.2rem; color: var(--color-accent-gold);
     margin-bottom: var(--spacing-md); display: block;
@@ -418,7 +427,7 @@ img { max-width: 100%; height: auto; display: block; }
     padding: calc(var(--spacing-lg) + var(--spacing-xs)) calc(var(--spacing-xl) + var(--spacing-sm));
     font-size: 1.25rem; letter-spacing: 1px;
 }
-.secondary-button { /* Assuming this might be used on About page later */
+.secondary-button {
     display: inline-flex; align-items: center; justify-content: center;
     gap: var(--spacing-sm); padding: var(--spacing-md) var(--spacing-xl);
     background: transparent; color: var(--color-secondary-brand) !important;
@@ -435,34 +444,31 @@ img { max-width: 100%; height: auto; display: block; }
 .secondary-button i { margin-left: var(--spacing-xs); transition: transform var(--transition-base); }
 .secondary-button:hover i, .secondary-button:focus-visible i { transform: translateX(3px); }
 
-.final-cta-section { /* General final CTA block style */
+/* 7.1. About Us CTA Section (Solid background retained for emphasis) */
+.final-cta-section.about-cta { /* Retains solid background from final-cta-section */
     background: linear-gradient(135deg, var(--color-primary-brand) 0%, var(--color-secondary-brand) 100%);
     color: var(--color-text-light); padding: var(--spacing-xxxl) var(--spacing-lg);
     border-top: 4px solid var(--color-accent-gold); border-radius: 0;
+    margin-bottom: 0; /* Ensure it's the last visual block before footer */
 }
-.final-cta-section .section-title {
+.final-cta-section.about-cta .section-title {
     color: var(--color-text-light);
     text-shadow: 1px 1px 3px rgba(0,0,0,0.2);
 }
-.final-cta-section .section-title::after { background: var(--color-accent-gold); }
-.final-cta-section .section-intro-text { color: rgba(255,255,255,0.95); font-style: normal; }
-.final-cta-section .cta-button { margin-top: var(--spacing-lg); }
+.final-cta-section.about-cta .section-title::after { background: var(--color-accent-gold); }
+.final-cta-section.about-cta .section-intro-text { color: rgba(255,255,255,0.95); font-style: normal; }
+.final-cta-section.about-cta .cta-button { margin-top: var(--spacing-lg); }
 
-/* 7.1. About Us CTA Section */
-.about-cta.final-cta-section {
-    padding-top: var(--spacing-xxl); padding-bottom: var(--spacing-xxxl);
-}
-.about-cta .section-title { font-size: clamp(1.8rem, 6.5vw, 2.8rem); }
 
-/* 8. MOBILE TABS NAVIGATION
+/* 8. MOBILE TABS NAVIGATION (Enhanced Transparency)
 -------------------------------------------------- */
 .mobile-tabs {
     position: fixed; bottom: 0; left: 0; width: 100%;
     height: var(--tabs-height-mobile);
-    background-color: rgba(var(--color-bg-light-rgb), 0.4); /* Highly transparent white */
+    background-color: rgba(var(--color-bg-light-rgb), 0.25); /* Highly transparent white */
     backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
-    box-shadow: 0 -3px 15px var(--color-shadow-medium);
-    border-top: 1px solid rgba(var(--color-primary-brand-rgb),0.08);
+    box-shadow: 0 -2px 10px var(--color-shadow-medium); /* Softer shadow */
+    border-top: 1px solid rgba(var(--color-primary-brand-rgb),0.06); /* Lighter border */
     display: flex; justify-content: space-around; align-items: stretch;
     z-index: 1000; padding-bottom: env(safe-area-inset-bottom);
 }
@@ -480,7 +486,7 @@ img { max-width: 100%; height: auto; display: block; }
 .tab-label { line-height: 1.2; display: block; }
 .tab-item:hover, .tab-item:focus-visible {
     color: var(--color-primary-brand) !important;
-    background-color: rgba(var(--color-accent-gold-rgb), 0.08);
+    background-color: rgba(var(--color-accent-gold-rgb), 0.05); /* Very subtle hover */
 }
 .tab-item:active { transform: scale(0.96); }
 .tab-item.active { color: var(--color-primary-brand) !important; font-weight: 700; }
@@ -493,13 +499,15 @@ img { max-width: 100%; height: auto; display: block; }
     box-shadow: 0 1px 2px rgba(var(--color-accent-gold-rgb), 0.3);
 }
 
-/* 9. FOOTER STYLES
+/* 9. FOOTER STYLES (Consistent with Index, Dark Background)
 -------------------------------------------------- */
 .site-footer {
-    background-color: var(--color-bg-footer); color: #A0AEC0;
+    background-color: var(--color-bg-footer); color: #A0AEC0; /* Solid dark BG for footer */
     text-align: center; padding: var(--spacing-xl) var(--spacing-lg) var(--spacing-lg);
     font-size: 0.9rem; line-height: 1.7;
     border-top: 3px solid var(--color-primary-brand); border-radius: 0;
+    position: relative; /* Ensures it's part of the flow after transparent sections */
+    z-index: 1; /* Above background, below modals/popups if any */
 }
 .footer-content { max-width: var(--content-max-width-capped); margin: 0 auto; width: var(--content-max-width); }
 .footer-firm-identity { margin-bottom: var(--spacing-lg); display: flex; flex-direction: column; align-items: center; gap: var(--spacing-sm); }
@@ -561,7 +569,7 @@ img { max-width: 100%; height: auto; display: block; }
 .animate-on-scroll.slide-in-right { transform: translateX(60px); }
 .animate-on-scroll.is-visible { opacity: 1; transform: translateY(0) translateX(0) scale(1); }
 
-/* 11. RESPONSIVE ADJUSTMENTS (About Us page and general)
+/* 11. RESPONSIVE ADJUSTMENTS
 -------------------------------------------------- */
 @media (min-width: 480px) {
     body { font-size: 1.125rem; }
@@ -576,8 +584,7 @@ img { max-width: 100%; height: auto; display: block; }
 @media (min-width: 600px) {
     body { font-size: 1.15rem; }
     :root { --content-max-width: 85vw; --content-max-width-capped: 820px; }
-    .section-title { font-size: clamp(2rem, 6vw, 3rem); } /* For h2 in index */
-    h3.section-title { font-size: clamp(1.8rem, 5.5vw, 2.8rem); } /* For h3 on about */
+    h3.section-title { font-size: clamp(1.8rem, 5.5vw, 2.8rem); }
     .page-hero-title { font-size: clamp(2rem, 6.5vw, 3rem); }
     .cta-button { font-size: 1.2rem; letter-spacing: 1px; }
     .secondary-button { font-size: 1.1rem; }
@@ -604,18 +611,21 @@ img { max-width: 100%; height: auto; display: block; }
         background-color: #fff !important; background-image: none !important;
     }
     .site-header, .mobile-tabs, .splash-loader, .page-transition-loader,
-    #background-static, #background-overlay, .cta-button, .secondary-button {
+    #background-static, #background-overlay, .cta-button, .secondary-button,
+    .final-cta-section.about-cta /* Ensure this solid CTA doesn't print with its BG */ {
         display: none !important;
+        background: none !important; /* For .final-cta-section */
     }
     .page-hero-content, .content-section {
         padding: 20pt 0 !important; background-color: #fff !important;
         box-shadow: none !important; border: none !important;
         backdrop-filter: none !important; -webkit-backdrop-filter: none !important;
         border-radius: 0 !important;
+        margin-bottom: 10pt !important;
     }
     .section-container { max-width: 100% !important; width: 100% !important; }
     a { color: var(--color-primary-brand) !important; text-decoration: underline !important; }
-    h1, h2, h3, h4, h5, h6 { color: #000 !important; }
+    h1, h2, h3, h4, h5, h6 { color: #000 !important; text-shadow: none !important; }
     .page-hero-title, .page-hero-subtitle { color: #000 !important; text-shadow: none !important; }
     .footer-social-media, .footer-links { display: none !important; }
     .footer-firm-name, .footer-copyright, .footer-disclaimer { color: #333 !important; }
