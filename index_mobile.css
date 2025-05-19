@@ -161,8 +161,8 @@ h1.firm-name-header {
 }
 h1.firm-name-header .firm-name-pc {
     font-weight: 600;
-    font-size: 0.8em;
-    opacity: 0.9;
+    font-size: 1em; /* Changed from 0.8em */
+    opacity: 1; /* Changed from 0.9 */
     margin-left: var(--spacing-xs);
 }
 
@@ -369,7 +369,7 @@ figcaption {
 }
 .firm-title-link:hover .firm-name-pc,
 .firm-title-link:focus-visible .firm-name-pc {
-    opacity: 1;
+    opacity: 1; /* Already 1, but ensures hover consistency */
 }
 
 
@@ -393,7 +393,7 @@ figcaption {
 /* WHITE-BASED TRANSPARENCY for general content sections */
 .content-section:nth-child(odd),
 .content-section:nth-child(even) { /* Apply same style to both now */
-     background-color: rgba(var(--color-bg-light-rgb), 0.6); /* e.g., 60% opacity white */
+     background-color: rgba(var(--color-bg-light-rgb), 0.5); /* Changed from 0.6 for more transparency */
      backdrop-filter: blur(16px);
      -webkit-backdrop-filter: blur(16px);
 }
@@ -443,9 +443,8 @@ figcaption {
     overflow: hidden;
 }
 .hero-content-box {
-    /* Kept the dark base for hero text contrast, but slightly more transparent */
-    background-color: rgba(var(--color-primary-brand-rgb), 0.40); /* e.g. 40% opacity */
-    backdrop-filter: blur(14px); /* Stronger blur for hero */
+    background-color: rgba(var(--color-primary-brand-rgb), 0.25); /* Changed from 0.40 for more transparency */
+    backdrop-filter: blur(14px); 
     -webkit-backdrop-filter: blur(14px);
     padding: var(--spacing-xl) var(--spacing-lg);
     border-radius: var(--border-radius-large);
@@ -484,7 +483,7 @@ figcaption {
 }
 .service-list-detailed li:last-child { border-bottom: none; }
 .service-list-detailed li:hover {
-    background-color: rgba(var(--color-accent-gold-rgb), 0.1); /* Slightly more opaque hover for white BG */
+    background-color: rgba(var(--color-accent-gold-rgb), 0.1); 
     transform: translateX(5px);
     border-bottom-color: transparent;
 }
@@ -505,7 +504,6 @@ figcaption {
     color: var(--color-accent-gold-darker);
 }
 .service-list-detailed strong {
-    /* color: var(--color-primary-brand); /* Already handled by section text color */
     font-weight: 700;
     font-family: var(--font-headings);
     font-size: 1.15em;
@@ -518,7 +516,6 @@ figcaption {
 -------------------------------------------------- */
 .testimonials-section {
     padding-bottom: var(--spacing-xxxl);
-    /* Uses general .content-section white-based transparent background */
 }
 
 .testimonial-carousel-wrapper {
@@ -528,8 +525,7 @@ figcaption {
     overflow: hidden;
     border-radius: var(--border-radius-large);
     box-shadow: 0 10px 35px var(--color-shadow-strong);
-    /* WHITE-BASED TRANSPARENCY */
-    background-color: rgba(var(--color-bg-light-rgb), 0.55); /* e.g., 55% opacity white */
+    background-color: rgba(var(--color-bg-light-rgb), 0.45); /* Changed from 0.55 for more transparency */
     backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);
 }
@@ -549,8 +545,6 @@ figcaption {
     margin-bottom: var(--spacing-md);
     display: block;
 }
-/* .testimonial-text color handled by .content-section p */
-/* .testimonial-author color handled by .content-section text rules */
 .testimonial-author {
     font-family: var(--font-headings);
     font-weight: 600;
@@ -618,8 +612,7 @@ figcaption {
 .google-reviews-callout {
     margin-top: var(--spacing-xxxl);
     padding: var(--spacing-xl) var(--spacing-lg);
-    /* WHITE-BASED TRANSPARENCY */
-    background: rgba(var(--color-bg-light-rgb), 0.55); /* e.g., 55% opacity white */
+    background: rgba(var(--color-bg-light-rgb), 0.45); /* Changed from 0.55 for more transparency */
     backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);
     border-radius: var(--border-radius-large);
@@ -628,8 +621,6 @@ figcaption {
     border: 1px solid var(--color-border-subtle);
     overflow: hidden;
 }
-/* .google-reviews-title color handled by .content-section h3 rules */
-/* .google-reviews-callout p color handled by .content-section p rules */
 .google-reviews-title i.fa-star {
     color: var(--color-accent-gold);
     font-size: 0.9em;
