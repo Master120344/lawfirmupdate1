@@ -2,104 +2,133 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Your Awesome App - Mobile</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Kershaw Law Firm - H-2A & H-2B Visas</title>
+    <meta name="description" content="The Kershaw Law Firm provides expert legal services for H-2A and H-2B work visas. Serving businesses and individuals with tailored solutions. Mobile optimized site.">
+    <link rel="stylesheet" href="index_mobile.css"> <!-- Assuming CSS is in the root or adjust path if it's in css/ -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <link rel="stylesheet" href="mobile_style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=EB+Garamond:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
 </head>
 <body>
+    <div id="loader" class="loader"></div>
+    <div id="background-static"></div>
 
-    <!-- Full Screen Page Loader -->
-    <div id="page-loader">
-        <img src="logo.png" alt="Loading..." id="loader-logo">
-        <div id="loader-bar-container">
-            <div id="loader-bar"></div>
+    <header class="header">
+        <div class="header-content">
+            <div class="logo-container">
+                 <a href="index_mobile.html" class="logo-link" aria-label="Home - The Kershaw Law Firm">
+                    <img src="logo.jpg" alt="Kershaw Law Firm Logo" class="header-logo"> <!-- Assuming logo.jpg is in the root or adjust path e.g., assets/logo.jpg -->
+                    <h1>The Kershaw Law Firm P.C.</h1>
+                 </a>
+            </div>
         </div>
-        <p id="loader-text">Loading next experience...</p>
-    </div>
+    </header>
 
-    <div class="mobile-main-wrapper">
-        <header class="mobile-header">
-            <!-- No logo here on the homepage as requested -->
-            <div class="header-content">
-                <h1>Welcome to Mobile</h1>
-                <p class="subtitle">Experience cutting-edge services</p>
+    <div class="page-content-wrapper">
+        <section class="hero">
+            <div class="hero-content">
+                <h2>Specializing in H-2B and H-2A Visas</h2>
+                <p class="hero-subtitle">Expert legal guidance for temporary work programs across the U.S.</p>
+                <a href="getstarted_mobile.html" class="cta-button">
+                    <i class="fa-solid fa-rocket"></i> Get Started Today
+                </a>
             </div>
-            <nav class="mobile-nav">
-                <a href="index_mobile.html" class="nav-link active">Home</a>
-                <a href="services_mobile.html" class="nav-link">Services</a>
-                <a href="about_mobile.html" class="nav-link">About</a>
-                <a href="contact_mobile.html" class="nav-link">Contact</a>
-            </nav>
-        </header>
+        </section>
 
-        <main class="mobile-content-area">
-            <section class="mobile-content-box intro-box">
-                <h2>Discover Austin's Best</h2>
-                <p>Explore a seamless mobile experience designed for you. Our commitment is to provide top-tier services with a modern touch. The background showcases the vibrant Austin scene, enjoy it through our transparent UI elements!</p>
-                <button class="cta-button">Learn More</button>
-            </section>
+        <section id="about" class="content-section about-section">
+            <div class="section-container">
+                <h2>About Our Firm</h2>
+                <p>Founded on principles of integrity, expertise, and client-focused service, The Kershaw Law Firm, P.C. is a leading provider of legal solutions for U.S. businesses requiring temporary foreign workers through the H-2A (agricultural) and H-2B (non-agricultural) visa programs.</p>
+                <p>Our seasoned team navigates the intricate regulations set by the Department of Labor (DOL) and U.S. Citizenship and Immigration Services (USCIS) with precision, ensuring your petitions are prepared accurately and processed efficiently. We understand the critical need for timely workforce solutions and are committed to achieving successful outcomes for your business.</p>
+                <a href="aboutus_mobile.html" class="secondary-button">Learn More About Our Approach</a>
+            </div>
+        </section>
 
-            <section class="mobile-content-box features-box">
-                <h2>Key Features</h2>
-                <ul>
-                    <li><i class="fas fa-check-circle"></i> Blazing Fast Transitions</li>
-                    <li><i class="fas fa-eye"></i> Stunning Visual Design</li>
-                    <li><i class="fas fa-mobile-alt"></i> Intuitive Mobile Navigation</li>
-                    <li><i class="fas fa-star"></i> Premium User Experience</li>
+        <section id="services-overview" class="content-section services-overview-section">
+             <div class="section-container">
+                <h2>Focused Visa Services</h2>
+                <p>We dedicate our practice to H-2A and H-2B visas, offering specialized knowledge that covers the entire process:</p>
+                <ul class="service-list">
+                    <li><i class="fas fa-check-circle"></i> Comprehensive Case Assessment & Strategy</li>
+                    <li><i class="fas fa-check-circle"></i> Meticulous Application & Petition Filing</li>
+                    <li><i class="fas fa-check-circle"></i> Navigating DOL Recruitment Requirements</li>
+                    <li><i class="fas fa-check-circle"></i> Responding to Government Audits & RFEs</li>
+                    <li><i class="fas fa-check-circle"></i> Ongoing Compliance Guidance</li>
                 </ul>
-            </section>
+                <p>Let our focused expertise streamline your temporary labor certification and visa process.</p>
+                <a href="services_mobile.html" class="secondary-button">View All Services</a>
+             </div>
+        </section>
 
-            <section class="mobile-content-box google-reviews-placeholder-section">
-                <h2>What Our Clients Say</h2>
-                <div id="google-reviews-display-area" class="reviews-container">
-                    <!-- Static Placeholder Content -->
-                    <div class="review-item-placeholder">
-                        <div class="review-stars">
-                            <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
-                        </div>
-                        <p class="review-text-placeholder">"An absolutely transformative experience! Highly recommended..."</p>
-                        <p class="review-author-placeholder">- A Happy Client</p>
+        <section id="testimonials" class="content-section testimonials-section">
+             <div class="section-container">
+                <h2>Client Successes</h2>
+                 <div class="testimonial-grid"> <!-- You might have a more complex carousel structure here from your snippet if needed -->
+                     <div class="testimonial-item">
+                        <p>"Working with The Kershaw Law Firm transformed our H-2B filing experience. Their team is incredibly knowledgeable, responsive, and supportive. The process was smooth, and we secured our workers on time. Truly exceptional service!"</p>
+                        <p class="testimonial-author">- John D., Construction Business Owner</p>
                     </div>
-                    <div class="review-item-placeholder">
-                        <div class="review-stars">
-                            <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="far fa-star"></i>
-                        </div>
-                        <p class="review-text-placeholder">"Great service and attention to detail. Will use again."</p>
-                        <p class="review-author-placeholder">- Another Satisfied Customer</p>
+                     <div class="testimonial-item">
+                        <p>"We rely heavily on seasonal H-2A workers. The Kershaw Law Firm has been our trusted legal partner for years. Their attention to detail and proactive communication make a huge difference. They are essential to our operation."</p>
+                        <p class="testimonial-author">- Sarah K., Farm Administrator</p>
                     </div>
-                    <p class="loading-reviews-message">Loading more reviews...</p>
-                    <!-- Actual reviews will be dynamically loaded here by google_reviews.js and mobile_script.js -->
+                    <!-- If you had more testimonial items or a carousel structure like in the snippet, it would go here -->
+                 </div>
+                <div class="google-reviews-callout"> <!-- This was in the base Kershaw HTML, the snippet also had a Google Reviews part -->
+                     <h3><i class="fas fa-star"></i> <i class="fas fa-star"></i> <i class="fas fa-star"></i> <i class="fas fa-star"></i> <i class="fas fa-star"></i> See More 5-Star Reviews!</h3>
+                     <p>Client satisfaction is our priority. Read authentic feedback from businesses like yours on Google.</p>
+                     <a href="https://www.google.com/search?q=The+Kershaw+Law+Firm+P.C.+reviews" class="google-reviews-button" aria-label="Read Google Reviews" target="_blank" rel="noopener noreferrer">
+                         <i class="fab fa-google"></i> Read Google Reviews
+                     </a>
                 </div>
-            </section>
-        </main>
+             </div>
+        </section>
 
-        <footer class="mobile-footer">
-            <div class="social-media-links">
-                <a href="https://facebook.com/yourprofile" target="_blank" class="social-icon facebook" aria-label="Facebook">
-                    <i class="fab fa-facebook-f"></i>
-                </a>
-                <a href="https://twitter.com/yourprofile" target="_blank" class="social-icon x-twitter" aria-label="X (Twitter)">
-                    <i class="fa-brands fa-x-twitter"></i>
-                </a>
-                <a href="https://instagram.com/yourprofile" target="_blank" class="social-icon instagram" aria-label="Instagram">
-                    <i class="fab fa-instagram"></i>
-                </a>
-                <!-- Example for a third one, e.g., LinkedIn -->
-                <a href="https://linkedin.com/yourprofile" target="_blank" class="social-icon linkedin" aria-label="LinkedIn">
-                    <i class="fab fa-linkedin-in"></i>
+        <section class="content-section call-to-action-bottom">
+            <div class="section-container text-center">
+                 <h2>Start Your Visa Process Today</h2>
+                 <p>Reach out to discuss your business's H-2A or H-2B needs with our experienced legal team.</p>
+                 <a href="contact_mobile.html" class="cta-button">
+                    <i class="fa-solid fa-phone-alt"></i> Contact Us Now
                 </a>
             </div>
-            <p class="copyright-text">© 2024 YourBrand. All Rights Reserved. Mobile Edition.</p>
-        </footer>
-    </div>
+        </section>
+    </div> <!-- End of page-content-wrapper -->
 
-    <!-- This script will contain your review data. Create it later. -->
-    <script src="google_reviews.js" defer></script>
-    <!-- This script handles loader and dynamic content like reviews. -->
-    <script src="mobile_script.js" defer></script>
+    <nav class="tabs"> <!-- Or class="mobile-tabs" if that was the final class name -->
+        <a href="index_mobile.html" class="active" aria-current="page"><i class="fas fa-home tab-icon"></i><span class="tab-label">Home</span></a>
+        <a href="aboutus_mobile.html" class="tab-item"><i class="fas fa-info-circle tab-icon"></i><span class="tab-label">About</span></a>
+        <a href="services_mobile.html" class="tab-item"><i class="fas fa-concierge-bell tab-icon"></i><span class="tab-label">Services</span></a>
+        <a href="faq_mobile.html" class="tab-item"><i class="fas fa-question-circle tab-icon"></i><span class="tab-label">FAQ</span></a>
+        <a href="contact_mobile.html" class="tab-item"><i class="fas fa-envelope tab-icon"></i><span class="tab-label">Contact</span></a>
+    </nav>
+
+    <footer class="site-footer">
+        <div class="footer-content">
+            <div class="footer-logo-area">
+                <!-- Optional: Small logo in footer -->
+                <!-- <img src="logo_symbol_white.png" alt="Kershaw Law Firm Icon" class="footer-emblem"> -->
+                <p class="footer-firm-name">The Kershaw Law Firm P.C.</p>
+            </div>
+            <div class="footer-social-media">
+                <a href="YOUR_FACEBOOK_LINK_HERE" aria-label="Visit our Facebook page" target="_blank" rel="noopener noreferrer"><i class="fab fa-facebook-f"></i></a>
+                <a href="YOUR_LINKEDIN_LINK_HERE" aria-label="Connect with us on LinkedIn" target="_blank" rel="noopener noreferrer"><i class="fab fa-linkedin-in"></i></a>
+                <a href="YOUR_X_TWITTER_LINK_HERE" aria-label="Follow us on X (formerly Twitter)" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-x-twitter"></i></a>
+            </div>
+            <nav class="footer-links">
+                <a href="privacy_policy_mobile.html">Privacy Policy</a>
+                <span class="footer-link-separator">•</span>
+                <a href="terms_of_service_mobile.html">Terms of Service</a>
+                 <span class="footer-link-separator">•</span>
+                <a href="sitemap_mobile.html">Sitemap</a>
+            </nav>
+            <p class="footer-copyright">© <span id="current-year">2024</span> The Kershaw Law Firm P.C. All Rights Reserved.</p> <!-- JS will update year -->
+            <p class="footer-disclaimer">This website is for informational purposes only and does not constitute legal advice. Attorney Advertising.</p>
+        </div>
+    </footer>
+
+    <script src="index_mobile.js" defer></script> <!-- Assuming JS is in the root or adjust path e.g., js/index_mobile.js -->
 </body>
 </html>
