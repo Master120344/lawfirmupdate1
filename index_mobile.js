@@ -1,5 +1,3 @@
-// aboutus_mobile.js
-
 // --- Strict Mode & Global Constants ---
 "use strict";
 const INITIAL_SPLASH_DURATION_MS = 100; // Extremely fast splash
@@ -29,14 +27,20 @@ function initPageLoad() {
     const mainContent = document.getElementById('main-content');
 
     if (!splashLoader || !bodyElement || !mainContent) {
-        console.warn("Essential elements for page load (splashLoader, body, mainContent) not found on About Us page.");
+        console.warn("Essential elements for page load (splashLoader, body, mainContent) not found.");
         if (bodyElement) bodyElement.classList.add('loaded');
-        if (mainContent) mainContent.style.visibility = 'visible';
+        if (mainContent) {
+             mainContent.style.visibility = 'visible';
+             mainContent.style.opacity = '1';
+        }
         return;
     }
 
     mainContent.style.visibility = 'hidden';
     mainContent.style.opacity = '0';
+
+    // Set loader display duration for CSS animation if a loading bar is used
+    // document.documentElement.style.setProperty('--loader-display-duration', `${INITIAL_SPLASH_DURATION_MS / 1000}s`);
 
     setTimeout(() => {
         splashLoader.classList.add('hidden');
@@ -47,7 +51,7 @@ function initPageLoad() {
 
         splashLoader.addEventListener('transitionend', () => {
             if (splashLoader.classList.contains('hidden')) {
-                // splashLoader.remove(); // Optional
+                // splashLoader.remove(); // Optional: remove from DOM after hiding
             }
         }, { once: true });
     }, INITIAL_SPLASH_DURATION_MS);
@@ -75,7 +79,6 @@ window.initScrollAnimations = function() {
         });
     }, observerOptions);
     animatedElements.forEach(el => {
-        // Re-observe if not visible, useful for bfcache scenarios
         if (!el.classList.contains('is-visible')) {
             animationObserver.observe(el);
         }
@@ -83,40 +86,41 @@ window.initScrollAnimations = function() {
 };
 
 
-// Handle bfcache
+// Handle bfcache (back-forward cache)
 window.addEventListener('pageshow', (event) => {
     const splashLoader = document.getElementById('splash-loader');
     const pageTransitionLoader = document.getElementById('page-transition-loader');
     const bodyElement = document.body;
     const mainContent = document.getElementById('main-content');
 
-    if (splashLoader) splashLoader.classList.add('hidden'); // Ensure splash is always hidden
-    if (pageTransitionLoader) pageTransitionLoader.classList.add('hidden'); // Ensure page transition is hidden
+    if (splashLoader) splashLoader.classList.add('hidden');
+    if (pageTransitionLoader) pageTransitionLoader.classList.add('hidden');
 
     if (event.persisted) { // Page is from bfcache
-        if (bodyElement) bodyElement.classList.add('loaded'); // Ensure body is opaque
+        if (bodyElement) bodyElement.classList.add('loaded');
         if (mainContent) {
-            mainContent.style.transition = 'none'; // No transition for instant display
+            mainContent.style.transition = 'none';
             mainContent.style.opacity = '1';
             mainContent.style.visibility = 'visible';
-            setTimeout(() => { // Re-apply transition for future interactions
+            setTimeout(() => {
                 mainContent.style.transition = `opacity ${PAGE_TRANSITION_ANIMATION_MS / 1000}s ease-out`;
             }, 50);
         }
-        // Re-initialize scroll animations as IntersectionObserver might need a nudge
         if (typeof window.initScrollAnimations === 'function') {
             setTimeout(window.initScrollAnimations, 100);
         }
     } else { // Page is a fresh load
-        // If splash screen is *somehow* still visible (e.g. extremely fast click after initial load was interrupted)
-        // and main content is also somehow involved (less likely with current setup).
-        // This logic primarily ensures mainContent is hidden if splash isn't done.
+        // Ensure main content visibility is correctly set relative to splash screen state
         if (mainContent && splashLoader && !splashLoader.classList.contains('hidden')) {
             mainContent.style.visibility = 'hidden';
             mainContent.style.opacity = '0';
-        } else if (mainContent) { // If splash is gone or wasn't there, ensure content is visible.
-            mainContent.style.visibility = 'visible';
-            mainContent.style.opacity = '1';
+        } else if (mainContent) {
+            // If initPageLoad hasn't made it visible yet and splash is gone, make it visible.
+            // This path is less likely with current initPageLoad logic.
+            if (mainContent.style.visibility === 'hidden') {
+                mainContent.style.visibility = 'visible';
+                mainContent.style.opacity = '1';
+            }
         }
     }
 });
@@ -141,16 +145,15 @@ document.addEventListener('DOMContentLoaded', () => {
                 try {
                     const currentHostname = window.location.hostname;
                     const destinationUrl = new URL(destination, window.location.href);
-                    if (destinationUrl.hostname !== currentHostname) return; // External link
+                    if (destinationUrl.hostname !== currentHostname && destinationUrl.hostname !== "") return; // External link or protocol like file://
                 } catch (error) { return; } // Invalid URL
                 
                 const currentPagePath = window.location.pathname.replace(/\/$/, "");
                 const destinationPathObject = new URL(destination, window.location.href);
                 const destinationPath = destinationPathObject.pathname.replace(/\/$/, "");
 
-                // Avoid transition for same page links (e.g. hash links or accidental self-links)
-                if (destinationPath === currentPagePath && destinationPathObject.hash) return; // Allow default for hash links
-                if (destinationPath === currentPagePath && !destinationPathObject.hash) { e.preventDefault(); return; } // Prevent reload
+                if (destinationPath === currentPagePath && destinationPathObject.hash) return; 
+                if (destinationPath === currentPagePath && !destinationPathObject.hash) { e.preventDefault(); return; }
 
                 e.preventDefault();
                 mainContent.style.transition = `opacity ${PAGE_TRANSITION_ANIMATION_MS / 1000}s ease-out`;
@@ -185,7 +188,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         if (targetElement) {
                             e.preventDefault();
                             const header = document.getElementById('site-header');
-                            const headerOffset = header ? header.offsetHeight : 70; // Default offset
+                            const headerOffset = header ? header.offsetHeight : (parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--header-height-mobile')) || 70);
                             const elementPosition = targetElement.getBoundingClientRect().top;
                             const offsetPosition = elementPosition + window.pageYOffset - headerOffset - 20; // Extra 20px padding
                             window.scrollTo({ top: offsetPosition, behavior: "smooth" });
@@ -202,25 +205,27 @@ document.addEventListener('DOMContentLoaded', () => {
         const header = document.getElementById('site-header');
         if (!header) return;
         let lastScrollTop = 0;
-        const delta = 10; // Scroll threshold
+        const delta = 10; 
         const headerHeight = header.offsetHeight;
         let isHeaderHidden = false;
+
         const handleScroll = debounce(() => {
             const nowScrollTop = window.pageYOffset || document.documentElement.scrollTop;
             if (Math.abs(lastScrollTop - nowScrollTop) <= delta) return;
-            if (nowScrollTop > lastScrollTop && nowScrollTop > headerHeight) { // Scrolling Down
+
+            if (nowScrollTop > lastScrollTop && nowScrollTop > headerHeight) { 
                 if (!isHeaderHidden) {
                     header.style.transform = `translateY(-${headerHeight}px)`;
                     isHeaderHidden = true;
                 }
-            } else { // Scrolling Up or at top
-                if (isHeaderHidden || nowScrollTop <= headerHeight / 2 ) { // Show if scrolling up or near top
+            } else { 
+                if (isHeaderHidden || nowScrollTop <= headerHeight / 2 ) { 
                     header.style.transform = 'translateY(0)';
                     isHeaderHidden = false;
                 }
             }
-            lastScrollTop = nowScrollTop <= 0 ? 0 : nowScrollTop; // For Mobile or negative scrolling
-        }, 30); // Debounce timeout
+            lastScrollTop = nowScrollTop <= 0 ? 0 : nowScrollTop; 
+        }, 30); 
         window.addEventListener('scroll', handleScroll, { passive: true });
     }
     initStickyHeaderBehavior();
