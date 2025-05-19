@@ -25,14 +25,14 @@ html {
     --font-primary: 'Cinzel', serif;
     --font-secondary: 'EB Garamond', serif;
     --footer-height: 70px;
-    --content-max-width-mobile: 700px;
+    --content-max-width-mobile: 700px; /* Max content width remains mobile friendly */
 }
 
 body {
     font-family: var(--font-secondary);
     min-height: 100vh;
     color: var(--color-text-dark);
-    line-height: 1.7;
+    line-height: 1.75; /* Increased base line-height */
     background-color: #EAEBEF;
     overflow-x: hidden;
     position: relative;
@@ -42,7 +42,7 @@ body {
     padding-bottom: var(--footer-height);
     display: flex;
     flex-direction: column;
-    font-size: 17px;
+    font-size: 18px; /* Increased base font size */
 }
 
 body.loaded {
@@ -97,7 +97,6 @@ body.loaded {
     background-repeat: no-repeat;
     background-image: url('austin.jpg');
     animation: subtleZoom 50s infinite alternate ease-in-out;
-    /* Increased brightness */
     filter: brightness(0.75) contrast(1.05);
 }
 
@@ -110,7 +109,7 @@ body.loaded {
 .header {
     width: 100%;
     z-index: 100;
-    padding: 10px 0; /* Adjusted padding slightly for new logo focus */
+    padding: 10px 0; /* Minimal vertical padding, logo size will dictate height */
     background: var(--color-bg-header-footer);
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
@@ -122,45 +121,44 @@ body.loaded {
 }
 
 .header-content {
-    width: 90%;
+    width: 90%; /* Content within header takes 90% of screen width */
     margin: 0 auto;
     display: flex;
-    flex-direction: column;
+    justify-content: center; /* Center the logo container */
     align-items: center;
-    /* gap: 0; /* Removed gap as H1 is gone */
 }
 
 .logo-container {
-    display: flex; /* Remains flex to center the link/image */
+    display: flex;
     align-items: center;
-    justify-content: center; /* Ensure link/image is centered */
-    width: 100%; /* Allow logo container to take full width for centering purposes */
-    /* gap: 0; /* Removed gap */
+    justify-content: center;
+    width: 100%; /* Allow logo container to use the full width of header-content */
 }
 
 .logo-link {
     text-decoration: none;
     color: inherit;
-    display: inline-block; /* Make it an inline block for sizing */
-    /* gap: 0; /* Removed gap */
+    display: inline-block;
+    line-height: 0; /* Prevent extra space below image if it's an inline block */
 }
 
 .header-logo {
-    height: 75px; /* Increased logo height */
-    width: auto;   /* Maintain aspect ratio */
-    max-width: 280px; /* Prevent logo from being excessively wide on mobile */
-    display: block; /* Ensures it behaves like a block for centering */
-    margin: 0 auto; /* Centers the logo if its container is wider */
-    border-radius: 8px;
-    box-shadow: 0 3px 8px var(--color-shadow-subtle);
-    border: 1px solid rgba(0,0,0,0.05);
+    width: 70%; /* Logo takes up 70% of the .header-content width */
+    max-width: 380px; /* But not more than 380px (prevents huge logo on wider mobiles) */
+    height: auto; /* Height adjusts to maintain aspect ratio */
+    max-height: 90px; /* Cap maximum height to prevent overly tall header */
+    display: block;
+    margin: 0 auto; /* Centers logo if its actual width is less than container */
+    border-radius: 6px; /* Slightly reduced border radius */
+    /* box-shadow: 0 2px 6px var(--color-shadow-subtle); /* Softer shadow */
+    /* border: 1px solid rgba(0,0,0,0.03); /* Very subtle border */
 }
 
 /* Main Content Wrapper */
 .page-content-wrapper {
     flex-grow: 1;
     width: 100%;
-    padding: 0 15px;
+    padding: 0 15px; /* Keep side gutters for mobile */
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -168,17 +166,17 @@ body.loaded {
     z-index: 1;
 }
 
-/* Sections */
+/* Sections - Increased Spacing and Padding */
 .content-section {
     width: 100%;
     max-width: var(--content-max-width-mobile);
-    margin: 30px auto;
-    padding: 30px 25px;
-    background-color: rgba(255, 255, 255, 0.92);
+    margin: 45px auto; /* Increased vertical margin between sections */
+    padding: 35px 30px; /* Increased internal padding */
+    background-color: rgba(255, 255, 255, 0.93); /* Slightly more opaque for readability */
     border-radius: 12px;
-    box-shadow: 0 5px 20px var(--color-shadow-medium);
+    box-shadow: 0 6px 22px var(--color-shadow-medium); /* Slightly stronger shadow */
     color: var(--color-text-dark);
-    border: 1px solid rgba(0,0,0,0.05);
+    border: 1px solid rgba(0,0,0,0.06);
 }
 
 .section-container {
@@ -188,13 +186,13 @@ body.loaded {
 
 .content-section h2 {
     font-family: var(--font-primary);
-    font-size: 2.2rem;
+    font-size: 2.4rem; /* Larger section headings */
     color: var(--color-accent-blue-primary);
     font-weight: 700;
-    margin-bottom: 25px;
+    margin-bottom: 30px; /* More space below heading */
     text-align: center;
     position: relative;
-    padding-bottom: 12px;
+    padding-bottom: 18px; /* More space for underline */
 }
 
 .content-section h2::after {
@@ -203,34 +201,34 @@ body.loaded {
     bottom: 0;
     left: 50%;
     transform: translateX(-50%);
-    width: 70px;
-    height: 3.5px;
+    width: 80px; /* Wider line */
+    height: 4px; /* Thicker line */
     background-color: var(--color-accent-gold);
     border-radius: 2px;
 }
 
 .content-section p, .content-section ul {
-    margin-bottom: 20px;
-    line-height: 1.75;
-    font-size: 1.05rem;
+    margin-bottom: 22px; /* Increased margin after paragraphs/lists */
+    line-height: 1.85; /* Increased line height */
+    font-size: 1.1rem; /* Slightly larger text (18px * 1.1 = 19.8px) */
 }
 
 .service-list { list-style: none; padding-left: 0; }
-.service-list li { margin-bottom: 14px; padding-left: 30px; position: relative; }
+.service-list li { margin-bottom: 16px; padding-left: 35px; position: relative; } /* More space */
 .service-list li i {
     color: var(--color-accent-blue-primary);
     position: absolute;
     left: 0;
-    top: 6px;
-    font-size: 1em;
+    top: 7px; /* Adjust vertical alignment for larger text */
+    font-size: 1.05em;
 }
 
 /* Hero Section */
 .hero {
     width: 100%;
     max-width: none;
-    margin: 20px auto 30px auto;
-    padding: 50px 20px;
+    margin: 25px auto 40px auto; /* Adjusted margins */
+    padding: 60px 20px; /* More padding */
     text-align: center;
     background: none;
     box-shadow: none;
@@ -241,75 +239,75 @@ body.loaded {
 .hero-content {
     max-width: 600px;
     margin: 0 auto;
-    background: linear-gradient(rgba(10, 25, 49, 0.65), rgba(10, 25, 49, 0.8));
-    padding: 35px;
+    background: linear-gradient(rgba(10, 25, 49, 0.7), rgba(10, 25, 49, 0.85)); /* Slightly darker tint */
+    padding: 40px; /* More padding */
     border-radius: 10px;
     box-shadow: 0 6px 20px rgba(0,0,0,0.5);
 }
 
 .hero h2 {
     font-family: var(--font-primary);
-    font-size: 2.4rem;
+    font-size: 2.6rem; /* Larger hero heading */
     color: var(--color-text-on-dark-bg);
     font-weight: 700;
     text-shadow: var(--color-shadow-text);
-    margin-bottom: 20px;
+    margin-bottom: 25px;
     animation: fadeIn 1s ease-out 0.2s backwards;
-    line-height: 1.25;
+    line-height: 1.3;
     padding-bottom: 0;
 }
 .hero h2::after { display: none; }
 
 .hero-subtitle {
-    font-size: 1.25rem;
-    margin-bottom: 35px;
+    font-size: 1.35rem; /* Larger subtitle */
+    margin-bottom: 40px; /* More space */
     text-shadow: 1px 1px 5px rgba(0,0,0,0.7);
-    color: rgba(255, 255, 255, 0.95);
+    color: rgba(255, 255, 255, 0.96);
     animation: fadeIn 1s ease-out 0.4s backwards;
     font-family: var(--font-secondary);
     font-weight: 400;
 }
 
-/* CTA Button */
+/* CTA Button - More Padding */
 .cta-button {
     display: inline-flex; align-items: center; justify-content: center;
     gap: 12px;
-    padding: 15px 38px;
+    padding: 18px 42px; /* Increased padding */
     background: var(--color-accent-gold);
     color: var(--color-text-on-dark-bg);
     text-decoration: none;
-    font-family: var(--font-primary); font-size: 1.15rem; font-weight: 700;
+    font-family: var(--font-primary); font-size: 1.2rem; font-weight: 700; /* Larger font */
     border-radius: 8px;
     border: none;
     transition: all 0.3s ease;
-    box-shadow: 0 4px 12px rgba(192, 149, 83, 0.5);
+    box-shadow: 0 5px 14px rgba(192, 149, 83, 0.5);
     cursor: pointer;
     animation: fadeIn 1s ease-out 0.6s backwards;
     text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
-    min-width: 230px;
+    min-width: 240px; /* Wider button */
     text-align: center;
     text-transform: uppercase;
     letter-spacing: 0.8px;
 }
-.cta-button i { font-size: 1em; }
+.cta-button i { font-size: 1.05em; }
 .cta-button:hover {
     background: #d4a15a;
     transform: translateY(-2px);
-    box-shadow: 0 6px 16px rgba(192, 149, 83, 0.6);
+    box-shadow: 0 7px 18px rgba(192, 149, 83, 0.6);
 }
 
-/* Secondary Button Style */
+/* Secondary Button Style - More Padding */
 .secondary-button {
     display: inline-block;
-    margin-top: 25px;
-    padding: 12px 30px;
+    margin-top: 30px; /* More space */
+    padding: 14px 35px; /* Increased padding */
     background: none;
     color: var(--color-accent-blue-primary);
     border: 2px solid var(--color-accent-blue-primary);
     border-radius: 6px;
     text-decoration: none;
     font-family: var(--font-secondary);
-    font-size: 1.05rem;
+    font-size: 1.1rem; /* Larger font */
     font-weight: 600;
     transition: all 0.3s ease;
     text-align: center;
@@ -317,97 +315,88 @@ body.loaded {
 .secondary-button:hover {
     background: var(--color-accent-blue-primary);
     color: var(--color-text-on-dark-bg);
-    box-shadow: 0 3px 10px rgba(0, 51, 102, 0.3);
+    box-shadow: 0 4px 12px rgba(0, 51, 102, 0.3);
 }
 
 /* Testimonials Section */
 .testimonials-section {
-    background-color: rgba(240, 242, 245, 0.92);
+    background-color: rgba(240, 242, 245, 0.93);
 }
-.testimonial-grid { display: grid; gap: 25px; }
+.testimonial-grid { display: grid; gap: 30px; } /* Increased gap */
 .testimonial-item {
     font-style: italic;
-    padding: 25px;
-    border-left: 5px solid var(--color-accent-gold);
-    background-color: rgba(255, 255, 255, 0.95);
-    border-radius: 0 8px 8px 0;
-    box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.08);
+    padding: 30px; /* More padding */
+    border-left: 6px solid var(--color-accent-gold); /* Thicker accent */
+    background-color: rgba(255, 255, 255, 0.96);
+    border-radius: 0 10px 10px 0; /* More rounded */
+    box-shadow: 3px 3px 12px rgba(0, 0, 0, 0.09);
 }
-.testimonial-item p:first-child { margin-bottom: 18px; }
+.testimonial-item p:first-child { margin-bottom: 20px; }
 .testimonial-author {
     font-style: normal;
     font-weight: 700;
     text-align: right;
-    margin-top: 18px;
+    margin-top: 20px;
     color: var(--color-accent-blue-primary);
-    font-size: 1rem;
+    font-size: 1.05rem;
 }
 
 .google-reviews-callout {
-    margin-top: 45px;
-    padding-top: 30px;
+    margin-top: 50px; /* More space */
+    padding-top: 35px; /* More padding */
     border-top: 1px solid rgba(0, 0, 0, 0.15);
     text-align: center;
 }
 .google-reviews-callout h3 {
     font-family: var(--font-secondary);
-    font-size: 1.35rem;
+    font-size: 1.4rem; /* Larger */
     color: var(--color-text-dark);
-    margin-bottom: 18px;
+    margin-bottom: 20px;
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 8px;
+    gap: 10px; /* More gap */
 }
-.google-reviews-callout h3 i { color: var(--color-accent-gold); }
+.google-reviews-callout h3 i { color: var(--color-accent-gold); font-size: 1.1em; }
 
 .google-reviews-button {
-    display: inline-flex; align-items: center; gap: 10px;
-    margin-top: 18px;
-    padding: 13px 30px;
+    display: inline-flex; align-items: center; gap: 12px;
+    margin-top: 20px;
+    padding: 15px 35px; /* More padding */
     background: #DB4437;
     color: var(--color-text-on-dark-bg);
     text-decoration: none; font-family: var(--font-primary);
-    font-size: 1.1rem; font-weight: 700;
+    font-size: 1.15rem; font-weight: 700; /* Larger */
     border-radius: 6px; transition: all 0.3s ease;
-    box-shadow: 0 3px 8px rgba(219, 68, 55, 0.4);
+    box-shadow: 0 4px 10px rgba(219, 68, 55, 0.4);
     text-transform: uppercase;
-    letter-spacing: 0.5px;
+    letter-spacing: 0.6px;
 }
 .google-reviews-button:hover {
      background: #e06055;
      transform: translateY(-1px);
-     box-shadow: 0 4px 10px rgba(219, 68, 55, 0.5);
+     box-shadow: 0 5px 12px rgba(219, 68, 55, 0.5);
 }
-.google-reviews-button i { font-size: 1.2em; }
+.google-reviews-button i { font-size: 1.25em; }
 
 /* Bottom CTA Section */
 .call-to-action-bottom {
     background: linear-gradient(135deg, var(--color-accent-blue-primary), #002244);
     color: var(--color-text-on-dark-bg);
     text-shadow: 1px 1px 3px rgba(0,0,0,0.4);
-    padding: 40px 25px;
+    padding: 45px 30px; /* More padding */
     margin-bottom: 0;
 }
 .call-to-action-bottom h2 {
      color: var(--color-text-on-dark-bg);
      text-shadow: 1px 1px 3px rgba(0,0,0,0.4);
      padding-bottom: 0;
+     font-size: 2.4rem; /* Match other section headings */
 }
 .call-to-action-bottom h2::after { display: none; }
-.call-to-action-bottom p { color: rgba(255, 255, 255, 0.92); }
-.call-to-action-bottom .cta-button {
-    background: var(--color-accent-gold);
-    color: var(--color-text-on-dark-bg);
-    box-shadow: 0 5px 15px rgba(192, 149, 83, 0.4);
-}
-.call-to-action-bottom .cta-button:hover {
-    background: #d4a15a;
-    color: var(--color-text-on-dark-bg);
-    box-shadow: 0 7px 18px rgba(192, 149, 83, 0.5);
-}
+.call-to-action-bottom p { color: rgba(255, 255, 255, 0.94); font-size: 1.15rem; }
 
-/* Fixed Mobile Tabs - IMPROVED */
+/* Fixed Mobile Tabs */
 .tabs {
     position: fixed; bottom: 0; left: 0; width: 100%;
     z-index: 1000; padding: 0 5px;
@@ -425,7 +414,7 @@ body.loaded {
     color: var(--color-text-header-footer);
     text-decoration: none;
     font-family: var(--font-secondary);
-    font-size: 0.85rem;
+    font-size: 0.9rem; /* Slightly larger tab text for better tap target feel */
     font-weight: 500;
     padding: 5px 5px;
     transition: all 0.3s ease;
@@ -444,9 +433,7 @@ body.loaded {
     min-width: 0;
     border-right: 1px solid var(--color-border-subtle);
 }
-.tabs a:last-child {
-    border-right: none;
-}
+.tabs a:last-child { border-right: none; }
 .tabs a::after {
     content: '';
     position: absolute;
@@ -462,7 +449,6 @@ body.loaded {
 .tabs a:hover { color: var(--color-accent-blue-primary); }
 .tabs a.active { color: var(--color-accent-blue-primary); font-weight: 700; }
 .tabs a:hover::after, .tabs a.active::after { width: 75%; }
-
 
 /* Animations */
 @keyframes fadeIn {
@@ -480,49 +466,72 @@ a:focus-visible, button:focus-visible, input:focus-visible {
 
 /* Responsive adjustments for tablets/larger phones */
 @media (min-width: 600px) {
-    body { font-size: 18px; }
+    body { font-size: 19px; } /* Slightly larger base for tablet+ */
 
-    .header { padding: 15px 0; } /* Adjusted padding for larger logo */
-    .header-content {
-        width: 90%;
-        flex-direction: row;
-        justify-content: flex-start; /* Align logo to the left */
-        align-items: center;
-    }
-     .logo-container {
-        justify-content: flex-start; /* Align logo to the left */
-        /* No gap needed as H1 is gone */
-    }
+    .header { padding: 12px 0; }
+    .header-content { width: 85%; } /* Can be a bit narrower on tablet */
     .header-logo {
-         height: 85px; /* Further increased logo size for tablet+ */
-         max-width: 320px; /* Max width for tablet+ */
-         margin: 0; /* Remove auto margin if container is flex-start */
+        width: auto; /* Let height primarily dictate size on tablet */
+        height: 75px; /* Specific height for tablet */
+        max-width: 300px; /* Max width for logo on tablet */
+        max-height: none; /* Remove mobile max-height if height is set */
+        /* Align left on tablet if header content justifies start */
+        /* For centered logo, margin: 0 auto still works */
+    }
+    /* If you wanted logo left and something else right on tablet: */
+    /* .header-content { justify-content: space-between; } */
+    /* .header-logo { margin: 0; } */
+
+
+    .page-content-wrapper { padding: 0 20px; }
+
+    .content-section {
+        padding: 45px 35px; /* More padding */
+        margin: 50px auto; /* More vertical space */
+        max-width: 800px; /* Max content width for tablet */
+    }
+     .content-section h2 {
+        font-size: 2.7rem; /* Larger section headings for tablet */
+        padding-bottom: 20px;
+        margin-bottom: 35px;
+    }
+     .content-section h2::after { width: 100px; height: 4.5px; }
+    .content-section p, .content-section ul {
+        font-size: 1.15rem; /* (19px * 1.15 = ~21.85px) */
+        line-height: 1.9;
     }
 
-    .hero h2 { font-size: 2.8rem; }
-    .hero-subtitle { font-size: 1.4rem; }
-    .content-section {
-        padding: 40px;
-        margin: 40px auto;
-        max-width: 800px;
-    }
-     .content-section h2 { font-size: 2.5rem; padding-bottom: 18px; }
-     .content-section h2::after { width: 90px; height: 4px; }
-    .content-section p, .content-section ul { font-size: 1.1rem; }
+    .hero h2 { font-size: 3rem; }
+    .hero-subtitle { font-size: 1.5rem; }
 
     .testimonial-grid {
-        grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-        gap: 30px;
+        grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); /* Wider items */
+        gap: 35px;
     }
     .tabs {
         justify-content: center;
         gap: 0;
     }
     .tabs a {
-        font-size: 0.95rem;
-        padding: 10px 15px;
+        font-size: 1rem;
+        padding: 10px 18px; /* More padding */
         flex-grow: 0; flex-basis: auto;
-        min-width: 110px; max-width: 160px;
+        min-width: 120px; max-width: 170px;
     }
      .tabs a::after { width: 85%; }
+}
+
+/* Specific adjustments for VERY NARROW mobile screens, if logo feels too big */
+@media (max-width: 360px) {
+    .header-logo {
+        width: 60%; /* Reduce width percentage on very small screens */
+        max-height: 70px; /* Further cap height if needed */
+    }
+    body { font-size: 17px; } /* Slightly smaller base font for tiny screens */
+    .content-section p, .content-section ul { font-size: 1.05rem; }
+    .content-section h2 { font-size: 2.1rem; }
+    .hero h2 { font-size: 2.2rem; }
+    .hero-subtitle { font-size: 1.2rem; }
+    .cta-button { padding: 16px 35px; font-size: 1.1rem; }
+    .secondary-button { padding: 12px 30px; font-size: 1rem; }
 }
