@@ -1,0 +1,467 @@
+/* TABLE OF CONTENTS
+--------------------------------------------------
+1. Variables & Global Resets
+2. Body & Typography Base
+3. Loader Styles
+4. Background Styles
+5. Header Styles
+6. Page Content Wrapper & Section Base
+7. Get Started Page Specific Styles
+   - .get-started-page-section
+   - .consultation-form-container
+   - Form Element Styling (grid, group, label, input, select, textarea, button)
+   - .thank-you-message
+8. CTA Buttons (Covered by global)
+9. Mobile Tabs Navigation
+10. Footer Styles
+11. Animation & Utility Classes
+12. Responsive Adjustments
+-------------------------------------------------- */
+
+/* 1. VARIABLES & GLOBAL RESETS (Consistent with other pages) */
+:root {
+    /* Primary Palette */
+    --color-primary-brand: #003366;
+    --color-primary-brand-rgb: 0, 51, 102;
+    --color-secondary-brand: #0A58A6;
+    --color-secondary-brand-rgb: 10, 88, 166;
+    --color-accent-gold: #B08D57;
+    --color-accent-gold-rgb: 176, 141, 87; /* Added for consistency */
+    --color-accent-gold-darker: #8c6d40;
+
+    /* Neutral Palette */
+    --color-text-dark: #1a232f;
+    --color-text-medium: #4a5568;
+    --color-text-light: #f0f2f5;
+    --color-text-on-gold: #FFFFFF;
+    --color-text-on-primary: #FFFFFF;
+
+    --color-bg-light: #FFFFFF;
+    --color-bg-off-white: #f8f9fa;
+    --color-bg-medium-grey: #e9ecef;
+    --color-bg-dark: var(--color-primary-brand);
+    --color-bg-footer: #111827;
+
+    /* Loader Specific */
+    --color-loader-bg: var(--color-primary-brand);
+    --color-loader-text: var(--color-text-light);
+    --color-loader-bar-track: rgba(255, 255, 255, 0.2);
+    --color-loader-bar-fill: var(--color-accent-gold);
+    --loader-display-duration: 0.05s; /* Very fast for getstarted page */
+
+    /* UI Elements */
+    --color-border-subtle: rgba(0, 0, 0, 0.08);
+    --color-border-medium: rgba(0, 0, 0, 0.15);
+    --color-shadow-soft: rgba(26, 43, 72, 0.05);
+    --color-shadow-medium: rgba(26, 43, 72, 0.1);
+    --color-shadow-strong: rgba(26, 43, 72, 0.18);
+
+    /* Typography */
+    --font-display: 'Cinzel Decorative', cursive;
+    --font-headings: 'Cinzel', serif;
+    --font-body: 'EB Garamond', serif;
+
+    /* Spacing & Sizing */
+    --spacing-unit: 8px;
+    --header-height-mobile: 65px;
+    --tabs-height-mobile: 60px;
+    --content-max-width: 90vw;
+    --content-max-width-capped: 720px;
+    --border-radius-small: 5px;
+    --border-radius-medium: 10px;
+
+    /* Transitions */
+    --transition-fast: 0.2s ease-in-out;
+    --transition-medium: 0.35s ease-in-out;
+    --transition-slow: 0.5s ease-in-out;
+
+    /* Form Specific (Consistent with contact_mobile.css) */
+    --form-input-bg: rgba(var(--color-secondary-brand-rgb), 0.05);
+    --form-input-bg-focus: rgba(var(--color-secondary-brand-rgb), 0.08);
+    --form-input-border: var(--color-secondary-brand);
+    --form-input-border-focus: var(--color-accent-gold);
+    --form-input-text-color: var(--color-text-dark);
+    --form-input-placeholder-color: #778ca3;
+}
+
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+html { scroll-behavior: smooth; font-size: 100%; }
+
+/* 2. BODY & TYPOGRAPHY BASE (Consistent) */
+body {
+    font-family: var(--font-body); font-size: 1.05rem; line-height: 1.7;
+    color: var(--color-text-dark); background-color: var(--color-bg-off-white);
+    overflow-x: hidden; position: relative; opacity: 0;
+    transition: opacity 0.8s ease-in-out;
+    padding-top: var(--header-height-mobile); padding-bottom: var(--tabs-height-mobile);
+    display: flex; flex-direction: column; min-height: 100vh;
+}
+body.loaded { opacity: 1; }
+h1,h2,h3,h4,h5,h6 { font-family: var(--font-headings); color: var(--color-primary-brand); line-height: 1.25; margin-bottom: calc(var(--spacing-unit)*2.5); font-weight:700; }
+h1 { font-size:clamp(2rem,7vw,3rem); font-weight:800; } h2 { font-size:clamp(1.6rem,6vw,2.4rem); } h3 { font-size:clamp(1.3rem,5vw,1.8rem); }
+p { margin-bottom:calc(var(--spacing-unit)*2); font-weight:400; } p:last-child { margin-bottom:0; }
+a { color:var(--color-secondary-brand); text-decoration:none; transition:color var(--transition-fast); }
+a:hover,a:focus { color:var(--color-accent-gold); text-decoration:underline; }
+ul,ol { margin-bottom:calc(var(--spacing-unit)*2); padding-left:calc(var(--spacing-unit)*3.5); } li { margin-bottom:var(--spacing-unit); }
+img { max-width:100%; height:auto; display:block; }
+
+/* 3. LOADER STYLES (Consistent) */
+.splash-loader {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100vh;
+    background-color: var(--color-loader-bg);
+    display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;
+    z-index: 10000; opacity: 1; visibility: visible;
+    transition: opacity 0.6s ease-out var(--loader-display-duration), visibility 0.6s ease-out var(--loader-display-duration);
+    padding: calc(var(--spacing-unit) * 3);
+}
+.splash-loader.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
+.splash-loader .splash-text-content { text-align: center; }
+.splash-loader .splash-main-title {
+    font-family: var(--font-headings); font-size: clamp(1.8rem, 6vw, 2.5rem);
+    color: var(--color-loader-text); font-weight: 700; letter-spacing: 0.5px;
+    margin-bottom: var(--spacing-unit); text-shadow: 1px 1px 2px rgba(0,0,0,0.15);
+    animation: pulseLogoSplash 2.5s infinite ease-in-out alternate;
+}
+.splash-loader .splash-main-title .splash-main-pc { font-weight: 600; font-size: 0.8em; display: inline-block; }
+@keyframes pulseLogoSplash { from { transform: scale(0.98); opacity: 0.85; } to { transform: scale(1.02); opacity: 1; } }
+.page-transition-loader {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100vh;
+    background-color: rgba(var(--color-primary-brand-rgb), 0.85);
+    backdrop-filter: blur(5px); -webkit-backdrop-filter: blur(5px);
+    display: flex; align-items: center; justify-content: center;
+    z-index: 9999; opacity: 1; visibility: visible;
+    transition: opacity 0.3s ease-out, visibility 0.3s ease-out;
+}
+.page-transition-loader.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
+.page-transition-loader .spinner {
+    width: 50px; height: 50px; border: 5px solid var(--color-loader-bar-track);
+    border-top-color: var(--color-accent-gold); border-radius: 50%;
+    animation: spinLoader 1s linear infinite;
+}
+@keyframes spinLoader { to { transform: rotate(360deg); } }
+
+
+/* 4. BACKGROUND STYLES (Consistent) */
+#background-static {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -2;
+    background-image: url('austin.jpg'); background-size: cover; background-position: center center;
+    background-repeat: no-repeat; animation: subtleZoomInOutBg 70s infinite alternate ease-in-out;
+    filter: saturate(0.6) brightness(0.5);
+}
+@keyframes subtleZoomInOutBg { 0% { transform: scale(1); } 100% { transform: scale(1.03); } }
+#background-overlay {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1;
+    background: linear-gradient(180deg, rgba(var(--color-primary-brand-rgb), 0.2) 0%, rgba(var(--color-primary-brand-rgb), 0.5) 70%, rgba(var(--color-primary-brand-rgb), 0.7) 100%);
+    pointer-events: none;
+}
+
+/* 5. HEADER STYLES (Consistent) */
+.site-header {
+    position: fixed; top: 0; left: 0; width: 100%; z-index: 1000;
+    height: var(--header-height-mobile); background-color: rgba(255, 255, 255, 0.88);
+    backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+    box-shadow: 0 1px 8px var(--color-shadow-medium);
+    border-bottom: 1px solid var(--color-border-subtle);
+    display: flex; align-items: center; padding: 0 calc(var(--spacing-unit) * 2);
+    transition: transform var(--transition-medium);
+}
+.header-content { width: 100%; display: flex; justify-content: flex-start; align-items: center; }
+.firm-title-container { display: flex; align-items: center; }
+.firm-title-link { display: flex; align-items: center; text-decoration: none !important; }
+.firm-title-link:hover .firm-name-header { color: var(--color-accent-gold); }
+.firm-name-header {
+    font-family: var(--font-headings); font-size: clamp(1.05rem, 4.2vw, 1.3rem);
+    color: var(--color-primary-brand); font-weight: 600; margin: 0; line-height: 1.2;
+    letter-spacing: 0.2px; transition: color var(--transition-fast);
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.firm-name-header .firm-name-pc { font-weight: 500; font-size: 0.9em; margin-left: calc(var(--spacing-unit) * 0.5); }
+
+/* 6. PAGE CONTENT WRAPPER & SECTION BASE (Consistent) */
+.page-content-wrapper { flex-grow: 1; width: 100%; position: relative; z-index: 1; }
+.content-section {
+    width: 100%; padding: calc(var(--spacing-unit) * 6) calc(var(--spacing-unit) * 2);
+    margin: 0 auto; position: relative;
+}
+.content-section, .content-section:nth-child(odd) { background-color: rgba(255, 255, 255, 0.88); }
+.content-section:nth-child(even) { background-color: rgba(248, 249, 250, 0.90); }
+.section-container { max-width: var(--content-max-width-capped); margin: 0 auto; width: var(--content-max-width); }
+.section-title {
+    font-family: var(--font-headings); font-size: clamp(1.8rem, 6vw, 2.6rem); text-align: center;
+    margin-bottom: calc(var(--spacing-unit) * 1.5); font-weight: 700;
+    color: var(--color-primary-brand); position: relative; padding-bottom: calc(var(--spacing-unit) * 1.5);
+}
+.section-title.decorative-title::after {
+    content: ''; position: absolute; bottom: 0; left: 50%; transform: translateX(-50%);
+    width: 70px; height: 3px; background-color: var(--color-accent-gold); border-radius: 2px;
+}
+.section-intro-text {
+    font-size: 1.1rem; line-height: 1.75; color: var(--color-text-medium); text-align: center;
+    max-width: 580px; margin: 0 auto calc(var(--spacing-unit) * 3) auto; /* Reduced bottom margin slightly for forms */
+}
+
+/* 7. GET STARTED PAGE SPECIFIC STYLES
+-------------------------------------------------- */
+.get-started-page-section .section-intro-text {
+    margin-bottom: calc(var(--spacing-unit) * 4);
+}
+
+.consultation-form-container {
+    background-color: rgba(255,255,255,0.92); /* Consistent with contact form */
+    padding: calc(var(--spacing-unit) * 3) calc(var(--spacing-unit) * 2.5);
+    border-radius: var(--border-radius-medium);
+    box-shadow: 0 4px 15px var(--color-shadow-medium);
+}
+
+.consultation-form-element .form-grid {
+    display: grid;
+    grid-template-columns: 1fr; /* Default to single column */
+    gap: calc(var(--spacing-unit) * 2);
+    margin-bottom: calc(var(--spacing-unit) * 2.5);
+}
+.form-group {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+.form-group.form-group-span-2 {
+    /* On larger screens, this might span two columns if grid changes */
+}
+
+.form-group label {
+    font-family: var(--font-headings);
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--color-primary-brand);
+    margin-bottom: calc(var(--spacing-unit) * 0.75);
+    display: flex;
+    align-items: center;
+}
+.form-icon {
+    margin-right: calc(var(--spacing-unit) * 1);
+    color: var(--color-accent-gold);
+    font-size: 0.9em;
+    width: 1em; text-align: center;
+}
+.required-asterisk {
+    color: var(--color-accent-gold-darker); /* Or a red color like #D32F2F */
+    margin-left: calc(var(--spacing-unit) * 0.5);
+    font-weight: bold;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="tel"],
+input[type="number"],
+select,
+textarea {
+    width: 100%;
+    padding: calc(var(--spacing-unit) * 1.5) calc(var(--spacing-unit) * 1.75);
+    font-family: var(--font-body);
+    font-size: 1rem;
+    color: var(--form-input-text-color);
+    background-color: var(--form-input-bg);
+    border: 1px solid var(--form-input-border);
+    border-radius: var(--border-radius-small);
+    transition: border-color var(--transition-fast), background-color var(--transition-fast), box-shadow var(--transition-fast);
+    appearance: none; -webkit-appearance: none; -moz-appearance: none;
+}
+input::placeholder,
+textarea::placeholder {
+    color: var(--form-input-placeholder-color);
+    opacity: 1;
+}
+input:focus,
+select:focus,
+textarea:focus {
+    outline: none;
+    border-color: var(--form-input-border-focus);
+    background-color: var(--form-input-bg-focus);
+    box-shadow: 0 0 0 3px rgba(var(--color-accent-gold-rgb), 0.2);
+}
+select {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath fill='none' stroke='%230A58A6' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2 5l6 6 6-6'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right calc(var(--spacing-unit) * 1.5) center;
+    background-size: 1em;
+    padding-right: calc(var(--spacing-unit) * 4);
+}
+select:disabled {
+    background-color: rgba(var(--color-secondary-brand-rgb), 0.03);
+    opacity: 0.7; cursor: not-allowed;
+}
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+input[type="number"] {
+  -moz-appearance: textfield; /* Firefox */
+}
+
+.form-submit-group {
+    text-align: center;
+    margin-top: calc(var(--spacing-unit) * 1.5); /* Slightly less margin for this form */
+}
+.form-submit-button {
+    width: 100%;
+    max-width: 320px; /* Slightly wider button */
+    padding: calc(var(--spacing-unit) * 1.75) calc(var(--spacing-unit) * 3);
+}
+.form-submit-button:disabled {
+    background: var(--color-text-medium);
+    box-shadow: none;
+    cursor: wait;
+    opacity: 0.7;
+}
+
+
+.thank-you-message { /* Consistent with contact page */
+    text-align: center;
+    padding: calc(var(--spacing-unit) * 4) calc(var(--spacing-unit) * 2);
+    background-color: rgba(var(--color-accent-gold-rgb), 0.05);
+    border: 1px solid rgba(var(--color-accent-gold-rgb), 0.3);
+    border-radius: var(--border-radius-medium);
+    margin-top: calc(var(--spacing-unit) * 3);
+    opacity: 0;
+    transition: opacity var(--transition-medium);
+}
+.thank-you-message.visible { display: block !important; opacity: 1; }
+.thank-you-icon { font-size: 3rem; color: var(--color-accent-gold); margin-bottom: calc(var(--spacing-unit) * 1.5); }
+.thank-you-title { color: var(--color-primary-brand); font-size: 1.5rem; margin-bottom: var(--spacing-unit); }
+.thank-you-message p { font-size: 1rem; color: var(--color-text-medium); margin-bottom: calc(var(--spacing-unit) * 1.5); }
+.thank-you-message #reset-form-button { margin-top: calc(var(--spacing-unit) * 2); }
+
+
+/* 8. CTA BUTTONS (Global from index_mobile.css - primary styling for submit button) */
+.cta-button {
+    display: inline-flex; align-items: center; justify-content: center;
+    gap: calc(var(--spacing-unit) * 1.25);
+    padding: calc(var(--spacing-unit) * 1.75) calc(var(--spacing-unit) * 4);
+    background: linear-gradient(145deg, var(--color-accent-gold), var(--color-accent-gold-darker));
+    color: var(--color-text-on-gold) !important; text-decoration: none !important;
+    font-family: var(--font-headings); font-size: 1.1rem; font-weight: 700;
+    border-radius: var(--border-radius-medium); border: none;
+    transition: all var(--transition-medium);
+    box-shadow: 0 4px 12px rgba(var(--color-accent-gold-rgb), 0.35);
+    cursor: pointer; text-transform: uppercase; letter-spacing: 0.6px;
+    min-width: 220px; text-align: center;
+}
+.cta-button i { font-size: 1em; }
+.cta-button:hover, .cta-button:focus {
+    background: linear-gradient(145deg, var(--color-accent-gold-darker), var(--color-accent-gold));
+    box-shadow: 0 6px 18px rgba(var(--color-accent-gold-rgb), 0.5);
+    transform: translateY(-2px) scale(1.01);
+    color: var(--color-text-on-gold) !important;
+}
+/* Secondary Button Style for "Request Another Consultation" */
+.secondary-button {
+    display: inline-block;
+    padding: calc(var(--spacing-unit) * 1.25) calc(var(--spacing-unit) * 3);
+    background: transparent;
+    color: var(--color-secondary-brand) !important;
+    border: 2px solid var(--color-secondary-brand);
+    border-radius: var(--border-radius-small);
+    font-family: var(--font-headings);
+    font-size: 1rem; font-weight: 600;
+    transition: all var(--transition-medium);
+    text-align: center; letter-spacing: 0.2px; text-decoration: none !important;
+}
+.secondary-button:hover, .secondary-button:focus {
+    background: var(--color-secondary-brand);
+    color: var(--color-text-light) !important;
+    box-shadow: 0 3px 10px rgba(var(--color-secondary-brand-rgb), 0.25);
+    transform: translateY(-1px);
+}
+
+/* 9. MOBILE TABS NAVIGATION (Consistent) */
+.mobile-tabs {
+    position: fixed; bottom: 0; left: 0; width: 100%; height: var(--tabs-height-mobile);
+    background-color: rgba(255, 255, 255, 0.96);
+    backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+    box-shadow: 0 -2px 12px var(--color-shadow-medium);
+    border-top: 1px solid var(--color-border-subtle);
+    display: flex; justify-content: space-around; align-items: stretch; z-index: 1000;
+}
+.tab-item {
+    flex-grow: 1; flex-basis: 0; display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    padding: calc(var(--spacing-unit) * 0.5) calc(var(--spacing-unit) * 0.5);
+    color: var(--color-text-medium) !important; text-decoration: none !important;
+    font-family: var(--font-body); font-size: 0.7rem; font-weight: 600;
+    text-align: center; transition: color var(--transition-fast), background-color var(--transition-fast);
+    position: relative;
+}
+.tab-icon { font-size: 1.35rem; margin-bottom: calc(var(--spacing-unit) * 0.35); line-height: 1; }
+.tab-label { line-height: 1.1; display: block; }
+.tab-item:hover, .tab-item:focus { color: var(--color-primary-brand) !important; background-color: rgba(var(--color-accent-gold-rgb), 0.06); }
+.tab-item.active { color: var(--color-primary-brand) !important; font-weight: 700; }
+.tab-item.active::before {
+    content: ''; position: absolute; top: 0; left: 15%; right: 15%;
+    height: 3px; background-color: var(--color-accent-gold); border-radius: 0 0 3px 3px;
+}
+
+/* 10. FOOTER STYLES (Consistent) */
+.site-footer {
+    background-color: var(--color-bg-footer); color: #b0bec5; text-align: center;
+    padding: calc(var(--spacing-unit) * 4) calc(var(--spacing-unit) * 2) calc(var(--spacing-unit) * 2.5);
+    font-size: 0.85rem; line-height: 1.6;
+}
+.footer-content { max-width: var(--content-max-width-capped); margin: 0 auto; width: var(--content-max-width); }
+.footer-firm-identity { margin-bottom: calc(var(--spacing-unit) * 2.5); display: flex; flex-direction: column; align-items: center; gap: var(--spacing-unit); }
+.footer-firm-name { font-family: var(--font-headings); font-size: 1.2rem; color: var(--color-text-light); font-weight: 600; margin: 0; }
+.footer-social-media { margin-bottom: calc(var(--spacing-unit) * 2.5); }
+.footer-social-media a { color: #ced4da !important; font-size: 1.6rem; margin: 0 calc(var(--spacing-unit) * 1.25); transition: color var(--transition-fast), transform var(--transition-fast); display: inline-block; }
+.footer-social-media a:hover i, .footer-social-media a:focus i { color: var(--color-accent-gold); }
+.footer-social-media a:hover, .footer-social-media a:focus { transform: scale(1.15); }
+.footer-social-media a.facebook:hover i, .footer-social-media a.facebook:focus i { color: #1877F2 !important; }
+.footer-social-media a.linkedin:hover i, .footer-social-media a.linkedin:focus i { color: #0A66C2 !important; }
+.footer-social-media a.x-twitter:hover i, .footer-social-media a.x-twitter:focus i { color: #000000 !important; }
+.footer-social-media a.instagram:hover i, .footer-social-media a.instagram:focus i { color: #E1306C !important; }
+.footer-social-media a.tiktok:hover i, .footer-social-media a.tiktok:focus i { color: #EE1D52 !important; }
+.footer-links { margin-bottom: calc(var(--spacing-unit) * 1.5); font-size: 0.8rem; }
+.footer-links a { color: #b0bec5 !important; margin: 0 calc(var(--spacing-unit) * 0.4); transition: color var(--transition-fast); }
+.footer-links a:hover, .footer-links a:focus { color: var(--color-accent-gold) !important; text-decoration: underline; }
+.footer-link-separator { margin: 0 calc(var(--spacing-unit) * 0.4); opacity: 0.7; }
+.footer-copyright { margin-bottom: var(--spacing-unit); font-size: 0.75rem; }
+.footer-disclaimer { font-size: 0.7rem; opacity: 0.6; margin-top: calc(var(--spacing-unit) * 1.25); }
+
+/* 11. ANIMATION & UTILITY CLASSES (Consistent) */
+*:focus-visible { outline: 2px solid var(--color-secondary-brand); outline-offset: 1px; box-shadow: 0 0 0 3px rgba(var(--color-secondary-brand-rgb), 0.2); }
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
+.text-center { text-align: center !important; }
+.animate-on-scroll { opacity: 0; transition-property: opacity, transform; transition-duration: 0.7s; transition-timing-function: cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+.animate-on-scroll.fade-in { transform: translateY(20px); }
+.animate-on-scroll.fade-in-up { transform: translateY(40px); }
+.animate-on-scroll.is-visible { opacity: 1; transform: translateY(0) translateX(0) scale(1); }
+
+/* 12. RESPONSIVE ADJUSTMENTS (Consistent) */
+@media (min-width: 480px) {
+    body { font-size: 1.075rem; }
+    :root { --header-height-mobile: 70px; --tabs-height-mobile: 65px; }
+    .firm-name-header { font-size: clamp(1.1rem, 4vw, 1.35rem); }
+    .tab-icon { font-size: 1.45rem; }
+    .tab-label { font-size: 0.75rem; }
+
+    .consultation-form-element .form-grid {
+        grid-template-columns: 1fr 1fr; /* Two columns for most fields */
+    }
+    .form-group.form-group-span-2 {
+        grid-column: span 2; /* Make these span full width */
+    }
+}
+@media (min-width: 600px) {
+    body { font-size: 1.1rem; }
+    :root { --content-max-width: 88vw; --content-max-width-capped: 760px; }
+    .section-title { font-size: clamp(2rem, 5.5vw, 2.8rem); }
+}
+
+/* Specific styling for form input focus to ensure high visibility */
+input:focus,
+select:focus,
+textarea:focus {
+    outline: none;
+    border-color: var(--form-input-border-focus) !important; /* Gold border */
+    background-color: var(--form-input-bg-focus) !important; /* Lighter blue background */
+    box-shadow: 0 0 0 3px rgba(var(--color-accent-gold-rgb), 0.25) !important; /* Gold glow */
+}
