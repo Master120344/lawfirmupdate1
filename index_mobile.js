@@ -43,17 +43,22 @@ function initPageLoad() {
     // document.documentElement.style.setProperty('--loader-display-duration', `${INITIAL_SPLASH_DURATION_MS / 1000}s`);
 
     setTimeout(() => {
-        splashLoader.classList.add('hidden');
+        if (splashLoader) { // Check if splashLoader still exists
+            splashLoader.classList.add('hidden');
+        }
+        
         mainContent.style.visibility = 'visible';
         mainContent.style.transition = `opacity ${PAGE_TRANSITION_ANIMATION_MS / 1000}s ease-out`;
         mainContent.style.opacity = '1';
         bodyElement.classList.add('loaded');
 
-        splashLoader.addEventListener('transitionend', () => {
-            if (splashLoader.classList.contains('hidden')) {
-                // splashLoader.remove(); // Optional: remove from DOM after hiding
-            }
-        }, { once: true });
+        if (splashLoader) {
+            splashLoader.addEventListener('transitionend', () => {
+                if (splashLoader.classList.contains('hidden')) {
+                    // splashLoader.remove(); // Optional: remove from DOM after hiding
+                }
+            }, { once: true });
+        }
     }, INITIAL_SPLASH_DURATION_MS);
 }
 
@@ -93,34 +98,39 @@ window.addEventListener('pageshow', (event) => {
     const bodyElement = document.body;
     const mainContent = document.getElementById('main-content');
 
+    // Ensure loaders are hidden on pageshow, especially page transition loader
     if (splashLoader) splashLoader.classList.add('hidden');
     if (pageTransitionLoader) pageTransitionLoader.classList.add('hidden');
 
+
     if (event.persisted) { // Page is from bfcache
-        if (bodyElement) bodyElement.classList.add('loaded');
+        if (bodyElement) bodyElement.classList.add('loaded'); // Ensure body is marked loaded
         if (mainContent) {
+            // Immediately show content from bfcache without transition, then re-enable transitions
             mainContent.style.transition = 'none';
             mainContent.style.opacity = '1';
             mainContent.style.visibility = 'visible';
-            setTimeout(() => {
+            setTimeout(() => { // Re-apply transition for future interactions
                 mainContent.style.transition = `opacity ${PAGE_TRANSITION_ANIMATION_MS / 1000}s ease-out`;
-            }, 50);
+            }, 50); // Small delay
         }
+        // Re-initialize scroll animations if they exist, as elements might be in view
         if (typeof window.initScrollAnimations === 'function') {
-            setTimeout(window.initScrollAnimations, 100);
+            setTimeout(window.initScrollAnimations, 100); // Delay slightly for rendering
         }
     } else { // Page is a fresh load
-        // Ensure main content visibility is correctly set relative to splash screen state
+        // initPageLoad handles initial splash and main content visibility for fresh loads.
+        // This block can ensure main content is correctly set if initPageLoad hasn't run or finished.
         if (mainContent && splashLoader && !splashLoader.classList.contains('hidden')) {
+            // If splash is still visible, main content should be hidden
             mainContent.style.visibility = 'hidden';
             mainContent.style.opacity = '0';
-        } else if (mainContent) {
-            // If initPageLoad hasn't made it visible yet and splash is gone, make it visible.
-            // This path is less likely with current initPageLoad logic.
-            if (mainContent.style.visibility === 'hidden') {
-                mainContent.style.visibility = 'visible';
-                mainContent.style.opacity = '1';
-            }
+        } else if (mainContent && mainContent.style.visibility === 'hidden') {
+            // If splash is gone (or was never there) and main content is still hidden, show it.
+            // This scenario is less likely if initPageLoad works as expected.
+            // mainContent.style.visibility = 'visible';
+            // mainContent.style.opacity = '1';
+            // Note: initPageLoad should be the primary controller for this on fresh load.
         }
     }
 });
@@ -141,25 +151,45 @@ document.addEventListener('DOMContentLoaded', () => {
         internalLinks.forEach(link => {
             link.addEventListener('click', (e) => {
                 const destination = link.getAttribute('href');
-                if (!destination || destination.startsWith('javascript:')) return;
+                // Basic checks for invalid or non-navigational links
+                if (!destination || destination.startsWith('javascript:void(0)')) return;
+
+                let isExternalOrProtocol = false;
                 try {
                     const currentHostname = window.location.hostname;
-                    const destinationUrl = new URL(destination, window.location.href);
-                    if (destinationUrl.hostname !== currentHostname && destinationUrl.hostname !== "") return; // External link or protocol like file://
-                } catch (error) { return; } // Invalid URL
-                
+                    const destinationUrl = new URL(destination, window.location.href); // Resolves relative URLs
+                    // Check if hostnames differ (external) or if it's a different protocol (e.g. file://, ftp://)
+                    if (destinationUrl.hostname !== currentHostname && destinationUrl.hostname !== "") {
+                        isExternalOrProtocol = true;
+                    }
+                } catch (error) {
+                    // Invalid URL, likely not an HTTP/HTTPS link, treat as non-transitional
+                    return; 
+                }
+                if (isExternalOrProtocol) return; // Don't run transition for external links
+
+                // Prevent transition if it's the same page (even with different hash)
+                // or just a hash link on the current page.
                 const currentPagePath = window.location.pathname.replace(/\/$/, "");
                 const destinationPathObject = new URL(destination, window.location.href);
-                const destinationPath = destinationPathObject.pathname.replace(/\/$/, "");
+                const destinationPathClean = destinationPathObject.pathname.replace(/\/$/, "");
 
-                if (destinationPath === currentPagePath && destinationPathObject.hash) return; 
-                if (destinationPath === currentPagePath && !destinationPathObject.hash) { e.preventDefault(); return; }
+                // If it's just a hash change on the same page, let smooth scroll handle it.
+                if (destinationPathClean === currentPagePath && destinationPathObject.hash) return; 
+                
+                // If it's a link to the exact same page without a hash, prevent default and do nothing.
+                if (destinationPathClean === currentPagePath && !destinationPathObject.hash) {
+                    e.preventDefault(); 
+                    return; 
+                }
+
 
                 e.preventDefault();
                 mainContent.style.transition = `opacity ${PAGE_TRANSITION_ANIMATION_MS / 1000}s ease-out`;
                 mainContent.style.opacity = '0';
-                transitionLoader.classList.remove('hidden');
-                setTimeout(() => { window.location.href = destination; }, PAGE_TRANSITION_ANIMATION_MS + 50);
+                if (transitionLoader) transitionLoader.classList.remove('hidden'); // Show loader
+
+                setTimeout(() => { window.location.href = destination; }, PAGE_TRANSITION_ANIMATION_MS + 50); // Navigate after fade
             });
         });
     }
@@ -182,18 +212,24 @@ document.addEventListener('DOMContentLoaded', () => {
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
                 const targetId = this.getAttribute('href');
-                if (targetId.length > 1 && targetId.startsWith('#')) {
+                if (targetId.length > 1 && targetId.startsWith('#')) { // Ensure it's a valid ID selector
                     try {
                         const targetElement = document.querySelector(targetId);
                         if (targetElement) {
                             e.preventDefault();
                             const header = document.getElementById('site-header');
-                            const headerOffset = header ? header.offsetHeight : (parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--header-height-mobile')) || 70);
+                            // Use getComputedStyle for robust header height, fallback if header not found
+                            const headerOffset = header ? header.offsetHeight : 
+                                               (parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--header-height-mobile').replace('px', '')) || 70);
+                            
                             const elementPosition = targetElement.getBoundingClientRect().top;
                             const offsetPosition = elementPosition + window.pageYOffset - headerOffset - 20; // Extra 20px padding
+
                             window.scrollTo({ top: offsetPosition, behavior: "smooth" });
                         }
-                    } catch (error) { console.warn(`Smooth scroll target not found: ${targetId}`); }
+                    } catch (error) { 
+                        console.warn(`Smooth scroll target not found or invalid selector: ${targetId}`, error); 
+                    }
                 }
             });
         });
@@ -205,27 +241,31 @@ document.addEventListener('DOMContentLoaded', () => {
         const header = document.getElementById('site-header');
         if (!header) return;
         let lastScrollTop = 0;
-        const delta = 10; 
+        const delta = 10; // Min scroll distance to trigger show/hide
         const headerHeight = header.offsetHeight;
         let isHeaderHidden = false;
 
         const handleScroll = debounce(() => {
             const nowScrollTop = window.pageYOffset || document.documentElement.scrollTop;
+            
+            // Don't do anything if scroll difference is too small
             if (Math.abs(lastScrollTop - nowScrollTop) <= delta) return;
 
             if (nowScrollTop > lastScrollTop && nowScrollTop > headerHeight) { 
+                // Scrolling Down & past header
                 if (!isHeaderHidden) {
                     header.style.transform = `translateY(-${headerHeight}px)`;
                     isHeaderHidden = true;
                 }
             } else { 
-                if (isHeaderHidden || nowScrollTop <= headerHeight / 2 ) { 
+                // Scrolling Up or near top
+                if (isHeaderHidden || nowScrollTop <= headerHeight / 2 ) { // Show if hidden OR very near top
                     header.style.transform = 'translateY(0)';
                     isHeaderHidden = false;
                 }
             }
-            lastScrollTop = nowScrollTop <= 0 ? 0 : nowScrollTop; 
-        }, 30); 
+            lastScrollTop = nowScrollTop <= 0 ? 0 : nowScrollTop; // For Mobile or negative scrolling
+        }, 30); // Debounce scroll events
         window.addEventListener('scroll', handleScroll, { passive: true });
     }
     initStickyHeaderBehavior();
