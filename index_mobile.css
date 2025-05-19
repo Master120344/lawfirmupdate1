@@ -281,7 +281,7 @@ img {
     background-position: center center;
     background-repeat: no-repeat;
     animation: subtleZoomInOut 70s infinite alternate ease-in-out;
-    filter: saturate(0.6) brightness(0.5); /* Darker for better contrast */
+    filter: saturate(0.7) brightness(0.7); /* MODIFIED: Brighter background image */
 }
 @keyframes subtleZoomInOut {
     0% { transform: scale(1); }
@@ -326,8 +326,8 @@ img {
 .firm-title-link:hover .firm-name-header {
     color: var(--color-accent-gold);
 }
-.firm-title-link:hover .firm-name-header .firm-name-pc { /* Keep P.C. its defined color on hover, or make it accent gold too */
-    color: var(--color-accent-gold); /* Or var(--color-secondary-brand) to keep it blue */
+.firm-title-link:hover .firm-name-header .firm-name-pc {
+    color: var(--color-accent-gold);
 }
 
 
@@ -338,7 +338,8 @@ img {
     font-weight: 600; /* Cinzel Semibold */
     margin: 0;
     line-height: 1.2;
-    letter-spacing: 0.2px;
+    letter-spacing: 0.4px; /* MODIFIED: Slightly increased letter spacing */
+    text-shadow: 0px 1px 3px rgba(var(--color-primary-brand-rgb), 0.2); /* MODIFIED: Added subtle text shadow */
     transition: color var(--transition-fast);
     white-space: nowrap;
     overflow: hidden;
@@ -351,6 +352,7 @@ img {
     margin-left: calc(var(--spacing-unit) * 0.35); /* Adjusted spacing */
     vertical-align: baseline; /* Ensure good alignment */
     transition: color var(--transition-fast); /* Allow color transition for P.C. part */
+    /* Text shadow will be inherited from .firm-name-header */
 }
 
 
@@ -369,10 +371,10 @@ img {
     position: relative;
 }
 .content-section:nth-child(odd) {
-     background-color: rgba(255, 255, 255, 0.80); /* MODIFIED: Increased transparency */
+     background-color: rgba(255, 255, 255, 0.80);
 }
 .content-section:nth-child(even) {
-     background-color: rgba(248, 249, 250, 0.88); /* Kept as is, or adjust if needed for consistency */
+     background-color: rgba(248, 249, 250, 0.88);
 }
 .section-container {
     max-width: var(--content-max-width-capped);
@@ -789,45 +791,28 @@ img {
     margin-bottom: calc(var(--spacing-unit) * 2.5);
 }
 .footer-social-media a {
-    color: #ced4da !important; /* Base color for <a> tag, icon inherits this initially */
+    color: #ced4da !important; /* Base color for <a> tag. Icon color will be set specifically. */
     font-size: 1.6rem;
     margin: 0 calc(var(--spacing-unit) * 1.25);
     transition: transform var(--transition-fast); /* Only transform on <a> tag */
     display: inline-block; /* Helps with transform */
     text-decoration: none !important;
 }
-.footer-social-media a i { /* Target the icon directly for color transition */
-    transition: color var(--transition-fast);
+.footer-social-media a i {
+    /* MODIFIED: Removed color transition from here as colors are static */
 }
 
 .footer-social-media a:hover,
 .footer-social-media a:focus {
     transform: scale(1.15);
-    /* No default color change for <a> on hover, icon color is handled below */
 }
 
-/* REMOVED default gold hover for all icons:
-.footer-social-media a:hover i,
-.footer-social-media a:focus i {
-    color: var(--color-accent-gold) !important;
-}
-*/
-
-/* Specific brand colors on hover/focus for icons */
-.footer-social-media a.facebook:hover i,
-.footer-social-media a.facebook:focus i { color: #1877F2 !important; }
-
-.footer-social-media a.linkedin:hover i,
-.footer-social-media a.linkedin:focus i { color: #0A66C2 !important; }
-
-.footer-social-media a.x-twitter:hover i,
-.footer-social-media a.x-twitter:focus i { color: #000000 !important; }
-
-.footer-social-media a.instagram:hover i,
-.footer-social-media a.instagram:focus i { color: #E1306C !important; }
-
-.footer-social-media a.tiktok:hover i,
-.footer-social-media a.tiktok:focus i { color: #EE1D52 !important; }
+/* MODIFIED: Apply brand colors directly to icons, not just on hover/focus */
+.footer-social-media a.facebook i { color: #1877F2 !important; }
+.footer-social-media a.linkedin i { color: #0A66C2 !important; }
+.footer-social-media a.x-twitter i { color: #FFFFFF !important; } /* MODIFIED: White for X on dark background */
+.footer-social-media a.instagram i { color: #E1306C !important; }
+.footer-social-media a.tiktok i { color: #EE1D52 !important; }
 
 
 .footer-links {
