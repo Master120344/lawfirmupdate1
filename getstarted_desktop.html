@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Request Consultation - The Kershaw Law Firm P.C. - Desktop Version</title>
+    <meta name="description" content="Request an H-2A or H-2B visa consultation with The Kershaw Law Firm P.C. Provide your details to get started. Desktop version.">
+    <link rel="stylesheet" href="getstarted_desktop.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;800&family=EB+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <!-- Add favicon links here if available -->
+</head>
+<body>
+    <div id="splash-loader" class="splash-loader">
+        <div class="splash-text-content">
+            <h1 class="splash-main-title">The Kershaw Law Firm <span class="splash-main-pc">P.C.</span></h1>
+        </div>
+    </div>
+    <div id="page-transition-loader" class="page-transition-loader hidden">
+        <div class="spinner"></div>
+    </div>
+
+    <div id="background-static"></div>
+    <div id="background-overlay"></div>
+
+    <header class="site-header" id="site-header">
+        <div class="header-content">
+            <div class="firm-title-container">
+                 <a href="index_desktop.html" class="firm-title-link" aria-label="Home - The Kershaw Law Firm P.C.">
+                    <h1 class="firm-name-header">The Kershaw Law Firm <span class="firm-name-pc">P.C.</span></h1>
+                 </a>
+            </div>
+        </div>
+    </header>
+
+    <main class="page-content-wrapper" id="main-content">
+        <section class="content-section get-started-page-section">
+            <div class="section-container">
+                <h2 class="section-title decorative-title animate-on-scroll fade-in-up">Request Your Consultation</h2>
+                <p class="section-intro-text animate-on-scroll fade-in-up" data-animation-delay="100">
+                    Take the first step towards securing your workforce. Please provide the following details, and our experienced team will contact you promptly to discuss your H-2A or H-2B visa needs.
+                </p>
+
+                <div class="consultation-form-container animate-on-scroll fade-in-up" data-animation-delay="200" id="consultation-form-section">
+                    <form id="consultation-request-form" class="consultation-form-element">
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label for="full-name"><i class="fa-solid fa-user form-icon"></i> Full Name <span class="required-asterisk">*</span></label>
+                                <input type="text" id="full-name" name="full-name" required placeholder="e.g., Jane Smith">
+                            </div>
+                            <div class="form-group">
+                                <label for="company-name"><i class="fa-solid fa-building form-icon"></i> Company Name <span class="required-asterisk">*</span></label>
+                                <input type="text" id="company-name" name="company-name" required placeholder="e.g., Smith Farms LLC">
+                            </div>
+                            <div class="form-group">
+                                <label for="email"><i class="fa-solid fa-at form-icon"></i> Email Address <span class="required-asterisk">*</span></label>
+                                <input type="email" id="email" name="email" required placeholder="jane.smith@example.com">
+                            </div>
+                            <div class="form-group">
+                                <label for="phone"><i class="fa-solid fa-phone-volume form-icon"></i> Phone Number <span class="required-asterisk">*</span></label>
+                                <input type="tel" id="phone" name="phone" required placeholder="(555) 123-4567">
+                            </div>
+                            <div class="form-group">
+                                <label for="position-title"><i class="fa-solid fa-id-card-clip form-icon"></i> Your Position/Job Title <span class="required-asterisk">*</span></label>
+                                <input type="text" id="position-title" name="position-title" required placeholder="e.g., Owner, HR Manager">
+                            </div>
+                            <div class="form-group">
+                                <label for="worker-count"><i class="fa-solid fa-users form-icon"></i> Approx. Workers Needed <span class="required-asterisk">*</span></label>
+                                <input type="number" id="worker-count" name="worker-count" min="1" required placeholder="e.g., 15">
+                            </div>
+                            <div class="form-group form-group-span-2">
+                                <label for="visa-type"><i class="fa-solid fa-passport form-icon"></i> Primary Visa Type Needed <span class="required-asterisk">*</span></label>
+                                <select id="visa-type" name="visa-type" required>
+                                    <option value="" disabled selected>-- Select Visa Program --</option>
+                                    <option value="h2a">H-2A (Agricultural)</option>
+                                    <option value="h2b">H-2B (Non-Agricultural)</option>
+                                    <option value="both_unsure">Both / Unsure</option>
+                                </select>
+                            </div>
+                            <div class="form-group form-group-span-2">
+                                <label for="job-duties"><i class="fa-solid fa-clipboard-list form-icon"></i> Brief Description of Job Duties <span class="required-asterisk">*</span></label>
+                                <textarea id="job-duties" name="job-duties" rows="4" required placeholder="e.g., Harvesting crops, landscape construction, hotel housekeeping..."></textarea>
+                            </div>
+                            <div class="form-group form-group-span-2">
+                                <label for="message"><i class="fa-solid fa-pen-to-square form-icon"></i> Additional Details or Questions</label>
+                                <textarea id="message" name="message" rows="4" placeholder="e.g., Peak season dates, previous H-2 experience, specific questions..."></textarea>
+                            </div>
+                            <div class="form-group form-group-span-2">
+                                <label for="referral-source"><i class="fa-solid fa-people-arrows form-icon"></i> How Did You Hear About Us? <span class="required-asterisk">*</span></label>
+                                <select id="referral-source" name="referral-source" required>
+                                    <option value="" disabled selected>-- Select Option --</option>
+                                    <option value="website_search">Website / Search Engine (Google, etc.)</option>
+                                    <option value="referral_colleague">Referral (Colleague/Friend)</option>
+                                    <option value="industry_association">Industry Association</option>
+                                    <option value="social_media">Social Media</option>
+                                    <option value="advertisement">Advertisement</option>
+                                    <option value="event_conference">Event/Conference</option>
+                                    <option value="previous_client">Previous Client</option>
+                                    <option value="other_referral">Other</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group form-submit-group">
+                            <button type="submit" class="cta-button form-submit-button">
+                                <i class="fa-solid fa-paper-plane"></i> Submit Consultation Request
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <div id="thank-you-message" class="thank-you-message" style="display: none;">
+                    <i class="fas fa-check-circle thank-you-icon"></i>
+                    <h3 class="thank-you-title">Consultation Request Sent!</h3>
+                    <p>Thank you for reaching out to The Kershaw Law Firm P.C. We have received your consultation request and will be in touch via email shortly to schedule a convenient time to discuss your needs. We typically respond within 1-2 business days.</p>
+                    <p>We look forward to speaking with you!</p>
+                    <button id="reset-form-button" class="secondary-button">Request Another Consultation</button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <nav class="mobile-tabs">
+        <a href="index_desktop.html" class="tab-item">
+            <i class="fas fa-home tab-icon"></i><span class="tab-label">Home</span>
+        </a>
+        <a href="aboutus_desktop.html" class="tab-item">
+            <i class="fas fa-building-columns tab-icon"></i><span class="tab-label">About Us</span>
+        </a>
+        <a href="services_desktop.html" class="tab-item">
+            <i class="fas fa-briefcase tab-icon"></i><span class="tab-label">Services</span>
+        </a>
+        <a href="faq_desktop.html" class="tab-item">
+            <i class="fas fa-lightbulb tab-icon"></i><span class="tab-label">FAQ</span>
+        </a>
+        <a href="contact_desktop.html" class="tab-item">
+            <i class="fas fa-envelope-open-text tab-icon"></i><span class="tab-label">Contact</span>
+        </a>
+    </nav>
+
+    <footer class="site-footer">
+        <div class="footer-content">
+            <div class="footer-firm-identity">
+                <p class="footer-firm-name">The Kershaw Law Firm P.C.</p>
+            </div>
+            <div class="footer-social-media">
+                <a href="YOUR_FACEBOOK_LINK_HERE" class="social-icon facebook" aria-label="Visit The Kershaw Law Firm P.C. on Facebook" target="_blank" rel="noopener noreferrer"><i class="fab fa-facebook-f"></i></a>
+                <a href="YOUR_LINKEDIN_LINK_HERE" class="social-icon linkedin" aria-label="Connect with The Kershaw Law Firm P.C. on LinkedIn" target="_blank" rel="noopener noreferrer"><i class="fab fa-linkedin-in"></i></a>
+                <a href="YOUR_X_TWITTER_LINK_HERE" class="social-icon x-twitter" aria-label="Follow The Kershaw Law Firm P.C. on X" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-x-twitter"></i></a>
+                <a href="YOUR_INSTAGRAM_LINK_HERE" class="social-icon instagram" aria-label="Follow The Kershaw Law Firm P.C. on Instagram" target="_blank" rel="noopener noreferrer"><i class="fab fa-instagram"></i></a>
+                <a href="YOUR_TIKTOK_LINK_HERE" class="social-icon tiktok" aria-label="Follow The Kershaw Law Firm P.C. on TikTok" target="_blank" rel="noopener noreferrer"><i class="fab fa-tiktok"></i></a>
+            </div>
+            <nav class="footer-links">
+                <a href="privacy_policy_desktop.html">Privacy Policy</a>
+                <span class="footer-link-separator">•</span>
+                <a href="terms_of_service_desktop.html">Terms of Service</a>
+                 <span class="footer-link-separator">•</span>
+                <a href="sitemap_desktop.html">Sitemap</a>
+            </nav>
+            <p class="footer-copyright">© <span id="current-year">2025</span> The Kershaw Law Firm P.C. All Rights Reserved.</p>
+            <p class="footer-disclaimer">This website is for informational purposes only and does not constitute legal advice. Submission of this form does not create an attorney-client relationship. Attorney Advertising. Results may vary.</p>
+        </div>
+    </footer>
+
+    <script src="getstarted_desktop.js" defer></script>
+</body>
+</html>
