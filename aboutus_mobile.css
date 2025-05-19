@@ -1,0 +1,425 @@
+/* aboutus_mobile.css - Styles for The Kershaw Law Firm P.C. About Us Page */
+
+/* TABLE OF CONTENTS (About Us Specific)
+--------------------------------------------------
+A1. Variables & Base Imports (Simulated - ideally from a shared base.css)
+A2. About Us Page Specific Layout
+A3. Page Hero Banner (About Us Variant)
+A4. Mission Section Styles
+A5. Expertise Section Styles (Icon List)
+A6. Approach Section Styles (Grid)
+A7. Commitment / Values Section Styles (Grid)
+A8. About Us CTA Section
+A9. Responsive Adjustments for About Us Page
+-------------------------------------------------- */
+
+
+/* A1. VARIABLES & BASE IMPORTS (Simulated)
+   Ideally, these would come from a shared base.css.
+   Re-declaring crucial ones for standalone potential and to meet "every css its own" request.
+-------------------------------------------------- */
+:root {
+    /* Primary Palette */
+    --color-primary-brand: #0A2342;
+    --color-primary-brand-rgb: 10, 35, 66;
+    --color-secondary-brand: #2C5D92;
+    --color-secondary-brand-rgb: 44, 93, 146;
+    --color-accent-gold: #C0A062;
+    --color-accent-gold-darker: #A8884F;
+    --color-accent-gold-rgb: 192, 160, 98;
+
+    /* Neutral Palette */
+    --color-text-dark: #181A1D;
+    --color-text-medium: #424750;
+    --color-text-light: #F0F4F8;
+    --color-text-on-gold: #FFFFFF;
+    --color-text-on-primary: #FFFFFF;
+    --color-text-link: var(--color-secondary-brand);
+    --color-text-link-hover: var(--color-accent-gold);
+
+    --color-bg-light: #FFFFFF;
+    --color-bg-light-rgb: 255, 255, 255;
+    --color-bg-footer: #071527;
+
+    /* Typography */
+    --font-display: 'Cinzel', serif;
+    --font-headings: 'Cinzel', serif;
+    --font-body: 'EB Garamond', serif;
+
+    /* Spacing & Sizing */
+    --spacing-unit: 8px;
+    --spacing-xs: calc(var(--spacing-unit) * 0.5);
+    --spacing-sm: var(--spacing-unit);
+    --spacing-md: calc(var(--spacing-unit) * 2);
+    --spacing-lg: calc(var(--spacing-unit) * 3);
+    --spacing-xl: calc(var(--spacing-unit) * 4);
+    --spacing-xxl: calc(var(--spacing-unit) * 6);
+    --spacing-xxxl: calc(var(--spacing-unit) * 8);
+
+    --header-height-mobile: 70px;
+    --tabs-height-mobile: 65px;
+    --content-max-width: 90vw;
+    --content-max-width-capped: 780px;
+    --border-radius-small: 4px;
+    --border-radius-medium: 8px;
+    --border-radius-large: 16px;
+
+    /* Transitions & Animations */
+    --transition-short: 0.15s ease-out;
+    --transition-base: 0.25s ease-out;
+    --transition-long: 0.4s cubic-bezier(0.25, 0.1, 0.25, 1);
+
+    /* Social Colors */
+    --color-facebook: #1877F2;
+    --color-linkedin: #0A66C2;
+    --color-x-twitter: #000000;
+}
+
+/* Minimal Global Resets (if not using a shared base.css) */
+*, *::before, *::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+html { scroll-behavior: smooth; font-size: 100%; }
+img { max-width: 100%; height: auto; display: block; }
+
+/* Basic Body Styling (if not using a shared base.css) */
+body {
+    font-family: var(--font-body);
+    font-size: 1.1rem;
+    line-height: 1.75;
+    color: var(--color-text-dark);
+    background-color: var(--color-bg-light);
+    overflow-x: hidden;
+    position: relative;
+    opacity: 0;
+    transition: opacity 0.2s var(--transition-base);
+    padding-top: var(--header-height-mobile);
+    padding-bottom: var(--tabs-height-mobile);
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+body.loaded { opacity: 1; }
+
+/* Basic Heading Styling (if not from shared base) */
+h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-headings);
+    color: var(--color-primary-brand);
+    line-height: 1.3;
+    margin-bottom: var(--spacing-lg);
+    font-weight: 700;
+    letter-spacing: 0.2px;
+}
+p { margin-bottom: var(--spacing-md); }
+p:last-child { margin-bottom: 0; }
+a { color: var(--color-text-link); text-decoration: none; }
+a:hover { color: var(--color-text-link-hover); text-decoration: underline; }
+
+/* Loader, Header, Footer, Tabs, Backgrounds, Animations, Utilities
+   ARE ASSUMED TO BE STYLED BY A SHARED CSS (like index_mobile.css)
+   OR WOULD NEED TO BE DUPLICATED/IMPORTED HERE FOR TRUE STANDALONE.
+   For this exercise, focusing on About Us specific content below.
+   The transparency and backdrop-filter for .content-section are inherited
+   if index_mobile.css is loaded or would need to be re-applied here.
+*/
+
+/* Re-apply .content-section transparency if this CSS is truly standalone */
+.content-section {
+    width: 100%;
+    padding: var(--spacing-xxl) var(--spacing-lg);
+    position: relative;
+    overflow: hidden;
+    border-radius: var(--border-radius-large);
+    margin-left: auto;
+    margin-right: auto;
+    background-color: rgba(var(--color-bg-light-rgb), 0.6); /* 60% transparent white */
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+}
+.content-section h2, .content-section h3, .content-section p, .content-section li {
+    color: var(--color-text-dark);
+}
+.content-section p.section-intro-text {
+    color: var(--color-text-medium);
+    font-size: 1.15rem;
+    line-height: 1.8;
+    text-align: center;
+    max-width: 620px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: var(--spacing-xl);
+    font-style: italic;
+    font-weight: 500;
+}
+.section-container {
+    max-width: var(--content-max-width-capped);
+    margin: 0 auto;
+    width: var(--content-max-width);
+    position: relative;
+}
+.section-title { /* Base section title styling */
+    font-size: clamp(1.7rem, 6vw, 2.6rem); /* Slightly smaller for h3 on about page */
+    font-weight: 700;
+    margin-bottom: var(--spacing-md);
+    text-align: center;
+    position: relative;
+    padding-bottom: var(--spacing-md);
+    color: var(--color-primary-brand);
+}
+.section-title.decorative-title::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80px;
+    height: 4px;
+    background: linear-gradient(to right, var(--color-accent-gold-darker), var(--color-accent-gold));
+    border-radius: 2px;
+    box-shadow: 0 1px 3px rgba(var(--color-accent-gold-rgb),0.3);
+}
+
+
+/* A2. ABOUT US PAGE SPECIFIC LAYOUT
+-------------------------------------------------- */
+.page-content-wrapper { /* No specific changes unless needed */ }
+
+
+/* A3. PAGE HERO BANNER (About Us Variant)
+-------------------------------------------------- */
+.page-hero-banner {
+    min-height: 35vh; /* Shorter than homepage hero */
+    max-height: 400px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: var(--spacing-xxl) var(--spacing-lg);
+    color: var(--color-text-light);
+    position: relative;
+    background: none; /* Uses main page background static/overlay */
+    overflow: hidden;
+}
+.page-hero-banner.about-us-banner {
+    /* Any specific background image/color overlay for about us hero if different */
+}
+.page-hero-content {
+    background-color: rgba(var(--color-primary-brand-rgb), 0.55); /* Consistent with index hero, maybe slightly less opacity */
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    padding: var(--spacing-lg) var(--spacing-md);
+    border-radius: var(--border-radius-medium);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+    max-width: calc(var(--content-max-width-capped) - 60px);
+    width: var(--content-max-width);
+    z-index: 2;
+    border: 1px solid rgba(var(--color-accent-gold-rgb), 0.2);
+}
+.page-hero-title {
+    font-family: var(--font-display);
+    font-size: clamp(1.8rem, 7vw, 2.8rem);
+    font-weight: 700; /* Cinzel Bold */
+    color: var(--color-text-light);
+    text-shadow: 1px 1px 3px rgba(var(--color-primary-brand-rgb), 0.4);
+    margin-bottom: var(--spacing-sm);
+}
+.page-hero-subtitle {
+    font-family: var(--font-body);
+    font-size: clamp(1rem, 4vw, 1.25rem);
+    color: rgba(255,255,255,0.85);
+    margin-bottom: 0;
+    font-weight: 500;
+    line-height: 1.5;
+}
+
+
+/* A4. MISSION SECTION STYLES
+-------------------------------------------------- */
+.mission-section {
+    /* Uses general .content-section styles */
+}
+.mission-section p {
+    font-size: 1.1em; /* Slightly larger emphasis for mission text */
+    line-height: 1.8;
+}
+
+
+/* A5. EXPERTISE SECTION STYLES (Icon List)
+-------------------------------------------------- */
+.expertise-section {
+    /* Uses general .content-section styles */
+}
+.icon-list {
+    list-style: none;
+    padding-left: 0;
+    margin-top: var(--spacing-lg);
+}
+.icon-list li {
+    font-size: 1.05rem;
+    padding: var(--spacing-sm) 0 var(--spacing-sm) calc(var(--spacing-md) + var(--spacing-sm));
+    position: relative;
+    margin-bottom: var(--spacing-md);
+    line-height: 1.7;
+}
+.icon-list li i.fas { /* Font Awesome Solid icons */
+    position: absolute;
+    left: 0;
+    top: var(--spacing-xs); /* Align with first line of text */
+    color: var(--color-accent-gold);
+    font-size: 1.5em; /* Prominent icons */
+    width: var(--spacing-md);
+    text-align: center;
+    opacity: 0.9;
+}
+
+
+/* A6. APPROACH SECTION STYLES (Grid)
+-------------------------------------------------- */
+.approach-section {
+    /* Uses general .content-section styles */
+}
+.approach-grid {
+    display: grid;
+    grid-template-columns: 1fr; /* Single column on mobile */
+    gap: var(--spacing-xl);
+    margin-top: var(--spacing-lg);
+}
+.approach-item {
+    text-align: center;
+    padding: var(--spacing-lg) var(--spacing-md);
+    background-color: rgba(var(--color-bg-light-rgb), 0.2); /* Subtle BG tint to lift from main section BG */
+    border-radius: var(--border-radius-medium);
+    box-shadow: 0 3px 10px var(--color-shadow-soft);
+    transition: transform var(--transition-base), box-shadow var(--transition-base);
+}
+.approach-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 15px var(--color-shadow-medium);
+}
+.approach-icon {
+    font-size: 2.5rem;
+    color: var(--color-secondary-brand);
+    margin-bottom: var(--spacing-md);
+    display: block;
+}
+.approach-item h4 {
+    font-size: 1.3rem;
+    font-weight: 700; /* Cinzel Bold */
+    color: var(--color-primary-brand);
+    margin-bottom: var(--spacing-sm);
+}
+.approach-item p {
+    font-size: 0.95rem;
+    color: var(--color-text-medium);
+    line-height: 1.6;
+}
+
+
+/* A7. COMMITMENT / VALUES SECTION STYLES (Grid)
+-------------------------------------------------- */
+.commitment-section {
+    /* Uses general .content-section styles */
+}
+.values-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); /* Responsive grid */
+    gap: var(--spacing-lg);
+    margin-top: var(--spacing-lg);
+}
+.value-item {
+    text-align: center;
+    padding: var(--spacing-md);
+    /* No extra background, relies on section BG */
+}
+.value-item i.fas {
+    font-size: 2.2rem;
+    color: var(--color-accent-gold);
+    margin-bottom: var(--spacing-md);
+    display: block;
+    transition: transform 0.3s ease-in-out;
+}
+.value-item:hover i.fas {
+    transform: scale(1.1) rotateY(15deg);
+}
+.value-item h5 {
+    font-size: 1.25rem;
+    font-weight: 700; /* Cinzel Bold */
+    color: var(--color-primary-brand);
+    margin-bottom: var(--spacing-xs);
+}
+.value-item p {
+    font-size: 0.9rem;
+    color: var(--color-text-medium);
+    line-height: 1.5;
+}
+
+
+/* A8. ABOUT US CTA SECTION
+-------------------------------------------------- */
+.about-cta.final-cta-section {
+    /* Uses global .final-cta-section styles (solid, dark background) */
+    /* No transparency needed for this strong call to action */
+    padding-top: var(--spacing-xxl);
+    padding-bottom: var(--spacing-xxxl);
+}
+.about-cta .section-title {
+    font-size: clamp(1.8rem, 6.5vw, 2.8rem); /* Match other section titles if desired */
+}
+
+
+/* A9. RESPONSIVE ADJUSTMENTS FOR ABOUT US PAGE
+-------------------------------------------------- */
+@media (min-width: 500px) {
+    .approach-grid {
+        grid-template-columns: repeat(2, 1fr); /* Two columns for slightly larger mobiles */
+        gap: var(--spacing-lg);
+    }
+}
+
+@media (min-width: 768px) { /* Tablet */
+    .page-hero-banner {
+        min-height: 40vh;
+    }
+    .page-hero-title {
+        font-size: clamp(2.2rem, 6vw, 3.2rem);
+    }
+    .page-hero-subtitle {
+        font-size: clamp(1.1rem, 3.5vw, 1.4rem);
+    }
+
+    .approach-grid {
+        /* Keep two columns, or go to four if design allows & items are brief */
+        /* grid-template-columns: repeat(4, 1fr); */
+    }
+    .values-grid {
+        grid-template-columns: repeat(4, 1fr); /* Four columns for values on tablet */
+    }
+}
+
+/* Animation, Utility, and other base styles (like buttons, footer, header, nav)
+   are assumed to be inherited from a main stylesheet (e.g., index_mobile.css)
+   or would need to be fully defined here for a true standalone page.
+   The following are placeholders for those if this file were 100% isolated.
+*/
+
+/* --- Placeholder for Button Styles (if not inherited) --- */
+.cta-button, .secondary-button { /* Basic structure */ }
+
+/* --- Placeholder for Animation Classes (if not inherited) --- */
+.animate-on-scroll { opacity: 0; }
+.animate-on-scroll.is-visible { opacity: 1; transform: none; }
+/* Specific animation classes: fade-in-up, slide-in-left, fade-in-scale etc. */
+
+/* --- Placeholder for Shared Background Styles (if not inherited) --- */
+#background-static { /* ... */ }
+#background-overlay { /* ... */ }
+
+/* --- Placeholder for Header, Footer, Mobile Tabs (if not inherited) --- */
+.site-header { /* ... */ }
+.mobile-tabs { /* ... */ }
+.site-footer { /* ... */ }
+/* ... and so on for all shared elements ... */
