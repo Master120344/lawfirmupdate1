@@ -1,7 +1,7 @@
 // --- Strict Mode & Global Constants ---
 "use strict";
-const INITIAL_SPLASH_DURATION_MS = 5000; // 5 seconds for logo splash screen
-const PAGE_TRANSITION_ANIMATION_MS = 300; // Slightly faster page fade out/in
+const INITIAL_SPLASH_DURATION_MS = 1000; // Changed from 5000ms to 1 second
+const PAGE_TRANSITION_ANIMATION_MS = 300; 
 
 // --- Utility Functions ---
 function debounce(func, wait, immediate) {
@@ -33,17 +33,15 @@ function initPageLoad() {
         return;
     }
 
-    mainContent.style.visibility = 'hidden'; // Start with content hidden
-    mainContent.style.opacity = '0'; // Ensure opacity is 0 initially
+    mainContent.style.visibility = 'hidden'; 
+    mainContent.style.opacity = '0'; 
 
-    // Hide splash loader after its duration
     setTimeout(() => {
         splashLoader.classList.add('hidden');
-        // Make main content visible and trigger body fade-in (CSS handles body opacity)
         mainContent.style.visibility = 'visible';
-        mainContent.style.transition = `opacity ${PAGE_TRANSITION_ANIMATION_MS / 1000}s ease-out`; // Faster content fade-in
+        mainContent.style.transition = `opacity ${PAGE_TRANSITION_ANIMATION_MS / 1000}s ease-out`; 
         mainContent.style.opacity = '1';
-        bodyElement.classList.add('loaded'); // This will trigger body's own fast fade if needed
+        bodyElement.classList.add('loaded'); 
 
         splashLoader.addEventListener('transitionend', () => {
             if (splashLoader.classList.contains('hidden')) {
@@ -55,44 +53,36 @@ function initPageLoad() {
 
 window.addEventListener('load', initPageLoad);
 
-// Handle bfcache (back/forward cache) for better UX
 window.addEventListener('pageshow', (event) => {
     const splashLoader = document.getElementById('splash-loader');
     const pageTransitionLoader = document.getElementById('page-transition-loader');
     const bodyElement = document.body;
     const mainContent = document.getElementById('main-content');
 
-    // Always ensure splash and transition loaders are hidden on pageshow
     if (splashLoader) splashLoader.classList.add('hidden');
     if (pageTransitionLoader) pageTransitionLoader.classList.add('hidden');
 
-    if (event.persisted) { // Page is from bfcache
+    if (event.persisted) { 
         if (bodyElement) {
-            bodyElement.classList.add('loaded'); // Ensure body is fully opaque
+            bodyElement.classList.add('loaded'); 
         }
         if (mainContent) {
-            mainContent.style.transition = 'none'; // Remove transition for instant display from bfcache
+            mainContent.style.transition = 'none'; 
             mainContent.style.opacity = '1';
             mainContent.style.visibility = 'visible';
-            // Re-apply transition for future interactions after a short delay
             setTimeout(() => {
                 mainContent.style.transition = `opacity ${PAGE_TRANSITION_ANIMATION_MS / 1000}s ease-out`;
             }, 50);
         }
-        // Re-initialize any dynamic components that might need it, e.g., scroll animations if they get stuck
         if (typeof initScrollAnimations === 'function') {
-             // Small delay to ensure layout is stable
             setTimeout(initScrollAnimations, 100);
         }
 
-    } else { // Page is a fresh load (not from bfcache)
-        // Initial load logic is handled by 'load' event, but ensure content is ready
-        if (mainContent && !splashLoader?.classList.contains('hidden')) {
-            // If splash is still visible, content should be hidden until splash timeout
+    } else { 
+        if (mainContent && splashLoader && !splashLoader.classList.contains('hidden')) {
             mainContent.style.visibility = 'hidden';
             mainContent.style.opacity = '0';
         } else if (mainContent) {
-            // If splash is already gone (e.g., very fast load or subsequent navigation)
             mainContent.style.visibility = 'visible';
             mainContent.style.opacity = '1';
         }
@@ -243,18 +233,23 @@ document.addEventListener('DOMContentLoaded', () => {
         const animatedElements = document.querySelectorAll('.animate-on-scroll');
         if (!animatedElements.length || !('IntersectionObserver' in window)) return;
 
+        // This block was for pre-checking visibility, but IntersectionObserver handles it better.
+        // Keeping it commented out for reference if specific pre-checks are ever needed.
+        /*
         animatedElements.forEach(el => {
             const rect = el.getBoundingClientRect();
             if (rect.top < window.innerHeight && rect.bottom >=0 && !el.classList.contains('is-visible')) {
+                // Potentially visible initially, but observer will handle
             } else if(rect.top > window.innerHeight || rect.bottom < 0) {
+                // Initially off-screen
             }
         });
-
+        */
 
         const observerOptions = {
             root: null,
             rootMargin: '0px 0px -10% 0px',
-            threshold: 0.1
+            threshold: 0.1 
         };
 
         const animationObserver = new IntersectionObserver((entries, observer) => {
@@ -270,7 +265,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }, observerOptions);
 
         animatedElements.forEach(el => {
-            if (!el.classList.contains('is-visible')) {
+            if (!el.classList.contains('is-visible')) { // Only observe if not already set (e.g. by bfcache)
                 animationObserver.observe(el);
             }
         });
@@ -289,9 +284,9 @@ document.addEventListener('DOMContentLoaded', () => {
                         if (targetElement) {
                             e.preventDefault();
                             const header = document.getElementById('site-header');
-                            const headerOffset = header ? header.offsetHeight : 70;
+                            const headerOffset = header ? header.offsetHeight : 70; 
                             const elementPosition = targetElement.getBoundingClientRect().top;
-                            const offsetPosition = elementPosition + window.pageYOffset - headerOffset - 20;
+                            const offsetPosition = elementPosition + window.pageYOffset - headerOffset - 20; 
 
                             window.scrollTo({
                                 top: offsetPosition,
@@ -313,7 +308,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!header) return;
 
         let lastScrollTop = 0;
-        const delta = 10;
+        const delta = 10; 
         const headerHeight = header.offsetHeight;
         let isHeaderHidden = false;
 
@@ -328,13 +323,13 @@ document.addEventListener('DOMContentLoaded', () => {
                     isHeaderHidden = true;
                 }
             } else {
-                if (isHeaderHidden || nowScrollTop <= headerHeight) {
+                if (isHeaderHidden || nowScrollTop <= headerHeight) { 
                     header.style.transform = 'translateY(0)';
                     isHeaderHidden = false;
                 }
             }
             lastScrollTop = nowScrollTop <= 0 ? 0 : nowScrollTop;
-        }, 30);
+        }, 30); 
 
         window.addEventListener('scroll', handleScroll, { passive: true });
     }
