@@ -1,6 +1,6 @@
 // --- Strict Mode & Global Constants ---
 "use strict";
-const INITIAL_SPLASH_DURATION_MS = 1000; // Changed from 5000ms to 1 second
+const INITIAL_SPLASH_DURATION_MS = 100; // Changed from 1000ms to 100ms (0.1 second)
 const PAGE_TRANSITION_ANIMATION_MS = 300; 
 
 // --- Utility Functions ---
@@ -45,7 +45,7 @@ function initPageLoad() {
 
         splashLoader.addEventListener('transitionend', () => {
             if (splashLoader.classList.contains('hidden')) {
-                // splashLoader.remove(); // Optional: remove splash loader from DOM
+                // splashLoader.remove(); 
             }
         }, { once: true });
     }, INITIAL_SPLASH_DURATION_MS);
@@ -233,19 +233,6 @@ document.addEventListener('DOMContentLoaded', () => {
         const animatedElements = document.querySelectorAll('.animate-on-scroll');
         if (!animatedElements.length || !('IntersectionObserver' in window)) return;
 
-        // This block was for pre-checking visibility, but IntersectionObserver handles it better.
-        // Keeping it commented out for reference if specific pre-checks are ever needed.
-        /*
-        animatedElements.forEach(el => {
-            const rect = el.getBoundingClientRect();
-            if (rect.top < window.innerHeight && rect.bottom >=0 && !el.classList.contains('is-visible')) {
-                // Potentially visible initially, but observer will handle
-            } else if(rect.top > window.innerHeight || rect.bottom < 0) {
-                // Initially off-screen
-            }
-        });
-        */
-
         const observerOptions = {
             root: null,
             rootMargin: '0px 0px -10% 0px',
@@ -265,7 +252,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }, observerOptions);
 
         animatedElements.forEach(el => {
-            if (!el.classList.contains('is-visible')) { // Only observe if not already set (e.g. by bfcache)
+            if (!el.classList.contains('is-visible')) { 
                 animationObserver.observe(el);
             }
         });
