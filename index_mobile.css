@@ -35,6 +35,7 @@
 
     --color-bg-light: #FFFFFF;
     --color-bg-off-white: #f8f9fa; /* Lighter off-white */
+    --color-bg-off-white-rgb: 248, 249, 250; /* Added for transparent loader option */
     --color-bg-medium-grey: #e9ecef; /* Light grey for alternate sections */
     --color-bg-dark: var(--color-primary-brand);
     --color-bg-footer: #111827; /* Very dark for footer */
@@ -152,9 +153,11 @@ img {
 
 /* 3. LOADER STYLES
 -------------------------------------------------- */
-.loader, .splash-loader { /* Combined .loader and .splash-loader for general fixed overlay */
+/* Base for all loaders (splash, page transition, general) */
+.splash-loader,
+.page-transition-loader,
+.loader /* A generic loader class if ever used elsewhere */ {
     position: fixed; top: 0; left: 0; width: 100%; height: 100vh;
-    background-color: var(--color-loader-bg);
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -163,14 +166,32 @@ img {
     z-index: 10000;
     opacity: 1;
     visibility: visible;
-    transition: opacity 0.6s ease-out, visibility 0.6s ease-out;
-    padding: calc(var(--spacing-unit) * 3);
+    transition: opacity 0.5s ease-out, visibility 0s linear 0s; /* Visibility changes instantly with opacity */
+    padding: calc(var(--spacing-unit) * 3); /* Padding for splash content if any */
 }
-.loader.hidden, .splash-loader.hidden {
+
+/* Default background for loaders that need a full opaque background */
+.splash-loader, .loader {
+    background-color: var(--color-loader-bg);
+}
+
+/* Specific background for page transition loader - more subtle */
+.page-transition-loader {
+    background-color: rgba(var(--color-primary-brand-rgb), 0.25); /* Subtle branded overlay */
+    backdrop-filter: blur(2px); /* Optional: slight blur effect */
+    -webkit-backdrop-filter: blur(2px);
+}
+
+/* Hidden state for all loaders */
+.splash-loader.hidden,
+.page-transition-loader.hidden,
+.loader.hidden {
     opacity: 0;
     visibility: hidden;
     pointer-events: none;
+    transition: opacity 0.4s ease-out, visibility 0s linear 0.4s; /* Delay visibility change until opacity is 0 */
 }
+
 
 /* Styles for the text-based splash screen */
 .splash-loader .splash-text-content {
@@ -187,20 +208,20 @@ img {
     animation: pulseLogo 2.5s infinite ease-in-out alternate;
 }
 .splash-loader .splash-main-title .splash-main-pc {
-    font-weight: 600; /* Slightly less than main title if desired, or same */
-    font-size: 0.8em; /* Example: make "P.C." slightly smaller */
-    display: inline-block; /* Ensures it's treated as part of the flow */
+    font-weight: 600;
+    font-size: 0.8em;
+    display: inline-block;
 }
 
-@keyframes pulseLogo { /* Re-used from original .loader-logo-img */
+@keyframes pulseLogo {
     from { transform: scale(0.98); opacity: 0.85; }
     to { transform: scale(1.02); opacity: 1; }
 }
 
-/* Original loader text styles (can be used by page transition loader or if splash needs more) */
+/* Original loader text styles (can be used if a loader needs more text) */
 .loader-text-wrapper { margin-bottom: calc(var(--spacing-unit) * 4); }
-.loader-main-title { /* This class name can be used by other loaders if needed */
-    font-family: var(--font-headings); /* Cinzel */
+.loader-main-title {
+    font-family: var(--font-headings);
     font-size: clamp(1.6rem, 5vw, 2.2rem);
     color: var(--color-loader-text);
     font-weight: 700;
@@ -236,7 +257,7 @@ img {
     100% { width: 100%; }
 }
 
-/* Page transition spinner (from original HTML structure, if needed) */
+/* Page transition spinner */
 .page-transition-loader .spinner {
     width: 50px;
     height: 50px;
@@ -295,34 +316,41 @@ img {
     justify-content: flex-start; /* Align logo to left */
     align-items: center;
 }
-.firm-title-container { display: flex; align-items: center; } /* Ensure container is flex if needed */
+.firm-title-container { display: flex; align-items: center; }
 
 .firm-title-link {
     display: flex;
     align-items: center;
     text-decoration: none !important;
 }
-.firm-title-link:hover .firm-name-header { /* Updated selector */
+.firm-title-link:hover .firm-name-header {
     color: var(--color-accent-gold);
 }
+.firm-title-link:hover .firm-name-header .firm-name-pc { /* Keep P.C. its defined color on hover, or make it accent gold too */
+    color: var(--color-accent-gold); /* Or var(--color-secondary-brand) to keep it blue */
+}
 
-.firm-name-header { /* Styles for the h1 firm name in header */
+
+.firm-name-header {
     font-family: var(--font-headings);
-    font-size: clamp(1.05rem, 4.2vw, 1.3rem); /* Slightly adjusted for fit */
+    font-size: clamp(1.05rem, 4.2vw, 1.3rem);
     color: var(--color-primary-brand);
     font-weight: 600; /* Cinzel Semibold */
     margin: 0;
     line-height: 1.2;
     letter-spacing: 0.2px;
     transition: color var(--transition-fast);
-    white-space: nowrap; /* Ensures it stays on one line */
-    overflow: hidden; /* Prevents overflow if too long, though clamp should help */
-    text-overflow: ellipsis; /* Adds ... if it still overflows (fallback) */
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 .firm-name-header .firm-name-pc {
-    font-weight: 500; /* Adjust P.C. styling as needed */
-    font-size: 0.9em;
-    margin-left: calc(var(--spacing-unit) * 0.5);
+    font-weight: 400; /* Cinzel Regular (lighter) */
+    font-size: 0.85em; /* Slightly smaller */
+    color: var(--color-secondary-brand); /* Brighter Blue for distinction */
+    margin-left: calc(var(--spacing-unit) * 0.35); /* Adjusted spacing */
+    vertical-align: baseline; /* Ensure good alignment */
+    transition: color var(--transition-fast); /* Allow color transition for P.C. part */
 }
 
 
@@ -341,10 +369,10 @@ img {
     position: relative;
 }
 .content-section:nth-child(odd) {
-     background-color: rgba(255, 255, 255, 0.85); /* Increased transparency */
+     background-color: rgba(255, 255, 255, 0.80); /* MODIFIED: Increased transparency */
 }
 .content-section:nth-child(even) {
-     background-color: rgba(248, 249, 250, 0.88); /* Increased transparency, slight distinction */
+     background-color: rgba(248, 249, 250, 0.88); /* Kept as is, or adjust if needed for consistency */
 }
 .section-container {
     max-width: var(--content-max-width-capped);
@@ -761,25 +789,31 @@ img {
     margin-bottom: calc(var(--spacing-unit) * 2.5);
 }
 .footer-social-media a {
-    color: #ced4da !important; /* Base color for social icons */
+    color: #ced4da !important; /* Base color for <a> tag, icon inherits this initially */
     font-size: 1.6rem;
     margin: 0 calc(var(--spacing-unit) * 1.25);
-    transition: color var(--transition-fast), transform var(--transition-fast);
+    transition: transform var(--transition-fast); /* Only transform on <a> tag */
     display: inline-block; /* Helps with transform */
+    text-decoration: none !important;
 }
-/* General hover effect for social icons (transform) */
+.footer-social-media a i { /* Target the icon directly for color transition */
+    transition: color var(--transition-fast);
+}
+
 .footer-social-media a:hover,
 .footer-social-media a:focus {
     transform: scale(1.15);
-    /* Default icon color on hover, can be overridden by specific icons */
-    /* color: var(--color-accent-gold) !important; (Removed to allow specific colors) */
-}
-.footer-social-media a:hover i,
-.footer-social-media a:focus i {
-    color: var(--color-accent-gold); /* Default hover color for the icon itself */
+    /* No default color change for <a> on hover, icon color is handled below */
 }
 
-/* Specific brand colors on hover for icons, using !important to override inherited styles */
+/* REMOVED default gold hover for all icons:
+.footer-social-media a:hover i,
+.footer-social-media a:focus i {
+    color: var(--color-accent-gold) !important;
+}
+*/
+
+/* Specific brand colors on hover/focus for icons */
 .footer-social-media a.facebook:hover i,
 .footer-social-media a.facebook:focus i { color: #1877F2 !important; }
 
@@ -787,13 +821,13 @@ img {
 .footer-social-media a.linkedin:focus i { color: #0A66C2 !important; }
 
 .footer-social-media a.x-twitter:hover i,
-.footer-social-media a.x-twitter:focus i { color: #000000 !important; } /* X Black */
+.footer-social-media a.x-twitter:focus i { color: #000000 !important; }
 
 .footer-social-media a.instagram:hover i,
-.footer-social-media a.instagram:focus i { color: #E1306C !important; } /* Instagram Pink/Red */
+.footer-social-media a.instagram:focus i { color: #E1306C !important; }
 
 .footer-social-media a.tiktok:hover i,
-.footer-social-media a.tiktok:focus i { color: #EE1D52 !important; } /* TikTok Reddish-Pink */
+.footer-social-media a.tiktok:focus i { color: #EE1D52 !important; }
 
 
 .footer-links {
