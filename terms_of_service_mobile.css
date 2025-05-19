@@ -1,0 +1,82 @@
+/* terms_of_service_mobile.css */
+
+/* Basic Variables (can be imported or redefined from main CSS if modularized) */
+:root {
+    --color-primary-brand: #003366;
+    --color-secondary-brand: #0A58A6;
+    /* ... other variables as in privacy_policy_mobile.css ... */
+    --font-body: 'EB Garamond', serif;
+    --content-max-width-terms: 800px; /* Max width for readability */
+}
+
+*, *::before, *::after { /* ... global resets ... */ }
+html { /* ... html styles ... */ }
+body { /* ... body styles ... */ }
+
+/* Header specific to Terms page */
+.terms-header {
+    background-color: var(--color-bg-light);
+    padding: calc(var(--spacing-unit) * 2) calc(var(--spacing-unit) * 2.5);
+    border-bottom: 1px solid var(--color-border-subtle);
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    text-align: center;
+}
+.terms-header .header-content {
+    max-width: var(--content-max-width-terms);
+    margin: 0 auto;
+}
+.terms-header .header-firm-title {
+    font-family: var(--font-secondary-headings);
+    font-size: clamp(1.5rem, 5vw, 2rem);
+    color: var(--color-primary-brand);
+    font-weight: 700;
+    margin: 0;
+}
+/* ... .home-link-header styles ... */
+
+/* Main Content Area specific to Terms page */
+.terms-content-wrapper {
+    flex-grow: 1;
+    width: 100%;
+    padding: calc(var(--spacing-unit) * 3) calc(var(--spacing-unit) * 2);
+}
+.terms-container {
+    max-width: var(--content-max-width-terms);
+    margin: 0 auto;
+    background-color: var(--color-bg-light);
+    padding: calc(var(--spacing-unit) * 3) calc(var(--spacing-unit) * 3.5);
+    border-radius: calc(var(--spacing-unit) * 1);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.07);
+}
+
+.terms-main-title {
+    font-family: var(--font-primary-headings);
+    font-size: clamp(2rem, 7vw, 2.8rem);
+    color: var(--color-primary-brand);
+    text-align: center;
+    margin-bottom: var(--spacing-unit);
+    font-weight: 700;
+}
+/* ... .last-updated styles ... */
+/* ... .important-notice styles ... */
+
+/* Sections and Typography (can largely reuse .policy-container styles by renaming or keeping general) */
+.terms-container section { /* ... section styles ... */ }
+.terms-container h3 { /* ... h3 styles ... */ }
+.terms-container h4 { /* ... h4 styles ... */ }
+.terms-container p { /* ... p styles ... */ }
+/* ... etc. for ul, ol, li, strong, address ... */
+
+/* Footer specific to Terms page */
+.terms-footer {
+    background-color: #343a40;
+    color: var(--color-text-light);
+    text-align: center;
+    padding: calc(var(--spacing-unit) * 2.5) calc(var(--spacing-unit) * 2.5);
+    font-size: 0.9rem;
+}
+.terms-footer .footer-content { /* ... footer content styles ... */ }
+/* ... other footer styles ... */
+
+/* ... Focus visible style ... */
+/* ... Media queries ... */
