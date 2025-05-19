@@ -1,7 +1,7 @@
 // --- Strict Mode & Global Constants ---
 "use strict";
 const INITIAL_SPLASH_DURATION_MS = 5000; // 5 seconds for logo splash screen
-const PAGE_TRANSITION_ANIMATION_MS = 400; // Duration for page fade out/in
+const PAGE_TRANSITION_ANIMATION_MS = 300; // Slightly faster page fade out/in
 
 // --- Utility Functions ---
 function debounce(func, wait, immediate) {
@@ -26,7 +26,6 @@ function initPageLoad() {
     const bodyElement = document.body;
     const mainContent = document.getElementById('main-content');
 
-
     if (!splashLoader || !bodyElement || !mainContent) {
         console.warn("Essential elements for page load (splashLoader, body, mainContent) not found.");
         if (bodyElement) bodyElement.classList.add('loaded');
@@ -34,37 +33,69 @@ function initPageLoad() {
         return;
     }
 
-    // Ensure main content is hidden initially to prevent flash
-    // CSS should handle body opacity, but this is an extra safeguard for main content visibility
-    mainContent.style.visibility = 'hidden';
-
+    mainContent.style.visibility = 'hidden'; // Start with content hidden
+    mainContent.style.opacity = '0'; // Ensure opacity is 0 initially
 
     // Hide splash loader after its duration
     setTimeout(() => {
         splashLoader.classList.add('hidden');
-        // Make main content visible and trigger body fade-in
+        // Make main content visible and trigger body fade-in (CSS handles body opacity)
         mainContent.style.visibility = 'visible';
-        bodyElement.classList.add('loaded');
+        mainContent.style.transition = `opacity ${PAGE_TRANSITION_ANIMATION_MS / 1000}s ease-out`; // Faster content fade-in
+        mainContent.style.opacity = '1';
+        bodyElement.classList.add('loaded'); // This will trigger body's own fast fade if needed
 
-        // Optional: remove splash loader from DOM after transition
-        // splashLoader.addEventListener('transitionend', () => splashLoader.remove(), { once: true });
+        splashLoader.addEventListener('transitionend', () => {
+            if (splashLoader.classList.contains('hidden')) {
+                // splashLoader.remove(); // Optional: remove splash loader from DOM
+            }
+        }, { once: true });
     }, INITIAL_SPLASH_DURATION_MS);
 }
 
 window.addEventListener('load', initPageLoad);
 
-// Handle bfcache (back/forward cache) to ensure splash doesn't reappear incorrectly
+// Handle bfcache (back/forward cache) for better UX
 window.addEventListener('pageshow', (event) => {
-    if (event.persisted) {
-        const splashLoader = document.getElementById('splash-loader');
-        const pageTransitionLoader = document.getElementById('page-transition-loader');
-        const bodyElement = document.body;
-        const mainContent = document.getElementById('main-content');
+    const splashLoader = document.getElementById('splash-loader');
+    const pageTransitionLoader = document.getElementById('page-transition-loader');
+    const bodyElement = document.body;
+    const mainContent = document.getElementById('main-content');
 
-        if (splashLoader) splashLoader.classList.add('hidden'); // Ensure splash is hidden
-        if (pageTransitionLoader) pageTransitionLoader.classList.add('hidden'); // Ensure transition loader is hidden
-        if (bodyElement) bodyElement.classList.add('loaded'); // Ensure body is visible
-        if (mainContent) mainContent.style.visibility = 'visible'; // Ensure content is visible
+    // Always ensure splash and transition loaders are hidden on pageshow
+    if (splashLoader) splashLoader.classList.add('hidden');
+    if (pageTransitionLoader) pageTransitionLoader.classList.add('hidden');
+
+    if (event.persisted) { // Page is from bfcache
+        if (bodyElement) {
+            bodyElement.classList.add('loaded'); // Ensure body is fully opaque
+        }
+        if (mainContent) {
+            mainContent.style.transition = 'none'; // Remove transition for instant display from bfcache
+            mainContent.style.opacity = '1';
+            mainContent.style.visibility = 'visible';
+            // Re-apply transition for future interactions after a short delay
+            setTimeout(() => {
+                mainContent.style.transition = `opacity ${PAGE_TRANSITION_ANIMATION_MS / 1000}s ease-out`;
+            }, 50);
+        }
+        // Re-initialize any dynamic components that might need it, e.g., scroll animations if they get stuck
+        if (typeof initScrollAnimations === 'function') {
+             // Small delay to ensure layout is stable
+            setTimeout(initScrollAnimations, 100);
+        }
+
+    } else { // Page is a fresh load (not from bfcache)
+        // Initial load logic is handled by 'load' event, but ensure content is ready
+        if (mainContent && !splashLoader?.classList.contains('hidden')) {
+            // If splash is still visible, content should be hidden until splash timeout
+            mainContent.style.visibility = 'hidden';
+            mainContent.style.opacity = '0';
+        } else if (mainContent) {
+            // If splash is already gone (e.g., very fast load or subsequent navigation)
+            mainContent.style.visibility = 'visible';
+            mainContent.style.opacity = '1';
+        }
     }
 });
 
@@ -72,7 +103,7 @@ window.addEventListener('pageshow', (event) => {
 // --- DOMContentLoaded Event Listener ---
 document.addEventListener('DOMContentLoaded', () => {
     const bodyElement = document.body;
-    const mainContent = document.getElementById('main-content'); // Used for fade transitions
+    const mainContent = document.getElementById('main-content');
 
     // 1. Page Transition Logic for Internal Links
     function initPageTransitions() {
@@ -88,33 +119,30 @@ document.addEventListener('DOMContentLoaded', () => {
                 const destination = link.getAttribute('href');
                 if (!destination || destination.startsWith('javascript:')) return;
 
-                // Check if it's a same-origin link
                 try {
                     const currentHostname = window.location.hostname;
                     const destinationUrl = new URL(destination, window.location.href);
                     if (destinationUrl.hostname !== currentHostname) {
-                        return; // External link, let browser handle
+                        return;
                     }
-                } catch (error) { return; /* Invalid URL, let browser handle */ }
+                } catch (error) { return; }
 
-                // Avoid re-triggering for same page links (e.g., if JS dynamically updated href)
                 const currentPagePath = window.location.pathname.replace(/\/$/, "");
                 const destinationPathObject = new URL(destination, window.location.href);
                 const destinationPath = destinationPathObject.pathname.replace(/\/$/, "");
 
-                if (destinationPath === currentPagePath && destinationPathObject.hash) { return; } // Allow hash links on same page
-                if (destinationPath === currentPagePath && !destinationPathObject.hash) { e.preventDefault(); return; } // Same page, no hash, do nothing
+                if (destinationPath === currentPagePath && destinationPathObject.hash) { return; }
+                if (destinationPath === currentPagePath && !destinationPathObject.hash) { e.preventDefault(); return; }
 
                 e.preventDefault();
 
-                // Fade out current page content
                 mainContent.style.transition = `opacity ${PAGE_TRANSITION_ANIMATION_MS / 1000}s ease-out`;
                 mainContent.style.opacity = '0';
-                transitionLoader.classList.remove('hidden'); // Show transition loader
+                transitionLoader.classList.remove('hidden');
 
                 setTimeout(() => {
                     window.location.href = destination;
-                }, PAGE_TRANSITION_ANIMATION_MS + 50); // Navigate after fade out + small buffer
+                }, PAGE_TRANSITION_ANIMATION_MS + 50);
             });
         });
     }
@@ -135,7 +163,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         let currentIndex = 0;
         const totalItems = items.length;
-        const TESTIMONIAL_INTERVAL = 7000; // 7 seconds per testimonial
+        const TESTIMONIAL_INTERVAL = 7000;
         let autoPlayInterval;
 
         function updateCarousel(isInitialization = false) {
@@ -153,15 +181,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 item.classList.toggle('active-testimonial', isActive);
                 item.setAttribute('aria-hidden', !isActive);
                 item.setAttribute('tabindex', isActive ? '0' : '-1');
-                // If not initializing, focus the new active item for accessibility
-                if (isActive && !isInitialization) {
-                    // item.focus(); // This might be too aggressive, consider based on UX
-                }
             });
         }
 
         function showItem(index) {
-            currentIndex = (index + totalItems) % totalItems; // Ensure index is within bounds
+            currentIndex = (index + totalItems) % totalItems;
             updateCarousel();
         }
         function showNext() { showItem(currentIndex + 1); }
@@ -183,25 +207,24 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         if (dotsContainer && totalItems > 1) {
-            dotsContainer.innerHTML = ''; // Clear existing dots if any
+            dotsContainer.innerHTML = '';
             for (let i = 0; i < totalItems; i++) {
                 const dot = document.createElement('button');
                 dot.classList.add('carousel-dot');
                 dot.setAttribute('aria-label', `Go to testimonial ${i + 1}`);
-                dot.setAttribute('role', 'tab'); // ARIA role
+                dot.setAttribute('role', 'tab');
                 dot.addEventListener('click', () => { showItem(i); stopAutoPlay(); });
                 dotsContainer.appendChild(dot);
             }
         }
 
-        // Initial setup
-        updateCarousel(true); // Pass true for initialization
+        updateCarousel(true);
         startAutoPlay();
 
         carouselWrapper.addEventListener('mouseenter', stopAutoPlay);
         carouselWrapper.addEventListener('mouseleave', startAutoPlay);
-        carouselWrapper.addEventListener('focusin', stopAutoPlay); // Stop if user focuses inside
-        carouselWrapper.addEventListener('focusout', startAutoPlay); // Resume if focus leaves
+        carouselWrapper.addEventListener('focusin', stopAutoPlay);
+        carouselWrapper.addEventListener('focusout', startAutoPlay);
     }
     initTestimonialCarousel();
 
@@ -220,9 +243,25 @@ document.addEventListener('DOMContentLoaded', () => {
         const animatedElements = document.querySelectorAll('.animate-on-scroll');
         if (!animatedElements.length || !('IntersectionObserver' in window)) return;
 
+        // Check if elements are already visible (e.g., on bfcache restore)
+        // and mark them as such to avoid re-animating if observer doesn't fire immediately
+        animatedElements.forEach(el => {
+            const rect = el.getBoundingClientRect();
+            if (rect.top < window.innerHeight && rect.bottom >=0 && !el.classList.contains('is-visible')) {
+                 // Element is already in view, make it visible quickly if it wasn't
+                // This is a fallback, main logic is in IntersectionObserver
+                // el.classList.add('is-visible');
+            } else if(rect.top > window.innerHeight || rect.bottom < 0) {
+                // Element is not in view, ensure 'is-visible' is removed for re-animation on scroll if desired
+                // For this setup, we animate once, so this might not be needed unless observer re-observes
+                // el.classList.remove('is-visible'); // Only if you want re-animation on scroll up then down
+            }
+        });
+
+
         const observerOptions = {
             root: null,
-            rootMargin: '0px 0px -10% 0px', // Trigger a bit before it's fully in view from bottom
+            rootMargin: '0px 0px -10% 0px',
             threshold: 0.1
         };
 
@@ -238,9 +277,16 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         }, observerOptions);
 
-        animatedElements.forEach(el => animationObserver.observe(el));
+        animatedElements.forEach(el => {
+            // If element is not yet visible from initial check, observe it.
+            if (!el.classList.contains('is-visible')) {
+                animationObserver.observe(el);
+            }
+        });
     }
+    // Call it initially
     initScrollAnimations();
+
 
     // 5. Smooth Scroll for Anchor Links
     function initSmoothScroll() {
@@ -255,7 +301,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             const header = document.getElementById('site-header');
                             const headerOffset = header ? header.offsetHeight : 70;
                             const elementPosition = targetElement.getBoundingClientRect().top;
-                            const offsetPosition = elementPosition + window.pageYOffset - headerOffset - 20; // Extra 20px padding
+                            const offsetPosition = elementPosition + window.pageYOffset - headerOffset - 20;
 
                             window.scrollTo({
                                 top: offsetPosition,
@@ -271,13 +317,13 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     initSmoothScroll();
 
-    // 6. Sticky Header - Hide on scroll down, show on scroll up
+    // 6. Sticky Header
     function initStickyHeaderBehavior() {
         const header = document.getElementById('site-header');
         if (!header) return;
 
         let lastScrollTop = 0;
-        const delta = 10; // Scroll threshold
+        const delta = 10;
         const headerHeight = header.offsetHeight;
         let isHeaderHidden = false;
 
@@ -287,13 +333,11 @@ document.addEventListener('DOMContentLoaded', () => {
             if (Math.abs(lastScrollTop - nowScrollTop) <= delta) return;
 
             if (nowScrollTop > lastScrollTop && nowScrollTop > headerHeight) {
-                // Scroll Down
                 if (!isHeaderHidden) {
                     header.style.transform = `translateY(-${headerHeight}px)`;
                     isHeaderHidden = true;
                 }
             } else {
-                // Scroll Up or at top
                 if (isHeaderHidden || nowScrollTop <= headerHeight) {
                     header.style.transform = 'translateY(0)';
                     isHeaderHidden = false;
@@ -304,6 +348,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
         window.addEventListener('scroll', handleScroll, { passive: true });
     }
-    initStickyHeaderBehavior(); // Enabled this feature for a premium feel
+    initStickyHeaderBehavior();
 
 }); // End DOMContentLoaded
