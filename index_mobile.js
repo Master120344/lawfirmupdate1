@@ -1,14 +1,14 @@
 // --- Strict Mode & Global Constants ---
 "use strict";
-const LOADER_ANIMATION_DURATION_MS = 5000; // 5 seconds for loading bar as requested
-const LOADER_FADE_OUT_DELAY_MS = LOADER_ANIMATION_DURATION_MS + 300; // Fade out after bar + buffer
-const PAGE_TRANSITION_LOADER_DURATION_MS = 1500; // Shorter for page transitions
+const INITIAL_SPLASH_DURATION_MS = 5000; // 5 seconds for logo splash screen
+const PAGE_TRANSITION_ANIMATION_MS = 400; // Duration for page fade out/in
 
 // --- Utility Functions ---
 function debounce(func, wait, immediate) {
     let timeout;
-    return function() {
-        const context = this, args = arguments;
+    return function executedFunction() {
+        const context = this;
+        const args = arguments;
         const later = function() {
             timeout = null;
             if (!immediate) func.apply(context, args);
@@ -20,44 +20,51 @@ function debounce(func, wait, immediate) {
     };
 }
 
-// --- Initial Page Load & Loader Logic ---
-function initPageLoader() {
-    const loader = document.getElementById('loader');
+// --- Initial Page Load & Splash Screen Logic ---
+function initPageLoad() {
+    const splashLoader = document.getElementById('splash-loader');
     const bodyElement = document.body;
+    const mainContent = document.getElementById('main-content');
 
-    if (!loader || !bodyElement) {
-        console.warn("Loader or body element not found.");
-        if (bodyElement) bodyElement.classList.add('loaded'); // Still show content
+
+    if (!splashLoader || !bodyElement || !mainContent) {
+        console.warn("Essential elements for page load (splashLoader, body, mainContent) not found.");
+        if (bodyElement) bodyElement.classList.add('loaded');
+        if (mainContent) mainContent.style.visibility = 'visible';
         return;
     }
 
-    // Set CSS variable for loading bar animation duration
-    document.documentElement.style.setProperty('--loader-display-duration', `${LOADER_ANIMATION_DURATION_MS / 1000}s`);
+    // Ensure main content is hidden initially to prevent flash
+    // CSS should handle body opacity, but this is an extra safeguard for main content visibility
+    mainContent.style.visibility = 'hidden';
 
-    // Show body content after loader animation + fade out time
-    // The CSS handles the body opacity transition based on its own timing relative to loader duration
+
+    // Hide splash loader after its duration
     setTimeout(() => {
+        splashLoader.classList.add('hidden');
+        // Make main content visible and trigger body fade-in
+        mainContent.style.visibility = 'visible';
         bodyElement.classList.add('loaded');
-    }, LOADER_ANIMATION_DURATION_MS);
 
-
-    // Hide loader itself after its animation and a small buffer
-    setTimeout(() => {
-        loader.classList.add('hidden');
-        // Optional: remove loader from DOM after transition to free up resources
-        // setTimeout(() => loader.remove(), 1000);
-    }, LOADER_FADE_OUT_DELAY_MS);
+        // Optional: remove splash loader from DOM after transition
+        // splashLoader.addEventListener('transitionend', () => splashLoader.remove(), { once: true });
+    }, INITIAL_SPLASH_DURATION_MS);
 }
 
-window.addEventListener('load', initPageLoader);
+window.addEventListener('load', initPageLoad);
 
-// Handle bfcache (back/forward cache) to ensure loader doesn't reappear incorrectly
+// Handle bfcache (back/forward cache) to ensure splash doesn't reappear incorrectly
 window.addEventListener('pageshow', (event) => {
     if (event.persisted) {
-        const loader = document.getElementById('loader');
+        const splashLoader = document.getElementById('splash-loader');
+        const pageTransitionLoader = document.getElementById('page-transition-loader');
         const bodyElement = document.body;
-        if (loader) loader.classList.add('hidden');
+        const mainContent = document.getElementById('main-content');
+
+        if (splashLoader) splashLoader.classList.add('hidden'); // Ensure splash is hidden
+        if (pageTransitionLoader) pageTransitionLoader.classList.add('hidden'); // Ensure transition loader is hidden
         if (bodyElement) bodyElement.classList.add('loaded'); // Ensure body is visible
+        if (mainContent) mainContent.style.visibility = 'visible'; // Ensure content is visible
     }
 });
 
@@ -65,11 +72,12 @@ window.addEventListener('pageshow', (event) => {
 // --- DOMContentLoaded Event Listener ---
 document.addEventListener('DOMContentLoaded', () => {
     const bodyElement = document.body;
+    const mainContent = document.getElementById('main-content'); // Used for fade transitions
 
-    // 1. Page Transition Loader for Internal Links
-    function initPageTransitionLoader() {
-        const loader = document.getElementById('loader');
-        if (!loader) return;
+    // 1. Page Transition Logic for Internal Links
+    function initPageTransitions() {
+        const transitionLoader = document.getElementById('page-transition-loader');
+        if (!transitionLoader || !mainContent) return;
 
         const internalLinks = document.querySelectorAll(
             'a[href]:not([href^="#"]):not([href^="tel:"]):not([href^="mailto:"]):not([href^="javascript:"]):not([target="_blank"])'
@@ -78,9 +86,9 @@ document.addEventListener('DOMContentLoaded', () => {
         internalLinks.forEach(link => {
             link.addEventListener('click', (e) => {
                 const destination = link.getAttribute('href');
-                if (!destination) return;
+                if (!destination || destination.startsWith('javascript:')) return;
 
-                // Simple check: if it's a full URL, ensure it's same origin
+                // Check if it's a same-origin link
                 try {
                     const currentHostname = window.location.hostname;
                     const destinationUrl = new URL(destination, window.location.href);
@@ -89,40 +97,30 @@ document.addEventListener('DOMContentLoaded', () => {
                     }
                 } catch (error) { return; /* Invalid URL, let browser handle */ }
 
-                // Avoid re-triggering for same page links (e.g. if JS dynamically updated href)
+                // Avoid re-triggering for same page links (e.g., if JS dynamically updated href)
                 const currentPagePath = window.location.pathname.replace(/\/$/, "");
                 const destinationPathObject = new URL(destination, window.location.href);
                 const destinationPath = destinationPathObject.pathname.replace(/\/$/, "");
 
-                if (destinationPath === currentPagePath && destinationPathObject.hash) { return; } // Allow hash links
-                if (destinationPath === currentPagePath && !destinationPathObject.hash) { e.preventDefault(); return; } // Same page, no hash
+                if (destinationPath === currentPagePath && destinationPathObject.hash) { return; } // Allow hash links on same page
+                if (destinationPath === currentPagePath && !destinationPathObject.hash) { e.preventDefault(); return; } // Same page, no hash, do nothing
 
                 e.preventDefault();
-                bodyElement.classList.remove('loaded'); // Fade out current page content
-                loader.classList.remove('hidden'); // Show loader
 
-                // Reset loading bar animation if needed (re-inserting element or class toggling)
-                const progressBar = loader.querySelector('.loading-bar-progress');
-                if (progressBar) {
-                    progressBar.style.animation = 'none'; // Reset animation
-                    // Trigger reflow to restart animation
-                    // eslint-disable-next-line no-unused-expressions
-                    progressBar.offsetHeight;
-                    progressBar.style.animation = ''; // Re-apply animation from CSS
-                }
-                // Set a shorter duration for page transition loader bar
-                document.documentElement.style.setProperty('--loader-display-duration', `${PAGE_TRANSITION_LOADER_DURATION_MS / 1000}s`);
-
+                // Fade out current page content
+                mainContent.style.transition = `opacity ${PAGE_TRANSITION_ANIMATION_MS / 1000}s ease-out`;
+                mainContent.style.opacity = '0';
+                transitionLoader.classList.remove('hidden'); // Show transition loader
 
                 setTimeout(() => {
                     window.location.href = destination;
-                }, PAGE_TRANSITION_LOADER_DURATION_MS - 200); // Navigate slightly before loader fully hides
+                }, PAGE_TRANSITION_ANIMATION_MS + 50); // Navigate after fade out + small buffer
             });
         });
     }
-    initPageTransitionLoader();
+    initPageTransitions();
 
-    // 2. Testimonial Carousel (More Advanced)
+    // 2. Testimonial Carousel
     function initTestimonialCarousel() {
         const carouselWrapper = document.querySelector('.testimonial-carousel-wrapper');
         if (!carouselWrapper) return;
@@ -132,91 +130,80 @@ document.addEventListener('DOMContentLoaded', () => {
         const prevButton = carouselWrapper.querySelector('.carousel-control.prev');
         const nextButton = carouselWrapper.querySelector('.carousel-control.next');
         const dotsContainer = carouselWrapper.querySelector('.carousel-dots');
+
         if (!carousel || items.length === 0) return;
 
         let currentIndex = 0;
         const totalItems = items.length;
-        const TESTIMONIAL_INTERVAL = 8000; // 8 seconds per testimonial
+        const TESTIMONIAL_INTERVAL = 7000; // 7 seconds per testimonial
         let autoPlayInterval;
 
-        function updateCarousel() {
+        function updateCarousel(isInitialization = false) {
             carousel.style.transform = `translateX(-${currentIndex * 100}%)`;
-            // Update active dot
+
             if (dotsContainer) {
                 Array.from(dotsContainer.children).forEach((dot, index) => {
                     dot.classList.toggle('active', index === currentIndex);
+                    dot.setAttribute('aria-pressed', index === currentIndex);
                 });
             }
-            // Update item active class (if needed for other styling/accessibility)
+
             items.forEach((item, index) => {
-                item.classList.toggle('active-testimonial', index === currentIndex);
-                item.setAttribute('aria-hidden', index !== currentIndex);
+                const isActive = index === currentIndex;
+                item.classList.toggle('active-testimonial', isActive);
+                item.setAttribute('aria-hidden', !isActive);
+                item.setAttribute('tabindex', isActive ? '0' : '-1');
+                // If not initializing, focus the new active item for accessibility
+                if (isActive && !isInitialization) {
+                    // item.focus(); // This might be too aggressive, consider based on UX
+                }
             });
         }
 
-        function showNext() {
-            currentIndex = (currentIndex + 1) % totalItems;
+        function showItem(index) {
+            currentIndex = (index + totalItems) % totalItems; // Ensure index is within bounds
             updateCarousel();
         }
-
-        function showPrev() {
-            currentIndex = (currentIndex - 1 + totalItems) % totalItems;
-            updateCarousel();
-        }
+        function showNext() { showItem(currentIndex + 1); }
+        function showPrev() { showItem(currentIndex - 1); }
 
         function startAutoPlay() {
-            stopAutoPlay(); // Clear existing interval
+            stopAutoPlay();
             if (totalItems > 1) {
                 autoPlayInterval = setInterval(showNext, TESTIMONIAL_INTERVAL);
             }
         }
+        function stopAutoPlay() { clearInterval(autoPlayInterval); }
 
-        function stopAutoPlay() {
-            clearInterval(autoPlayInterval);
+        if (nextButton) {
+            nextButton.addEventListener('click', () => { showNext(); stopAutoPlay(); });
+        }
+        if (prevButton) {
+            prevButton.addEventListener('click', () => { showPrev(); stopAutoPlay(); });
         }
 
-        if (nextButton && prevButton) {
-            nextButton.addEventListener('click', () => {
-                showNext();
-                stopAutoPlay(); // Optional: stop autoplay on manual interaction
-                // startAutoPlay(); // Or restart it after a delay
-            });
-            prevButton.addEventListener('click', () => {
-                showPrev();
-                stopAutoPlay();
-            });
-        }
-
-        // Create dots
         if (dotsContainer && totalItems > 1) {
+            dotsContainer.innerHTML = ''; // Clear existing dots if any
             for (let i = 0; i < totalItems; i++) {
                 const dot = document.createElement('button');
                 dot.classList.add('carousel-dot');
                 dot.setAttribute('aria-label', `Go to testimonial ${i + 1}`);
-                dot.addEventListener('click', () => {
-                    currentIndex = i;
-                    updateCarousel();
-                    stopAutoPlay();
-                });
+                dot.setAttribute('role', 'tab'); // ARIA role
+                dot.addEventListener('click', () => { showItem(i); stopAutoPlay(); });
                 dotsContainer.appendChild(dot);
             }
         }
 
         // Initial setup
-        items.forEach((item, index) => {
-             item.setAttribute('aria-hidden', index !== 0);
-             if(index !== 0) item.classList.remove('active-testimonial');
-        });
-        updateCarousel(); // Set initial active dot and position
+        updateCarousel(true); // Pass true for initialization
         startAutoPlay();
 
-        // Pause autoplay on hover (optional)
         carouselWrapper.addEventListener('mouseenter', stopAutoPlay);
         carouselWrapper.addEventListener('mouseleave', startAutoPlay);
+        carouselWrapper.addEventListener('focusin', stopAutoPlay); // Stop if user focuses inside
+        carouselWrapper.addEventListener('focusout', startAutoPlay); // Resume if focus leaves
     }
-    if (document.querySelector('.testimonial-carousel')) {
-      initTestimonialCarousel();
-    }
+    initTestimonialCarousel();
 
 
     // 3. Set Current Year in Footer
@@ -231,12 +218,12 @@ document.addEventListener('DOMContentLoaded', () => {
     // 4. Scroll-triggered Animations
     function initScrollAnimations() {
         const animatedElements = document.querySelectorAll('.animate-on-scroll');
-        if (!animatedElements.length) return;
+        if (!animatedElements.length || !('IntersectionObserver' in window)) return;
 
         const observerOptions = {
-            root: null, // viewport
-            rootMargin: '0px',
-            threshold: 0.15 // Trigger when 15% of the element is visible
+            root: null,
+            rootMargin: '0px 0px -10% 0px', // Trigger a bit before it's fully in view from bottom
+            threshold: 0.1
         };
 
         const animationObserver = new IntersectionObserver((entries, observer) => {
@@ -246,7 +233,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     setTimeout(() => {
                         entry.target.classList.add('is-visible');
                     }, delay);
-                    observer.unobserve(entry.target); // Animate only once
+                    observer.unobserve(entry.target);
                 }
             });
         }, observerOptions);
@@ -255,23 +242,28 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     initScrollAnimations();
 
-    // 5. Smooth Scroll for Anchor Links (if any added dynamically or for specific cases)
+    // 5. Smooth Scroll for Anchor Links
     function initSmoothScroll() {
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
                 const targetId = this.getAttribute('href');
-                if (targetId.length > 1) { // Ensure it's not just "#"
-                    const targetElement = document.querySelector(targetId);
-                    if (targetElement) {
-                        e.preventDefault();
-                        const headerOffset = document.getElementById('site-header')?.offsetHeight || 70;
-                        const elementPosition = targetElement.getBoundingClientRect().top;
-                        const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+                if (targetId.length > 1 && targetId.startsWith('#')) {
+                    try {
+                        const targetElement = document.querySelector(targetId);
+                        if (targetElement) {
+                            e.preventDefault();
+                            const header = document.getElementById('site-header');
+                            const headerOffset = header ? header.offsetHeight : 70;
+                            const elementPosition = targetElement.getBoundingClientRect().top;
+                            const offsetPosition = elementPosition + window.pageYOffset - headerOffset - 20; // Extra 20px padding
 
-                        window.scrollTo({
-                            top: offsetPosition,
-                            behavior: "smooth"
-                        });
+                            window.scrollTo({
+                                top: offsetPosition,
+                                behavior: "smooth"
+                            });
+                        }
+                    } catch (error) {
+                        console.warn(`Smooth scroll target element not found for selector: ${targetId}`);
                     }
                 }
             });
@@ -279,36 +271,39 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     initSmoothScroll();
 
-    // 6. Sticky Header - Basic hide on scroll down, show on scroll up (optional enhancement)
+    // 6. Sticky Header - Hide on scroll down, show on scroll up
     function initStickyHeaderBehavior() {
         const header = document.getElementById('site-header');
         if (!header) return;
 
         let lastScrollTop = 0;
-        const delta = 5; // Scroll threshold
+        const delta = 10; // Scroll threshold
         const headerHeight = header.offsetHeight;
+        let isHeaderHidden = false;
 
         const handleScroll = debounce(() => {
             const nowScrollTop = window.pageYOffset || document.documentElement.scrollTop;
 
-            if (Math.abs(lastScrollTop - nowScrollTop) <= delta) return; // Ignore small scrolls
+            if (Math.abs(lastScrollTop - nowScrollTop) <= delta) return;
 
             if (nowScrollTop > lastScrollTop && nowScrollTop > headerHeight) {
                 // Scroll Down
-                header.style.transform = `translateY(-${headerHeight}px)`;
+                if (!isHeaderHidden) {
+                    header.style.transform = `translateY(-${headerHeight}px)`;
+                    isHeaderHidden = true;
+                }
             } else {
                 // Scroll Up or at top
-                header.style.transform = 'translateY(0)';
+                if (isHeaderHidden || nowScrollTop <= headerHeight) {
+                    header.style.transform = 'translateY(0)';
+                    isHeaderHidden = false;
+                }
             }
-            lastScrollTop = nowScrollTop <= 0 ? 0 : nowScrollTop; // For Mobile or negative scrolling
-        }, 50); // Debounce scroll event
+            lastScrollTop = nowScrollTop <= 0 ? 0 : nowScrollTop;
+        }, 30);
 
-        window.addEventListener('scroll', handleScroll);
+        window.addEventListener('scroll', handleScroll, { passive: true });
     }
-    // initStickyHeaderBehavior(); // Uncomment to enable this feature
-
-
-    // Add more JS functionalities here as the site grows
-    // e.g., FAQ accordions, form validation enhancements, etc.
+    initStickyHeaderBehavior(); // Enabled this feature for a premium feel
 
 }); // End DOMContentLoaded
