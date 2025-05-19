@@ -22,33 +22,37 @@
 -------------------------------------------------- */
 :root {
     /* Primary Palette - Refined and Expanded */
-    --color-primary-brand: #0A2342; /* Deeper, more authoritative Navy */
+    --color-primary-brand: #0A2342;
     --color-primary-brand-rgb: 10, 35, 66;
-    --color-secondary-brand: #2C5D92; /* Richer, complementary Blue */
+    --color-secondary-brand: #2C5D92;
     --color-secondary-brand-rgb: 44, 93, 146;
-    --color-accent-gold: #C0A062; /* Muted, sophisticated Gold */
-    --color-accent-gold-darker: #A8884F; /* Darker Gold for depth */
+    --color-accent-gold: #C0A062;
+    --color-accent-gold-darker: #A8884F;
     --color-accent-gold-rgb: 192, 160, 98;
 
     /* Neutral Palette - Expanded for subtlety */
-    --color-text-dark: #1D2025; /* Slightly softer black */
-    --color-text-medium: #4A5568; /* Good for subtext */
-    --color-text-light: #F0F4F8; /* Clean light text for dark BGs */
+    --color-text-dark: #1D2025;
+    --color-text-medium: #4A5568;
+    --color-text-light: #F0F4F8;
     --color-text-on-gold: #FFFFFF;
     --color-text-on-primary: #FFFFFF;
     --color-text-link: var(--color-secondary-brand);
     --color-text-link-hover: var(--color-accent-gold);
 
     --color-bg-light: #FFFFFF;
-    --color-bg-off-white: #F8F9FA; /* Subtle off-white */
-    --color-bg-light-accent: #EBF0F5; /* Very light blue/grey tint */
+    --color-bg-light-rgb: 255, 255, 255; /* Added for rgba */
+    --color-bg-off-white: #F8F9FA;
+    --color-bg-off-white-rgb: 248, 249, 250; /* Added for rgba */
+    --color-bg-light-accent: #EBF0F5;
+    --color-bg-light-accent-rgb: 235, 240, 245;
     --color-bg-medium-grey: #E9ECEF;
+    --color-bg-medium-grey-rgb: 233, 236, 239;
     --color-bg-dark: var(--color-primary-brand);
-    --color-bg-footer: #071527; /* Even darker footer base */
+    --color-bg-footer: #071527;
 
     /* Loader Specific */
-    --color-loader-bg: var(--color-primary-brand); /* Initial splash background */
-    --color-loader-logo-filter: brightness(0) invert(1); /* If logo is dark, make it white */
+    --color-loader-bg: var(--color-primary-brand);
+    --color-loader-logo-filter: brightness(0) invert(1);
 
     /* UI Elements - Refined */
     --color-border-subtle: rgba(var(--color-primary-brand-rgb), 0.1);
@@ -58,33 +62,34 @@
     --color-shadow-strong: rgba(10, 35, 66, 0.15);
     --color-shadow-gold-cta: rgba(var(--color-accent-gold-rgb), 0.3);
 
-    /* Typography - Updated Font Stack Preference */
-    --font-display: 'Cinzel', serif; /* Using Cinzel more broadly for impact */
+    /* Typography */
+    --font-display: 'Cinzel', serif;
     --font-headings: 'Cinzel', serif;
     --font-body: 'EB Garamond', serif;
 
-    /* Spacing & Sizing - Consistent Units */
+    /* Spacing & Sizing */
     --spacing-unit: 8px;
-    --spacing-xs: calc(var(--spacing-unit) * 0.5);   /* 4px */
-    --spacing-sm: var(--spacing-unit);               /* 8px */
-    --spacing-md: calc(var(--spacing-unit) * 2);   /* 16px */
-    --spacing-lg: calc(var(--spacing-unit) * 3);   /* 24px */
-    --spacing-xl: calc(var(--spacing-unit) * 4);   /* 32px */
-    --spacing-xxl: calc(var(--spacing-unit) * 6);  /* 48px */
-    --spacing-xxxl: calc(var(--spacing-unit) * 8); /* 64px */
+    --spacing-xs: calc(var(--spacing-unit) * 0.5);
+    --spacing-sm: var(--spacing-unit);
+    --spacing-md: calc(var(--spacing-unit) * 2);
+    --spacing-lg: calc(var(--spacing-unit) * 3);
+    --spacing-xl: calc(var(--spacing-unit) * 4);
+    --spacing-xxl: calc(var(--spacing-unit) * 6);
+    --spacing-xxxl: calc(var(--spacing-unit) * 8);
 
     --header-height-mobile: 70px;
     --tabs-height-mobile: 65px;
     --content-max-width: 90vw;
-    --content-max-width-capped: 780px; /* Slightly wider for better readability */
+    --content-max-width-capped: 780px;
     --border-radius-small: 4px;
     --border-radius-medium: 8px;
     --border-radius-large: 16px;
 
-    /* Transitions & Animations - Standardized */
+    /* Transitions & Animations */
     --transition-short: 0.15s ease-out;
     --transition-base: 0.25s ease-out;
-    --transition-long: 0.4s cubic-bezier(0.25, 0.1, 0.25, 1); /* Smooth and responsive */
+    --transition-long: 0.4s cubic-bezier(0.25, 0.1, 0.25, 1);
+    --transition-very-fast: 0.1s ease-out; /* For near-instant changes */
 
     /* Social Colors */
     --color-facebook: #1877F2;
@@ -101,7 +106,7 @@
 
 html {
     scroll-behavior: smooth;
-    font-size: 100%; /* Base for rem units */
+    font-size: 100%;
     scrollbar-width: thin;
     scrollbar-color: var(--color-secondary-brand) var(--color-bg-light-accent);
 }
@@ -113,69 +118,68 @@ html::-webkit-scrollbar-thumb {
     border: 2px solid var(--color-bg-light-accent);
 }
 
-
 /* 2. BODY & TYPOGRAPHY BASE
 -------------------------------------------------- */
 body {
     font-family: var(--font-body);
-    font-size: 1.1rem; /* Default: ~17.6px for EB Garamond */
+    font-size: 1.1rem;
     line-height: 1.75;
     color: var(--color-text-dark);
-    background-color: var(--color-bg-off-white);
+    background-color: var(--color-bg-off-white); /* This will be mostly covered by background image */
     overflow-x: hidden;
     position: relative;
     opacity: 0;
-    transition: opacity 0.7s var(--transition-long);
+    /* FASTER page content fade-in */
+    transition: opacity 0.2s var(--transition-base);
     padding-top: var(--header-height-mobile);
-    padding-bottom: var(--tabs-height-mobile); /* Account for bottom nav */
+    padding-bottom: var(--tabs-height-mobile);
     display: flex;
     flex-direction: column;
-    min-height: 100vh; /* Full viewport height */
+    min-height: 100vh;
 }
 
 body.loaded {
     opacity: 1;
 }
 
-/* Typography Hierarchy & Refinements */
 h1, h2, h3, h4, h5, h6 {
     font-family: var(--font-headings);
     color: var(--color-primary-brand);
     line-height: 1.3;
     margin-bottom: var(--spacing-lg);
-    font-weight: 700; /* Cinzel Bold */
-    letter-spacing: 0.2px; /* Subtle spacing for Cinzel */
+    font-weight: 700;
+    letter-spacing: 0.2px;
     text-rendering: optimizeLegibility;
 }
 
-h1.firm-name-header { /* Specific for site header */
-    font-size: clamp(1.3rem, 5vw, 1.75rem); /* Responsive sizing */
-    font-weight: 700; /* Cinzel Bold */
+h1.firm-name-header {
+    font-size: clamp(1.3rem, 5vw, 1.75rem);
+    font-weight: 700;
     color: var(--color-primary-brand);
     margin: 0;
     line-height: 1.2;
 }
 h1.firm-name-header .firm-name-pc {
-    font-weight: 600; /* Slightly lighter for P.C. */
-    font-size: 0.8em; /* Smaller */
+    font-weight: 600;
+    font-size: 0.8em;
     opacity: 0.9;
     margin-left: var(--spacing-xs);
 }
 
-h2.section-title { /* Main section titles */
+h2.section-title {
     font-size: clamp(1.8rem, 6.5vw, 2.8rem);
-    font-weight: 700; /* Cinzel Bold */
-    margin-bottom: var(--spacing-md); /* Tighter for subtitle */
+    font-weight: 700;
+    margin-bottom: var(--spacing-md);
     text-align: center;
     position: relative;
     padding-bottom: var(--spacing-md);
 }
 h2.hero-main-title {
     font-family: var(--font-display);
-    font-size: clamp(2.2rem, 8vw, 3.5rem); /* Larger for hero */
-    font-weight: 800; /* Cinzel Black for max impact */
+    font-size: clamp(2.2rem, 8vw, 3.5rem);
+    font-weight: 800;
     color: var(--color-text-light);
-    text-shadow: 1px 2px 4px rgba(var(--color-primary-brand-rgb), 0.5);
+    text-shadow: 1px 2px 4px rgba(var(--color-primary-brand-rgb), 0.6); /* Adjusted shadow for readability */
     margin-bottom: var(--spacing-md);
     letter-spacing: 0.5px;
 }
@@ -184,7 +188,7 @@ h3 { font-size: clamp(1.4rem, 5.5vw, 2rem); font-weight: 600;}
 
 p {
     margin-bottom: var(--spacing-md);
-    font-weight: 400; /* EB Garamond Regular */
+    font-weight: 400;
 }
 p.section-intro-text {
     font-size: 1.15rem;
@@ -195,15 +199,15 @@ p.section-intro-text {
     margin-left: auto;
     margin-right: auto;
     margin-bottom: var(--spacing-xl);
-    font-style: italic; /* Subtle italic for intro */
-    font-weight: 500; /* EB Garamond Medium Italic */
+    font-style: italic;
+    font-weight: 500;
 }
 p.hero-subtitle {
     font-family: var(--font-body);
     font-size: clamp(1.1rem, 4.5vw, 1.4rem);
-    color: rgba(255,255,255,0.9);
+    color: rgba(255,255,255,0.95); /* Slightly increased opacity for hero subtitle */
     margin-bottom: var(--spacing-xl);
-    font-weight: 500; /* EB Garamond Medium */
+    font-weight: 500;
     line-height: 1.6;
     max-width: 550px;
     margin-left: auto;
@@ -226,7 +230,7 @@ a:hover, a:focus-visible {
 
 ul, ol {
     margin-bottom: var(--spacing-md);
-    padding-left: var(--spacing-xl); /* More generous padding */
+    padding-left: var(--spacing-xl);
 }
 li { margin-bottom: var(--spacing-sm); }
 
@@ -251,7 +255,8 @@ figcaption {
     z-index: 10000;
     opacity: 1;
     visibility: visible;
-    transition: opacity 0.8s ease-out 0.3s, visibility 0.8s ease-out 0.3s; /* Delayed fade for smoother feel */
+    /* FASTER splash screen fade-out */
+    transition: opacity 0.3s ease-out, visibility 0.3s ease-out;
 }
 .splash-loader.hidden {
     opacity: 0;
@@ -259,11 +264,11 @@ figcaption {
     pointer-events: none;
 }
 .splash-logo {
-    max-width: 70vw; /* Ensure logo is large but constrained */
+    max-width: 70vw;
     max-height: 50vh;
-    width: auto; /* Maintain aspect ratio */
-    height: auto; /* Maintain aspect ratio */
-    filter: var(--color-loader-logo-filter); /* Assumes dark logo on dark BG; adjust if logo is light */
+    width: auto;
+    height: auto;
+    filter: var(--color-loader-logo-filter);
     animation: subtlePulse 3s infinite ease-in-out alternate;
 }
 @keyframes subtlePulse {
@@ -273,18 +278,18 @@ figcaption {
 
 .page-transition-loader {
     position: fixed; top: 0; left: 0; width: 100%; height: 100vh;
-    background-color: rgba(var(--color-primary-brand-rgb), 0.85); /* Slightly transparent */
+    background-color: rgba(var(--color-primary-brand-rgb), 0.85);
     backdrop-filter: blur(5px);
     -webkit-backdrop-filter: blur(5px);
     display: flex;
     align-items: center;
     justify-content: center;
-    z-index: 9998; /* Below splash, above content */
+    z-index: 9998;
     opacity: 0;
     visibility: hidden;
     transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
 }
-.page-transition-loader:not(.hidden) { /* Use :not selector to override initial hidden */
+.page-transition-loader:not(.hidden) {
     opacity: 1;
     visibility: visible;
 }
@@ -303,28 +308,26 @@ figcaption {
 -------------------------------------------------- */
 #background-static {
     position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-    z-index: -2; /* Behind overlay and content */
-    background-image: url('austin.jpg'); /* Ensure path is correct */
+    z-index: -2;
+    background-image: url('austin.jpg');
     background-size: cover;
     background-position: center center;
-    background-attachment: fixed; /* Creates parallax effect */
+    background-attachment: fixed;
     animation: subtleZoomInOut 80s infinite alternate ease-in-out;
-    /* Refined filter for more professional look */
     filter: saturate(0.3) brightness(0.45) contrast(1.1);
 }
-@keyframes subtleZoomInOut { /* More subtle zoom */
-    0% { transform: scale(1.05); } /* Start slightly zoomed */
+@keyframes subtleZoomInOut {
+    0% { transform: scale(1.05); }
     100% { transform: scale(1.1); }
 }
 
 #background-overlay {
     position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-    z-index: -1; /* Between background image and content */
-    /* More sophisticated gradient for depth and focus */
+    z-index: -1;
     background: linear-gradient(to bottom,
-        rgba(var(--color-primary-brand-rgb), 0.5) 0%,
+        rgba(var(--color-primary-brand-rgb), 0.6) 0%,  /* Slightly less opaque at top */
         rgba(var(--color-primary-brand-rgb), 0.75) 40%,
-        rgba(var(--color-primary-brand-rgb), 0.9) 80%,
+        rgba(var(--color-primary-brand-rgb), 0.85) 80%, /* Slightly less opaque towards bottom */
         var(--color-primary-brand) 100%
     );
     pointer-events: none;
@@ -336,31 +339,32 @@ figcaption {
     position: fixed; top: 0; left: 0; width: 100%;
     z-index: 1000;
     height: var(--header-height-mobile);
-    background-color: rgba(255, 255, 255, 0.85); /* Slightly more transparent */
-    backdrop-filter: blur(12px); /* Stronger blur */
+    /* INCREASED TRANSPARENCY */
+    background-color: rgba(var(--color-bg-light-rgb), 0.75);
+    backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
     box-shadow: 0 2px 10px var(--color-shadow-medium);
     border-bottom: 1px solid var(--color-border-subtle);
     display: flex;
     align-items: center;
-    padding: 0 var(--spacing-lg); /* More horizontal padding */
+    padding: 0 var(--spacing-lg);
     transition: transform 0.35s var(--transition-long), background-color 0.35s ease-out;
 }
 .header-content {
     width: 100%;
     display: flex;
-    justify-content: center; /* Center title now no logo */
+    justify-content: center;
     align-items: center;
 }
 .firm-title-container { display: flex; align-items: center; }
 .firm-title-link {
-    display: inline-block; /* For better interaction area */
+    display: inline-block;
     text-decoration: none !important;
-    padding: var(--spacing-sm) 0; /* Vertical padding for larger tap target */
+    padding: var(--spacing-sm) 0;
 }
 .firm-title-link:hover .firm-name-header,
 .firm-title-link:focus-visible .firm-name-header {
-    color: var(--color-accent-gold); /* Gold hover for main title */
+    color: var(--color-accent-gold);
 }
 .firm-title-link:hover .firm-name-pc,
 .firm-title-link:focus-visible .firm-name-pc {
@@ -373,30 +377,42 @@ figcaption {
 .page-content-wrapper {
     flex-grow: 1;
     width: 100%;
-    position: relative; /* For z-index stacking if needed */
-    z-index: 1; /* Above background, below header/nav */
+    position: relative;
+    z-index: 1;
 }
 .content-section {
     width: 100%;
     padding: var(--spacing-xxl) var(--spacing-lg);
     position: relative;
-    overflow: hidden; /* Contain animations or decorative elements */
+    overflow: hidden;
+    /* ADDED for backdrop-filter context */
+    border-radius: var(--border-radius-medium); /* Optional: if sections look better slightly rounded */
+    margin-left: auto;
+    margin-right: auto;
+    /* Consider max-width for sections if not full bleed for better backdrop effect */
 }
-/* Enhanced alternating section backgrounds */
+/* Enhanced alternating section backgrounds with MORE TRANSPARENCY & BLUR */
 .content-section:nth-child(odd) {
-     background-color: rgba(255, 255, 255, 0.96); /* Very high opacity white */
+     background-color: rgba(var(--color-bg-light-rgb), 0.8); /* More transparent */
+     backdrop-filter: blur(10px);
+     -webkit-backdrop-filter: blur(10px);
 }
 .content-section:nth-child(even) {
-     background-color: rgba(var(--color-bg-light-accent-rgb, 235, 240, 245), 0.96); /* Light accent BG */
-     /* Define --color-bg-light-accent-rgb if not already defined: e.g., 235, 240, 245 */
+     background-color: rgba(var(--color-bg-light-accent-rgb), 0.8); /* More transparent */
+     backdrop-filter: blur(10px);
+     -webkit-backdrop-filter: blur(10px);
 }
-:root { --color-bg-light-accent-rgb: 235, 240, 245; } /* Adding the RGB for the above */
+/* Ensure text in these sections remains highly readable */
+.content-section h2, .content-section h3, .content-section p, .content-section li {
+    /* text-shadow: 0 0 5px rgba(255,255,255,0.3); /* Subtle shadow if needed for light text on light blur */
+    /* color: var(--color-text-dark); /* Ensure strong contrast */
+}
 
 .section-container {
     max-width: var(--content-max-width-capped);
     margin: 0 auto;
     width: var(--content-max-width);
-    position: relative; /* For pseudo-elements if needed */
+    position: relative;
 }
 
 .section-title.decorative-title::after {
@@ -405,9 +421,9 @@ figcaption {
     bottom: 0;
     left: 50%;
     transform: translateX(-50%);
-    width: 80px; /* Wider */
-    height: 4px; /* Thicker */
-    background: linear-gradient(to right, var(--color-accent-gold-darker), var(--color-accent-gold)); /* Gradient line */
+    width: 80px;
+    height: 4px;
+    background: linear-gradient(to right, var(--color-accent-gold-darker), var(--color-accent-gold));
     border-radius: 2px;
     box-shadow: 0 1px 3px rgba(var(--color-accent-gold-rgb),0.3);
 }
@@ -415,26 +431,29 @@ figcaption {
 /* 7. HERO SECTION
 -------------------------------------------------- */
 .hero-section {
-    min-height: 70vh; /* Taller hero */
+    min-height: 70vh;
     display: flex;
     align-items: center;
     justify-content: center;
     text-align: center;
     padding: var(--spacing-xxxl) var(--spacing-lg);
     color: var(--color-text-light);
-    position: relative; /* For z-index of content box */
-    background: none; /* Background is handled by #background-static and #background-overlay */
-    overflow: hidden; /* Contain elements */
+    position: relative;
+    background: none;
+    overflow: hidden;
 }
 .hero-content-box {
-    background-color: rgba(var(--color-primary-brand-rgb), 0.7); /* Slightly more transparent for depth */
+    /* INCREASED TRANSPARENCY & BLUR */
+    background-color: rgba(var(--color-primary-brand-rgb), 0.65);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
     padding: var(--spacing-xl) var(--spacing-lg);
-    border-radius: var(--border-radius-large); /* Softer, larger radius */
-    box-shadow: 0 8px 30px rgba(0,0,0,0.3); /* More pronounced shadow */
+    border-radius: var(--border-radius-large);
+    box-shadow: 0 8px 30px rgba(0,0,0,0.3);
     max-width: calc(var(--content-max-width-capped) - 40px);
     width: var(--content-max-width);
-    z-index: 2; /* Above general overlays */
-    border: 1px solid rgba(var(--color-accent-gold-rgb), 0.2); /* Subtle gold border */
+    z-index: 2;
+    border: 1px solid rgba(var(--color-accent-gold-rgb), 0.25); /* Slightly more prominent border */
 }
 .hero-cta { margin-top: var(--spacing-lg); }
 
@@ -443,7 +462,7 @@ figcaption {
 .about-section .secondary-button,
 .services-overview-section .secondary-button {
     display: block;
-    max-width: 300px; /* Wider button */
+    max-width: 300px;
     margin: var(--spacing-xl) auto 0 auto;
 }
 
@@ -454,28 +473,28 @@ figcaption {
     margin-top: var(--spacing-xl);
 }
 .service-list-detailed li {
-    font-size: 1.1rem; /* Slightly larger list items */
-    padding: var(--spacing-md) var(--spacing-md) var(--spacing-md) calc(var(--spacing-md) + var(--spacing-xxl)); /* More padding */
+    font-size: 1.1rem;
+    padding: var(--spacing-md) var(--spacing-md) var(--spacing-md) calc(var(--spacing-md) + var(--spacing-xxl));
     position: relative;
-    border-bottom: 1px solid var(--color-border-subtle);
+    border-bottom: 1px solid rgba(var(--color-primary-brand-rgb), 0.08); /* Subtler border with transparent sections */
     margin-bottom: var(--spacing-md);
     transition: background-color var(--transition-base), transform var(--transition-base);
     border-radius: var(--border-radius-medium);
-    background-color: transparent;
+    background-color: transparent; /* Ensure no override from section BG for hover effect */
 }
 .service-list-detailed li:last-child { border-bottom: none; }
 .service-list-detailed li:hover {
-    background-color: rgba(var(--color-accent-gold-rgb), 0.05);
-    transform: translateX(5px); /* Subtle shift on hover */
-    border-bottom-color: transparent; /* Hide border on hover if BG is distinct */
+    background-color: rgba(var(--color-accent-gold-rgb), 0.08); /* Slightly stronger hover for transparent BG */
+    transform: translateX(5px);
+    border-bottom-color: transparent;
 }
-.service-list-detailed i { /* General icon styling for this list */
+.service-list-detailed i {
     position: absolute;
-    left: var(--spacing-lg); /* Position icon further left */
+    left: var(--spacing-lg);
     top: 50%;
     transform: translateY(-50%);
     color: var(--color-accent-gold);
-    font-size: 1.8em; /* Larger icons */
+    font-size: 1.8em;
     width: var(--spacing-xl);
     text-align: center;
     opacity: 0.85;
@@ -487,10 +506,10 @@ figcaption {
 }
 .service-list-detailed strong {
     color: var(--color-primary-brand);
-    font-weight: 700; /* Cinzel Bold for emphasis */
+    font-weight: 700;
     font-family: var(--font-headings);
     font-size: 1.15em;
-    display: block; /* Make strong take full width for better structure */
+    display: block;
     margin-bottom: var(--spacing-xs);
 }
 
@@ -498,50 +517,53 @@ figcaption {
 /* 9. TESTIMONIAL SECTION & CAROUSEL
 -------------------------------------------------- */
 .testimonials-section {
-    background-color: rgba(var(--color-bg-medium-grey-rgb, 233, 236, 239), 0.96) !important; /* Ensure RGB defined */
-    padding-bottom: var(--spacing-xxxl); /* More bottom padding */
+    /* This section has its own specific background color logic in :nth-child, which now includes backdrop-filter */
+    padding-bottom: var(--spacing-xxxl);
 }
-:root { --color-bg-medium-grey-rgb: 233, 236, 239; }
 
 .testimonial-carousel-wrapper {
     position: relative;
-    max-width: 600px; /* Slightly wider carousel */
+    max-width: 600px;
     margin: 0 auto var(--spacing-xxl) auto;
-    overflow: hidden;
+    overflow: hidden; /* Important for border-radius with backdrop-filter */
     border-radius: var(--border-radius-large);
-    box-shadow: 0 10px 35px var(--color-shadow-strong); /* Softer, larger shadow */
-    background-color: var(--color-bg-light); /* Ensure BG for items */
+    box-shadow: 0 10px 35px var(--color-shadow-strong);
+    /* INCREASED TRANSPARENCY & BLUR */
+    background-color: rgba(var(--color-bg-light-rgb), 0.75); /* Match odd content sections */
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
 }
 .testimonial-carousel {
     display: flex;
-    transition: transform 0.6s cubic-bezier(0.68, -0.55, 0.27, 1.55); /* Springy transition */
+    transition: transform 0.6s cubic-bezier(0.68, -0.55, 0.27, 1.55);
 }
 .testimonial-item {
     min-width: 100%; flex-shrink: 0;
     padding: var(--spacing-xl) var(--spacing-lg);
     text-align: center;
+    /* Text inside needs to be clearly readable against the blurred background */
 }
 .testimonial-icon-quote {
-    font-size: 2.8rem; /* Larger quote icon */
+    font-size: 2.8rem;
     color: var(--color-accent-gold);
-    opacity: 0.25; /* More subtle quote icon */
+    opacity: 0.25;
     margin-bottom: var(--spacing-md);
     display: block;
 }
 .testimonial-text {
     font-family: var(--font-body);
     font-style: italic;
-    font-size: 1.15rem; /* More readable testimonial text */
+    font-size: 1.15rem;
     line-height: 1.8;
-    color: var(--color-text-medium);
+    color: var(--color-text-medium); /* Ensure this has good contrast */
     margin-bottom: var(--spacing-lg);
-    font-weight: 500; /* EB Garamond Italic Medium */
+    font-weight: 500;
 }
 .testimonial-author {
     font-family: var(--font-headings);
-    font-weight: 600; /* Cinzel Semibold */
+    font-weight: 600;
     text-align: center;
-    color: var(--color-primary-brand);
+    color: var(--color-primary-brand); /* Ensure this has good contrast */
     font-size: 1.05rem;
     margin-top: var(--spacing-sm);
     letter-spacing: 0.3px;
@@ -557,7 +579,7 @@ figcaption {
     border: none;
     padding: 0;
     border-radius: 50%;
-    width: 44px; height: 44px; /* Larger controls */
+    width: 44px; height: 44px;
     font-size: 1.5rem;
     cursor: pointer;
     transition: background-color var(--transition-base), transform var(--transition-base), box-shadow var(--transition-base);
@@ -576,14 +598,14 @@ figcaption {
 .carousel-dots {
     text-align: center;
     position: absolute;
-    bottom: calc(var(--spacing-lg) * -1); /* Position dots further down */
+    bottom: calc(var(--spacing-lg) * -1);
     left: 50%;
     transform: translateX(-50%);
     padding-top: var(--spacing-md);
 }
 .carousel-dot {
     display: inline-block;
-    width: 10px; height: 10px; /* Slightly larger dots */
+    width: 10px; height: 10px;
     background-color: rgba(var(--color-primary-brand-rgb), 0.25);
     border-radius: 50%;
     margin: 0 var(--spacing-sm);
@@ -604,25 +626,32 @@ figcaption {
 
 /* 9.1. Google Reviews Callout */
 .google-reviews-callout {
-    margin-top: var(--spacing-xxxl); /* More space above */
+    margin-top: var(--spacing-xxxl);
     padding: var(--spacing-xl) var(--spacing-lg);
-    background: linear-gradient(135deg, var(--color-bg-light) 0%, var(--color-bg-off-white) 100%);
+    /* INCREASED TRANSPARENCY & BLUR */
+    background: linear-gradient(135deg,
+        rgba(var(--color-bg-light-rgb), 0.75) 0%,          /* More transparent */
+        rgba(var(--color-bg-off-white-rgb), 0.75) 100%  /* More transparent */
+    );
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
     border-radius: var(--border-radius-large);
     text-align: center;
     box-shadow: 0 5px 20px var(--color-shadow-medium);
     border: 1px solid var(--color-border-subtle);
+    overflow: hidden; /* For border-radius with backdrop-filter */
 }
 .google-reviews-title {
     font-family: var(--font-headings);
-    font-size: 1.6rem; /* Larger title */
+    font-size: 1.6rem;
     color: var(--color-primary-brand);
-    margin-bottom: var(--spacing-sm); /* Tighter bottom margin */
+    margin-bottom: var(--spacing-sm);
     display: flex; align-items: center; justify-content: center; gap: var(--spacing-sm);
-    font-weight: 600; /* Cinzel Semibold */
+    font-weight: 600;
 }
 .google-reviews-title i.fa-star {
     color: var(--color-accent-gold);
-    font-size: 0.9em; /* Relative to h3 size */
+    font-size: 0.9em;
     transition: transform 0.3s ease-in-out;
 }
 .google-reviews-callout:hover .google-reviews-title i.fa-star {
@@ -637,11 +666,11 @@ figcaption {
     display: inline-flex; align-items: center; gap: var(--spacing-md);
     margin-top: var(--spacing-md);
     padding: var(--spacing-md) var(--spacing-xl);
-    background-color: #CF3D2E; /* Slightly adjusted Google Red */
+    background-color: #CF3D2E;
     color: var(--color-text-light) !important;
     font-family: var(--font-headings);
     font-size: 1.05rem;
-    font-weight: 600; /* Cinzel Semibold */
+    font-weight: 600;
     border-radius: var(--border-radius-medium);
     transition: background-color var(--transition-base), transform var(--transition-base), box-shadow var(--transition-base);
     box-shadow: 0 3px 8px rgba(207, 61, 46, 0.3);
@@ -650,7 +679,7 @@ figcaption {
     text-decoration: none !important;
 }
 .google-reviews-button:hover, .google-reviews-button:focus-visible {
-    background-color: #B22E20; /* Darker Google Red */
+    background-color: #B22E20;
     transform: translateY(-2px) scale(1.02);
     box-shadow: 0 5px 15px rgba(207, 61, 46, 0.4);
     color: var(--color-text-light) !important;
@@ -662,27 +691,27 @@ figcaption {
 .cta-button {
     display: inline-flex; align-items: center; justify-content: center;
     gap: var(--spacing-md);
-    padding: var(--spacing-lg) var(--spacing-xl); /* Generous padding */
+    padding: var(--spacing-lg) var(--spacing-xl);
     background: linear-gradient(135deg, var(--color-accent-gold), var(--color-accent-gold-darker));
     color: var(--color-text-on-gold) !important;
     text-decoration: none !important;
     font-family: var(--font-headings);
-    font-size: 1.15rem; /* Slightly larger base */
-    font-weight: 700; /* Cinzel Bold */
-    border-radius: var(--border-radius-medium); /* Consistent radius */
+    font-size: 1.15rem;
+    font-weight: 700;
+    border-radius: var(--border-radius-medium);
     border: none;
-    transition: all var(--transition-long); /* Smoother, longer transition */
+    transition: all var(--transition-long);
     box-shadow: 0 5px 15px var(--color-shadow-gold-cta);
     cursor: pointer;
     text-transform: uppercase;
-    letter-spacing: 0.8px; /* More spacing for uppercase */
+    letter-spacing: 0.8px;
     min-width: 240px;
     text-align: center;
     position: relative;
     overflow: hidden;
     z-index: 1;
 }
-.cta-button::before { /* Subtle shimmer effect on hover */
+.cta-button::before {
     content: '';
     position: absolute;
     top: 0; left: -100%;
@@ -698,11 +727,11 @@ figcaption {
 .cta-button:hover, .cta-button:focus-visible {
     background: linear-gradient(135deg, var(--color-accent-gold-darker), var(--color-accent-gold));
     box-shadow: 0 8px 20px rgba(var(--color-accent-gold-rgb), 0.45);
-    transform: translateY(-3px) scale(1.03); /* More pronounced hover effect */
+    transform: translateY(-3px) scale(1.03);
     color: var(--color-text-on-gold) !important;
 }
 .cta-button.large-cta {
-    padding: calc(var(--spacing-lg) + var(--spacing-xs)) calc(var(--spacing-xl) + var(--spacing-sm)); /* Even larger */
+    padding: calc(var(--spacing-lg) + var(--spacing-xs)) calc(var(--spacing-xl) + var(--spacing-sm));
     font-size: 1.25rem;
     letter-spacing: 1px;
 }
@@ -717,7 +746,7 @@ figcaption {
     border-radius: var(--border-radius-medium);
     font-family: var(--font-headings);
     font-size: 1.05rem;
-    font-weight: 600; /* Cinzel Semibold */
+    font-weight: 600;
     transition: all var(--transition-base);
     text-align: center;
     letter-spacing: 0.4px;
@@ -741,9 +770,11 @@ figcaption {
 
 .final-cta-section {
     background: linear-gradient(135deg, var(--color-primary-brand) 0%, var(--color-secondary-brand) 100%);
+    /* This section should remain opaque as it's a dark, strong CTA */
     color: var(--color-text-light);
     padding: var(--spacing-xxxl) var(--spacing-lg);
-    border-top: 4px solid var(--color-accent-gold); /* Gold accent separator */
+    border-top: 4px solid var(--color-accent-gold);
+    border-radius: 0; /* Full bleed, no rounding needed here */
 }
 .final-cta-section .section-title {
     color: var(--color-text-light);
@@ -758,16 +789,17 @@ figcaption {
 .mobile-tabs {
     position: fixed; bottom: 0; left: 0; width: 100%;
     height: var(--tabs-height-mobile);
-    background-color: rgba(250, 250, 252, 0.9); /* Lighter, cleaner BG */
+    /* INCREASED TRANSPARENCY */
+    background-color: rgba(var(--color-bg-off-white-rgb), 0.8); /* Using off-white base like content for consistency */
     backdrop-filter: blur(15px);
     -webkit-backdrop-filter: blur(15px);
     box-shadow: 0 -3px 15px var(--color-shadow-medium);
     border-top: 1px solid rgba(var(--color-primary-brand-rgb),0.08);
     display: flex;
     justify-content: space-around;
-    align-items: stretch; /* Ensure items fill height */
+    align-items: stretch;
     z-index: 1000;
-    padding-bottom: env(safe-area-inset-bottom); /* For iPhone X notch */
+    padding-bottom: env(safe-area-inset-bottom);
 }
 .tab-item {
     flex-grow: 1; flex-basis: 0;
@@ -778,17 +810,17 @@ figcaption {
     padding: var(--spacing-xs) var(--spacing-xs) calc(var(--spacing-xs) + env(safe-area-inset-bottom)/4) ;
     color: var(--color-text-medium) !important;
     text-decoration: none !important;
-    font-family: var(--font-body); /* EB Garamond for labels */
-    font-size: 0.75rem; /* Refined size */
-    font-weight: 600; /* EB Garamond Semibold */
+    font-family: var(--font-body);
+    font-size: 0.75rem;
+    font-weight: 600;
     text-align: center;
     transition: color var(--transition-base), background-color var(--transition-base), transform var(--transition-short);
     position: relative;
-    -webkit-tap-highlight-color: transparent; /* Remove tap highlight on mobile */
+    -webkit-tap-highlight-color: transparent;
 }
 .tab-icon {
-    font-size: 1.5rem; /* Slightly larger icons */
-    margin-bottom: 3px; /* Fine-tuned spacing */
+    font-size: 1.5rem;
+    margin-bottom: 3px;
     line-height: 1;
     transition: transform var(--transition-base);
 }
@@ -796,25 +828,25 @@ figcaption {
 
 .tab-item:hover, .tab-item:focus-visible {
     color: var(--color-primary-brand) !important;
-    background-color: rgba(var(--color-accent-gold-rgb), 0.08); /* Subtle gold hover */
+    background-color: rgba(var(--color-accent-gold-rgb), 0.08);
 }
-.tab-item:active { /* Pressed state */
+.tab-item:active {
     transform: scale(0.96);
 }
 .tab-item.active {
     color: var(--color-primary-brand) !important;
-    font-weight: 700; /* EB Garamond Bold for active */
+    font-weight: 700;
 }
 .tab-item.active .tab-icon {
-    transform: scale(1.1); /* Slightly larger active icon */
+    transform: scale(1.1);
     color: var(--color-accent-gold);
 }
-.tab-item.active::before { /* More elegant active indicator */
+.tab-item.active::before {
     content: '';
     position: absolute;
     top: 0; left: 50%;
     transform: translateX(-50%);
-    width: 40%; /* Narrower */
+    width: 40%;
     height: 3px;
     background-color: var(--color-accent-gold);
     border-radius: 0 0 var(--border-radius-small) var(--border-radius-small);
@@ -825,12 +857,14 @@ figcaption {
 -------------------------------------------------- */
 .site-footer {
     background-color: var(--color-bg-footer);
-    color: #A0AEC0; /* Lighter grey for better contrast on dark BG */
+    /* Footer should remain opaque for strong grounding */
+    color: #A0AEC0;
     text-align: center;
     padding: var(--spacing-xl) var(--spacing-lg) var(--spacing-lg);
     font-size: 0.9rem;
     line-height: 1.7;
-    border-top: 3px solid var(--color-primary-brand); /* Stronger top border */
+    border-top: 3px solid var(--color-primary-brand);
+    border-radius: 0; /* No rounding for footer */
 }
 .footer-content {
     max-width: var(--content-max-width-capped);
@@ -844,15 +878,15 @@ figcaption {
     align-items: center;
     gap: var(--spacing-sm);
 }
-.footer-emblem { /* If you use one */
+.footer-emblem {
     width: 50px; height: auto; opacity: 0.7;
     margin-bottom: var(--spacing-xs);
 }
 .footer-firm-name {
     font-family: var(--font-headings);
-    font-size: 1.4rem; /* Larger footer firm name */
+    font-size: 1.4rem;
     color: var(--color-text-light);
-    font-weight: 600; /* Cinzel Semibold */
+    font-weight: 600;
     letter-spacing: 0.3px;
     margin: 0;
 }
@@ -861,24 +895,24 @@ figcaption {
     padding-top: var(--spacing-sm);
 }
 .social-icon {
-    color: #CBD5E0 !important; /* Lighter social icons */
-    font-size: 1.8rem; /* Larger icons */
+    color: #CBD5E0 !important;
+    font-size: 1.8rem;
     margin: 0 var(--spacing-md);
     transition: color var(--transition-base), transform var(--transition-base);
-    display: inline-block; /* For transform */
+    display: inline-block;
 }
 .social-icon:hover, .social-icon:focus-visible {
-    transform: scale(1.2) translateY(-2px); /* More dynamic hover */
+    transform: scale(1.2) translateY(-2px);
 }
 .social-icon.facebook:hover, .social-icon.facebook:focus-visible { color: var(--color-facebook) !important; }
 .social-icon.linkedin:hover, .social-icon.linkedin:focus-visible { color: var(--color-linkedin) !important; }
 
 .footer-links {
     margin-bottom: var(--spacing-md);
-    font-size: 0.85rem; /* Slightly larger link text */
+    font-size: 0.85rem;
 }
 .footer-links a {
-    color: #BCCCDC !important; /* Brighter link color */
+    color: #BCCCDC !important;
     margin: 0 var(--spacing-xs);
     transition: color var(--transition-base), text-decoration-color var(--transition-base);
     text-decoration: underline;
@@ -900,43 +934,34 @@ figcaption {
     font-size: 0.75rem;
     opacity: 0.6;
     margin-top: var(--spacing-md);
-    max-width: 500px; /* Constrain width for readability */
+    max-width: 500px;
     margin-left: auto;
     margin-right: auto;
 }
 
 /* 13. ANIMATION & UTILITY CLASSES
 -------------------------------------------------- */
-*:focus-visible { /* Global focus style */
+*:focus-visible {
     outline: 3px solid var(--color-secondary-brand);
     outline-offset: 2px;
     box-shadow: 0 0 0 5px rgba(var(--color-secondary-brand-rgb), 0.25);
-    border-radius: var(--border-radius-small); /* Apply radius to outline if possible */
+    border-radius: var(--border-radius-small);
 }
-/* For elements where default radius is not desired */
 .no-focus-radius *:focus-visible { border-radius: 0; }
 
-.sr-only { /* Screen reader only, improved */
-    position: absolute !important;
-    width: 1px !important; height: 1px !important;
-    padding: 0 !important; margin: -1px !important;
-    overflow: hidden !important; clip: rect(0,0,0,0) !important;
-    white-space: nowrap !important; border: 0 !important;
-}
-.text-center { text-align: center !important; }
-.visually-hidden { /* Alias for sr-only */
+.sr-only, .visually-hidden {
     position: absolute !important; width: 1px !important; height: 1px !important;
     padding: 0 !important; margin: -1px !important;
     overflow: hidden !important; clip: rect(0,0,0,0) !important;
     white-space: nowrap !important; border: 0 !important;
 }
+.text-center { text-align: center !important; }
 
-/* Enhanced Scroll Animations */
 .animate-on-scroll {
     opacity: 0;
     transition-property: opacity, transform;
-    transition-duration: 0.8s; /* Slightly longer for smoother effect */
-    transition-timing-function: cubic-bezier(0.175, 0.885, 0.32, 1.1); /* Smoother ease */
+    transition-duration: 0.8s;
+    transition-timing-function: cubic-bezier(0.175, 0.885, 0.32, 1.1);
 }
 .animate-on-scroll.fade-in { transform: translateY(25px); }
 .animate-on-scroll.fade-in-up { transform: translateY(50px); }
@@ -951,8 +976,8 @@ figcaption {
 
 /* 14. RESPONSIVE ADJUSTMENTS & FINE-TUNING
 -------------------------------------------------- */
-@media (min-width: 480px) { /* Larger mobile screens */
-    body { font-size: 1.125rem; } /* ~18px */
+@media (min-width: 480px) {
+    body { font-size: 1.125rem; }
     :root {
         --header-height-mobile: 75px;
         --tabs-height-mobile: 70px;
@@ -960,14 +985,14 @@ figcaption {
     h1.firm-name-header { font-size: clamp(1.4rem, 5vw, 1.9rem); }
     .tab-icon { font-size: 1.6rem; }
     .tab-label { font-size: 0.8rem; }
-    .hero-section { min-height: 65vh; } /* Adjust if needed */
+    .hero-section { min-height: 65vh; }
 }
 
-@media (min-width: 600px) { /* Small tablets / Landscape mobile */
-    body { font-size: 1.15rem; } /* ~18.4px */
+@media (min-width: 600px) {
+    body { font-size: 1.15rem; }
      :root {
         --content-max-width: 85vw;
-        --content-max-width-capped: 820px; /* Wider cap for tablets */
+        --content-max-width-capped: 820px;
     }
     h2.section-title { font-size: clamp(2rem, 6vw, 3rem); }
     h2.hero-main-title { font-size: clamp(2.5rem, 7.5vw, 4rem); }
@@ -976,33 +1001,28 @@ figcaption {
     .secondary-button { font-size: 1.1rem; }
 }
 
-@media (min-width: 768px) { /* Standard tablet portrait */
-    /* Consider if tabs should become sidebar or top nav for tablets */
-    /* For this exercise, keeping tabs, but could be adapted */
+@media (min-width: 768px) {
     :root {
-      --spacing-unit: 9px; /* Slightly increase base spacing unit for larger screens */
-    }
-    .page-content-wrapper {
-      /* Example: Add more horizontal padding if not full-width sections */
-      /* padding-left: var(--spacing-xl); */
-      /* padding-right: var(--spacing-xl); */
+      --spacing-unit: 9px;
     }
      p.section-intro-text { font-size: 1.2rem; }
+     /* Make content sections slightly less wide on tablets to better see background */
+    .content-section .section-container {
+        max-width: var(--content-max-width-capped);
+        width: 88vw; /* Slightly narrower than full viewport width */
+    }
 }
 
-@media (min-width: 1024px) { /* Larger tablets, small desktops */
-    body { font-size: 1.18rem; } /* ~18.88px */
+@media (min-width: 1024px) {
+    body { font-size: 1.18rem; }
     html {
         scrollbar-color: var(--color-accent-gold) var(--color-bg-light-accent);
     }
     html::-webkit-scrollbar-thumb {
         background-color: var(--color-accent-gold);
     }
-    /* Potentially hide mobile tabs and introduce a desktop navigation */
-    /* For now, mobile tabs remain for consistency with "mobile" focus */
 }
 
-/* Print styles - basic */
 @media print {
     body {
         padding-top: 0 !important;
@@ -1010,8 +1030,9 @@ figcaption {
         font-size: 12pt;
         color: #000 !important;
         background-color: #fff !important;
+        background-image: none !important;
     }
-    .site-header, .mobile-tabs, .splash-loader, .page-transition-loader, #background-static, #background-overlay, .carousel-control, .carousel-dots, .google-reviews-button, .cta-button, .secondary-button {
+    .site-header, .mobile-tabs, .splash-loader, .page-transition-loader, #background-static, #background-overlay, .carousel-control, .carousel-dots, .google-reviews-button, .cta-button, .secondary-button, .hero-content-box {
         display: none !important;
     }
     .content-section, .hero-section {
@@ -1019,11 +1040,13 @@ figcaption {
         background-color: #fff !important;
         box-shadow: none !important;
         border: none !important;
+        backdrop-filter: none !important;
+        -webkit-backdrop-filter: none !important;
+        border-radius: 0 !important;
     }
     .section-container { max-width: 100% !important; width: 100% !important; }
     a { color: var(--color-primary-brand) !important; text-decoration: underline !important; }
     h1, h2, h3 { color: #000 !important; }
-    .hero-content-box { background: none !important; box-shadow: none !important; padding: 0 !important; }
     .hero-main-title, .hero-subtitle { color: #000 !important; text-shadow: none !important; }
     .footer-social-media, .footer-links { display: none !important; }
     .footer-firm-name, .footer-copyright, .footer-disclaimer { color: #333 !important; }
