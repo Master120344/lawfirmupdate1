@@ -12,7 +12,7 @@
    - .contact-form-container, .form-title
    - Form Element Styling (.form-group, label, input, select, textarea, button)
    - .thank-you-message
-8. CTA Buttons (Covered by global)
+8. CTA Buttons (Send Inquiry Button Styled)
 9. Mobile Tabs Navigation
 10. Footer Styles
 11. Animation & Utility Classes
@@ -28,6 +28,7 @@
     --color-secondary-brand: #0A58A6; /* Brighter Blue */
     --color-secondary-brand-rgb: 10, 88, 166;
     --color-accent-gold: #B08D57;
+    --color-accent-gold-rgb: 176, 141, 87; /* Added for consistency */
     --color-accent-gold-darker: #8c6d40;
 
     /* Neutral Palette */
@@ -77,12 +78,12 @@
     --transition-slow: 0.5s ease-in-out;
 
     /* Form Specific */
-    --form-input-bg: rgba(var(--color-secondary-brand-rgb), 0.05); /* Lighter blue base */
+    --form-input-bg: rgba(var(--color-secondary-brand-rgb), 0.05);
     --form-input-bg-focus: rgba(var(--color-secondary-brand-rgb), 0.08);
     --form-input-border: var(--color-secondary-brand);
     --form-input-border-focus: var(--color-accent-gold);
     --form-input-text-color: var(--color-text-dark);
-    --form-input-placeholder-color: #778ca3; /* Medium grey-blue for placeholder */
+    --form-input-placeholder-color: #778ca3;
 }
 
 *, *::before, *::after {
@@ -151,24 +152,24 @@ img { max-width: 100%; height: auto; display: block; }
 }
 @keyframes spinLoader { to { transform: rotate(360deg); } }
 
-/* 4. BACKGROUND STYLES (Consistent) */
+/* 4. BACKGROUND STYLES */
 #background-static {
     position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -2;
     background-image: url('austin.jpg'); background-size: cover; background-position: center center;
     background-repeat: no-repeat; animation: subtleZoomInOutBg 70s infinite alternate ease-in-out;
-    filter: saturate(0.6) brightness(0.5);
+    filter: saturate(0.7) brightness(0.75); /* MODIFIED: Brightened wallpaper */
 }
 @keyframes subtleZoomInOutBg { 0% { transform: scale(1); } 100% { transform: scale(1.03); } }
 #background-overlay {
     position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1;
-    background: linear-gradient(180deg, rgba(var(--color-primary-brand-rgb), 0.2) 0%, rgba(var(--color-primary-brand-rgb), 0.5) 70%, rgba(var(--color-primary-brand-rgb), 0.7) 100%);
+    background: linear-gradient(180deg, rgba(var(--color-primary-brand-rgb), 0.15) 0%, rgba(var(--color-primary-brand-rgb), 0.35) 60%, rgba(var(--color-primary-brand-rgb), 0.55) 100%); /* MODIFIED: More transparent overlay */
     pointer-events: none;
 }
 
 /* 5. HEADER STYLES (Consistent) */
 .site-header {
     position: fixed; top: 0; left: 0; width: 100%; z-index: 1000;
-    height: var(--header-height-mobile); background-color: rgba(255, 255, 255, 0.88);
+    height: var(--header-height-mobile); background-color: rgba(255, 255, 255, 0.85); /* MODIFIED: Slightly more transparent */
     backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
     box-shadow: 0 1px 8px var(--color-shadow-medium);
     border-bottom: 1px solid var(--color-border-subtle);
@@ -187,14 +188,14 @@ img { max-width: 100%; height: auto; display: block; }
 }
 .firm-name-header .firm-name-pc { font-weight: 500; font-size: 0.9em; margin-left: calc(var(--spacing-unit) * 0.5); }
 
-/* 6. PAGE CONTENT WRAPPER & SECTION BASE (Consistent) */
+/* 6. PAGE CONTENT WRAPPER & SECTION BASE */
 .page-content-wrapper { flex-grow: 1; width: 100%; position: relative; z-index: 1; }
 .content-section {
     width: 100%; padding: calc(var(--spacing-unit) * 6) calc(var(--spacing-unit) * 2);
     margin: 0 auto; position: relative;
 }
-.content-section, .content-section:nth-child(odd) { background-color: rgba(255, 255, 255, 0.88); }
-.content-section:nth-child(even) { background-color: rgba(248, 249, 250, 0.90); }
+.content-section, .content-section:nth-child(odd) { background-color: rgba(255, 255, 255, 0.82); } /* MODIFIED: More transparent */
+.content-section:nth-child(even) { background-color: rgba(248, 249, 250, 0.85); } /* MODIFIED: More transparent */
 .section-container { max-width: var(--content-max-width-capped); margin: 0 auto; width: var(--content-max-width); }
 .section-title {
     font-family: var(--font-headings); font-size: clamp(1.8rem, 6vw, 2.6rem); text-align: center;
@@ -213,12 +214,12 @@ img { max-width: 100%; height: auto; display: block; }
 /* 7. CONTACT PAGE SPECIFIC STYLES
 -------------------------------------------------- */
 .contact-page-section .section-intro-text {
-    margin-bottom: calc(var(--spacing-unit) * 5); /* More space before contact details */
+    margin-bottom: calc(var(--spacing-unit) * 5);
 }
 
 .contact-info-grid {
     display: grid;
-    grid-template-columns: 1fr; /* Single column on small screens */
+    grid-template-columns: 1fr;
     gap: calc(var(--spacing-unit) * 3);
     margin-bottom: calc(var(--spacing-unit) * 5);
     text-align: center;
@@ -275,7 +276,7 @@ img { max-width: 100%; height: auto; display: block; }
 
 .contact-form-container {
     margin-top: calc(var(--spacing-unit) * 3);
-    background-color: rgba(255,255,255,0.92); /* Slightly more opaque form background */
+    background-color: rgba(255,255,255,0.86); /* MODIFIED: Slightly more transparent form background */
     padding: calc(var(--spacing-unit) * 3) calc(var(--spacing-unit) * 2.5);
     border-radius: var(--border-radius-medium);
     box-shadow: 0 4px 15px var(--color-shadow-medium);
@@ -286,7 +287,7 @@ img { max-width: 100%; height: auto; display: block; }
     margin-bottom: calc(var(--spacing-unit) * 3);
     position: relative;
 }
-.form-title.decorative-title::after { width: 60px; height: 2.5px; } /* Smaller underline for form title */
+.form-title.decorative-title::after { width: 60px; height: 2.5px; }
 
 .contact-form-element .form-row {
     display: flex;
@@ -314,7 +315,7 @@ img { max-width: 100%; height: auto; display: block; }
     margin-right: calc(var(--spacing-unit) * 1);
     color: var(--color-accent-gold);
     font-size: 0.9em;
-    width: 1em; /* Ensure consistent icon spacing */
+    width: 1em;
     text-align: center;
 }
 input[type="text"],
@@ -331,29 +332,29 @@ textarea {
     border: 1px solid var(--form-input-border);
     border-radius: var(--border-radius-small);
     transition: border-color var(--transition-fast), background-color var(--transition-fast), box-shadow var(--transition-fast);
-    appearance: none; /* Remove default styling, esp. for select */
+    appearance: none;
     -webkit-appearance: none;
     -moz-appearance: none;
 }
 input::placeholder,
 textarea::placeholder {
     color: var(--form-input-placeholder-color);
-    opacity: 1; /* Firefox fix */
+    opacity: 1;
 }
 input:focus,
 select:focus,
 textarea:focus {
     outline: none;
     border-color: var(--form-input-border-focus);
-    background-color: var(--form-input-bg-focus); /* Slightly darker blue on focus */
-    box-shadow: 0 0 0 3px rgba(var(--color-accent-gold-rgb, 176, 141, 87), 0.2);
+    background-color: var(--form-input-bg-focus);
+    box-shadow: 0 0 0 3px rgba(var(--color-accent-gold-rgb), 0.2); /* Uses --color-accent-gold-rgb */
 }
 select {
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath fill='none' stroke='%230A58A6' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2 5l6 6 6-6'/%3E%3C/svg%3E");
     background-repeat: no-repeat;
     background-position: right calc(var(--spacing-unit) * 1.5) center;
     background-size: 1em;
-    padding-right: calc(var(--spacing-unit) * 4); /* Make space for arrow */
+    padding-right: calc(var(--spacing-unit) * 4);
 }
 select:disabled {
     background-color: rgba(var(--color-secondary-brand-rgb), 0.03);
@@ -365,24 +366,64 @@ select:disabled {
     text-align: center;
     margin-top: calc(var(--spacing-unit) * 2);
 }
+
+/* MODIFIED: Send Inquiry Button Styling */
 .form-submit-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
     width: 100%;
-    max-width: 300px; /* Limit button width on wider small screens */
-    padding: calc(var(--spacing-unit) * 1.75) calc(var(--spacing-unit) * 3);
+    max-width: 320px;
+    padding: calc(var(--spacing-unit) * 1.8) calc(var(--spacing-unit) * 2.5);
+    font-family: var(--font-headings);
+    font-size: 1.05rem; /* Adjusted for mobile better fit */
+    font-weight: 700; /* Bolder */
+    letter-spacing: 0.5px;
+    color: var(--color-text-on-primary);
+    background-color: var(--color-secondary-brand);
+    border: none;
+    border-radius: var(--border-radius-medium);
+    box-shadow: 0 4px 10px rgba(var(--color-secondary-brand-rgb), 0.3), 0 1px 3px rgba(0,0,0,0.1);
+    cursor: pointer;
+    transition: background-color var(--transition-medium), color var(--transition-medium), transform var(--transition-fast), box-shadow var(--transition-fast);
+    text-transform: uppercase;
+    line-height: 1.3; /* Ensure icon and text align well */
 }
+
+.form-submit-button i {
+    margin-right: calc(var(--spacing-unit) * 1.25);
+    font-size: 1em; /* Relative to button's font size */
+    line-height: 1; /* Prevents icon from misaligning text */
+}
+
+.form-submit-button:hover,
+.form-submit-button:focus-visible { /* Using focus-visible for better accessibility */
+    background-color: var(--color-accent-gold);
+    color: var(--color-text-on-gold);
+    transform: translateY(-2px) scale(1.02);
+    box-shadow: 0 6px 15px rgba(var(--color-accent-gold-rgb), 0.35), 0 2px 5px rgba(0,0,0,0.15);
+    text-decoration: none;
+    outline: none; /* Custom focus style handled by box-shadow */
+}
+
+.form-submit-button:active {
+    transform: translateY(0px) scale(1);
+    box-shadow: 0 3px 8px rgba(var(--color-accent-gold-rgb), 0.3), 0 1px 2px rgba(0,0,0,0.1);
+}
+
 
 .thank-you-message {
     text-align: center;
     padding: calc(var(--spacing-unit) * 4) calc(var(--spacing-unit) * 2);
-    background-color: rgba(var(--color-accent-gold-rgb, 176,141,87), 0.05);
-    border: 1px solid rgba(var(--color-accent-gold-rgb, 176,141,87), 0.3);
+    background-color: rgba(var(--color-accent-gold-rgb), 0.05); /* Uses --color-accent-gold-rgb */
+    border: 1px solid rgba(var(--color-accent-gold-rgb), 0.3); /* Uses --color-accent-gold-rgb */
     border-radius: var(--border-radius-medium);
     margin-top: calc(var(--spacing-unit) * 3);
-    opacity: 0; /* Initially hidden for JS transition */
+    opacity: 0;
     transition: opacity var(--transition-medium);
 }
 .thank-you-message.visible {
-    display: block !important; /* Override display: none from HTML */
+    display: block !important;
     opacity: 1;
 }
 .thank-you-icon {
@@ -402,15 +443,28 @@ select:disabled {
 }
 .thank-you-message #reset-form-button {
     margin-top: calc(var(--spacing-unit) * 2);
+    /* Basic styling for reset button to match theme, can be expanded */
+    font-family: var(--font-headings);
+    padding: calc(var(--spacing-unit) * 1.25) calc(var(--spacing-unit) * 2);
+    background-color: transparent;
+    color: var(--color-secondary-brand);
+    border: 1px solid var(--color-secondary-brand);
+    border-radius: var(--border-radius-small);
+    cursor: pointer;
+    transition: background-color var(--transition-fast), color var(--transition-fast);
+}
+.thank-you-message #reset-form-button:hover {
+    background-color: var(--color-secondary-brand);
+    color: var(--color-text-on-primary);
 }
 
 
-/* 8. CTA BUTTONS (Covered by global styles from index_mobile.css, already included above if needed) */
+/* 8. CTA BUTTONS (Covered by .form-submit-button now) */
 
 /* 9. MOBILE TABS NAVIGATION (Consistent) */
 .mobile-tabs {
     position: fixed; bottom: 0; left: 0; width: 100%; height: var(--tabs-height-mobile);
-    background-color: rgba(255, 255, 255, 0.96);
+    background-color: rgba(255, 255, 255, 0.94); /* MODIFIED: Slightly more transparent */
     backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
     box-shadow: 0 -2px 12px var(--color-shadow-medium);
     border-top: 1px solid var(--color-border-subtle);
@@ -434,7 +488,7 @@ select:disabled {
     height: 3px; background-color: var(--color-accent-gold); border-radius: 0 0 3px 3px;
 }
 
-/* 10. FOOTER STYLES (Consistent) */
+/* 10. FOOTER STYLES */
 .site-footer {
     background-color: var(--color-bg-footer); color: #b0bec5; text-align: center;
     padding: calc(var(--spacing-unit) * 4) calc(var(--spacing-unit) * 2) calc(var(--spacing-unit) * 2.5);
@@ -445,13 +499,19 @@ select:disabled {
 .footer-firm-name { font-family: var(--font-headings); font-size: 1.2rem; color: var(--color-text-light); font-weight: 600; margin: 0; }
 .footer-social-media { margin-bottom: calc(var(--spacing-unit) * 2.5); }
 .footer-social-media a { color: #ced4da !important; font-size: 1.6rem; margin: 0 calc(var(--spacing-unit) * 1.25); transition: color var(--transition-fast), transform var(--transition-fast); display: inline-block; }
-.footer-social-media a:hover i, .footer-social-media a:focus i { color: var(--color-accent-gold); }
-.footer-social-media a:hover, .footer-social-media a:focus { transform: scale(1.15); }
-.footer-social-media a.facebook:hover i, .footer-social-media a.facebook:focus i { color: #1877F2 !important; }
-.footer-social-media a.linkedin:hover i, .footer-social-media a.linkedin:focus i { color: #0A66C2 !important; }
-.footer-social-media a.x-twitter:hover i, .footer-social-media a.x-twitter:focus i { color: #000000 !important; }
-.footer-social-media a.instagram:hover i, .footer-social-media a.instagram:focus i { color: #E1306C !important; }
-.footer-social-media a.tiktok:hover i, .footer-social-media a.tiktok:focus i { color: #EE1D52 !important; }
+
+/* MODIFIED: Social Icons Light Up White on Hover */
+.footer-social-media a:hover i,
+.footer-social-media a:focus i {
+    color: #FFFFFF !important; /* All social icons turn white on hover/focus */
+}
+.footer-social-media a:hover,
+.footer-social-media a:focus {
+    transform: scale(1.15); /* Keep existing scale transform */
+    text-decoration: none;
+}
+/* Removed specific brand color hovers for social icons to enforce white "light up" */
+
 .footer-links { margin-bottom: calc(var(--spacing-unit) * 1.5); font-size: 0.8rem; }
 .footer-links a { color: #b0bec5 !important; margin: 0 calc(var(--spacing-unit) * 0.4); transition: color var(--transition-fast); }
 .footer-links a:hover, .footer-links a:focus { color: var(--color-accent-gold) !important; text-decoration: underline; }
@@ -477,14 +537,17 @@ select:disabled {
     .tab-label { font-size: 0.75rem; }
 
     .contact-info-grid {
-        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); /* 2 or 3 columns on larger mobiles */
-        text-align: left; /* Align text left on multi-column */
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        text-align: left;
     }
     .contact-detail-item {
-        text-align: center; /* Keep items centered if they stack, or left if preferred */
+        text-align: center;
     }
      .contact-form-element .form-row {
-        flex-direction: row; /* Side-by-side for half-width groups */
+        flex-direction: row;
+    }
+    .form-submit-button {
+        font-size: 1.1rem; /* Slightly larger font for button on wider small screens */
     }
 }
 @media (min-width: 600px) {
