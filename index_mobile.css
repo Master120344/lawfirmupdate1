@@ -10,25 +10,28 @@ html {
 }
 
 :root {
-    --color-bg-header-footer: rgba(255, 255, 255, 0.96); /* Consistent light bg for header/footer */
+    --color-bg-header-footer: rgba(255, 255, 255, 0.96);
     --color-text-header-footer: #1A2B48;
     --color-text-dark: #2c3e50;
     --color-text-light: #333;
-    --color-text-on-dark-bg: #FFFFFF;
+    --color-text-on-dark-bg: #FFFFFF; /* White text for loader */
+    --color-loader-text: #f0f0f0; /* Very light grey/off-white for loader text if pure white is too stark */
     --color-accent-blue-primary: #003366;
     --color-accent-blue-secondary: #0A58A6;
     --color-accent-gold: #B08D57;
-    --color-accent-grey: #f0f2f5; /* Background for loader */
-    --color-loader-bar: var(--color-accent-blue-primary); /* Color for the new loading bar */
+    --color-loader-bg: var(--color-accent-blue-primary); /* Loader background is primary blue */
+    --color-loader-bar-track: rgba(255, 255, 255, 0.25); /* Lighter track for loading bar on blue */
+    --color-loader-bar-fill: var(--color-accent-gold); /* Gold fill for loading bar */
     --color-shadow-text: 1px 1px 8px rgba(0, 0, 0, 0.8);
     --color-shadow-subtle: rgba(26, 43, 72, 0.08);
     --color-shadow-medium: rgba(26, 43, 72, 0.12);
     --color-border-subtle: rgba(26, 43, 72, 0.1);
     --font-primary: 'Cinzel', serif;
     --font-secondary: 'EB Garamond', serif;
-    --footer-height: 70px;
+    --footer-height: 70px; /* For bottom nav tabs */
+    --site-footer-height: auto; /* Actual footer will determine its own height */
     --content-max-width-mobile: 700px;
-    --loader-transition-duration: 1.2s; /* For page transition, slightly longer */
+    --loader-display-duration: 4s; /* Target 3-5 seconds, adjust with JS */
 }
 
 body {
@@ -41,8 +44,9 @@ body {
     position: relative;
     opacity: 0;
     transition: opacity 0.7s ease-in-out;
-    padding-top: 0;
-    padding-bottom: var(--footer-height);
+    padding-top: 0; /* Header is sticky */
+    /* Adjust padding-bottom to account for both fixed tabs and new footer */
+    padding-bottom: calc(var(--footer-height) + 60px); /* Approx height for new footer, adjust as needed */
     display: flex;
     flex-direction: column;
     font-size: 18px;
@@ -55,7 +59,7 @@ body.loaded {
 /* --- REVISED LOADER STYLES --- */
 .loader {
     position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-    background: var(--color-accent-grey); /* Light grey background for loader */
+    background: var(--color-loader-bg); /* FULL BLUE BACKGROUND */
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -63,7 +67,7 @@ body.loaded {
     text-align: center;
     z-index: 3000;
     opacity: 1;
-    transition: opacity 0.7s ease-out, visibility 0.7s ease-out;
+    transition: opacity 0.8s ease-out, visibility 0.8s ease-out; /* Slower fade for effect */
     visibility: visible;
     pointer-events: auto;
     padding: 20px;
@@ -76,448 +80,274 @@ body.loaded {
 }
 
 .loader-logo-img {
-    max-width: 50%;      /* Logo width scaled down */
-    max-height: 120px;   /* Max height for logo */
+    max-width: 45%;      /* Logo reasonable size */
+    max-height: 100px;   /* Max height for logo on blue */
     height: auto;
-    margin-bottom: 20px; /* Space between logo and title */
-    animation: pulseLogo 2s infinite ease-in-out alternate;
-    filter: drop-shadow(0 3px 6px rgba(0,0,0,0.08));
+    margin-bottom: 20px;
+    animation: pulseLogo 2.5s infinite ease-in-out alternate;
+    /* No filter needed if logo itself has good contrast or is light */
 }
 
 @keyframes pulseLogo {
-    from { transform: scale(0.98); opacity: 0.9; }
-    to { transform: scale(1.02); opacity: 1; }
+    from { transform: scale(0.97); opacity: 0.85; }
+    to { transform: scale(1.03); opacity: 1; }
 }
 
 .loader-title {
     font-family: var(--font-primary);
-    font-size: 1.6rem;   /* Title size scaled down */
-    color: var(--color-accent-blue-primary);
-    margin-bottom: 25px; /* Space between title and loading bar */
+    font-size: 1.8rem;   /* Prominent title on blue */
+    color: var(--color-loader-text); /* Light text color on blue */
+    margin-bottom: 30px;
     line-height: 1.3;
-    font-weight: 700;
-    letter-spacing: 0.5px;
+    font-weight: 700; /* Cinzel bold */
+    letter-spacing: 0.8px;
+    text-shadow: 1px 1px 3px rgba(0,0,0,0.3); /* Subtle shadow for depth on blue */
 }
 
-/* NEW LOADING BAR STYLES */
 .loading-bar-container {
-    width: 60%;          /* Width of the loading bar track */
-    max-width: 250px;    /* Max width of the track */
-    height: 8px;         /* Height of the track */
-    background-color: rgba(0, 51, 102, 0.15); /* Light track color */
-    border-radius: 4px;
-    overflow: hidden;    /* Important to clip the progress bar */
+    width: 70%;
+    max-width: 280px;
+    height: 10px;
+    background-color: var(--color-loader-bar-track); /* Lighter track on blue */
+    border-radius: 5px;
+    overflow: hidden;
+    box-shadow: inset 0 1px 2px rgba(0,0,0,0.1);
 }
 
 .loading-bar-progress {
-    width: 0%;           /* Start with 0 width */
+    width: 0%;
     height: 100%;
-    background-color: var(--color-loader-bar); /* Use defined blue */
-    border-radius: 4px;
-    animation: loadProgress var(--loader-transition-duration) ease-out forwards;
-    /* 'forwards' keeps it at 100% after animation */
+    background-color: var(--color-loader-bar-fill); /* Gold fill */
+    border-radius: 5px;
+    animation: loadProgress var(--loader-display-duration) ease-out forwards;
 }
 
 @keyframes loadProgress {
     0% { width: 0%; }
-    /* 30% { width: 20%; } Not needed for simple fill */
-    /* 70% { width: 75%; } */
     100% { width: 100%; }
 }
 
-
 /* Background */
 #background-static {
-    position: fixed;
-    top: 0; left: 0; width: 100%; height: 100%;
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
     z-index: -2;
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
+    background-size: cover; background-position: center; background-repeat: no-repeat;
     background-image: url('austin.jpg');
     animation: subtleZoom 50s infinite alternate ease-in-out;
-    filter: brightness(0.70) contrast(1.05);
+    filter: brightness(0.65) contrast(1.05); /* Slightly darker for more content box pop */
 }
+@keyframes subtleZoom { from { transform: scale(1); } to { transform: scale(1.03); } }
 
-@keyframes subtleZoom {
-    from { transform: scale(1); }
-    to { transform: scale(1.03); }
-}
-
-/* --- REVISED HEADER STYLES --- */
+/* --- ENHANCED HEADER FIRM TITLE --- */
 .header {
-    width: 100%;
-    z-index: 100;
-    padding: 15px 0; /* Decent padding for text title */
-    background: var(--color-bg-header-footer); /* SEMI-TRANSPARENT WHITE BACKGROUND */
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    box-shadow: 0 2px 8px var(--color-shadow-subtle); /* Softer shadow */
-    position: sticky;
-    top: 0;
-    text-align: center; /* Center the title */
+    width: 100%; z-index: 100;
+    padding: 12px 0; /* Adjusted padding for title */
+    background: var(--color-bg-header-footer);
+    backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); /* Stronger blur */
+    box-shadow: 0 3px 12px var(--color-shadow-subtle); /* More defined shadow */
+    position: sticky; top: 0;
+    text-align: center;
 }
-.header-content { /* This div might be optional if header is text-align: center */
-    width: 90%;
-    margin: 0 auto;
-    /* display: flex; justify-content: center; align-items: center; */
+.header-content { width: 90%; margin: 0 auto; }
+.header-firm-title {
+    font-family: var(--font-primary);
+    font-size: 1.9rem; /* Larger, more impactful */
+    color: var(--color-text-header-footer);
+    font-weight: 900; /* Bolder Cinzel */
+    margin: 0; line-height: 1.2;
+    letter-spacing: 1px; /* Wider spacing for elegance */
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.05); /* Very subtle depth */
+    padding: 5px 0; /* Give title some breathing room */
 }
-.header-firm-title { /* NEW STYLE FOR THE TEXT TITLE IN HEADER */
-    font-family: var(--font-primary); /* Cinzel */
-    font-size: 1.7rem; /* Prominent but not overly large for a header */
-    color: var(--color-text-header-footer); /* Dark blue text */
-    font-weight: 700;
-    margin: 0;
-    line-height: 1.2;
-    letter-spacing: 0.5px;
-}
-
 
 /* Main Content Wrapper */
-.page-content-wrapper {
-    flex-grow: 1;
-    width: 100%;
-    padding: 0 15px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    position: relative;
-    z-index: 1;
-}
+.page-content-wrapper { flex-grow: 1; width: 100%; padding: 0 15px; display: flex; flex-direction: column; align-items: center; position: relative; z-index: 1; }
 
-/* Sections - INCREASED TRANSPARENCY */
+/* Sections - EVEN MORE TRANSPARENCY */
 .content-section {
-    width: 100%;
-    max-width: var(--content-max-width-mobile);
-    margin: 45px auto;
-    padding: 35px 30px;
-    background-color: rgba(255, 255, 255, 0.82); /* INCREASED TRANSPARENCY */
-    border-radius: 12px;
-    box-shadow: 0 5px 18px rgba(44, 62, 80, 0.12); /* Adjusted shadow */
+    width: 100%; max-width: var(--content-max-width-mobile);
+    margin: 40px auto; /* Reduced top/bottom margin slightly */
+    padding: 30px 25px; /* Adjusted padding */
+    background-color: rgba(255, 255, 255, 0.78); /* EVEN MORE TRANSPARENCY */
+    border-radius: 10px; /* Slightly less rounded */
+    box-shadow: 0 4px 15px rgba(44, 62, 80, 0.1);
     color: var(--color-text-light);
-    border: 1px solid rgba(0,0,0,0.03);
+    border: 1px solid rgba(255,255,255,0.15); /* Light border for definition against dark bg */
 }
+.testimonials-section { background-color: rgba(240, 242, 245, 0.78); }
+.testimonial-item { background-color: rgba(255, 255, 255, 0.88); } /* Items still a bit more opaque */
 
-.testimonials-section { /* Matching transparency */
-    background-color: rgba(240, 242, 245, 0.82);
-}
-.testimonial-item { /* Keep items slightly more opaque for readability */
-    background-color: rgba(255, 255, 255, 0.90);
-}
-
-
-/* Section Headings and Content (using styles from previous "Law Theme" attempt) */
-.section-container {
-     width: 100%;
-     margin: 0 auto;
-}
+/* Section Headings and Content (styles largely retained) */
+.section-container { width: 100%; margin: 0 auto; }
 .content-section h2 {
-    font-family: var(--font-primary);
-    font-size: 2.3rem;
-    color: var(--color-accent-blue-primary);
-    font-weight: 700;
-    margin-bottom: 30px;
-    text-align: center;
-    position: relative;
-    padding-bottom: 18px;
+    font-family: var(--font-primary); font-size: 2.2rem; /* Slightly smaller for balance */
+    color: var(--color-accent-blue-primary); font-weight: 700;
+    margin-bottom: 25px; text-align: center; position: relative; padding-bottom: 15px;
     letter-spacing: 0.5px;
 }
 .content-section h2::after {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 75px;
-    height: 3.5px;
-    background-color: var(--color-accent-gold);
-    border-radius: 2px;
+    content: ''; position: absolute; bottom: 0; left: 50%; transform: translateX(-50%);
+    width: 70px; height: 3px; background-color: var(--color-accent-gold); border-radius: 1.5px;
 }
-.content-section p, .content-section ul {
-    margin-bottom: 22px;
-    line-height: 1.8;
-    font-size: 1.05rem;
-}
+.content-section p, .content-section ul { margin-bottom: 20px; line-height: 1.8; font-size: 1.05rem; }
 .service-list { list-style: none; padding-left: 0; }
-.service-list li { margin-bottom: 16px; padding-left: 35px; position: relative; }
-.service-list li i {
-    color: var(--color-accent-blue-primary);
-    position: absolute;
-    left: 0;
-    top: 7px;
-    font-size: 1.05em;
+.service-list li { margin-bottom: 15px; padding-left: 30px; position: relative; }
+.service-list li i { color: var(--color-accent-blue-primary); position: absolute; left: 0; top: 6px; font-size: 1em; }
+
+/* --- TESTIMONIAL CAROUSEL STYLES --- */
+.testimonial-carousel {
+    position: relative;
+    min-height: 180px; /* Estimate based on content, adjust if needed */
+    overflow: hidden; /* Hide non-active items if using absolute positioning */
+}
+.testimonial-item {
+    /* display: none; /* JS will handle initial display or use opacity */
+    opacity: 0;
+    position: absolute; /* For fade transition in same space */
+    top: 0; left: 0; width: 100%;
+    transition: opacity 0.7s ease-in-out;
+    padding: 25px; /* Internal padding for each item */
+    border-left: 5px solid var(--color-accent-gold);
+    background-color: rgba(255, 255, 255, 0.88);
+    border-radius: 0 8px 8px 0;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+}
+.testimonial-item.active-testimonial {
+    /* display: block; */
+    opacity: 1;
+    position: relative; /* Or static, if not using absolute for all */
+    z-index: 1;
+}
+.testimonial-item p:first-child { margin-bottom: 18px; font-family: var(--font-secondary); }
+.testimonial-author {
+    font-style: normal; font-weight: 700; text-align: right; margin-top: 18px;
+    color: var(--color-accent-blue-primary); font-size: 1.05rem; font-family: var(--font-secondary);
 }
 
-/* Hero Section (using styles from previous "Law Theme" attempt) */
-.hero {
-    width: 100%;
-    max-width: none;
-    margin: 25px auto 40px auto;
-    padding: 50px 20px;
-    text-align: center;
-    background: none;
-    box-shadow: none;
-    color: var(--color-text-on-dark-bg);
-    position: relative;
-}
-.hero-content {
-    max-width: 600px;
-    margin: 0 auto;
-    background: rgba(20, 25, 30, 0.78);
-    padding: 35px;
-    border-radius: 10px;
-    box-shadow: 0 5px 18px rgba(0,0,0,0.45);
-}
-.hero h2 {
-    font-family: var(--font-primary);
-    font-size: 2.5rem;
-    color: var(--color-text-on-dark-bg);
-    font-weight: 700;
-    text-shadow: 1px 1px 5px rgba(0,0,0,0.6);
-    margin-bottom: 20px;
-    animation: fadeIn 1s ease-out 0.2s backwards;
-    line-height: 1.25;
-    letter-spacing: 0.5px;
-    padding-bottom: 0;
-}
+
+/* Hero Section (styles largely retained) */
+.hero { width: 100%; max-width: none; margin: 20px auto 35px auto; padding: 45px 20px; text-align: center; background: none; box-shadow: none; color: var(--color-text-on-dark-bg); position: relative; }
+.hero-content { max-width: 600px; margin: 0 auto; background: rgba(20, 25, 30, 0.8); padding: 30px; border-radius: 10px; box-shadow: 0 5px 18px rgba(0,0,0,0.45); }
+.hero h2 { font-family: var(--font-primary); font-size: 2.4rem; color: var(--color-text-on-dark-bg); font-weight: 700; text-shadow: 1px 1px 5px rgba(0,0,0,0.6); margin-bottom: 20px; animation: fadeIn 1s ease-out 0.2s backwards; line-height: 1.25; letter-spacing: 0.5px; padding-bottom: 0; }
 .hero h2::after { display: none; }
-.hero-subtitle {
-    font-size: 1.3rem;
-    margin-bottom: 35px;
-    text-shadow: 1px 1px 4px rgba(0,0,0,0.5);
-    color: rgba(255, 255, 255, 0.98);
-    animation: fadeIn 1s ease-out 0.4s backwards;
-    font-family: var(--font-secondary);
-    font-weight: 400;
-    line-height: 1.6;
-}
+.hero-subtitle { font-size: 1.25rem; margin-bottom: 30px; text-shadow: 1px 1px 4px rgba(0,0,0,0.5); color: rgba(255, 255, 255, 0.98); animation: fadeIn 1s ease-out 0.4s backwards; font-family: var(--font-secondary); font-weight: 400; line-height: 1.6; }
 
-/* Buttons (using styles from previous "Law Theme" attempt) */
-.cta-button {
-    display: inline-flex; align-items: center; justify-content: center;
-    gap: 12px;
-    padding: 17px 40px;
-    background: var(--color-accent-gold);
-    color: #20150C;
-    text-decoration: none;
-    font-family: var(--font-primary); font-size: 1.15rem; font-weight: 700;
-    border-radius: 8px;
-    border: 1px solid rgba(0,0,0,0.1);
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 12px rgba(176, 141, 87, 0.4);
-    cursor: pointer;
-    animation: fadeIn 1s ease-out 0.6s backwards;
-    text-shadow: none;
-    min-width: 230px;
-    text-align: center;
-    text-transform: uppercase;
-    letter-spacing: 0.8px;
-}
-.cta-button i { font-size: 1.05em; }
-.cta-button:hover {
-    background: #c8a265;
-    box-shadow: 0 6px 16px rgba(176, 141, 87, 0.5);
-    transform: translateY(-1px);
-}
-.secondary-button {
-    display: inline-block;
-    margin-top: 30px;
-    padding: 13px 32px;
-    background: none;
-    color: var(--color-accent-blue-primary);
-    border: 2px solid var(--color-accent-blue-primary);
-    border-radius: 6px;
-    text-decoration: none;
-    font-family: var(--font-secondary);
-    font-size: 1.05rem;
-    font-weight: 600;
-    transition: all 0.3s ease;
-    text-align: center;
-    letter-spacing: 0.3px;
-}
-.secondary-button:hover {
-    background: var(--color-accent-blue-primary);
-    color: var(--color-text-on-dark-bg);
-    box-shadow: 0 3px 10px rgba(0, 51, 102, 0.3);
-}
-.google-reviews-callout {
-    margin-top: 50px;
-    padding-top: 35px;
-    border-top: 1px dashed rgba(0, 0, 0, 0.15);
-    text-align: center;
-}
-.google-reviews-callout h3 {
-    font-family: var(--font-secondary);
-    font-size: 1.35rem;
-    color: var(--color-text-light);
-    margin-bottom: 20px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
-    font-weight: 600;
-}
+/* Buttons (styles largely retained) */
+.cta-button { display: inline-flex; align-items: center; justify-content: center; gap: 12px; padding: 16px 38px; background: var(--color-accent-gold); color: #20150C; text-decoration: none; font-family: var(--font-primary); font-size: 1.1rem; font-weight: 700; border-radius: 8px; border: 1px solid rgba(0,0,0,0.1); transition: all 0.3s ease; box-shadow: 0 4px 12px rgba(176, 141, 87, 0.4); cursor: pointer; animation: fadeIn 1s ease-out 0.6s backwards; text-shadow: none; min-width: 220px; text-align: center; text-transform: uppercase; letter-spacing: 0.8px; }
+.cta-button i { font-size: 1em; }
+.cta-button:hover { background: #c8a265; box-shadow: 0 6px 16px rgba(176, 141, 87, 0.5); transform: translateY(-1px); }
+.secondary-button { display: inline-block; margin-top: 25px; padding: 12px 30px; background: none; color: var(--color-accent-blue-primary); border: 2px solid var(--color-accent-blue-primary); border-radius: 6px; text-decoration: none; font-family: var(--font-secondary); font-size: 1rem; font-weight: 600; transition: all 0.3s ease; text-align: center; letter-spacing: 0.3px; }
+.secondary-button:hover { background: var(--color-accent-blue-primary); color: var(--color-text-on-dark-bg); box-shadow: 0 3px 10px rgba(0, 51, 102, 0.3); }
+.google-reviews-callout { margin-top: 40px; padding-top: 30px; border-top: 1px dashed rgba(0, 0, 0, 0.15); text-align: center; }
+.google-reviews-callout h3 { font-family: var(--font-secondary); font-size: 1.3rem; color: var(--color-text-light); margin-bottom: 18px; display: flex; align-items: center; justify-content: center; gap: 8px; font-weight: 600; }
 .google-reviews-callout h3 i { color: var(--color-accent-gold); font-size: 1.05em; }
-.google-reviews-button {
-    display: inline-flex; align-items: center; gap: 12px;
-    margin-top: 20px;
-    padding: 14px 32px;
-    background: #DB4437;
-    color: var(--color-text-on-dark-bg);
-    text-decoration: none; font-family: var(--font-primary);
-    font-size: 1.1rem; font-weight: 700;
-    border-radius: 6px; transition: all 0.3s ease;
-    box-shadow: 0 3px 8px rgba(219, 68, 55, 0.4);
-    text-transform: uppercase;
-    letter-spacing: 0.6px;
-}
-.google-reviews-button:hover {
-     background: #e06055;
-     transform: translateY(-1px);
-     box-shadow: 0 4px 10px rgba(219, 68, 55, 0.5);
-}
-.google-reviews-button i { font-size: 1.25em; }
-.call-to-action-bottom {
-    background: linear-gradient(135deg, var(--color-accent-blue-primary), #002855);
-    color: var(--color-text-on-dark-bg);
-    text-shadow: 1px 1px 3px rgba(0,0,0,0.4);
-    padding: 45px 30px;
-    margin-bottom: 0;
-}
-.call-to-action-bottom h2 {
-     color: var(--color-text-on-dark-bg);
-     text-shadow: 1px 1px 3px rgba(0,0,0,0.4);
-     padding-bottom: 0;
-     font-size: 2.3rem;
-     letter-spacing: 0.5px;
-}
+.google-reviews-button { display: inline-flex; align-items: center; gap: 10px; margin-top: 18px; padding: 13px 30px; background: #DB4437; color: var(--color-text-on-dark-bg); text-decoration: none; font-family: var(--font-primary); font-size: 1.05rem; font-weight: 700; border-radius: 6px; transition: all 0.3s ease; box-shadow: 0 3px 8px rgba(219, 68, 55, 0.4); text-transform: uppercase; letter-spacing: 0.6px; }
+.google-reviews-button:hover { background: #e06055; transform: translateY(-1px); box-shadow: 0 4px 10px rgba(219, 68, 55, 0.5); }
+.google-reviews-button i { font-size: 1.2em; }
+.call-to-action-bottom { background: linear-gradient(135deg, var(--color-accent-blue-primary), #002855); color: var(--color-text-on-dark-bg); text-shadow: 1px 1px 3px rgba(0,0,0,0.4); padding: 40px 25px; margin-bottom: 0; }
+.call-to-action-bottom h2 { color: var(--color-text-on-dark-bg); text-shadow: 1px 1px 3px rgba(0,0,0,0.4); padding-bottom: 0; font-size: 2.2rem; letter-spacing: 0.5px; }
 .call-to-action-bottom h2::after { display: none; }
-.call-to-action-bottom p {
-    color: rgba(255, 255, 255, 0.94);
-    font-size: 1.1rem;
-    line-height: 1.7;
-}
-.call-to-action-bottom .cta-button {
-    background: var(--color-accent-gold);
-    color: #20150C;
-    box-shadow: 0 5px 15px rgba(176, 141, 87, 0.4);
-    margin-top: 25px;
-}
-.call-to-action-bottom .cta-button:hover {
-    background: #c8a265;
-    box-shadow: 0 7px 18px rgba(176, 141, 87, 0.5);
-}
+.call-to-action-bottom p { color: rgba(255, 255, 255, 0.94); font-size: 1.05rem; line-height: 1.7; }
+.call-to-action-bottom .cta-button { background: var(--color-accent-gold); color: #20150C; box-shadow: 0 5px 15px rgba(176, 141, 87, 0.4); margin-top: 20px; }
+.call-to-action-bottom .cta-button:hover { background: #c8a265; box-shadow: 0 7px 18px rgba(176, 141, 87, 0.5); }
 
-/* Tabs (using styles from previous "Law Theme" attempt) */
-.tabs {
-    position: fixed; bottom: 0; left: 0; width: 100%;
-    z-index: 1000; padding: 0 5px;
-    height: var(--footer-height);
-    background: var(--color-bg-header-footer); /* Consistent with header */
-    backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
-    box-shadow: 0 -3px 10px var(--color-shadow-medium);
-    border-top: 1px solid var(--color-border-subtle);
-    display: flex;
-    justify-content: space-around;
-    align-items: stretch;
-    color: var(--color-text-header-footer);
-}
-.tabs a {
-    color: var(--color-text-header-footer);
-    text-decoration: none;
-    font-family: var(--font-secondary);
-    font-size: 0.8rem;
-    font-weight: 600;
-    padding: 5px 4px;
-    transition: all 0.3s ease;
-    position: relative;
-    text-transform: uppercase;
-    letter-spacing: 0.7px;
-    text-align: center;
-    flex-grow: 1;
-    flex-basis: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    min-width: 0;
-    border-right: 1px solid var(--color-border-subtle);
-}
+/* Tabs (styles largely retained) */
+.tabs { position: fixed; bottom: 0; left: 0; width: 100%; z-index: 1000; padding: 0 5px; height: var(--footer-height); background: var(--color-bg-header-footer); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); box-shadow: 0 -3px 10px var(--color-shadow-medium); border-top: 1px solid var(--color-border-subtle); display: flex; justify-content: space-around; align-items: stretch; color: var(--color-text-header-footer); }
+.tabs a { color: var(--color-text-header-footer); text-decoration: none; font-family: var(--font-secondary); font-size: 0.75rem; font-weight: 600; padding: 5px 3px; transition: all 0.3s ease; position: relative; text-transform: uppercase; letter-spacing: 0.6px; text-align: center; flex-grow: 1; flex-basis: 0; display: flex; align-items: center; justify-content: center; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0; border-right: 1px solid var(--color-border-subtle); }
 .tabs a:last-child { border-right: none; }
-.tabs a::after {
-    content: '';
-    position: absolute;
-    width: 0;
-    height: 3px;
-    bottom: 0px;
-    left: 50%;
-    transform: translateX(-50%);
-    background: var(--color-accent-blue-primary);
-    transition: width 0.35s ease;
-    border-radius: 1.5px 1.5px 0 0;
-}
+.tabs a::after { content: ''; position: absolute; width: 0; height: 2.5px; bottom: 0px; left: 50%; transform: translateX(-50%); background: var(--color-accent-blue-primary); transition: width 0.35s ease; border-radius: 1.5px 1.5px 0 0; }
 .tabs a:hover { color: var(--color-accent-blue-primary); }
 .tabs a.active { color: var(--color-accent-blue-primary); font-weight: 700; }
-.tabs a:hover::after, .tabs a.active::after { width: 70%; }
+.tabs a:hover::after, .tabs a.active::after { width: 65%; }
 
-/* Animations */
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(20px); }
-    to { opacity: 1; transform: translateY(0); }
+/* --- NEW FOOTER STYLES --- */
+.site-footer {
+    background-color: #202833; /* Dark, professional footer background */
+    color: #aab8c2; /* Lighter text for contrast */
+    text-align: center;
+    padding: 25px 15px;
+    font-family: var(--font-secondary);
+    font-size: 0.9rem;
+    line-height: 1.6;
+    position: relative; /* For stacking context if needed, or if body padding isn't enough */
+    /* This footer is now part of the document flow. body padding-bottom accounts for fixed tabs */
+}
+.footer-content {
+    max-width: var(--content-max-width-mobile);
+    margin: 0 auto;
+}
+.footer-social-media {
+    margin-bottom: 18px;
+}
+.footer-social-media a {
+    color: #ced6dc; /* Slightly brighter for icons */
+    text-decoration: none;
+    font-size: 1.6rem; /* Larger icons */
+    margin: 0 12px; /* Spacing between icons */
+    transition: color 0.3s ease;
+}
+.footer-social-media a:hover {
+    color: var(--color-accent-gold); /* Gold hover for icons */
+}
+.footer-copyright {
+    margin-bottom: 8px;
+    font-size: 0.85rem;
+}
+.footer-privacy a {
+    color: #aab8c2;
+    text-decoration: none;
+    font-size: 0.85rem;
+    border-bottom: 1px dotted #aab8c2;
+    transition: color 0.3s ease, border-bottom-color 0.3s ease;
+}
+.footer-privacy a:hover {
+    color: var(--color-accent-gold);
+    border-bottom-color: var(--color-accent-gold);
 }
 
-/* Focus outline for accessibility */
-a:focus-visible, button:focus-visible, input:focus-visible {
-    outline: 3px solid var(--color-accent-blue-secondary);
-    outline-offset: 2px;
-    border-radius: 4px;
-    box-shadow: 0 0 0 3px rgba(10, 88, 166, 0.3);
-}
+/* Animations & Focus */
+@keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+a:focus-visible, button:focus-visible, input:focus-visible { outline: 2px solid var(--color-accent-blue-secondary); outline-offset: 2px; border-radius: 3px; box-shadow: 0 0 0 2px rgba(10, 88, 166, 0.25); }
 
 /* Responsive adjustments */
 @media (min-width: 600px) {
-    body { font-size: 19px; }
-    .header-firm-title { font-size: 2rem; }
-    .loader-logo-img { max-width: 40%; max-height: 180px; }
-    .loader-title { font-size: 2rem; }
-    .loading-bar-container { width: 50%; max-width: 300px; height: 10px; }
+    body { font-size: 19px; padding-bottom: calc(var(--footer-height) + 80px); } /* Adjust for taller footer on tablet */
+    .header-firm-title { font-size: 2.2rem; letter-spacing: 1.5px; padding: 8px 0; }
+    .loader-logo-img { max-width: 35%; max-height: 150px; }
+    .loader-title { font-size: 2.2rem; }
+    .loading-bar-container { width: 50%; max-width: 350px; height: 12px; }
 
     .page-content-wrapper { padding: 0 20px; }
-    .content-section {
-        padding: 45px 35px; margin: 50px auto; max-width: 800px;
-        background-color: rgba(255, 255, 255, 0.85); /* Slightly more opaque on tablet for readability */
-    }
-    .testimonials-section { background-color: rgba(240, 242, 245, 0.85); }
-    .testimonial-item { background-color: rgba(255, 255, 255, 0.92); }
-
-     .content-section h2 { font-size: 2.6rem; padding-bottom: 20px; margin-bottom: 35px;}
-     .content-section h2::after { width: 90px; height: 4px; }
+    .content-section { padding: 40px 30px; margin: 45px auto; max-width: 800px; background-color: rgba(255, 255, 255, 0.82); }
+    .testimonials-section { background-color: rgba(240, 242, 245, 0.82); }
+    .testimonial-item { background-color: rgba(255, 255, 255, 0.90); }
+     .content-section h2 { font-size: 2.5rem; padding-bottom: 18px; margin-bottom: 30px;}
+     .content-section h2::after { width: 80px; height: 3.5px; }
     .content-section p, .content-section ul { font-size: 1.1rem; line-height: 1.85; }
-    .hero h2 { font-size: 2.8rem; }
-    .hero-subtitle { font-size: 1.45rem; }
-    .testimonial-grid { grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 35px; }
-    .tabs a { font-size: 0.9rem; padding: 10px 15px; flex-grow: 0; flex-basis: auto; min-width: 110px; max-width: 160px; letter-spacing: 0.5px; }
-     .tabs a::after { width: 80%; }
+    .hero h2 { font-size: 2.6rem; } .hero-subtitle { font-size: 1.35rem; }
+    .testimonial-carousel { min-height: 200px; } /* Adjust if content is taller on tablet */
+    .tabs a { font-size: 0.85rem; padding: 10px 12px; letter-spacing: 0.5px; }
+     .tabs a::after { width: 75%; }
+    .site-footer { padding: 30px 20px; }
+    .footer-social-media a { font-size: 1.8rem; margin: 0 15px; }
+    .footer-copyright, .footer-privacy a { font-size: 0.9rem; }
 }
 
 @media (max-width: 360px) { /* Very narrow screens */
-    body { font-size: 17px; }
-    .header-firm-title { font-size: 1.4rem; }
-    .loader-logo-img { max-width: 55%; max-height: 100px; margin-bottom: 15px; }
-    .loader-title { font-size: 1.3rem; margin-bottom: 20px; }
-    .loading-bar-container { width: 70%; height: 6px; }
+    body { font-size: 17px; padding-bottom: calc(var(--footer-height) + 50px); }
+    .header-firm-title { font-size: 1.6rem; letter-spacing: 0.5px; }
+    .loader-logo-img { max-width: 50%; max-height: 80px; margin-bottom: 15px; }
+    .loader-title { font-size: 1.4rem; margin-bottom: 20px; }
+    .loading-bar-container { width: 80%; height: 8px; }
 
-    .content-section { padding: 30px 20px; margin: 35px auto; background-color: rgba(255, 255, 255, 0.80); }
-    .testimonials-section { background-color: rgba(240, 242, 245, 0.80); }
-    .testimonial-item { background-color: rgba(255, 255, 255, 0.88); }
-
-    .content-section p, .content-section ul { font-size: 1rem; line-height: 1.75; }
-    .content-section h2 { font-size: 2rem; }
-    .hero h2 { font-size: 2.1rem; }
-    .hero-subtitle { font-size: 1.15rem; }
-    .cta-button { padding: 15px 30px; font-size: 1.05rem; }
-    .secondary-button { padding: 11px 28px; font-size: 0.95rem; }
-    .tabs a { font-size: 0.75rem; letter-spacing: 0.5px;}
+    .content-section { padding: 25px 15px; margin: 30px auto; background-color: rgba(255, 255, 255, 0.75); }
+    .testimonials-section { background-color: rgba(240, 242, 245, 0.75); }
+    .testimonial-item { background-color: rgba(255, 255, 255, 0.85); }
+    .content-section p, .content-section ul { font-size: 0.95rem; line-height: 1.7; }
+    .content-section h2 { font-size: 1.9rem; }
+    .hero h2 { font-size: 2rem; } .hero-subtitle { font-size: 1.1rem; }
+    .cta-button { padding: 14px 28px; font-size: 1rem; }
+    .secondary-button { padding: 10px 25px; font-size: 0.9rem; }
+    .tabs a { font-size: 0.7rem; letter-spacing: 0.4px;}
+    .footer-social-media a { font-size: 1.4rem; margin: 0 10px; }
 }
