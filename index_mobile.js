@@ -1,75 +1,101 @@
 // --- Initial Page Load Loader Fade Out ---
-// This runs when the initial page load is complete
 window.addEventListener('load', () => {
     const loader = document.getElementById('loader');
     const bodyElement = document.body;
 
-    // Add 'loaded' class to body to trigger fade-in defined in CSS
     if (bodyElement) {
         bodyElement.classList.add('loaded');
     } else {
-        console.error("Body element not found.");
+        console.error("Body element not found on load.");
     }
 
-    // Fade out and hide the loader after a short delay
     if (loader) {
-        // Add the 'hidden' class to trigger the CSS fade-out transition
         setTimeout(() => {
             loader.classList.add('hidden');
-        }, 500); // Increased delay slightly to match enhanced visuals
+        }, 400); // Slightly shorter delay, CSS transition handles smoothness
     } else {
-        console.error("Loader element not found.");
+        console.error("Loader element not found on load.");
     }
 });
 
+// --- Handle Loader on Back/Forward Navigation (bfcache) ---
+window.addEventListener('pageshow', (event) => {
+    const loader = document.getElementById('loader');
+    const bodyElement = document.body;
+
+    if (event.persisted && loader) {
+        // Page is being restored from the bfcache
+        // Instantly hide loader and ensure body is visible
+        loader.classList.add('hidden');
+        if (bodyElement) {
+            bodyElement.classList.add('loaded'); // Ensure body is faded in
+        }
+        console.log("Page restored from bfcache, loader hidden.");
+    }
+    // For non-bfcache loads, the 'load' event will handle it or it's a new navigation.
+});
+
+
 // --- Page Transition Loader ---
-// This runs when the DOM is ready to attach event listeners
 document.addEventListener('DOMContentLoaded', () => {
     const loader = document.getElementById('loader');
 
-    // Select all internal links that navigate to a different page
-    const internalLinks = document.querySelectorAll('a[href]:not([href^="#"]):not([href^="tel:"]):not([href^="mailto:"]):not([href^="javascript:"]):not([href^="http"]):not([href^="https"]):not([target="_blank"])'); // Exclude target="_blank" links
+    const internalLinks = document.querySelectorAll(
+        'a[href]:not([href^="#"]):not([href^="tel:"]):not([href^="mailto:"]):not([href^="javascript:"]):not([target="_blank"])'
+    );
+    // Further refine to exclude links that don't actually navigate away from the domain,
+    // or ensure the href is a relative path or same-origin absolute path.
+    // For simplicity, this selector is kept, but for complex sites, it might need more care.
 
     internalLinks.forEach(link => {
         link.addEventListener('click', (e) => {
             const destination = link.getAttribute('href');
+            const currentHostname = window.location.hostname;
+            let destinationHostname;
+            try {
+                destinationHostname = new URL(destination, window.location.href).hostname;
+            } catch (error) {
+                // Invalid URL, likely a malformed href, let browser handle or ignore
+                console.warn("Invalid URL for link:", destination);
+                return;
+            }
 
-            // Simple check if destination is potentially the current page
-            // This check is basic and might need refinement depending on your URL structure
-             const currentPagePath = window.location.pathname;
-             const destinationPath = new URL(destination, window.location.href).pathname; // Resolve destination path relative to current page
+            // Only trigger for same-origin navigations
+            if (destinationHostname !== currentHostname) {
+                return; // Let external links navigate normally
+            }
 
-             if (destinationPath === currentPagePath || destination === '#') {
-                 // If linking to the current page or an anchor, do nothing (let default behavior happen)
+            const currentPagePath = window.location.pathname.replace(/\/$/, ""); // Normalize by removing trailing slash
+            const destinationPathObject = new URL(destination, window.location.href);
+            const destinationPath = destinationPathObject.pathname.replace(/\/$/, ""); // Normalize
+
+            // If linking to the exact same page (e.g. index_mobile.html to index_mobile.html) or an anchor on the same page
+            if (destinationPath === currentPagePath && destinationPathObject.hash) {
+                 // Allow smooth scroll for on-page anchors
+                 return;
+            }
+             if (destinationPath === currentPagePath && !destinationPathObject.hash) {
+                 // Re-clicking the current page link - do nothing or perhaps a gentle visual cue
+                 e.preventDefault(); // Prevent reload if desired
+                 console.log("Link to current page clicked, no transition.");
                  return;
              }
 
 
-            // Prevent the default navigation
+            // Prevent default navigation to show loader
             e.preventDefault();
 
-            // Show the loader overlay immediately
             if (loader) {
-                 loader.classList.remove('hidden');
-
-                 // --- Ensure loader styling for transition ---
-                 // Override any initial centering/load styles to be a full overlay
-                 loader.style.position = 'fixed';
-                 loader.style.top = '0';
-                 loader.style.left = '0';
-                 loader.style.transform = 'none';
-                 loader.style.width = '100%';
-                 loader.style.height = '100%';
-                 loader.style.background = 'rgba(255, 255, 255, 0.95)'; // Match CSS overlay background
-                 loader.style.display = 'flex'; // Ensure flex display for centering spinner
+                loader.classList.remove('hidden'); // Show loader
+                // Styles for loader are primarily handled by CSS, 'hidden' class toggles opacity/visibility
+            } else {
+                console.error("Loader element not found for page transition.");
             }
 
-            // Wait a brief moment for the loader animation to show, then navigate
+            // Navigate after a short delay for loader to appear
             setTimeout(() => {
                 window.location.href = destination;
-            }, 350); // Slightly increased delay for visual effect
+            }, 300); // Adjust delay as needed for visual balance
         });
     });
-
-    // Firebase code remains removed.
 });
