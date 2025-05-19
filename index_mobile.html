@@ -12,33 +12,29 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
 </head>
 <body>
+    <!-- MODIFIED LOADER STRUCTURE -->
     <div id="loader" class="loader">
         <img src="logo.jpg" alt="Kershaw Law Firm Loading" class="loader-logo-img">
         <h1 class="loader-title">The Kershaw Law Firm P.C.</h1>
-        <div class="loading-bar-container">
-             <div class="loading-bar-progress"></div>
-        </div>
+        <!-- The spinner will be created by the .loader::after pseudo-element in CSS -->
     </div>
 
     <div id="background-static"></div>
 
     <header class="header">
         <div class="header-content">
-             <a href="index_mobile.html" class="logo-link" aria-label="Home - The Kershaw Law Firm">
-                <!-- If you want the text title here instead of only in loader -->
-                <h1 class="header-firm-title">The Kershaw Law Firm P.C.</h1>
-                <!-- Or if you want the logo in the header:
-                <img src="logo.jpg" alt="Kershaw Law Firm Logo" class="header-logo">
-                Your CSS for .header-logo was missing, so I'm defaulting to the text title.
-                -->
-             </a>
+            <div class="logo-container">
+                 <a href="index_mobile.html" class="logo-link" aria-label="Home - The Kershaw Law Firm">
+                    <img src="logo.jpg" alt="Kershaw Law Firm Logo" class="header-logo">
+                 </a>
+            </div>
         </div>
     </header>
 
     <div class="page-content-wrapper">
         <section class="hero">
             <div class="hero-content">
-                <h2 class="hero-main-title">Specializing in H-2B and H-2A Visas</h2>
+                <h2>Specializing in H-2B and H-2A Visas</h2>
                 <p class="hero-subtitle">Expert legal guidance for temporary work programs across the U.S.</p>
                 <a href="getstarted_mobile.html" class="cta-button">
                     <i class="fa-solid fa-rocket"></i> Get Started Today
@@ -74,15 +70,21 @@
         <section id="testimonials" class="content-section testimonials-section">
              <div class="section-container">
                 <h2>Client Successes</h2>
-                 <div id="google-reviews-container">
-                     <p class="loading-reviews-text">Loading reviews...</p>
-                     <!-- Google Reviews will be dynamically injected here -->
+                 <div class="testimonial-grid">
+                     <div class="testimonial-item">
+                        <p>"Working with The Kershaw Law Firm transformed our H-2B filing experience. Their team is incredibly knowledgeable, responsive, and supportive. The process was smooth, and we secured our workers on time. Truly exceptional service!"</p>
+                        <p class="testimonial-author">- John D., Construction Business Owner</p>
+                    </div>
+                     <div class="testimonial-item">
+                        <p>"We rely heavily on seasonal H-2A workers. The Kershaw Law Firm has been our trusted legal partner for years. Their attention to detail and proactive communication make a huge difference. They are essential to our operation."</p>
+                        <p class="testimonial-author">- Sarah K., Farm Administrator</p>
+                    </div>
                  </div>
                 <div class="google-reviews-callout">
                      <h3><i class="fas fa-star"></i> <i class="fas fa-star"></i> <i class="fas fa-star"></i> <i class="fas fa-star"></i> <i class="fas fa-star"></i> See More 5-Star Reviews!</h3>
                      <p>Client satisfaction is our priority. Read authentic feedback from businesses like yours on Google.</p>
-                     <a href="#" id="google-reviews-main-link" class="google-reviews-button" aria-label="Read Google Reviews" target="_blank" rel="noopener noreferrer">
-                         <i class="fab fa-google"></i> Read All Google Reviews
+                     <a href="#" class="google-reviews-button" aria-label="Read Google Reviews" target="_blank">
+                         <i class="fab fa-google"></i> Read Google Reviews
                      </a>
                 </div>
              </div>
