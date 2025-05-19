@@ -2,7 +2,7 @@
 
 // --- Strict Mode & Global Constants ---
 "use strict";
-const INITIAL_SPLASH_DURATION_MS = 100; // Corresponds to CSS --loader-display-duration for splash
+const INITIAL_SPLASH_DURATION_MS = 100; // Fast for text-based splash
 const PAGE_TRANSITION_ANIMATION_MS = 300;
 
 // --- Utility Functions ---
@@ -41,21 +41,24 @@ function initPageLoad() {
     mainContent.style.visibility = 'hidden';
     mainContent.style.opacity = '0';
     
-    // Set CSS variable for splash screen duration if needed by CSS animations directly
-    document.documentElement.style.setProperty('--loader-display-duration', `${INITIAL_SPLASH_DURATION_MS / 1000}s`);
+    // CSS directly handles its own timing via .hidden class transition now.
+    // document.documentElement.style.setProperty('--loader-display-duration', `${INITIAL_SPLASH_DURATION_MS / 1000}s`); // Not strictly needed if CSS uses fixed transition on .hidden
 
     setTimeout(() => {
-        splashLoader.classList.add('hidden');
+        if (splashLoader) { // Check if splashLoader still exists
+            splashLoader.classList.add('hidden');
+        }
+        
         mainContent.style.visibility = 'visible';
         mainContent.style.transition = `opacity ${PAGE_TRANSITION_ANIMATION_MS / 1000}s ease-out`;
         mainContent.style.opacity = '1';
         bodyElement.classList.add('loaded');
 
-        splashLoader.addEventListener('transitionend', () => {
-            if (splashLoader.classList.contains('hidden')) {
-                // splashLoader.remove(); // Optional
-            }
-        }, { once: true });
+        if (splashLoader) {
+            splashLoader.addEventListener('transitionend', () => {
+                // if (splashLoader.classList.contains('hidden')) splashLoader.remove(); // Optional
+            }, { once: true });
+        }
     }, INITIAL_SPLASH_DURATION_MS);
 }
 
@@ -111,14 +114,12 @@ window.addEventListener('pageshow', (event) => {
             setTimeout(window.initScrollAnimations, 100);
         }
     } else {
+        // For fresh loads, initPageLoad handles initial splash and main content visibility.
         if (mainContent && splashLoader && !splashLoader.classList.contains('hidden')) {
             mainContent.style.visibility = 'hidden';
             mainContent.style.opacity = '0';
-        } else if (mainContent && mainContent.style.visibility === 'hidden') {
-             // If splash is already hidden or not present, ensure content becomes visible
-            mainContent.style.visibility = 'visible';
-            mainContent.style.opacity = '1';
         }
+        // initPageLoad is primary controller for fresh load main content appearance.
     }
 });
 
@@ -138,24 +139,30 @@ document.addEventListener('DOMContentLoaded', () => {
         internalLinks.forEach(link => {
             link.addEventListener('click', (e) => {
                 const destination = link.getAttribute('href');
-                if (!destination || destination.startsWith('javascript:')) return;
+                if (!destination || destination.startsWith('javascript:void(0)')) return;
+                
+                let isExternalOrProtocol = false;
                 try {
                     const currentHostname = window.location.hostname;
                     const destinationUrl = new URL(destination, window.location.href);
-                    if (destinationUrl.hostname !== currentHostname && destinationUrl.hostname !== "") return; 
+                    if (destinationUrl.hostname !== currentHostname && destinationUrl.hostname !== "") {
+                        isExternalOrProtocol = true;
+                    }
                 } catch (error) { return; } 
+                if (isExternalOrProtocol) return;
                 
                 const currentPagePath = window.location.pathname.replace(/\/$/, "");
                 const destinationPathObject = new URL(destination, window.location.href);
-                const destinationPath = destinationPathObject.pathname.replace(/\/$/, "");
+                const destinationPathClean = destinationPathObject.pathname.replace(/\/$/, "");
 
-                if (destinationPath === currentPagePath && destinationPathObject.hash) return; 
-                if (destinationPath === currentPagePath && !destinationPathObject.hash) { e.preventDefault(); return; }
+                if (destinationPathClean === currentPagePath && destinationPathObject.hash) return; 
+                if (destinationPathClean === currentPagePath && !destinationPathObject.hash) { e.preventDefault(); return; }
 
                 e.preventDefault();
                 mainContent.style.transition = `opacity ${PAGE_TRANSITION_ANIMATION_MS / 1000}s ease-out`;
                 mainContent.style.opacity = '0';
-                transitionLoader.classList.remove('hidden');
+                if(transitionLoader) transitionLoader.classList.remove('hidden'); // Show loader
+                
                 setTimeout(() => { window.location.href = destination; }, PAGE_TRANSITION_ANIMATION_MS + 50);
             });
         });
@@ -166,10 +173,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function updateFooterYear() {
         const yearSpan = document.getElementById('current-year');
         if (yearSpan) {
-            // If the year is hardcoded to 2025 in HTML, this line can be removed or adjusted
-            // For dynamic year: yearSpan.textContent = new Date().getFullYear();
-            // Forcing 2025 as requested for this scenario:
-            yearSpan.textContent = '2025';
+            yearSpan.textContent = new Date().getFullYear(); // UPDATED: Dynamically set current year
         }
     }
     updateFooterYear();
@@ -179,7 +183,7 @@ document.addEventListener('DOMContentLoaded', () => {
         window.initScrollAnimations();
     }
 
-    // 4. Smooth Scroll for Anchor Links (if any are added to FAQ page)
+    // 4. Smooth Scroll for Anchor Links
     function initSmoothScroll() {
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
@@ -190,7 +194,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         if (targetElement) {
                             e.preventDefault();
                             const header = document.getElementById('site-header');
-                            const headerOffset = header ? header.offsetHeight : (parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--header-height-mobile')) || 70);
+                            const headerOffset = header ? header.offsetHeight : (parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--header-height-mobile').replace('px', '')) || 70);
                             const elementPosition = targetElement.getBoundingClientRect().top;
                             const offsetPosition = elementPosition + window.pageYOffset - headerOffset - 20;
                             window.scrollTo({ top: offsetPosition, behavior: "smooth" });
@@ -238,7 +242,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         faqItems.forEach(item => {
             const questionButton = item.querySelector('.faq-question');
-            const answerDiv = item.querySelector('.faq-answer');
+            const answerDiv = item.querySelector('.faq-answer'); // Not directly used for style, CSS handles it
 
             if (!questionButton || !answerDiv) {
                 console.warn('FAQ item missing question button or answer div:', item);
@@ -248,14 +252,13 @@ document.addEventListener('DOMContentLoaded', () => {
             questionButton.addEventListener('click', () => {
                 const isCurrentlyActive = item.classList.contains('active');
 
-                // Close all other active items
-                faqItems.forEach(otherItem => {
-                    if (otherItem !== item && otherItem.classList.contains('active')) {
-                        otherItem.classList.remove('active');
-                        otherItem.querySelector('.faq-question').setAttribute('aria-expanded', 'false');
-                        // CSS will handle the transition for max-height, opacity, padding
-                    }
-                });
+                // Optional: Close all other active items if you want only one open at a time
+                // faqItems.forEach(otherItem => {
+                //     if (otherItem !== item && otherItem.classList.contains('active')) {
+                //         otherItem.classList.remove('active');
+                //         otherItem.querySelector('.faq-question').setAttribute('aria-expanded', 'false');
+                //     }
+                // });
 
                 // Toggle current item
                 if (isCurrentlyActive) {
