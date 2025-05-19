@@ -39,12 +39,8 @@
     --color-text-link: var(--color-secondary-brand);
     --color-text-link-hover: var(--color-accent-gold);
 
-    --color-bg-light: #FFFFFF; /* Pure White */
+    --color-bg-light: #FFFFFF; 
     --color-bg-light-rgb: 255, 255, 255;
-    /* --color-bg-off-white: #F8F9FA; /* Kept for reference if needed, but focusing on white */
-    /* --color-bg-off-white-rgb: 248, 249, 250; */
-    /* --color-bg-light-accent: #EBF0F5; /* Kept for reference */
-    /* --color-bg-light-accent-rgb: 235, 240, 245; */
     --color-bg-medium-grey: #E9ECEF;
     --color-bg-medium-grey-rgb: 233, 236, 239;
     --color-bg-dark: var(--color-primary-brand);
@@ -95,6 +91,8 @@
     --color-facebook: #1877F2;
     --color-linkedin: #0A66C2;
     --color-x-twitter: #000000;
+    --color-instagram: #E1306C; /* Instagram Pink/Red */
+    --color-tiktok: #000000;    /* TikTok Black (common) or #00F2EA (Teal) / #FF0050 (Pink) */
 }
 
 *, *::before, *::after {
@@ -109,14 +107,14 @@ html {
     scroll-behavior: smooth;
     font-size: 100%;
     scrollbar-width: thin;
-    scrollbar-color: var(--color-secondary-brand) var(--color-bg-light-accent, #EBF0F5); /* Added fallback for clarity */
+    scrollbar-color: var(--color-secondary-brand) var(--color-bg-medium-grey, #EBF0F5);
 }
 html::-webkit-scrollbar { width: 10px; }
-html::-webkit-scrollbar-track { background: var(--color-bg-light-accent, #EBF0F5); }
+html::-webkit-scrollbar-track { background: var(--color-bg-medium-grey, #EBF0F5); }
 html::-webkit-scrollbar-thumb {
     background-color: var(--color-secondary-brand);
     border-radius: var(--border-radius-medium);
-    border: 2px solid var(--color-bg-light-accent, #EBF0F5);
+    border: 2px solid var(--color-bg-medium-grey, #EBF0F5);
 }
 
 /* 2. BODY & TYPOGRAPHY BASE
@@ -126,7 +124,7 @@ body {
     font-size: 1.1rem;
     line-height: 1.75;
     color: var(--color-text-dark);
-    background-color: var(--color-bg-light); /* Base body BG is white, but mostly covered */
+    background-color: var(--color-bg-light); 
     overflow-x: hidden;
     position: relative;
     opacity: 0;
@@ -161,8 +159,8 @@ h1.firm-name-header {
 }
 h1.firm-name-header .firm-name-pc {
     font-weight: 600;
-    font-size: 1em; /* Changed from 0.8em */
-    opacity: 1; /* Changed from 0.9 */
+    font-size: 1em; 
+    opacity: 1; 
     margin-left: var(--spacing-xs);
 }
 
@@ -340,9 +338,8 @@ figcaption {
     position: fixed; top: 0; left: 0; width: 100%;
     z-index: 1000;
     height: var(--header-height-mobile);
-    /* WHITE-BASED TRANSPARENCY */
-    background-color: rgba(var(--color-bg-light-rgb), 0.55); /* e.g., 55% opacity white */
-    backdrop-filter: blur(18px); /* Stronger blur */
+    background-color: rgba(var(--color-bg-light-rgb), 0.3); /* Changed from 0.55 for more transparency */
+    backdrop-filter: blur(18px); 
     -webkit-backdrop-filter: blur(18px);
     box-shadow: 0 2px 10px var(--color-shadow-medium);
     border-bottom: 1px solid var(--color-border-subtle);
@@ -369,7 +366,7 @@ figcaption {
 }
 .firm-title-link:hover .firm-name-pc,
 .firm-title-link:focus-visible .firm-name-pc {
-    opacity: 1; /* Already 1, but ensures hover consistency */
+    opacity: 1; 
 }
 
 
@@ -390,21 +387,20 @@ figcaption {
     margin-left: auto;
     margin-right: auto;
 }
-/* WHITE-BASED TRANSPARENCY for general content sections */
 .content-section:nth-child(odd),
-.content-section:nth-child(even) { /* Apply same style to both now */
-     background-color: rgba(var(--color-bg-light-rgb), 0.5); /* Changed from 0.6 for more transparency */
+.content-section:nth-child(even) { 
+     background-color: rgba(var(--color-bg-light-rgb), 0.15); /* Changed from 0.5 for much more transparency */
      backdrop-filter: blur(16px);
      -webkit-backdrop-filter: blur(16px);
 }
 .content-section h2, .content-section h3, .content-section p, .content-section li {
-    color: var(--color-text-dark); /* Ensure primary text is dark for readability */
+    color: var(--color-text-dark); 
 }
 .content-section p.section-intro-text, .content-section .testimonial-text {
-    color: var(--color-text-medium); /* Sub-texts can be medium */
+    color: var(--color-text-medium); 
 }
 .content-section .service-list-detailed strong {
-    color: var(--color-primary-brand); /* Headings within sections */
+    color: var(--color-primary-brand); 
 }
 
 
@@ -442,8 +438,8 @@ figcaption {
     background: none;
     overflow: hidden;
 }
-.hero-content-box {
-    background-color: rgba(var(--color-primary-brand-rgb), 0.25); /* Changed from 0.40 for more transparency */
+.hero-content-box { /* This box uses primary brand color transparency, not white */
+    background-color: rgba(var(--color-primary-brand-rgb), 0.25); 
     backdrop-filter: blur(14px); 
     -webkit-backdrop-filter: blur(14px);
     padding: var(--spacing-xl) var(--spacing-lg);
@@ -479,7 +475,7 @@ figcaption {
     margin-bottom: var(--spacing-md);
     transition: background-color var(--transition-base), transform var(--transition-base);
     border-radius: var(--border-radius-medium);
-    background-color: transparent;
+    background-color: transparent; /* Items themselves are transparent, relying on parent section */
 }
 .service-list-detailed li:last-child { border-bottom: none; }
 .service-list-detailed li:hover {
@@ -525,7 +521,7 @@ figcaption {
     overflow: hidden;
     border-radius: var(--border-radius-large);
     box-shadow: 0 10px 35px var(--color-shadow-strong);
-    background-color: rgba(var(--color-bg-light-rgb), 0.45); /* Changed from 0.55 for more transparency */
+    background-color: rgba(var(--color-bg-light-rgb), 0.1); /* Changed from 0.45 for much more transparency */
     backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);
 }
@@ -612,7 +608,7 @@ figcaption {
 .google-reviews-callout {
     margin-top: var(--spacing-xxxl);
     padding: var(--spacing-xl) var(--spacing-lg);
-    background: rgba(var(--color-bg-light-rgb), 0.45); /* Changed from 0.55 for more transparency */
+    background: rgba(var(--color-bg-light-rgb), 0.1); /* Changed from 0.45 for much more transparency */
     backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);
     border-radius: var(--border-radius-large);
@@ -755,9 +751,8 @@ figcaption {
 .mobile-tabs {
     position: fixed; bottom: 0; left: 0; width: 100%;
     height: var(--tabs-height-mobile);
-    /* WHITE-BASED TRANSPARENCY */
-    background-color: rgba(var(--color-bg-light-rgb), 0.65); /* e.g. 65% opacity white */
-    backdrop-filter: blur(20px); /* Strongest blur for nav */
+    background-color: rgba(var(--color-bg-light-rgb), 0.4); /* Changed from 0.65 for more transparency */
+    backdrop-filter: blur(20px); 
     -webkit-backdrop-filter: blur(20px);
     box-shadow: 0 -3px 15px var(--color-shadow-medium);
     border-top: 1px solid rgba(var(--color-primary-brand-rgb),0.08);
@@ -873,6 +868,9 @@ figcaption {
 .social-icon.facebook { color: var(--color-facebook) !important; }
 .social-icon.linkedin { color: var(--color-linkedin) !important; }
 .social-icon.x-twitter { color: var(--color-x-twitter) !important; }
+.social-icon.instagram { color: var(--color-instagram) !important; }
+.social-icon.tiktok { color: var(--color-tiktok) !important; }
+
 
 .footer-links {
     margin-bottom: var(--spacing-md);
@@ -984,7 +982,7 @@ figcaption {
 @media (min-width: 1024px) {
     body { font-size: 1.18rem; }
     html {
-        scrollbar-color: var(--color-accent-gold) var(--color-bg-light-accent, #EBF0F5);
+        scrollbar-color: var(--color-accent-gold) var(--color-bg-medium-grey, #EBF0F5);
     }
     html::-webkit-scrollbar-thumb {
         background-color: var(--color-accent-gold);
