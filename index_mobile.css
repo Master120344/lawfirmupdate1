@@ -152,7 +152,7 @@ img {
 
 /* 3. LOADER STYLES
 -------------------------------------------------- */
-.loader {
+.loader, .splash-loader { /* Combined .loader and .splash-loader for general fixed overlay */
     position: fixed; top: 0; left: 0; width: 100%; height: 100vh;
     background-color: var(--color-loader-bg);
     display: flex;
@@ -166,25 +166,40 @@ img {
     transition: opacity 0.6s ease-out, visibility 0.6s ease-out;
     padding: calc(var(--spacing-unit) * 3);
 }
-.loader.hidden {
+.loader.hidden, .splash-loader.hidden {
     opacity: 0;
     visibility: hidden;
     pointer-events: none;
 }
-.loader-logo-img {
-    width: clamp(100px, 30vw, 150px);
-    height: auto;
-    margin-bottom: calc(var(--spacing-unit) * 3);
-    animation: pulseLogo 2.5s infinite ease-in-out alternate;
-    border-radius: var(--border-radius-small); /* Or 50% if you prefer circular */
-    box-shadow: 0 0 20px rgba(255,255,255,0.1);
+
+/* Styles for the text-based splash screen */
+.splash-loader .splash-text-content {
+    text-align: center;
 }
-@keyframes pulseLogo {
+.splash-loader .splash-main-title {
+    font-family: var(--font-headings);
+    font-size: clamp(1.8rem, 6vw, 2.5rem);
+    color: var(--color-loader-text);
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    margin-bottom: var(--spacing-unit);
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.15);
+    animation: pulseLogo 2.5s infinite ease-in-out alternate;
+}
+.splash-loader .splash-main-title .splash-main-pc {
+    font-weight: 600; /* Slightly less than main title if desired, or same */
+    font-size: 0.8em; /* Example: make "P.C." slightly smaller */
+    display: inline-block; /* Ensures it's treated as part of the flow */
+}
+
+@keyframes pulseLogo { /* Re-used from original .loader-logo-img */
     from { transform: scale(0.98); opacity: 0.85; }
     to { transform: scale(1.02); opacity: 1; }
 }
+
+/* Original loader text styles (can be used by page transition loader or if splash needs more) */
 .loader-text-wrapper { margin-bottom: calc(var(--spacing-unit) * 4); }
-.loader-main-title {
+.loader-main-title { /* This class name can be used by other loaders if needed */
     font-family: var(--font-headings); /* Cinzel */
     font-size: clamp(1.6rem, 5vw, 2.2rem);
     color: var(--color-loader-text);
@@ -220,6 +235,20 @@ img {
     0% { width: 0%; }
     100% { width: 100%; }
 }
+
+/* Page transition spinner (from original HTML structure, if needed) */
+.page-transition-loader .spinner {
+    width: 50px;
+    height: 50px;
+    border: 5px solid var(--color-loader-bar-track);
+    border-top-color: var(--color-accent-gold);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
 
 /* 4. BACKGROUND STYLES
 -------------------------------------------------- */
@@ -266,29 +295,36 @@ img {
     justify-content: flex-start; /* Align logo to left */
     align-items: center;
 }
-.logo-container { display: flex; align-items: center; }
-.logo-link {
+.firm-title-container { display: flex; align-items: center; } /* Ensure container is flex if needed */
+
+.firm-title-link {
     display: flex;
     align-items: center;
     text-decoration: none !important;
 }
-.logo-link:hover .header-firm-title-text { color: var(--color-accent-gold); }
-.header-logo {
-    height: calc(var(--header-height-mobile) - var(--spacing-unit) * 3); /* Responsive logo height */
-    width: auto;
-    margin-right: calc(var(--spacing-unit) * 1.5);
-    border-radius: var(--border-radius-small); /* Optional: if your logo suits it */
+.firm-title-link:hover .firm-name-header { /* Updated selector */
+    color: var(--color-accent-gold);
 }
-.header-firm-title-text {
+
+.firm-name-header { /* Styles for the h1 firm name in header */
     font-family: var(--font-headings);
-    font-size: clamp(1rem, 4vw, 1.25rem); /* Slightly smaller, more refined */
+    font-size: clamp(1.05rem, 4.2vw, 1.3rem); /* Slightly adjusted for fit */
     color: var(--color-primary-brand);
     font-weight: 600; /* Cinzel Semibold */
     margin: 0;
     line-height: 1.2;
     letter-spacing: 0.2px;
     transition: color var(--transition-fast);
+    white-space: nowrap; /* Ensures it stays on one line */
+    overflow: hidden; /* Prevents overflow if too long, though clamp should help */
+    text-overflow: ellipsis; /* Adds ... if it still overflows (fallback) */
 }
+.firm-name-header .firm-name-pc {
+    font-weight: 500; /* Adjust P.C. styling as needed */
+    font-size: 0.9em;
+    margin-left: calc(var(--spacing-unit) * 0.5);
+}
+
 
 /* 6. PAGE CONTENT WRAPPER & SECTION BASE
 -------------------------------------------------- */
@@ -305,10 +341,10 @@ img {
     position: relative;
 }
 .content-section:nth-child(odd) {
-     background-color: rgba(255, 255, 255, 0.92); /* Increased opacity */
+     background-color: rgba(255, 255, 255, 0.85); /* Increased transparency */
 }
 .content-section:nth-child(even) {
-     background-color: rgba(248, 249, 250, 0.95); /* Slightly different, more opaque */
+     background-color: rgba(248, 249, 250, 0.88); /* Increased transparency, slight distinction */
 }
 .section-container {
     max-width: var(--content-max-width-capped);
@@ -403,7 +439,8 @@ img {
 }
 .service-list-detailed li {
     font-size: 1.05rem;
-    padding: calc(var(--spacing-unit) * 1.25) 0 calc(var(--spacing-unit) * 1.25) calc(var(--spacing-unit) * 4.5);
+    /* Increased padding-left for more space between icon and text */
+    padding: calc(var(--spacing-unit) * 1.25) 0 calc(var(--spacing-unit) * 1.25) calc(var(--spacing-unit) * 5.5);
     position: relative;
     border-bottom: 1px dashed var(--color-border-subtle);
     margin-bottom: var(--spacing-unit);
@@ -411,21 +448,25 @@ img {
 }
 .service-list-detailed li:last-child { border-bottom: none; }
 .service-list-detailed li:hover { background-color: rgba(176, 141, 87, 0.04); }
-.service-list-detailed i.fa-check-circle {
+
+/* Updated selector to target all Font Awesome solid icons directly within li */
+.service-list-detailed li > i.fa-solid {
     position: absolute;
-    left: var(--spacing-unit);
+    left: var(--spacing-unit); /* Icon position from left */
     top: 50%;
     transform: translateY(-50%);
-    color: var(--color-accent-gold); /* Changed icon color */
-    font-size: 1.4em;
-    width: calc(var(--spacing-unit) * 3);
-    text-align: center;
+    color: var(--color-accent-gold); /* Golden color for icons */
+    font-size: 1.4em; /* Icon size */
+    width: calc(var(--spacing-unit) * 3); /* Space allocated for icon width */
+    text-align: center; /* Center icon within its allocated space */
+    line-height: 1; /* Ensure icon is vertically centered if it has intrinsic line height */
 }
 .service-list-detailed strong {
     color: var(--color-primary-brand);
     font-weight: 600; /* EB Garamond Semibold/Bold */
     font-family: var(--font-headings); /* Use Cinzel for list item titles */
     font-size: 1.1em;
+    display: inline-block; /* Helps with alignment if needed */
 }
 
 
@@ -662,9 +703,7 @@ img {
     text-align: center;
     transition: color var(--transition-fast), background-color var(--transition-fast);
     position: relative;
-    /* border-right: 1px solid var(--color-border-subtle); remove for cleaner look */
 }
-/* .tab-item:last-child { border-right: none; } */
 .tab-icon {
     font-size: 1.35rem; /* Slightly smaller icons */
     margin-bottom: calc(var(--spacing-unit) * 0.35);
@@ -711,12 +750,6 @@ img {
     align-items: center;
     gap: var(--spacing-unit);
 }
-.footer-emblem {
-    width: 45px; /* Small emblem */
-    height: auto;
-    border-radius: var(--border-radius-small); /* if applicable */
-    opacity: 0.8;
-}
 .footer-firm-name {
     font-family: var(--font-headings); /* Cinzel */
     font-size: 1.2rem;
@@ -728,15 +761,41 @@ img {
     margin-bottom: calc(var(--spacing-unit) * 2.5);
 }
 .footer-social-media a {
-    color: #ced4da !important;
+    color: #ced4da !important; /* Base color for social icons */
     font-size: 1.6rem;
     margin: 0 calc(var(--spacing-unit) * 1.25);
     transition: color var(--transition-fast), transform var(--transition-fast);
+    display: inline-block; /* Helps with transform */
 }
-.footer-social-media a:hover, .footer-social-media a:focus {
-    color: var(--color-accent-gold) !important;
+/* General hover effect for social icons (transform) */
+.footer-social-media a:hover,
+.footer-social-media a:focus {
     transform: scale(1.15);
+    /* Default icon color on hover, can be overridden by specific icons */
+    /* color: var(--color-accent-gold) !important; (Removed to allow specific colors) */
 }
+.footer-social-media a:hover i,
+.footer-social-media a:focus i {
+    color: var(--color-accent-gold); /* Default hover color for the icon itself */
+}
+
+/* Specific brand colors on hover for icons, using !important to override inherited styles */
+.footer-social-media a.facebook:hover i,
+.footer-social-media a.facebook:focus i { color: #1877F2 !important; }
+
+.footer-social-media a.linkedin:hover i,
+.footer-social-media a.linkedin:focus i { color: #0A66C2 !important; }
+
+.footer-social-media a.x-twitter:hover i,
+.footer-social-media a.x-twitter:focus i { color: #000000 !important; } /* X Black */
+
+.footer-social-media a.instagram:hover i,
+.footer-social-media a.instagram:focus i { color: #E1306C !important; } /* Instagram Pink/Red */
+
+.footer-social-media a.tiktok:hover i,
+.footer-social-media a.tiktok:focus i { color: #EE1D52 !important; } /* TikTok Reddish-Pink */
+
+
 .footer-links {
     margin-bottom: calc(var(--spacing-unit) * 1.5);
     font-size: 0.8rem;
@@ -801,8 +860,7 @@ img {
         --header-height-mobile: 70px;
         --tabs-height-mobile: 65px;
     }
-    .header-logo { height: calc(var(--header-height-mobile) - var(--spacing-unit) * 3.5); }
-    .header-firm-title-text { font-size: clamp(1.1rem, 4vw, 1.35rem); }
+    .firm-name-header { font-size: clamp(1.1rem, 4vw, 1.35rem); }
     .tab-icon { font-size: 1.45rem; }
     .tab-label { font-size: 0.75rem; }
 }
