@@ -243,18 +243,10 @@ document.addEventListener('DOMContentLoaded', () => {
         const animatedElements = document.querySelectorAll('.animate-on-scroll');
         if (!animatedElements.length || !('IntersectionObserver' in window)) return;
 
-        // Check if elements are already visible (e.g., on bfcache restore)
-        // and mark them as such to avoid re-animating if observer doesn't fire immediately
         animatedElements.forEach(el => {
             const rect = el.getBoundingClientRect();
             if (rect.top < window.innerHeight && rect.bottom >=0 && !el.classList.contains('is-visible')) {
-                 // Element is already in view, make it visible quickly if it wasn't
-                // This is a fallback, main logic is in IntersectionObserver
-                // el.classList.add('is-visible');
             } else if(rect.top > window.innerHeight || rect.bottom < 0) {
-                // Element is not in view, ensure 'is-visible' is removed for re-animation on scroll if desired
-                // For this setup, we animate once, so this might not be needed unless observer re-observes
-                // el.classList.remove('is-visible'); // Only if you want re-animation on scroll up then down
             }
         });
 
@@ -278,13 +270,11 @@ document.addEventListener('DOMContentLoaded', () => {
         }, observerOptions);
 
         animatedElements.forEach(el => {
-            // If element is not yet visible from initial check, observe it.
             if (!el.classList.contains('is-visible')) {
                 animationObserver.observe(el);
             }
         });
     }
-    // Call it initially
     initScrollAnimations();
 
 
