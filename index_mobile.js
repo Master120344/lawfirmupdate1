@@ -3,16 +3,23 @@ window.addEventListener('load', () => {
     const loader = document.getElementById('loader');
     const bodyElement = document.body;
 
+    // Set CSS variable for animation duration to match JS timeout
+    // Ensure this duration is slightly less than or equal to the JS timeout for fade-out
+    const loaderAnimationDuration = 1200; // ms, matches CSS --loader-transition-duration
+    document.documentElement.style.setProperty('--loader-transition-duration', `${loaderAnimationDuration / 1000}s`);
+
+
     if (bodyElement) {
-        bodyElement.classList.add('loaded');
+        bodyElement.classList.add('loaded'); // Start body fade-in
     } else {
         console.error("Body element not found on load.");
     }
 
     if (loader) {
+        // Wait for loading bar animation to mostly complete, then fade out loader
         setTimeout(() => {
             loader.classList.add('hidden');
-        }, 400); // Slightly shorter delay, CSS transition handles smoothness
+        }, loaderAnimationDuration + 300); // Total time: bar animation + short buffer for fade
     } else {
         console.error("Loader element not found on load.");
     }
@@ -24,15 +31,13 @@ window.addEventListener('pageshow', (event) => {
     const bodyElement = document.body;
 
     if (event.persisted && loader) {
-        // Page is being restored from the bfcache
-        // Instantly hide loader and ensure body is visible
         loader.classList.add('hidden');
         if (bodyElement) {
-            bodyElement.classList.add('loaded'); // Ensure body is faded in
+            bodyElement.classList.add('loaded');
         }
-        console.log("Page restored from bfcache, loader hidden.");
+        // If the loading bar animation was tied to a class, reset it here if needed
+        // For this CSS animation, it will restart automatically if loader is reshown
     }
-    // For non-bfcache loads, the 'load' event will handle it or it's a new navigation.
 });
 
 
@@ -43,9 +48,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const internalLinks = document.querySelectorAll(
         'a[href]:not([href^="#"]):not([href^="tel:"]):not([href^="mailto:"]):not([href^="javascript:"]):not([target="_blank"])'
     );
-    // Further refine to exclude links that don't actually navigate away from the domain,
-    // or ensure the href is a relative path or same-origin absolute path.
-    // For simplicity, this selector is kept, but for complex sites, it might need more care.
 
     internalLinks.forEach(link => {
         link.addEventListener('click', (e) => {
@@ -55,47 +57,41 @@ document.addEventListener('DOMContentLoaded', () => {
             try {
                 destinationHostname = new URL(destination, window.location.href).hostname;
             } catch (error) {
-                // Invalid URL, likely a malformed href, let browser handle or ignore
                 console.warn("Invalid URL for link:", destination);
                 return;
             }
 
-            // Only trigger for same-origin navigations
             if (destinationHostname !== currentHostname) {
-                return; // Let external links navigate normally
+                return;
             }
 
-            const currentPagePath = window.location.pathname.replace(/\/$/, ""); // Normalize by removing trailing slash
+            const currentPagePath = window.location.pathname.replace(/\/$/, "");
             const destinationPathObject = new URL(destination, window.location.href);
-            const destinationPath = destinationPathObject.pathname.replace(/\/$/, ""); // Normalize
+            const destinationPath = destinationPathObject.pathname.replace(/\/$/, "");
 
-            // If linking to the exact same page (e.g. index_mobile.html to index_mobile.html) or an anchor on the same page
             if (destinationPath === currentPagePath && destinationPathObject.hash) {
-                 // Allow smooth scroll for on-page anchors
                  return;
             }
              if (destinationPath === currentPagePath && !destinationPathObject.hash) {
-                 // Re-clicking the current page link - do nothing or perhaps a gentle visual cue
-                 e.preventDefault(); // Prevent reload if desired
-                 console.log("Link to current page clicked, no transition.");
+                 e.preventDefault();
                  return;
              }
 
-
-            // Prevent default navigation to show loader
             e.preventDefault();
 
             if (loader) {
-                loader.classList.remove('hidden'); // Show loader
-                // Styles for loader are primarily handled by CSS, 'hidden' class toggles opacity/visibility
+                // Reset loading bar animation if needed by removing and re-adding a class,
+                // or ensure the CSS animation reruns correctly when 'hidden' is removed.
+                // For this setup, removing 'hidden' should allow the animation to play again.
+                loader.classList.remove('hidden');
             } else {
                 console.error("Loader element not found for page transition.");
             }
 
-            // Navigate after a short delay for loader to appear
+            const pageTransitionLoaderDuration = 1200; // ms, should match CSS animation
             setTimeout(() => {
                 window.location.href = destination;
-            }, 300); // Adjust delay as needed for visual balance
+            }, pageTransitionLoaderDuration + 100); // Navigate after bar animation + small buffer
         });
     });
 });
