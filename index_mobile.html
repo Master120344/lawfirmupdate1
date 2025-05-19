@@ -5,79 +5,101 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>The Kershaw Law Firm - H-2A & H-2B Visas</title>
     <meta name="description" content="The Kershaw Law Firm provides expert legal services for H-2A and H-2B work visas. Serving businesses and individuals with tailored solutions. Mobile optimized site.">
-    <link rel="stylesheet" href="index_mobile.css"> <!-- Assuming CSS is in the root or adjust path if it's in css/ -->
+    <link rel="stylesheet" href="index_mobile.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=EB+Garamond:wght@400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=Cinzel:wght@400;600;700;900&family=EB+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
 </head>
 <body>
-    <div id="loader" class="loader"></div>
+    <div id="loader" class="loader">
+        <!-- Loader content will be dynamically added by JS if needed, or keep static content -->
+        <img src="logo.jpg" alt="Kershaw Law Firm Loading" class="loader-logo-img">
+        <div class="loader-text-wrapper">
+            <h1 class="loader-main-title">The Kershaw Law Firm P.C.</h1>
+            <p class="loader-subtitle">Specializing in H-2A & H-2B Visas</p>
+        </div>
+        <div class="loading-bar-container">
+            <div class="loading-bar-progress"></div>
+        </div>
+    </div>
     <div id="background-static"></div>
+    <div id="background-overlay"></div>
 
-    <header class="header">
+    <header class="site-header">
         <div class="header-content">
             <div class="logo-container">
                  <a href="index_mobile.html" class="logo-link" aria-label="Home - The Kershaw Law Firm">
-                    <img src="logo.jpg" alt="Kershaw Law Firm Logo" class="header-logo"> <!-- Assuming logo.jpg is in the root or adjust path e.g., assets/logo.jpg -->
-                    <h1>The Kershaw Law Firm P.C.</h1>
+                    <img src="logo.jpg" alt="Kershaw Law Firm Logo" class="header-logo">
+                    <span class="header-firm-title-text">The Kershaw Law Firm P.C.</span>
                  </a>
             </div>
         </div>
     </header>
 
     <div class="page-content-wrapper">
-        <section class="hero">
-            <div class="hero-content">
-                <h2>Specializing in H-2B and H-2A Visas</h2>
+        <section class="hero-section animate-on-scroll fade-in">
+            <div class="hero-content-box">
+                <h1 class="hero-main-title">Specializing in H-2A and H-2B Visas</h1>
                 <p class="hero-subtitle">Expert legal guidance for temporary work programs across the U.S.</p>
-                <a href="getstarted_mobile.html" class="cta-button">
+                <a href="getstarted_mobile.html" class="cta-button hero-cta">
                     <i class="fa-solid fa-rocket"></i> Get Started Today
                 </a>
             </div>
         </section>
 
-        <section id="about" class="content-section about-section">
+        <section id="about" class="content-section about-section animate-on-scroll fade-in-up" data-animation-delay="200">
             <div class="section-container">
-                <h2>About Our Firm</h2>
-                <p>Founded on principles of integrity, expertise, and client-focused service, The Kershaw Law Firm, P.C. is a leading provider of legal solutions for U.S. businesses requiring temporary foreign workers through the H-2A (agricultural) and H-2B (non-agricultural) visa programs.</p>
+                <h2 class="section-title decorative-title">About Our Firm</h2>
+                <p class="section-intro-text">Founded on principles of integrity, expertise, and client-focused service, The Kershaw Law Firm, P.C. is a leading provider of legal solutions for U.S. businesses requiring temporary foreign workers through the H-2A (agricultural) and H-2B (non-agricultural) visa programs.</p>
                 <p>Our seasoned team navigates the intricate regulations set by the Department of Labor (DOL) and U.S. Citizenship and Immigration Services (USCIS) with precision, ensuring your petitions are prepared accurately and processed efficiently. We understand the critical need for timely workforce solutions and are committed to achieving successful outcomes for your business.</p>
                 <a href="aboutus_mobile.html" class="secondary-button">Learn More About Our Approach</a>
             </div>
         </section>
 
-        <section id="services-overview" class="content-section services-overview-section">
+        <section id="services-overview" class="content-section services-overview-section animate-on-scroll fade-in-up" data-animation-delay="200">
              <div class="section-container">
-                <h2>Focused Visa Services</h2>
-                <p>We dedicate our practice to H-2A and H-2B visas, offering specialized knowledge that covers the entire process:</p>
-                <ul class="service-list">
-                    <li><i class="fas fa-check-circle"></i> Comprehensive Case Assessment & Strategy</li>
-                    <li><i class="fas fa-check-circle"></i> Meticulous Application & Petition Filing</li>
-                    <li><i class="fas fa-check-circle"></i> Navigating DOL Recruitment Requirements</li>
-                    <li><i class="fas fa-check-circle"></i> Responding to Government Audits & RFEs</li>
-                    <li><i class="fas fa-check-circle"></i> Ongoing Compliance Guidance</li>
+                <h2 class="section-title decorative-title">Focused Visa Services</h2>
+                <p class="section-intro-text">We dedicate our practice to H-2A and H-2B visas, offering specialized knowledge that covers the entire process:</p>
+                <ul class="service-list-detailed">
+                    <li><i class="fas fa-check-circle"></i><strong>Comprehensive Case Assessment & Strategy</strong></li>
+                    <li><i class="fas fa-check-circle"></i><strong>Meticulous Application & Petition Filing</strong></li>
+                    <li><i class="fas fa-check-circle"></i><strong>Navigating DOL Recruitment Requirements</strong></li>
+                    <li><i class="fas fa-check-circle"></i><strong>Responding to Government Audits & RFEs</strong></li>
+                    <li><i class="fas fa-check-circle"></i><strong>Ongoing Compliance Guidance</strong></li>
                 </ul>
                 <p>Let our focused expertise streamline your temporary labor certification and visa process.</p>
                 <a href="services_mobile.html" class="secondary-button">View All Services</a>
              </div>
         </section>
 
-        <section id="testimonials" class="content-section testimonials-section">
+        <section id="testimonials" class="content-section testimonials-section animate-on-scroll fade-in-up" data-animation-delay="200">
              <div class="section-container">
-                <h2>Client Successes</h2>
-                 <div class="testimonial-grid"> <!-- You might have a more complex carousel structure here from your snippet if needed -->
-                     <div class="testimonial-item">
-                        <p>"Working with The Kershaw Law Firm transformed our H-2B filing experience. Their team is incredibly knowledgeable, responsive, and supportive. The process was smooth, and we secured our workers on time. Truly exceptional service!"</p>
-                        <p class="testimonial-author">- John D., Construction Business Owner</p>
-                    </div>
-                     <div class="testimonial-item">
-                        <p>"We rely heavily on seasonal H-2A workers. The Kershaw Law Firm has been our trusted legal partner for years. Their attention to detail and proactive communication make a huge difference. They are essential to our operation."</p>
-                        <p class="testimonial-author">- Sarah K., Farm Administrator</p>
-                    </div>
-                    <!-- If you had more testimonial items or a carousel structure like in the snippet, it would go here -->
+                <h2 class="section-title decorative-title">Client Successes</h2>
+                 <div class="testimonial-carousel-wrapper">
+                     <div class="testimonial-carousel">
+                         <div class="testimonial-item">
+                            <i class="fas fa-quote-left testimonial-icon-quote"></i>
+                            <p class="testimonial-text">Working with The Kershaw Law Firm transformed our H-2B filing experience. Their team is incredibly knowledgeable, responsive, and supportive. The process was smooth, and we secured our workers on time. Truly exceptional service!</p>
+                            <p class="testimonial-author">- John D., Construction Business Owner</p>
+                        </div>
+                         <div class="testimonial-item">
+                            <i class="fas fa-quote-left testimonial-icon-quote"></i>
+                            <p class="testimonial-text">We rely heavily on seasonal H-2A workers. The Kershaw Law Firm has been our trusted legal partner for years. Their attention to detail and proactive communication make a huge difference. They are essential to our operation.</p>
+                            <p class="testimonial-author">- Sarah K., Farm Administrator</p>
+                        </div>
+                        <div class="testimonial-item">
+                            <i class="fas fa-quote-left testimonial-icon-quote"></i>
+                            <p class="testimonial-text">Navigating the H-2A program felt overwhelming until we partnered with Kershaw Law. Their expertise made all the difference. Highly recommended for any agricultural business.</p>
+                            <p class="testimonial-author">- Maria G., Vineyard Manager</p>
+                        </div>
+                     </div>
+                     <button class="carousel-control prev" aria-label="Previous testimonial"><i class="fas fa-chevron-left"></i></button>
+                     <button class="carousel-control next" aria-label="Next testimonial"><i class="fas fa-chevron-right"></i></button>
+                     <div class="carousel-dots"></div>
                  </div>
-                <div class="google-reviews-callout"> <!-- This was in the base Kershaw HTML, the snippet also had a Google Reviews part -->
-                     <h3><i class="fas fa-star"></i> <i class="fas fa-star"></i> <i class="fas fa-star"></i> <i class="fas fa-star"></i> <i class="fas fa-star"></i> See More 5-Star Reviews!</h3>
+                <div class="google-reviews-callout">
+                     <h3 class="google-reviews-title"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i> See More 5-Star Reviews!</h3>
                      <p>Client satisfaction is our priority. Read authentic feedback from businesses like yours on Google.</p>
                      <a href="https://www.google.com/search?q=The+Kershaw+Law+Firm+P.C.+reviews" class="google-reviews-button" aria-label="Read Google Reviews" target="_blank" rel="noopener noreferrer">
                          <i class="fab fa-google"></i> Read Google Reviews
@@ -86,19 +108,19 @@
              </div>
         </section>
 
-        <section class="content-section call-to-action-bottom">
-            <div class="section-container text-center">
-                 <h2>Start Your Visa Process Today</h2>
-                 <p>Reach out to discuss your business's H-2A or H-2B needs with our experienced legal team.</p>
-                 <a href="contact_mobile.html" class="cta-button">
+        <section class="content-section final-cta-section text-center animate-on-scroll fade-in">
+            <div class="section-container">
+                 <h2 class="section-title decorative-title">Start Your Visa Process Today</h2>
+                 <p class="section-intro-text">Reach out to discuss your business's H-2A or H-2B needs with our experienced legal team.</p>
+                 <a href="contact_mobile.html" class="cta-button large-cta">
                     <i class="fa-solid fa-phone-alt"></i> Contact Us Now
                 </a>
             </div>
         </section>
     </div> <!-- End of page-content-wrapper -->
 
-    <nav class="tabs"> <!-- Or class="mobile-tabs" if that was the final class name -->
-        <a href="index_mobile.html" class="active" aria-current="page"><i class="fas fa-home tab-icon"></i><span class="tab-label">Home</span></a>
+    <nav class="mobile-tabs">
+        <a href="index_mobile.html" class="tab-item active" aria-current="page"><i class="fas fa-home tab-icon"></i><span class="tab-label">Home</span></a>
         <a href="aboutus_mobile.html" class="tab-item"><i class="fas fa-info-circle tab-icon"></i><span class="tab-label">About</span></a>
         <a href="services_mobile.html" class="tab-item"><i class="fas fa-concierge-bell tab-icon"></i><span class="tab-label">Services</span></a>
         <a href="faq_mobile.html" class="tab-item"><i class="fas fa-question-circle tab-icon"></i><span class="tab-label">FAQ</span></a>
@@ -107,9 +129,8 @@
 
     <footer class="site-footer">
         <div class="footer-content">
-            <div class="footer-logo-area">
-                <!-- Optional: Small logo in footer -->
-                <!-- <img src="logo_symbol_white.png" alt="Kershaw Law Firm Icon" class="footer-emblem"> -->
+            <div class="footer-firm-identity">
+                <img src="logo.jpg" alt="Kershaw Law Firm Emblem" class="footer-emblem">
                 <p class="footer-firm-name">The Kershaw Law Firm P.C.</p>
             </div>
             <div class="footer-social-media">
@@ -124,11 +145,11 @@
                  <span class="footer-link-separator">•</span>
                 <a href="sitemap_mobile.html">Sitemap</a>
             </nav>
-            <p class="footer-copyright">© <span id="current-year">2024</span> The Kershaw Law Firm P.C. All Rights Reserved.</p> <!-- JS will update year -->
+            <p class="footer-copyright">© <span id="current-year">2024</span> The Kershaw Law Firm P.C. All Rights Reserved.</p>
             <p class="footer-disclaimer">This website is for informational purposes only and does not constitute legal advice. Attorney Advertising.</p>
         </div>
     </footer>
 
-    <script src="index_mobile.js" defer></script> <!-- Assuming JS is in the root or adjust path e.g., js/index_mobile.js -->
+    <script src="index_mobile.js" defer></script>
 </body>
 </html>
