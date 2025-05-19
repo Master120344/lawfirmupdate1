@@ -504,37 +504,38 @@ img {
 -------------------------------------------------- */
 .testimonials-section {
     background-color: var(--color-bg-medium-grey) !important;
-    padding-bottom: calc(var(--spacing-unit) * 7);
+    padding-bottom: calc(var(--spacing-unit) * 7); /* Ensure space for dots */
 }
 .testimonial-carousel-wrapper {
     position: relative;
     max-width: 580px;
-    margin: 0 auto calc(var(--spacing-unit) * 4) auto;
-    overflow: hidden;
+    margin: 0 auto calc(var(--spacing-unit) * 5) auto; /* Increased bottom margin for dots */
+    overflow: hidden; /* Crucial for slide effect */
     border-radius: var(--border-radius-medium);
     box-shadow: 0 6px 20px var(--color-shadow-medium);
 }
 .testimonial-carousel {
-    display: flex;
-    transition: transform var(--transition-slow);
+    display: flex; /* Crucial for side-by-side items */
+    transition: transform var(--transition-slow) ease-in-out; /* Smooth sliding */
 }
 .testimonial-item {
-    min-width: 100%; flex-shrink: 0;
+    min-width: 100%; /* Each item takes full width of wrapper */
+    flex-shrink: 0; /* Prevent items from shrinking */
     background-color: var(--color-bg-light);
-    padding: calc(var(--spacing-unit) * 3); /* Adjusted padding */
-    text-align: left; /* Align text to left for review content */
+    padding: calc(var(--spacing-unit) * 2.5) calc(var(--spacing-unit) * 3); /* Adjusted padding */
+    text-align: left;
+    box-sizing: border-box; /* Include padding in width calculation */
 }
 
-/* NEW Styles for Google Review Structure */
 .review-header {
     display: flex;
     align-items: center;
-    margin-bottom: calc(var(--spacing-unit) * 2);
+    margin-bottom: calc(var(--spacing-unit) * 1.5); /* Slightly reduced margin */
 }
 .review-profile-pic {
-    font-size: 3rem; /* Size of the user icon */
-    color: var(--color-text-medium); /* Neutral color for placeholder */
-    margin-right: calc(var(--spacing-unit) * 2);
+    font-size: 2.8rem; /* Adjusted size */
+    color: var(--color-text-medium);
+    margin-right: calc(var(--spacing-unit) * 1.5); /* Adjusted margin */
     flex-shrink: 0;
 }
 .reviewer-info {
@@ -543,44 +544,46 @@ img {
 }
 .review-stars {
     color: var(--color-accent-gold);
-    font-size: 0.9rem; /* Size of star icons */
-    margin-top: calc(var(--spacing-unit) * 0.5);
+    font-size: 0.9rem;
+    margin-top: calc(var(--spacing-unit) * 0.25); /* Reduced margin */
 }
-.review-stars .fa-star { /* Solid star */
+.review-stars .fa-star {
     margin-right: calc(var(--spacing-unit) * 0.25);
 }
-.review-stars .far.fa-star { /* Regular (empty) star, if used for <5 rating */
-    color: var(--color-accent-gold); /* Or a lighter gold/grey */
+.review-stars .far.fa-star {
+    color: var(--color-accent-gold);
 }
 .review-source {
     font-size: 0.85rem;
     color: var(--color-text-medium);
-    margin-top: calc(var(--spacing-unit) * 1.5);
+    margin-top: calc(var(--spacing-unit) * 2); /* Increased margin for separation */
     text-align: right;
     font-style: italic;
 }
-/* END New Styles */
-
-/* .testimonial-icon-quote { REMOVED - Replaced by review-header structure } */
 
 .testimonial-text {
     font-family: var(--font-body);
-    font-style: normal; /* No longer italic by default, can be on demand */
-    font-size: 1rem; /* Slightly adjusted for readability */
+    font-style: normal;
+    font-size: 1rem;
     line-height: 1.65;
-    color: var(--color-text-dark); /* Darker text for reviews */
+    color: var(--color-text-dark);
     margin-bottom: calc(var(--spacing-unit) * 1.5);
-    font-weight: 400; /* EB Garamond Regular */
+    font-weight: 400;
+    /* ADDED FOR TEXT WRAPPING */
+    white-space: normal; /* Allow wrapping */
+    overflow-wrap: break-word; /* Break long words if necessary */
+    word-break: break-word; /* Alternative for robust breaking */
+    hyphens: auto; /* Optional: allow hyphenation */
 }
-.testimonial-author { /* Now part of .reviewer-info */
-    font-family: var(--font-headings); /* Cinzel */
+.testimonial-author {
+    font-family: var(--font-headings);
     font-weight: 600;
     color: var(--color-primary-brand);
     font-size: 1rem;
-    margin-top: 0; /* Reset margin as it's in flex now */
-    text-align: left; /* Align to left */
+    margin-top: 0;
+    text-align: left;
 }
-.testimonial-author::before { content: ""; } /* Removed em-dash prefix */
+.testimonial-author::before { content: ""; }
 
 .carousel-control {
     position: absolute;
@@ -599,20 +602,27 @@ img {
     box-shadow: 0 1px 4px rgba(0,0,0,0.15);
     display: flex; align-items: center; justify-content: center;
 }
+/* HIDE ARROWS AS REQUESTED */
+.carousel-control.prev,
+.carousel-control.next {
+    display: none;
+}
+/* You can re-enable them by removing the display:none if JS needs them
 .carousel-control:hover, .carousel-control:focus {
     background-color: var(--color-primary-brand);
     transform: translateY(-50%) scale(1.05);
 }
 .carousel-control.prev { left: calc(var(--spacing-unit) * 1.5); }
 .carousel-control.next { right: calc(var(--spacing-unit) * 1.5); }
+*/
 
 .carousel-dots {
     text-align: center;
     position: absolute;
-    bottom: calc(var(--spacing-unit) * -3); /* Adjusted for potential overlap */
+    bottom: calc(var(--spacing-unit) * -2.5); /* Adjust if needed to prevent overlap */
     left: 50%;
     transform: translateX(-50%);
-    padding-top: var(--spacing-unit); /* Keep padding */
+    padding-top: calc(var(--spacing-unit) * 1); /* Reduced top padding */
 }
 .carousel-dot {
     display: inline-block;
@@ -622,6 +632,8 @@ img {
     margin: 0 calc(var(--spacing-unit) * 0.6);
     cursor: pointer;
     transition: background-color var(--transition-fast), transform var(--transition-fast);
+    border: none; /* Ensure button reset for dots */
+    padding: 0; /* Ensure button reset for dots */
 }
 .carousel-dot.active {
     background-color: var(--color-primary-brand);
@@ -629,7 +641,7 @@ img {
 }
 
 .google-reviews-callout {
-    margin-top: calc(var(--spacing-unit) * 7);
+    margin-top: calc(var(--spacing-unit) * 7); /* Increased margin to accommodate dots below carousel */
     padding: calc(var(--spacing-unit) * 3) calc(var(--spacing-unit) * 2.5);
     background-color: var(--color-bg-light);
     border-radius: var(--border-radius-medium);
