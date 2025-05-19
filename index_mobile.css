@@ -31,20 +31,20 @@
     --color-accent-gold-rgb: 192, 160, 98;
 
     /* Neutral Palette */
-    --color-text-dark: #181A1D; /* Slightly darker for better contrast on transparent BGs */
-    --color-text-medium: #424750; /* Adjusted medium text */
+    --color-text-dark: #181A1D;
+    --color-text-medium: #424750;
     --color-text-light: #F0F4F8;
     --color-text-on-gold: #FFFFFF;
     --color-text-on-primary: #FFFFFF;
     --color-text-link: var(--color-secondary-brand);
     --color-text-link-hover: var(--color-accent-gold);
 
-    --color-bg-light: #FFFFFF;
+    --color-bg-light: #FFFFFF; /* Pure White */
     --color-bg-light-rgb: 255, 255, 255;
-    --color-bg-off-white: #F8F9FA;
-    --color-bg-off-white-rgb: 248, 249, 250;
-    --color-bg-light-accent: #EBF0F5;
-    --color-bg-light-accent-rgb: 235, 240, 245;
+    /* --color-bg-off-white: #F8F9FA; /* Kept for reference if needed, but focusing on white */
+    /* --color-bg-off-white-rgb: 248, 249, 250; */
+    /* --color-bg-light-accent: #EBF0F5; /* Kept for reference */
+    /* --color-bg-light-accent-rgb: 235, 240, 245; */
     --color-bg-medium-grey: #E9ECEF;
     --color-bg-medium-grey-rgb: 233, 236, 239;
     --color-bg-dark: var(--color-primary-brand);
@@ -55,9 +55,9 @@
     --color-loader-logo-filter: brightness(0) invert(1);
 
     /* UI Elements */
-    --color-border-subtle: rgba(var(--color-primary-brand-rgb), 0.12); /* Slightly more visible border */
+    --color-border-subtle: rgba(var(--color-primary-brand-rgb), 0.12);
     --color-border-medium: rgba(var(--color-primary-brand-rgb), 0.22);
-    --color-shadow-soft: rgba(10, 35, 66, 0.05); /* Slightly increased opacity for shadows */
+    --color-shadow-soft: rgba(10, 35, 66, 0.05);
     --color-shadow-medium: rgba(10, 35, 66, 0.1);
     --color-shadow-strong: rgba(10, 35, 66, 0.18);
     --color-shadow-gold-cta: rgba(var(--color-accent-gold-rgb), 0.3);
@@ -83,7 +83,7 @@
     --content-max-width-capped: 780px;
     --border-radius-small: 4px;
     --border-radius-medium: 8px;
-    --border-radius-large: 16px; /* Increased for softer feel */
+    --border-radius-large: 16px;
 
     /* Transitions & Animations */
     --transition-short: 0.15s ease-out;
@@ -94,7 +94,7 @@
     /* Social Colors */
     --color-facebook: #1877F2;
     --color-linkedin: #0A66C2;
-    --color-x-twitter: #000000; /* X is typically black or white */
+    --color-x-twitter: #000000;
 }
 
 *, *::before, *::after {
@@ -109,14 +109,14 @@ html {
     scroll-behavior: smooth;
     font-size: 100%;
     scrollbar-width: thin;
-    scrollbar-color: var(--color-secondary-brand) var(--color-bg-light-accent);
+    scrollbar-color: var(--color-secondary-brand) var(--color-bg-light-accent, #EBF0F5); /* Added fallback for clarity */
 }
 html::-webkit-scrollbar { width: 10px; }
-html::-webkit-scrollbar-track { background: var(--color-bg-light-accent); }
+html::-webkit-scrollbar-track { background: var(--color-bg-light-accent, #EBF0F5); }
 html::-webkit-scrollbar-thumb {
     background-color: var(--color-secondary-brand);
     border-radius: var(--border-radius-medium);
-    border: 2px solid var(--color-bg-light-accent);
+    border: 2px solid var(--color-bg-light-accent, #EBF0F5);
 }
 
 /* 2. BODY & TYPOGRAPHY BASE
@@ -126,7 +126,7 @@ body {
     font-size: 1.1rem;
     line-height: 1.75;
     color: var(--color-text-dark);
-    background-color: var(--color-bg-off-white);
+    background-color: var(--color-bg-light); /* Base body BG is white, but mostly covered */
     overflow-x: hidden;
     position: relative;
     opacity: 0;
@@ -174,15 +174,14 @@ h2.section-title {
     position: relative;
     padding-bottom: var(--spacing-md);
 }
-h2.hero-main-title { /* For Hero Section */
+h2.hero-main-title {
     font-family: var(--font-display);
-    font-size: clamp(2.1rem, 7.5vw, 3.3rem); /* Adjusted for new wording */
-    font-weight: 800; /* Cinzel Black for impact */
+    font-size: clamp(2.1rem, 7.5vw, 3.3rem);
+    font-weight: 800;
     color: var(--color-text-light);
-    /* Enhanced text shadow for readability on more transparent BG */
     text-shadow: 0px 1px 2px rgba(var(--color-primary-brand-rgb), 0.5),
                  0px 2px 5px rgba(var(--color-primary-brand-rgb), 0.4);
-    margin-bottom: var(--spacing-sm); /* Tighter margin for sub-headline */
+    margin-bottom: var(--spacing-sm);
     letter-spacing: 0.3px;
 }
 
@@ -204,14 +203,14 @@ p.section-intro-text {
     font-style: italic;
     font-weight: 500;
 }
-p.hero-subtitle { /* For Hero Section */
+p.hero-subtitle {
     font-family: var(--font-body);
-    font-size: clamp(1.05rem, 4vw, 1.35rem); /* Adjusted for new wording */
-    color: rgba(255,255,255,0.9); /* Maintained opacity */
+    font-size: clamp(1.05rem, 4vw, 1.35rem);
+    color: rgba(255,255,255,0.9);
     margin-bottom: var(--spacing-xl);
-    font-weight: 500; /* EB Garamond Medium */
+    font-weight: 500;
     line-height: 1.65;
-    max-width: 580px; /* Slightly wider */
+    max-width: 580px;
     margin-left: auto;
     margin-right: auto;
     text-shadow: 0px 1px 3px rgba(var(--color-primary-brand-rgb), 0.3);
@@ -316,7 +315,7 @@ figcaption {
     background-position: center center;
     background-attachment: fixed;
     animation: subtleZoomInOut 80s infinite alternate ease-in-out;
-    filter: saturate(0.4) brightness(0.5) contrast(1.05); /* Slightly brighter background */
+    filter: saturate(0.4) brightness(0.5) contrast(1.05);
 }
 @keyframes subtleZoomInOut {
     0% { transform: scale(1.05); }
@@ -327,8 +326,8 @@ figcaption {
     position: fixed; top: 0; left: 0; width: 100%; height: 100%;
     z-index: -1;
     background: linear-gradient(to bottom,
-        rgba(var(--color-primary-brand-rgb), 0.5) 0%,  /* Even less opaque at top */
-        rgba(var(--color-primary-brand-rgb), 0.65) 40%, /* Less opaque mid */
+        rgba(var(--color-primary-brand-rgb), 0.5) 0%,
+        rgba(var(--color-primary-brand-rgb), 0.65) 40%,
         rgba(var(--color-primary-brand-rgb), 0.75) 80%,
         var(--color-primary-brand) 100%
     );
@@ -341,10 +340,10 @@ figcaption {
     position: fixed; top: 0; left: 0; width: 100%;
     z-index: 1000;
     height: var(--header-height-mobile);
-    /* FURTHER INCREASED TRANSPARENCY */
-    background-color: rgba(var(--color-bg-light-rgb), 0.6); /* e.g., 60% opacity */
-    backdrop-filter: blur(16px); /* Stronger blur for more transparency */
-    -webkit-backdrop-filter: blur(16px);
+    /* WHITE-BASED TRANSPARENCY */
+    background-color: rgba(var(--color-bg-light-rgb), 0.55); /* e.g., 55% opacity white */
+    backdrop-filter: blur(18px); /* Stronger blur */
+    -webkit-backdrop-filter: blur(18px);
     box-shadow: 0 2px 10px var(--color-shadow-medium);
     border-bottom: 1px solid var(--color-border-subtle);
     display: flex;
@@ -387,25 +386,27 @@ figcaption {
     padding: var(--spacing-xxl) var(--spacing-lg);
     position: relative;
     overflow: hidden;
-    border-radius: var(--border-radius-large); /* Softer, larger radius for sections */
+    border-radius: var(--border-radius-large);
     margin-left: auto;
     margin-right: auto;
 }
-/* FURTHER INCREASED TRANSPARENCY & BLUR */
-.content-section:nth-child(odd) {
-     background-color: rgba(var(--color-bg-light-rgb), 0.65); /* e.g., 65% opacity */
-     backdrop-filter: blur(14px); /* Stronger blur */
-     -webkit-backdrop-filter: blur(14px);
-}
-.content-section:nth-child(even) {
-     background-color: rgba(var(--color-bg-light-accent-rgb), 0.65); /* e.g., 65% opacity */
-     backdrop-filter: blur(14px); /* Stronger blur */
-     -webkit-backdrop-filter: blur(14px);
+/* WHITE-BASED TRANSPARENCY for general content sections */
+.content-section:nth-child(odd),
+.content-section:nth-child(even) { /* Apply same style to both now */
+     background-color: rgba(var(--color-bg-light-rgb), 0.6); /* e.g., 60% opacity white */
+     backdrop-filter: blur(16px);
+     -webkit-backdrop-filter: blur(16px);
 }
 .content-section h2, .content-section h3, .content-section p, .content-section li {
-    /* text-shadow: 0 0 1px rgba(255,255,255,0.1); /* Very subtle text shadow if needed */
-    /* Ensure text colors like --color-text-dark and --color-text-medium provide good contrast */
+    color: var(--color-text-dark); /* Ensure primary text is dark for readability */
 }
+.content-section p.section-intro-text, .content-section .testimonial-text {
+    color: var(--color-text-medium); /* Sub-texts can be medium */
+}
+.content-section .service-list-detailed strong {
+    color: var(--color-primary-brand); /* Headings within sections */
+}
+
 
 .section-container {
     max-width: var(--content-max-width-capped);
@@ -427,7 +428,7 @@ figcaption {
     box-shadow: 0 1px 3px rgba(var(--color-accent-gold-rgb),0.3);
 }
 
-/* 7. HERO SECTION (ENHANCED)
+/* 7. HERO SECTION
 -------------------------------------------------- */
 .hero-section {
     min-height: 70vh;
@@ -442,19 +443,19 @@ figcaption {
     overflow: hidden;
 }
 .hero-content-box {
-    /* FURTHER INCREASED TRANSPARENCY & REFINED STYLE */
-    background-color: rgba(var(--color-primary-brand-rgb), 0.45); /* e.g. 45-50% opacity, adjust based on wallpaper */
-    backdrop-filter: blur(12px); /* Adjust blur strength */
-    -webkit-backdrop-filter: blur(12px);
+    /* Kept the dark base for hero text contrast, but slightly more transparent */
+    background-color: rgba(var(--color-primary-brand-rgb), 0.40); /* e.g. 40% opacity */
+    backdrop-filter: blur(14px); /* Stronger blur for hero */
+    -webkit-backdrop-filter: blur(14px);
     padding: var(--spacing-xl) var(--spacing-lg);
-    border-radius: var(--border-radius-large); /* Consistent larger radius */
-    box-shadow: 0 6px 25px rgba(0,0,0,0.25); /* Softer, more diffused shadow */
-    max-width: calc(var(--content-max-width-capped) - 20px); /* Slightly wider */
+    border-radius: var(--border-radius-large);
+    box-shadow: 0 6px 25px rgba(0,0,0,0.25);
+    max-width: calc(var(--content-max-width-capped) - 20px);
     width: var(--content-max-width);
     z-index: 2;
-    border: 1px solid rgba(var(--color-accent-gold-rgb), 0.35); /* Thinner, more elegant gold border */
+    border: 1px solid rgba(var(--color-accent-gold-rgb), 0.35);
 }
-.hero-cta { margin-top: var(--spacing-xl); } /* Increased margin for new layout */
+.hero-cta { margin-top: var(--spacing-xl); }
 
 
 /* 8. CONTENT SECTIONS (About, Services, etc.) */
@@ -483,7 +484,7 @@ figcaption {
 }
 .service-list-detailed li:last-child { border-bottom: none; }
 .service-list-detailed li:hover {
-    background-color: rgba(var(--color-accent-gold-rgb), 0.08);
+    background-color: rgba(var(--color-accent-gold-rgb), 0.1); /* Slightly more opaque hover for white BG */
     transform: translateX(5px);
     border-bottom-color: transparent;
 }
@@ -504,7 +505,7 @@ figcaption {
     color: var(--color-accent-gold-darker);
 }
 .service-list-detailed strong {
-    color: var(--color-primary-brand);
+    /* color: var(--color-primary-brand); /* Already handled by section text color */
     font-weight: 700;
     font-family: var(--font-headings);
     font-size: 1.15em;
@@ -517,6 +518,7 @@ figcaption {
 -------------------------------------------------- */
 .testimonials-section {
     padding-bottom: var(--spacing-xxxl);
+    /* Uses general .content-section white-based transparent background */
 }
 
 .testimonial-carousel-wrapper {
@@ -526,10 +528,10 @@ figcaption {
     overflow: hidden;
     border-radius: var(--border-radius-large);
     box-shadow: 0 10px 35px var(--color-shadow-strong);
-    /* FURTHER INCREASED TRANSPARENCY & BLUR */
-    background-color: rgba(var(--color-bg-light-rgb), 0.6); /* e.g., 60% opacity */
-    backdrop-filter: blur(14px);
-    -webkit-backdrop-filter: blur(14px);
+    /* WHITE-BASED TRANSPARENCY */
+    background-color: rgba(var(--color-bg-light-rgb), 0.55); /* e.g., 55% opacity white */
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
 }
 .testimonial-carousel {
     display: flex;
@@ -547,20 +549,11 @@ figcaption {
     margin-bottom: var(--spacing-md);
     display: block;
 }
-.testimonial-text {
-    font-family: var(--font-body);
-    font-style: italic;
-    font-size: 1.15rem;
-    line-height: 1.8;
-    color: var(--color-text-medium);
-    margin-bottom: var(--spacing-lg);
-    font-weight: 500;
-}
+/* .testimonial-text color handled by .content-section p */
+/* .testimonial-author color handled by .content-section text rules */
 .testimonial-author {
     font-family: var(--font-headings);
     font-weight: 600;
-    text-align: center;
-    color: var(--color-primary-brand);
     font-size: 1.05rem;
     margin-top: var(--spacing-sm);
     letter-spacing: 0.3px;
@@ -625,27 +618,18 @@ figcaption {
 .google-reviews-callout {
     margin-top: var(--spacing-xxxl);
     padding: var(--spacing-xl) var(--spacing-lg);
-    /* FURTHER INCREASED TRANSPARENCY & BLUR */
-    background: linear-gradient(135deg,
-        rgba(var(--color-bg-light-rgb), 0.6) 0%,
-        rgba(var(--color-bg-off-white-rgb), 0.6) 100%
-    );
-    backdrop-filter: blur(14px);
-    -webkit-backdrop-filter: blur(14px);
+    /* WHITE-BASED TRANSPARENCY */
+    background: rgba(var(--color-bg-light-rgb), 0.55); /* e.g., 55% opacity white */
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
     border-radius: var(--border-radius-large);
     text-align: center;
     box-shadow: 0 5px 20px var(--color-shadow-medium);
     border: 1px solid var(--color-border-subtle);
     overflow: hidden;
 }
-.google-reviews-title {
-    font-family: var(--font-headings);
-    font-size: 1.6rem;
-    color: var(--color-primary-brand);
-    margin-bottom: var(--spacing-sm);
-    display: flex; align-items: center; justify-content: center; gap: var(--spacing-sm);
-    font-weight: 600;
-}
+/* .google-reviews-title color handled by .content-section h3 rules */
+/* .google-reviews-callout p color handled by .content-section p rules */
 .google-reviews-title i.fa-star {
     color: var(--color-accent-gold);
     font-size: 0.9em;
@@ -653,11 +637,6 @@ figcaption {
 }
 .google-reviews-callout:hover .google-reviews-title i.fa-star {
     transform: scale(1.1) rotate(5deg);
-}
-.google-reviews-callout p {
-    font-size: 1.05rem;
-    color: var(--color-text-medium);
-    margin-bottom: var(--spacing-lg);
 }
 .google-reviews-button {
     display: inline-flex; align-items: center; gap: var(--spacing-md);
@@ -785,10 +764,10 @@ figcaption {
 .mobile-tabs {
     position: fixed; bottom: 0; left: 0; width: 100%;
     height: var(--tabs-height-mobile);
-    /* FURTHER INCREASED TRANSPARENCY */
-    background-color: rgba(var(--color-bg-off-white-rgb), 0.7); /* e.g., 70% opacity */
-    backdrop-filter: blur(18px); /* Stronger blur */
-    -webkit-backdrop-filter: blur(18px);
+    /* WHITE-BASED TRANSPARENCY */
+    background-color: rgba(var(--color-bg-light-rgb), 0.65); /* e.g. 65% opacity white */
+    backdrop-filter: blur(20px); /* Strongest blur for nav */
+    -webkit-backdrop-filter: blur(20px);
     box-shadow: 0 -3px 15px var(--color-shadow-medium);
     border-top: 1px solid rgba(var(--color-primary-brand-rgb),0.08);
     display: flex;
@@ -889,21 +868,20 @@ figcaption {
     margin-bottom: var(--spacing-lg);
     padding-top: var(--spacing-sm);
 }
-/* SOCIAL ICON PREFILLED COLORS */
 .social-icon {
     font-size: 1.8rem;
     margin: 0 var(--spacing-md);
-    transition: transform var(--transition-base), opacity var(--transition-base); /* Added opacity transition */
+    transition: transform var(--transition-base), opacity var(--transition-base);
     display: inline-block;
-    opacity: 0.9; /* Slightly transparent initially */
+    opacity: 0.9;
 }
 .social-icon:hover, .social-icon:focus-visible {
     transform: scale(1.2) translateY(-2px);
-    opacity: 1; /* Full opacity on hover */
+    opacity: 1;
 }
 .social-icon.facebook { color: var(--color-facebook) !important; }
 .social-icon.linkedin { color: var(--color-linkedin) !important; }
-.social-icon.x-twitter { color: var(--color-x-twitter) !important; } /* If X is black, this is fine. If white for dark BG, adjust if footer gets light */
+.social-icon.x-twitter { color: var(--color-x-twitter) !important; }
 
 .footer-links {
     margin-bottom: var(--spacing-md);
@@ -1015,7 +993,7 @@ figcaption {
 @media (min-width: 1024px) {
     body { font-size: 1.18rem; }
     html {
-        scrollbar-color: var(--color-accent-gold) var(--color-bg-light-accent);
+        scrollbar-color: var(--color-accent-gold) var(--color-bg-light-accent, #EBF0F5);
     }
     html::-webkit-scrollbar-thumb {
         background-color: var(--color-accent-gold);
