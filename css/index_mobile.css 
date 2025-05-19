@@ -34,7 +34,7 @@ body {
     background-color: #f8fafc;
     overflow-x: hidden;
     position: relative;
-    opacity: 0;
+    opacity: 0; /* Content is initially hidden, made visible by JS adding 'loaded' class */
     transition: opacity 1s ease-in-out;
     padding-bottom: var(--footer-height);
     display: flex;
@@ -54,12 +54,18 @@ body.loaded {
     width: 100%;
     height: 100%;
     z-index: -2;
-    background-image: url('../assets/austin.jpg'); /* Relative path */
-    background-image: url('/assets/austin.jpg'); /* Root-relative for GitHub Pages */
+    /* Note on background-image paths:
+       - url('../assets/austin.jpg') is relative to this CSS file. If css/ is in root, this expects /assets/austin.jpg.
+       - url('/assets/austin.jpg') is relative to the domain root. This will override the previous line.
+       - For local testing with file:/// protocol, url('/assets/austin.jpg') will likely fail.
+       - Choose the one appropriate for your setup or remove the one that's not working for your environment.
+    */
+    background-image: url('../assets/austin.jpg'); /* Path relative to CSS file */
+    /* background-image: url('/assets/austin.jpg'); */ /* Path relative to domain root - uncomment if preferred and ../assets/austin.jpg is commented out */
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
-    background-color: #003087; /* Fallback */
+    background-color: #003087; /* Fallback color if image fails to load */
     transform: translateZ(0);
     animation: parallaxZoom 60s infinite alternate ease-in-out;
 }
@@ -376,7 +382,7 @@ body.loaded {
 .about p {
     font-family: var(--font-secondary);
     font-size: 1.1rem;
-    color: #4b5563;
+    color: #4b5563; /* This text color might be hard to read if body background is transparent and parallax background is dark */
     margin-bottom: 20px;
 }
 
@@ -423,6 +429,7 @@ body.loaded {
     font-size: 1rem;
     background: rgba(255, 255, 255, 0.95);
     transition: border-color 0.3s ease;
+    color: #333; /* Added for better readability in input fields */
 }
 
 .form-group input:focus, .form-group textarea:focus {
@@ -515,7 +522,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
     }
 
     .hero-content p {
-        font-size 1rem;
+        font-size: 1rem; /* CORRECTED: Added colon and semicolon */
     }
 
     .section-title {
