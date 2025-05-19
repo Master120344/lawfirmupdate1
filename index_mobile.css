@@ -1,4 +1,4 @@
-/* Reset and Base Styles */
+/* General & Variables */
 * {
     margin: 0;
     padding: 0;
@@ -9,540 +9,474 @@ html {
     scroll-behavior: smooth;
 }
 
-/* CSS Variables */
 :root {
-    --color-bg-header-footer: rgba(255, 255, 255, 0.95);
-    --color-text-header-footer: #1a2a44;
-    --color-text-on-dark-bg: #ffffff;
-    --color-accent-blue-primary: #003087;
-    --color-accent-blue-secondary: #3b82f6;
-    --color-accent-gold: #f59e0b;
-    --color-shadow-text: 1px 1px 4px rgba(0, 0, 0, 0.7);
-    --color-shadow-subtle: rgba(0, 0, 0, 0.15);
-    --color-border-subtle: rgba(0, 0, 0, 0.1);
+    --color-bg-header-footer: rgba(255, 255, 255, 0.95); /* Slightly lighter/more opaque */
+    --color-text-header-footer: #2c3e50; /* Dark blue/grey */
+    --color-text-dark: #333; /* For content sections on light background */
+    --color-text-on-dark-bg: #FFFFFF;
+    --color-accent-blue-primary: #005686; /* Deep Professional Blue */
+    --color-accent-blue-secondary: #007acc; /* Brighter clickable blue */
+    --color-accent-grey: #f4f4f4; /* Light background for sections */
+    --color-shadow-text: 1px 1px 5px rgba(0, 0, 0, 0.6); /* More prominent text shadow */
+    --color-shadow-subtle: rgba(44, 62, 80, 0.1); /* Lighter shadow */
+    --color-shadow-medium: rgba(0, 0, 0, 0.15);
+    --color-border-subtle: rgba(44, 62, 80, 0.08); /* Lighter border */
     --font-primary: 'Cinzel', serif;
     --font-secondary: 'EB Garamond', serif;
-    --footer-height: 70px;
+    --footer-height: 58px; /* Adjusted for potential padding/border */
 }
 
-/* Body Styles */
 body {
     font-family: var(--font-secondary);
     min-height: 100vh;
-    color: var(--color-text-on-dark-bg);
-    line-height: 1.7;
-    background-color: #f8fafc;
+    color: var(--color-text-dark); /* Default text color for content */
+    line-height: 1.7; /* Improved readability */
+    background-color: #FAFAFA; /* Light background */
     overflow-x: hidden;
     position: relative;
-    opacity: 0; /* Content is initially hidden, made visible by JS adding 'loaded' class */
-    transition: opacity 1s ease-in-out;
-    padding-bottom: var(--footer-height);
+    opacity: 0; /* For initial fade-in */
+    transition: opacity 0.7s ease-in-out;
+    padding-top: 0; /* Header is not fixed here */
+    padding-bottom: var(--footer-height); /* Adjust padding for fixed tabs */
     display: flex;
     flex-direction: column;
-    font-size: 16px;
+    font-size: 17px; /* Slightly larger base font */
 }
 
 body.loaded {
     opacity: 1;
 }
 
+/* Loader Overlay (for page transitions) */
+/* This styles the #loader div when it's NOT hidden, covering the screen */
+.loader {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(255, 255, 255, 0.9); /* Semi-transparent white overlay */
+    display: flex; align-items: center; justify-content: center;
+    z-index: 3000;
+    opacity: 1; /* Default visible state for overlay */
+    transition: opacity 0.4s ease-out;
+    pointer-events: auto; /* Can interact (block clicks) */
+
+    /* Spinner within the loader */
+    /* These replace the border properties on the .loader div itself */
+    border: none; /* Remove borders from the container div */
+    transform: none; /* Remove translate from the container div */
+}
+
+/* Hide the loader */
+.loader.hidden {
+    opacity: 0;
+    pointer-events: none; /* Cannot interact when hidden */
+}
+
+/* The Spinner element */
+.loader::after {
+    content: '';
+    display: block; /* Make it a block element */
+    width: 45px; height: 45px; /* Slightly larger spinner */
+    border: 5px solid rgba(0, 86, 134, 0.2); /* Lighter border */
+    border-top: 5px solid var(--color-accent-blue-primary); /* Primary color spinner */
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite; /* Slightly faster spin */
+    /* Ensure it's centered relative to its parent (.loader) */
+    position: absolute; /* Position absolutely within the loader */
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+
+/* Animation for the spinner itself */
+@keyframes spin {
+     0% { transform: translate(-50%, -50%) rotate(0deg); }
+    100% { transform: translate(-50%, -50%) rotate(360deg); }
+}
+
+
 /* Background */
-.parallax-bg {
+#background-static {
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
     z-index: -2;
-    /* Note on background-image paths:
-       - url('../assets/austin.jpg') is relative to this CSS file. If css/ is in root, this expects /assets/austin.jpg.
-       - url('/assets/austin.jpg') is relative to the domain root. This will override the previous line.
-       - For local testing with file:/// protocol, url('/assets/austin.jpg') will likely fail.
-       - Choose the one appropriate for your setup or remove the one that's not working for your environment.
-    */
-    background-image: url('../assets/austin.jpg'); /* Path relative to CSS file */
-    /* background-image: url('/assets/austin.jpg'); */ /* Path relative to domain root - uncomment if preferred and ../assets/austin.jpg is commented out */
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
-    background-color: #003087; /* Fallback color if image fails to load */
-    transform: translateZ(0);
-    animation: parallaxZoom 60s infinite alternate ease-in-out;
+    /* Image path corrected */
+    background-image: url('austinbackground.jpg');
+    animation: subtleZoom 40s infinite alternate ease-in-out;
+    filter: brightness(0.7) contrast(1.1); /* Slightly darken and add contrast */
 }
 
-@keyframes parallaxZoom {
-    from { transform: scale(1); }
-    to { transform: scale(1.1); }
+@keyframes subtleZoom {
+    from { transform: scale(1.02); }
+    to { transform: scale(1.05); }
 }
 
-/* Loader */
-.loader {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 50px;
-    height: 50px;
-    border: 5px solid rgba(59, 130, 246, 0.3);
-    border-top: 5px solid var(--color-accent-blue-primary);
-    border-radius: 50%;
-    animation: spin 0.8s linear infinite;
-    z-index: 3000;
-    opacity: 1;
-    transition: opacity 0.5s ease-out;
-}
-
-.loader.hidden {
-    opacity: 0;
-    pointer-events: none;
-}
-
-@keyframes spin {
-    0% { transform: translate(-50%, -50%) rotate(0deg); }
-    100% { transform: translate(-50%, -50%) rotate(360deg); }
-}
 
 /* Header */
 .header {
-    position: sticky;
-    top: 0;
-    left: 0;
-    width: 100%;
-    z-index: 20;
-    padding: 15px 0;
+    top: 0; left: 0; width: 100%; z-index: 10;
+    padding: 10px 0; /* Reduced padding */
     background: var(--color-bg-header-footer);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    box-shadow: 0 2px 6px var(--color-shadow-subtle);
+    backdrop-filter: blur(6px); /* Slightly less blur */
+    -webkit-backdrop-filter: blur(6px);
+    box-shadow: 0 1px 4px var(--color-shadow-subtle); /* Lighter shadow */
     color: var(--color-text-header-footer);
+    border-bottom: 1px solid var(--color-border-subtle); /* Lighter border */
 }
 
 .header-content {
-    width: 90%;
+    width: 95%; /* Wider content area */
     margin: 0 auto;
     display: flex;
-    justify-content: center;
     align-items: center;
+    justify-content: center; /* Center content if no actions */
+    gap: 10px;
 }
 
-.title-container {
+.logo-container {
+    display: flex; /* Use flex for logo and text */
+    align-items: center;
+    gap: 10px; /* Space between logo image and text */
+}
+
+.logo-link { text-decoration: none; color: inherit; display: flex; align-items: center; }
+
+.header-logo {
+    height: 45px; /* Adjust size as needed */
+    width: auto;
+    border-radius: 5px; /* Subtle rounded corners */
+    box-shadow: 0 1px 4px var(--color-shadow-medium); /* Subtle shadow */
+}
+
+.logo-container h1 {
+    font-family: var(--font-primary);
+    font-size: 1.5rem; /* Slightly smaller for better mobile fit */
+    color: var(--color-text-header-footer);
+    font-weight: 700; margin: 0;
+    transition: color 0.3s ease;
+    line-height: 1.2; /* Improve spacing if text wraps */
+}
+
+.logo-container .logo-link:hover h1 { color: var(--color-accent-blue-primary); }
+
+
+/* Main Content Wrapper - Adds padding to the sides */
+.page-content-wrapper {
+    flex-grow: 1;
+    width: 100%; /* Takes full width */
+    padding: 0 15px; /* Padding on sides for all content sections */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    z-index: 1; /* Ensure content is above background */
+}
+
+/* Sections */
+.content-section {
+    width: 100%; /* Full width within wrapper padding */
+    max-width: 700px; /* Max width for readability */
+    margin: 30px auto; /* Spacing between sections */
+    padding: 20px; /* Internal padding */
+    background-color: rgba(255, 255, 255, 0.9); /* Semi-transparent white background */
+    border-radius: 8px; /* Rounded corners */
+    box-shadow: 0 2px 8px var(--color-shadow-medium); /* Section shadow */
+    color: var(--color-text-dark);
+}
+
+.section-container {
+     width: 100%; /* Inner container */
+     margin: 0 auto;
+}
+
+.content-section h2 {
+    font-family: var(--font-primary);
+    font-size: 1.8rem; /* Consistent section heading size */
+    color: var(--color-accent-blue-primary);
+    font-weight: 700;
+    margin-bottom: 20px;
     text-align: center;
 }
 
-.title-link {
-    text-decoration: none;
-    color: var(--color-text-header-footer);
+.content-section p, .content-section ul {
+    margin-bottom: 15px;
+    line-height: 1.7;
+    font-size: 1rem;
 }
 
-.title-container h1 {
-    font-family: var(--font-primary);
-    font-size: 1.8rem;
-    font-weight: 700;
-    letter-spacing: 1px;
-    transition: color 0.3s ease;
+.content-section ul {
+    padding-left: 20px;
 }
 
-.title-link:hover h1 {
-    color: var(--color-accent-blue-primary);
+.content-section li {
+    margin-bottom: 8px;
 }
 
-/* Main Content */
-.main-content-area {
-    position: relative;
-    z-index: 1;
-    flex-grow: 1;
-    padding: 30px 0;
+
+/* Hero Section (Specific styling over general section) */
+.hero {
+    width: 100%; /* Full width within wrapper */
+    max-width: none; /* Override max-width */
+    margin: 0 auto 30px auto; /* No top margin, space below */
+    padding: 50px 20px; /* More padding */
+    text-align: center;
+    background: none; /* No specific background */
+    box-shadow: none; /* No shadow */
+    color: var(--color-text-on-dark-bg); /* Text color for dark background */
 }
 
-.main-content-container {
-    width: 90%;
+.hero-content {
     max-width: 600px;
     margin: 0 auto;
+    background: rgba(0, 0, 0, 0.35); /* Slightly darker subtle dark overlay for text readability */
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.3); /* Add a subtle shadow to the overlay */
 }
 
-/* Hero Section */
-.hero {
-    position: relative;
-    text-align: center;
-    padding: 60px 20px;
-    border-radius: 20px;
-    overflow: hidden;
-    margin-bottom: 40px;
-}
-
-.hero-overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(135deg, rgba(0, 48, 135, 0.8), rgba(59, 130, 246, 0.5));
-    z-index: -1;
-}
-
-.hero-content h1 {
-    font-family: var(--font-primary);
-    font-size: 2.5rem;
+.hero h2 {
+    font-family: var(--font-primary); font-size: 2.3rem; /* Larger hero heading */
+    color: var(--color-text-on-dark-bg);
     font-weight: 700;
-    color: var(--color-text-on-dark-bg);
     text-shadow: var(--color-shadow-text);
-    margin-bottom: 20px;
+    margin-bottom: 15px;
+    animation: fadeIn 1s ease-out 0.2s backwards;
+    line-height: 1.3;
 }
 
-.hero-content p {
-    font-family: var(--font-secondary);
+.hero-subtitle {
     font-size: 1.2rem;
-    color: var(--color-text-on-dark-bg);
-    margin-bottom: 25px;
+    margin-bottom: 30px;
+    text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
+    color: rgba(255, 255, 255, 0.95); /* Slightly more opaque */
+    animation: fadeIn 1s ease-out 0.4s backwards;
 }
 
 /* CTA Button */
 .cta-button {
-    display: inline-flex;
-    align-items: center;
-    gap: 10px;
-    padding: 14px 35px;
+    display: inline-flex; align-items: center; justify-content: center; /* Center text/icon */
+    gap: 10px; /* Increased gap */
+    margin-top: 0;
+    padding: 12px 30px; /* More padding */
     background: var(--color-accent-blue-primary);
     color: var(--color-text-on-dark-bg);
     text-decoration: none;
-    font-family: var(--font-primary);
-    font-size: 1.1rem;
-    font-weight: 700;
-    border-radius: 50px;
-    border: none;
-    box-shadow: 0 4px 15px rgba(0, 48, 135, 0.4);
-    transition: all 0.3s ease;
+    font-family: var(--font-primary); font-size: 1.1rem; font-weight: 700;
+    border-radius: 50px; border: none; transition: all 0.3s ease;
+    box-shadow: 0 4px 10px rgba(0, 86, 134, 0.4); /* Stronger shadow */
     cursor: pointer;
+    animation: fadeIn 1s ease-out 0.6s backwards;
+    text-shadow: none;
+    min-width: 200px; /* Minimum width */
+    text-align: center;
 }
-
-.cta-button i {
-    font-size: 1rem;
-}
-
+.cta-button i { font-size: 1em; } /* Keep icon size relative to text */
 .cta-button:hover {
     background: var(--color-accent-blue-secondary);
-    transform: translateY(-3px);
-    box-shadow: 0 6px 20px rgba(59, 130, 246, 0.5);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 14px rgba(0, 122, 204, 0.5); /* Shadow matches hover color */
 }
 
-.cta-button.secondary {
-    background: transparent;
-    border: 2px solid var(--color-text-on-dark-bg);
-}
-
-.cta-button.secondary:hover {
-    background: var(--color-accent-blue-secondary);
-    border-color: var(--color-accent-blue-secondary);
-}
-
-.cta-button.primary.animate-pulse {
-    animation: pulse 2s infinite ease-in-out;
-}
-
-@keyframes pulse {
-    0%, 100% { transform: scale(1); }
-    50% { transform: scale(1.05); }
-}
-
-/* Services Section */
-.services {
-    margin-bottom: 50px;
-}
-
-.section-title {
-    font-family: var(--font-primary);
-    font-size: 2rem;
-    color: var(--color-text-header-footer);
-    text-align: center;
-    margin-bottom: 30px;
-}
-
-.service-card {
-    background: var(--color-bg-header-footer);
-    border-radius: 15px;
-    padding: 25px;
-    margin-bottom: 20px;
-    text-align: center;
-    box-shadow: 0 4px 10px var(--color-shadow-subtle);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-.service-card:hover {
-    transform: translateY(-5px) rotateX(2deg);
-    box-shadow: 0 8px 20px rgba(0, 48, 135, 0.2);
-}
-
-.service-icon {
-    font-size: 2.5rem;
+/* Secondary Button Style */
+.secondary-button {
+    display: inline-block;
+    margin-top: 15px;
+    padding: 10px 25px;
+    background: none;
     color: var(--color-accent-blue-primary);
-    margin-bottom: 15px;
-}
-
-.service-card h3 {
-    font-family: var(--font-primary);
-    font-size: 1.4rem;
-    color: var(--color-text-header-footer);
-    margin-bottom: 10px;
-}
-
-.service-card p {
+    border: 2px solid var(--color-accent-blue-primary);
+    border-radius: 5px;
+    text-decoration: none;
     font-family: var(--font-secondary);
     font-size: 1rem;
-    color: #4b5563;
-    margin-bottom: 15px;
+    font-weight: 500;
+    transition: all 0.3s ease;
 }
-
-.service-link {
-    color: var(--color-accent-blue-primary);
-    text-decoration: none;
-    font-weight: 600;
-    transition: color 0.3s ease;
-}
-
-.service-link:hover {
-    color: var(--color-accent-blue-secondary);
+.secondary-button:hover {
+    background: var(--color-accent-blue-primary);
+    color: var(--color-text-on-dark-bg);
+    box-shadow: 0 2px 6px rgba(0, 86, 134, 0.2);
 }
 
 /* Testimonials Section */
-.testimonials {
-    margin-bottom: 50px;
+.testimonials-section {
+    background-color: var(--color-accent-grey); /* Light grey background */
 }
 
-.testimonial-carousel {
-    display: flex;
-    overflow-x: auto;
-    gap: 20px;
-    padding-bottom: 15px;
-    scroll-snap-type: x mandatory;
-}
-
-.testimonial-card {
-    flex: 0 0 85%;
-    background: var(--color-bg-header-footer);
-    border-radius: 15px;
-    padding: 25px;
-    box-shadow: 0 4px 10px var(--color-shadow-subtle);
-    scroll-snap-align: start;
-    transition: transform 0.3s ease;
-}
-
-.testimonial-card:hover {
-    transform: scale(1.02);
-}
-
-.stars {
-    color: var(--color-accent-gold);
-    margin-bottom: 15px;
-}
-
-.testimonial-card p {
-    font-family: var(--font-secondary);
-    font-size: 1rem;
-    color: #4b5563;
-    margin-bottom: 15px;
-}
-
-.client-name {
-    font-family: var(--font-primary);
-    font-size: 0.9rem;
-    color: var(--color-accent-blue-primary);
-}
-
-.carousel-controls {
-    display: flex;
-    justify-content: center;
-    gap: 20px;
-    margin-top: 15px;
-}
-
-.carousel-prev, .carousel-next {
-    background: var(--color-accent-blue-primary);
-    color: var(--color-text-on-dark-bg);
-    border: none;
-    border-radius: 50%;
-    width: 40px;
-    height: 40px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    transition: background 0.3s ease;
-}
-
-.carousel-prev:hover, .carousel-next:hover {
-    background: var(--color-accent-blue-secondary);
-}
-
-/* About Section */
-.about {
-    margin-bottom: 50px;
-    text-align: center;
-}
-
-.about p {
-    font-family: var(--font-secondary);
-    font-size: 1.1rem;
-    color: #4b5563; /* This text color might be hard to read if body background is transparent and parallax background is dark */
+.testimonial-item {
+    font-style: italic;
     margin-bottom: 20px;
+    padding: 15px;
+    border-left: 4px solid var(--color-accent-blue-secondary); /* Accent border */
+    background-color: rgba(255, 255, 255, 0.8); /* Slightly more opaque white */
+    border-radius: 0 5px 5px 0; /* Rounded corner on one side */
+    box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.08);
 }
 
-/* Contact Section */
-.contact {
-    background: var(--color-accent-blue-primary);
-    border-radius: 20px;
-    padding: 40px 25px;
-    margin-bottom: 40px;
+.testimonial-item p:last-child {
+    margin-bottom: 0; /* Remove bottom margin from last paragraph */
+}
+
+.testimonial-author {
+    font-style: normal; /* Author name not italic */
+    font-weight: 600;
+    text-align: right;
+    margin-top: 10px;
+    color: var(--color-accent-blue-primary);
+    font-size: 0.95rem;
+}
+
+.google-reviews-placeholder {
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 1px dashed rgba(0, 0, 0, 0.15); /* Slightly stronger separator */
     text-align: center;
 }
 
-.contact p {
+.google-reviews-placeholder h3 {
     font-family: var(--font-secondary);
-    font-size: 1.1rem;
+    font-size: 1.2rem;
+    color: var(--color-text-dark);
+    margin-bottom: 10px;
+}
+
+.google-reviews-button {
+    display: inline-flex; align-items: center; gap: 8px;
+    margin-top: 10px;
+    padding: 10px 25px;
+    background: #DB4437; /* Google Red */
     color: var(--color-text-on-dark-bg);
-    margin-bottom: 25px;
+    text-decoration: none; font-family: var(--font-primary);
+    font-size: 1rem; font-weight: 700;
+    border-radius: 5px; transition: all 0.3s ease;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
 }
 
-.contact-form {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
+.google-reviews-button:hover {
+     background: #e06055;
+     transform: translateY(-1px);
+     box-shadow: 0 3px 8px rgba(0, 0, 0, 0.3);
 }
 
-.form-group {
-    display: flex;
-    flex-direction: column;
-    text-align: left;
+.google-reviews-button i {
+    font-size: 1.1em;
 }
 
-.form-group label {
-    font-family: var(--font-primary);
-    font-size: 1rem;
+/* Bottom CTA Section */
+.call-to-action-bottom {
+    background: linear-gradient(45deg, rgba(0, 86, 134, 0.95), rgba(0, 122, 204, 0.95)); /* Slightly less transparent gradient overlay */
     color: var(--color-text-on-dark-bg);
-    margin-bottom: 5px;
+    text-shadow: 1px 1px 3px rgba(0,0,0,0.4); /* Stronger text shadow */
+}
+.call-to-action-bottom h2 {
+     color: var(--color-text-on-dark-bg);
+     text-shadow: 1px 1px 3px rgba(0,0,0,0.4);
+}
+.call-to-action-bottom .cta-button {
+    background: var(--color-text-on-dark-bg); /* White button on dark background */
+    color: var(--color-accent-blue-primary);
+    box-shadow: 0 4px 10px rgba(255, 255, 255, 0.4);
+}
+.call-to-action-bottom .cta-button:hover {
+    background: var(--color-accent-blue-secondary);
+    color: var(--color-text-on-dark-bg);
+     box-shadow: 0 6px 14px rgba(255, 255, 255, 0.5);
 }
 
-.form-group input, .form-group textarea {
-    padding: 12px;
-    border: 1px solid var(--color-border-subtle);
-    border-radius: 8px;
-    font-family: var(--font-secondary);
-    font-size: 1rem;
-    background: rgba(255, 255, 255, 0.95);
-    transition: border-color 0.3s ease;
-    color: #333; /* Added for better readability in input fields */
-}
 
-.form-group input:focus, .form-group textarea:focus {
-    border-color: var(--color-accent-blue-secondary);
-    outline: none;
-}
-
-.form-group textarea {
-    resize: vertical;
-    min-height: 100px;
-}
-
-/* Navigation */
+/* Fixed Mobile Tabs */
 .tabs {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    z-index: 1000;
+    position: fixed; bottom: 0; left: 0; width: 100%;
+    z-index: 1000; padding: 0;
     height: var(--footer-height);
     background: var(--color-bg-header-footer);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
+    backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
     box-shadow: 0 -2px 6px var(--color-shadow-subtle);
     border-top: 1px solid var(--color-border-subtle);
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-}
-
-.tab-link {
+    display: flex; justify-content: space-around;
+    align-items: center; gap: 5px;
     color: var(--color-text-header-footer);
-    text-decoration: none;
-    font-family: var(--font-secondary);
-    font-size: 0.8rem;
-    font-weight: 500;
-    padding: 10px;
+}
+.tabs a {
+    color: var(--color-text-header-footer);
+    text-decoration: none; font-family: var(--font-secondary); font-size: 0.88rem; /* Slightly larger font */
+    font-weight: 500; padding: 8px 4px; /* Adjusted padding */
     transition: all 0.3s ease;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 5px;
-    flex: 1;
+    position: relative; text-transform: uppercase; letter-spacing: 0.5px;
+    text-align: center;
+    flex-grow: 1;
+    flex-basis: 0; /* Allow items to grow equally */
+    white-space: nowrap; /* Prevent wrapping */
+    overflow: hidden;
+    text-overflow: ellipsis; /* Add ellipsis if text is too long */
+    min-width: 0; /* Allow shrinking below content size */
 }
+.tabs a::after {
+    content: ''; position: absolute; width: 0; height: 2px; bottom: 3px;
+    left: 50%; transform: translateX(-50%);
+    background: var(--color-accent-blue-primary);
+    transition: width 0.4s ease; border-radius: 1px;
+}
+.tabs a:hover { color: var(--color-accent-blue-primary); }
+.tabs a.active { color: var(--color-accent-blue-primary); font-weight: 700; }
+.tabs a:hover::after, .tabs a.active::after { width: 70%; /* Wider underline */ }
 
-.tab-link i {
-    font-size: 1.2rem;
-}
-
-.tab-link.active {
-    color: var(--color-accent-blue-primary);
-    font-weight: 700;
-}
-
-.tab-link:hover {
-    color: var(--color-accent-blue-secondary);
-    transform: translateY(-2px);
-}
 
 /* Animations */
-.animate-slide-in {
-    animation: slideIn 1s ease-out;
-}
-
-.animate-fade-in {
-    animation: fadeIn 1s ease-out 0.2s backwards;
-}
-
-@keyframes slideIn {
-    from { opacity: 0; transform: translateY(20px); }
-    to { opacity: 1; transform: translateY(0); }
-}
-
 @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(10px); }
+    from { opacity: 0; transform: translateY(10px); } /* Slightly more movement */
     to { opacity: 1; transform: translateY(0); }
 }
 
-/* Focus States */
-a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visible {
-    outline: 3px solid var(--color-accent-blue-secondary);
-    outline-offset: 2px;
-    border-radius: 5px;
+/* Focus outline for accessibility */
+a:focus-visible, button:focus-visible, input:focus-visible {
+    outline: 2px solid var(--color-accent-blue-secondary);
+    outline-offset: 1.5px; border-radius: 3px;
+    box-shadow: 0 0 6px rgba(0, 122, 204, 0.4);
 }
 
-/* Media Queries */
-@media (max-width: 500px) {
-    .hero-content h1 {
-        font-size: 2rem;
+/* Added basic responsiveness for slightly larger screens (tablets in portrait) */
+@media (min-width: 600px) {
+    .header-content {
+        width: 90%;
+        justify-content: space-between; /* Logo left, actions/nav right */
     }
 
-    .hero-content p {
-        font-size: 1rem; /* CORRECTED: Added colon and semicolon */
+    .logo-container {
+        flex-direction: row; /* Logo and text side-by-side on wider screens */
+        gap: 15px;
     }
 
-    .section-title {
+    .logo-container h1 {
         font-size: 1.8rem;
     }
 
-    .service-card h3 {
-        font-size: 1.3rem;
+    .header-logo {
+         height: 50px;
     }
 
-    .cta-button {
-        padding: 12px 30px;
-        font-size: 1rem;
+    .hero h2 {
+        font-size: 2.8rem;
     }
 
-    .tab-link {
-        font-size: 0.75rem;
+    .hero-subtitle {
+        font-size: 1.4rem;
     }
 
-    .tab-link i {
-        font-size: 1.1rem;
+    .content-section {
+        padding: 30px;
+    }
+
+     .content-section h2 {
+        font-size: 2rem;
+    }
+
+    .tabs a {
+        font-size: 0.95rem;
+        padding: 8px 10px;
     }
 }
