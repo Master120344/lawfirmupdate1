@@ -1,141 +1,314 @@
+// --- Strict Mode & Global Constants ---
+"use strict";
+const LOADER_ANIMATION_DURATION_MS = 5000; // 5 seconds for loading bar as requested
+const LOADER_FADE_OUT_DELAY_MS = LOADER_ANIMATION_DURATION_MS + 300; // Fade out after bar + buffer
+const PAGE_TRANSITION_LOADER_DURATION_MS = 1500; // Shorter for page transitions
+
+// --- Utility Functions ---
+function debounce(func, wait, immediate) {
+    let timeout;
+    return function() {
+        const context = this, args = arguments;
+        const later = function() {
+            timeout = null;
+            if (!immediate) func.apply(context, args);
+        };
+        const callNow = immediate && !timeout;
+        clearTimeout(timeout);
+        timeout = setTimeout(later, wait);
+        if (callNow) func.apply(context, args);
+    };
+}
+
+// --- Initial Page Load & Loader Logic ---
+function initPageLoader() {
+    const loader = document.getElementById('loader');
+    const bodyElement = document.body;
+
+    if (!loader || !bodyElement) {
+        console.warn("Loader or body element not found.");
+        if (bodyElement) bodyElement.classList.add('loaded'); // Still show content
+        return;
+    }
+
+    // Set CSS variable for loading bar animation duration
+    document.documentElement.style.setProperty('--loader-display-duration', `${LOADER_ANIMATION_DURATION_MS / 1000}s`);
+
+    // Show body content after loader animation + fade out time
+    // The CSS handles the body opacity transition based on its own timing relative to loader duration
+    setTimeout(() => {
+        bodyElement.classList.add('loaded');
+    }, LOADER_ANIMATION_DURATION_MS);
+
+
+    // Hide loader itself after its animation and a small buffer
+    setTimeout(() => {
+        loader.classList.add('hidden');
+        // Optional: remove loader from DOM after transition to free up resources
+        // setTimeout(() => loader.remove(), 1000);
+    }, LOADER_FADE_OUT_DELAY_MS);
+}
+
+window.addEventListener('load', initPageLoader);
+
+// Handle bfcache (back/forward cache) to ensure loader doesn't reappear incorrectly
+window.addEventListener('pageshow', (event) => {
+    if (event.persisted) {
+        const loader = document.getElementById('loader');
+        const bodyElement = document.body;
+        if (loader) loader.classList.add('hidden');
+        if (bodyElement) bodyElement.classList.add('loaded'); // Ensure body is visible
+    }
+});
+
+
+// --- DOMContentLoaded Event Listener ---
 document.addEventListener('DOMContentLoaded', () => {
-    const pageLoader = document.getElementById('page-loader');
-    const loaderBar = document.getElementById('loader-bar');
-    const navLinks = document.querySelectorAll('a.nav-link'); // Select only navigation links
-    const currentPath = window.location.pathname.split('/').pop() || 'index_mobile.html'; // Get current page name
+    const bodyElement = document.body;
 
-    const LOADER_DURATION_MIN = 3000; // 3 seconds
-    const LOADER_DURATION_MAX = 5000; // 5 seconds
+    // 1. Page Transition Loader for Internal Links
+    function initPageTransitionLoader() {
+        const loader = document.getElementById('loader');
+        if (!loader) return;
 
-    // Function to show the loader
-    function showLoader(callback) {
-        if (!pageLoader || !loaderBar) {
-            if (callback) callback(); // Proceed if loader elements aren't found
-            return;
-        }
+        const internalLinks = document.querySelectorAll(
+            'a[href]:not([href^="#"]):not([href^="tel:"]):not([href^="mailto:"]):not([href^="javascript:"]):not([target="_blank"])'
+        );
 
-        pageLoader.classList.add('visible');
-        loaderBar.style.width = '0%';
-        let progress = 0;
-        const loadingDuration = Math.random() * (LOADER_DURATION_MAX - LOADER_DURATION_MIN) + LOADER_DURATION_MIN;
-        const intervalTime = 50; // Update bar every 50ms
-        const totalSteps = loadingDuration / intervalTime;
-        const increment = 100 / totalSteps;
+        internalLinks.forEach(link => {
+            link.addEventListener('click', (e) => {
+                const destination = link.getAttribute('href');
+                if (!destination) return;
 
-        const progressInterval = setInterval(() => {
-            progress += increment;
-            if (progress <= 100) {
-                loaderBar.style.width = progress + '%';
-            } else {
-                loaderBar.style.width = '100%';
-            }
-        }, intervalTime);
+                // Simple check: if it's a full URL, ensure it's same origin
+                try {
+                    const currentHostname = window.location.hostname;
+                    const destinationUrl = new URL(destination, window.location.href);
+                    if (destinationUrl.hostname !== currentHostname) {
+                        return; // External link, let browser handle
+                    }
+                } catch (error) { return; /* Invalid URL, let browser handle */ }
 
-        setTimeout(() => {
-            clearInterval(progressInterval);
-            loaderBar.style.width = '100%'; // Ensure it hits 100%
-            if (callback) {
-                // Slight delay to ensure 100% bar is seen before navigating or hiding
-                setTimeout(callback, 150);
-            }
-        }, loadingDuration);
-    }
+                // Avoid re-triggering for same page links (e.g. if JS dynamically updated href)
+                const currentPagePath = window.location.pathname.replace(/\/$/, "");
+                const destinationPathObject = new URL(destination, window.location.href);
+                const destinationPath = destinationPathObject.pathname.replace(/\/$/, "");
 
-    // Function to hide the loader (not typically called directly if navigating)
-    function hideLoader() {
-        if (!pageLoader) return;
-        pageLoader.classList.remove('visible');
-        if (loaderBar) loaderBar.style.width = '0%'; // Reset for next time
-    }
+                if (destinationPath === currentPagePath && destinationPathObject.hash) { return; } // Allow hash links
+                if (destinationPath === currentPagePath && !destinationPathObject.hash) { e.preventDefault(); return; } // Same page, no hash
 
-    // Add 'active' class to current page nav link
-    navLinks.forEach(link => {
-        const linkPath = link.getAttribute('href').split('/').pop();
-        if (linkPath === currentPath) {
-            link.classList.add('active');
-        }
+                e.preventDefault();
+                bodyElement.classList.remove('loaded'); // Fade out current page content
+                loader.classList.remove('hidden'); // Show loader
 
-        // Intercept navigation for internal page links
-        link.addEventListener('click', function(event) {
-            const href = this.getAttribute('href');
-            const isExternal = href.startsWith('http://') || href.startsWith('https://');
-            const isHashLink = href.startsWith('#');
-            const targetPath = href.split('/').pop();
+                // Reset loading bar animation if needed (re-inserting element or class toggling)
+                const progressBar = loader.querySelector('.loading-bar-progress');
+                if (progressBar) {
+                    progressBar.style.animation = 'none'; // Reset animation
+                    // Trigger reflow to restart animation
+                    // eslint-disable-next-line no-unused-expressions
+                    progressBar.offsetHeight;
+                    progressBar.style.animation = ''; // Re-apply animation from CSS
+                }
+                // Set a shorter duration for page transition loader bar
+                document.documentElement.style.setProperty('--loader-display-duration', `${PAGE_TRANSITION_LOADER_DURATION_MS / 1000}s`);
 
-            // Don't use loader for external links, hash links, or if navigating to the same page
-            if (isExternal || isHashLink || targetPath === currentPath) {
-                return; // Allow default behavior
-            }
 
-            event.preventDefault(); // Stop direct navigation for internal links
-            showLoader(() => {
-                window.location.href = href; // Navigate after loader animation
+                setTimeout(() => {
+                    window.location.href = destination;
+                }, PAGE_TRANSITION_LOADER_DURATION_MS - 200); // Navigate slightly before loader fully hides
             });
         });
-    });
+    }
+    initPageTransitionLoader();
 
+    // 2. Testimonial Carousel (More Advanced)
+    function initTestimonialCarousel() {
+        const carouselWrapper = document.querySelector('.testimonial-carousel-wrapper');
+        if (!carouselWrapper) return;
 
-    // --- Google Reviews Display Logic ---
-    // This function will try to load reviews if googleReviewsData is available
-    function displayGoogleReviews() {
-        const reviewsContainer = document.getElementById('google-reviews-display-area');
-        if (!reviewsContainer) return;
+        const carousel = carouselWrapper.querySelector('.testimonial-carousel');
+        const items = Array.from(carousel.querySelectorAll('.testimonial-item'));
+        const prevButton = carouselWrapper.querySelector('.carousel-control.prev');
+        const nextButton = carouselWrapper.querySelector('.carousel-control.next');
+        const dotsContainer = carouselWrapper.querySelector('.carousel-dots');
+        if (!carousel || items.length === 0) return;
 
-        // Check if googleReviewsData is defined (it should be by google_reviews.js)
-        if (typeof googleReviewsData !== 'undefined' && googleReviewsData.length > 0) {
-            reviewsContainer.innerHTML = ''; // Clear placeholder or old reviews
+        let currentIndex = 0;
+        const totalItems = items.length;
+        const TESTIMONIAL_INTERVAL = 8000; // 8 seconds per testimonial
+        let autoPlayInterval;
 
-            googleReviewsData.forEach(review => {
-                const reviewCard = document.createElement('div');
-                reviewCard.classList.add('review-card');
-
-                let starsHTML = '';
-                for (let i = 1; i <= 5; i++) {
-                    starsHTML += `<i class="${i <= review.rating ? 'fas' : 'far'} fa-star"></i>`;
-                }
-
-                reviewCard.innerHTML = `
-                    <div class="author-info">
-                        ${review.profile_photo_url ? `<img src="${review.profile_photo_url}" alt="${review.author_name}" class="author-photo">` : ''}
-                        <span class="author-name">${review.author_name}</span>
-                    </div>
-                    <div class="rating">${starsHTML}</div>
-                    ${review.relative_time_description ? `<div class="review-time">${review.relative_time_description}</div>` : ''}
-                    <p class="review-text">${review.text}</p>
-                `;
-                reviewsContainer.appendChild(reviewCard);
-            });
-        } else {
-            // Keep placeholder or show a specific message if data is not loaded
-            // The static placeholder is already in HTML, so we might just update the "loading..." message
-            const loadingMessage = reviewsContainer.querySelector('.loading-reviews-message');
-            if (loadingMessage) {
-                loadingMessage.textContent = 'No reviews available at the moment, or an error occurred.';
+        function updateCarousel() {
+            carousel.style.transform = `translateX(-${currentIndex * 100}%)`;
+            // Update active dot
+            if (dotsContainer) {
+                Array.from(dotsContainer.children).forEach((dot, index) => {
+                    dot.classList.toggle('active', index === currentIndex);
+                });
             }
-             // If you want to remove static placeholders if no dynamic data:
-            // const staticPlaceholders = reviewsContainer.querySelectorAll('.review-item-placeholder');
-            // staticPlaceholders.forEach(ph => ph.style.display = 'none');
+            // Update item active class (if needed for other styling/accessibility)
+            items.forEach((item, index) => {
+                item.classList.toggle('active-testimonial', index === currentIndex);
+                item.setAttribute('aria-hidden', index !== currentIndex);
+            });
         }
+
+        function showNext() {
+            currentIndex = (currentIndex + 1) % totalItems;
+            updateCarousel();
+        }
+
+        function showPrev() {
+            currentIndex = (currentIndex - 1 + totalItems) % totalItems;
+            updateCarousel();
+        }
+
+        function startAutoPlay() {
+            stopAutoPlay(); // Clear existing interval
+            if (totalItems > 1) {
+                autoPlayInterval = setInterval(showNext, TESTIMONIAL_INTERVAL);
+            }
+        }
+
+        function stopAutoPlay() {
+            clearInterval(autoPlayInterval);
+        }
+
+        if (nextButton && prevButton) {
+            nextButton.addEventListener('click', () => {
+                showNext();
+                stopAutoPlay(); // Optional: stop autoplay on manual interaction
+                // startAutoPlay(); // Or restart it after a delay
+            });
+            prevButton.addEventListener('click', () => {
+                showPrev();
+                stopAutoPlay();
+            });
+        }
+
+        // Create dots
+        if (dotsContainer && totalItems > 1) {
+            for (let i = 0; i < totalItems; i++) {
+                const dot = document.createElement('button');
+                dot.classList.add('carousel-dot');
+                dot.setAttribute('aria-label', `Go to testimonial ${i + 1}`);
+                dot.addEventListener('click', () => {
+                    currentIndex = i;
+                    updateCarousel();
+                    stopAutoPlay();
+                });
+                dotsContainer.appendChild(dot);
+            }
+        }
+
+        // Initial setup
+        items.forEach((item, index) => {
+             item.setAttribute('aria-hidden', index !== 0);
+             if(index !== 0) item.classList.remove('active-testimonial');
+        });
+        updateCarousel(); // Set initial active dot and position
+        startAutoPlay();
+
+        // Pause autoplay on hover (optional)
+        carouselWrapper.addEventListener('mouseenter', stopAutoPlay);
+        carouselWrapper.addEventListener('mouseleave', startAutoPlay);
+    }
+    if (document.querySelector('.testimonial-carousel')) {
+      initTestimonialCarousel();
     }
 
-    // Call displayGoogleReviews once the DOM is ready and google_reviews.js *should* have loaded
-    // The `defer` attribute on the script tags helps manage loading order.
-    // We can also add a small timeout to ensure google_reviews.js has a chance to define its data.
-    setTimeout(displayGoogleReviews, 100);
 
-
-    // Handle back/forward browser navigation to hide loader if it gets stuck
-    window.addEventListener('pageshow', function(event) {
-        // event.persisted is true if page is from bfcache (back/forward cache)
-        if (event.persisted && pageLoader) {
-            hideLoader();
+    // 3. Set Current Year in Footer
+    function updateFooterYear() {
+        const yearSpan = document.getElementById('current-year');
+        if (yearSpan) {
+            yearSpan.textContent = new Date().getFullYear();
         }
-    });
-
-    // Initial check: If loader was somehow made visible by mistake on first load, hide it.
-    // (CSS should handle initial hidden state, but this is a safeguard)
-    if (pageLoader && pageLoader.classList.contains('visible')) {
-         setTimeout(hideLoader, 50); // Ensure it doesn't flash
     }
+    updateFooterYear();
+
+    // 4. Scroll-triggered Animations
+    function initScrollAnimations() {
+        const animatedElements = document.querySelectorAll('.animate-on-scroll');
+        if (!animatedElements.length) return;
+
+        const observerOptions = {
+            root: null, // viewport
+            rootMargin: '0px',
+            threshold: 0.15 // Trigger when 15% of the element is visible
+        };
+
+        const animationObserver = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const delay = parseInt(entry.target.dataset.animationDelay) || 0;
+                    setTimeout(() => {
+                        entry.target.classList.add('is-visible');
+                    }, delay);
+                    observer.unobserve(entry.target); // Animate only once
+                }
+            });
+        }, observerOptions);
+
+        animatedElements.forEach(el => animationObserver.observe(el));
+    }
+    initScrollAnimations();
+
+    // 5. Smooth Scroll for Anchor Links (if any added dynamically or for specific cases)
+    function initSmoothScroll() {
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                const targetId = this.getAttribute('href');
+                if (targetId.length > 1) { // Ensure it's not just "#"
+                    const targetElement = document.querySelector(targetId);
+                    if (targetElement) {
+                        e.preventDefault();
+                        const headerOffset = document.getElementById('site-header')?.offsetHeight || 70;
+                        const elementPosition = targetElement.getBoundingClientRect().top;
+                        const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+
+                        window.scrollTo({
+                            top: offsetPosition,
+                            behavior: "smooth"
+                        });
+                    }
+                }
+            });
+        });
+    }
+    initSmoothScroll();
+
+    // 6. Sticky Header - Basic hide on scroll down, show on scroll up (optional enhancement)
+    function initStickyHeaderBehavior() {
+        const header = document.getElementById('site-header');
+        if (!header) return;
+
+        let lastScrollTop = 0;
+        const delta = 5; // Scroll threshold
+        const headerHeight = header.offsetHeight;
+
+        const handleScroll = debounce(() => {
+            const nowScrollTop = window.pageYOffset || document.documentElement.scrollTop;
+
+            if (Math.abs(lastScrollTop - nowScrollTop) <= delta) return; // Ignore small scrolls
+
+            if (nowScrollTop > lastScrollTop && nowScrollTop > headerHeight) {
+                // Scroll Down
+                header.style.transform = `translateY(-${headerHeight}px)`;
+            } else {
+                // Scroll Up or at top
+                header.style.transform = 'translateY(0)';
+            }
+            lastScrollTop = nowScrollTop <= 0 ? 0 : nowScrollTop; // For Mobile or negative scrolling
+        }, 50); // Debounce scroll event
+
+        window.addEventListener('scroll', handleScroll);
+    }
+    // initStickyHeaderBehavior(); // Uncomment to enable this feature
+
+
+    // Add more JS functionalities here as the site grows
+    // e.g., FAQ accordions, form validation enhancements, etc.
 
 }); // End DOMContentLoaded
