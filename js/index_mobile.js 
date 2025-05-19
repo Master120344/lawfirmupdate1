@@ -1,174 +1,60 @@
-document.addEventListener('DOMContentLoaded', function() {
-    const body = document.body;
-    const pageLoader = document.getElementById('page-loader');
-    const menuToggleButton = document.getElementById('menuToggleButton');
-    const slideOutNavigation = document.getElementById('slideOutNavigation');
-    const closeNavigationButton = document.getElementById('closeNavigationButton');
+document.addEventListener('DOMContentLoaded', () => {
+    const loader = document.getElementById('loader');
+    const bodyElement = document.body;
+    const menuButton = document.querySelector('.menu-button');
+    const mobileNav = document.querySelector('.mobile-nav');
+    const navLinks = document.querySelectorAll('.mobile-nav a');
+    const testimonialSlider = document.querySelector('.testimonial-slider');
+    let testimonialIndex = 0;
 
-    // --- Page Loader ---
-    if (pageLoader) {
-        body.classList.add('preload'); // Initially hide content if loader present
-        window.addEventListener('load', () => {
-            setTimeout(() => { // Ensure loader is visible for a moment
-                body.classList.remove('preload');
-                body.classList.add('loaded');
-            }, 300); // Adjust timing as needed
-        });
+    // Fade out loader when the page is loaded
+    if (bodyElement) {
+        bodyElement.classList.add('loaded');
     } else {
-        body.classList.add('loaded'); // If no loader, show content immediately
+        console.error("Body element not found.");
     }
 
-    // --- Slide-Out Navigation Menu ---
-    function openNavMenu() {
-        if (slideOutNavigation && menuToggleButton) {
-            slideOutNavigation.classList.add('open');
-            menuToggleButton.classList.add('active');
-            menuToggleButton.setAttribute('aria-expanded', 'true');
-            body.classList.add('nav-menu-open');
-        }
+    if (loader) {
+        setTimeout(() => {
+            loader.classList.add('hidden');
+        }, 600); // Slightly longer for smoother perceived transition
+    } else {
+        console.error("Loader element not found.");
     }
 
-    function closeNavMenu() {
-        if (slideOutNavigation && menuToggleButton) {
-            slideOutNavigation.classList.remove('open');
-            menuToggleButton.classList.remove('active');
-            menuToggleButton.setAttribute('aria-expanded', 'false');
-            body.classList.remove('nav-menu-open');
-        }
-    }
-
-    if (menuToggleButton) {
-        menuToggleButton.addEventListener('click', () => {
-            if (slideOutNavigation.classList.contains('open')) {
-                closeNavMenu();
-            } else {
-                openNavMenu();
-            }
+    // Toggle mobile navigation
+    if (menuButton && mobileNav) {
+        menuButton.addEventListener('click', () => {
+            mobileNav.style.display = mobileNav.style.display === 'block' ? 'none' : 'block';
+            menuButton.classList.toggle('open');
         });
-    }
 
-    if (closeNavigationButton) {
-        closeNavigationButton.addEventListener('click', closeNavMenu);
-    }
-
-    // Close menu when a link inside it is clicked
-    if (slideOutNavigation) {
-        const navLinks = slideOutNavigation.querySelectorAll('.navigation-link');
+        // Close mobile nav when a link is clicked
         navLinks.forEach(link => {
             link.addEventListener('click', () => {
-                // Smooth scroll for # links handled by separate function
-                // For other links, browser navigates, menu should close
-                closeNavMenu();
+                mobileNav.style.display = 'none';
+                menuButton.classList.remove('open');
             });
         });
     }
 
-    // --- Active Navigation Link States ---
-    function setActiveLinks() {
-        const currentPath = window.location.pathname.split("/").pop() || "index_mobile.html";
-
-        // Slide-Out Navigation
-        const slideOutNavLinks = document.querySelectorAll('.slide-out-navigation .navigation-link');
-        slideOutNavLinks.forEach(link => {
-            const linkHref = link.getAttribute('href').split("/").pop();
-            link.classList.toggle('active', linkHref === currentPath);
-        });
-
-        // Bottom Fixed Navigation
-        const bottomNavLinks = document.querySelectorAll('.bottom-fixed-navigation .bottom-nav-link');
-        bottomNavLinks.forEach(link => {
-            const linkHref = link.getAttribute('href').split("/").pop();
-            link.classList.toggle('active', linkHref === currentPath);
-            if(linkHref === currentPath) link.setAttribute('aria-current', 'page');
-            else link.removeAttribute('aria-current');
-        });
-    }
-    setActiveLinks();
-
-    // --- Scroll-triggered Animations ---
-    function initializeScrollAnimations() {
-        const animatedElements = document.querySelectorAll('.animate-on-scroll, .animate-on-load');
-        if (!animatedElements.length) return;
-
-        const observerOptions = {
-            root: null, // observes intersections relative to the viewport
-            rootMargin: '0px 0px -10% 0px', // Trigger when 10% of element is visible from bottom
-            threshold: 0.1 // At least 10% of the element is visible
-        };
-
-        const animationObserver = new IntersectionObserver((entries, observer) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    const el = entry.target;
-                    const delay = parseInt(el.dataset.delay) || 0;
-                    
-                    // Apply delay using a CSS custom property
-                    el.style.setProperty('--animation-actual-delay', `${delay}ms`);
-                    
-                    el.classList.add('is-visible');
-                    
-                    // Unobserve after animation if it should only run once
-                    if (!el.classList.contains('animate-on-load')) { // Keep observing for scroll items
-                         // observer.unobserve(el); // Uncomment to animate only once
-                    }
+    // Basic testimonial slider functionality
+    if (testimonialSlider) {
+        const testimonials = testimonialSlider.children;
+        if (testimonials.length > 0) {
+            function showTestimonial(index) {
+                for (let i = 0; i < testimonials.length; i++) {
+                    testimonials[i].style.display = 'none';
                 }
-            });
-        }, observerOptions);
-
-        animatedElements.forEach(el => {
-            if (el.classList.contains('animate-on-load')) {
-                // Trigger 'animate-on-load' elements after a slight delay (e.g., after loader)
-                const delay = parseInt(el.dataset.delay) || 0;
-                el.style.setProperty('--animation-actual-delay', `${delay}ms`);
-                // Ensure these are triggered after the main page load sequence
-                if (document.body.classList.contains('loaded')) {
-                    el.classList.add('is-visible');
-                } else {
-                    window.addEventListener('load', () => setTimeout(() => el.classList.add('is-visible'), 350 + delay));
-                }
-            } else {
-                animationObserver.observe(el);
+                testimonials[index].style.display = 'block';
             }
-        });
+
+            showTestimonial(testimonialIndex); // Show the first testimonial initially
+
+            setInterval(() => {
+                testimonialIndex = (testimonialIndex + 1) % testimonials.length;
+                showTestimonial(testimonialIndex);
+            }, 5000); // Change testimonial every 5 seconds
+        }
     }
-    // Initialize animations after loader logic has a chance to complete
-    if (pageLoader) {
-        window.addEventListener('load', () => setTimeout(initializeScrollAnimations, 400));
-    } else {
-        initializeScrollAnimations();
-    }
-
-
-    // --- Smooth Scroll for Anchor Links (#) ---
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-        anchor.addEventListener('click', function (e) {
-            const hrefAttribute = this.getAttribute('href');
-            if (hrefAttribute.length > 1 && hrefAttribute.startsWith('#')) {
-                try {
-                    const targetElement = document.querySelector(hrefAttribute);
-                    if (targetElement) {
-                        e.preventDefault();
-                        const headerOffset = document.querySelector('.site-main-header')?.offsetHeight || 0;
-                        const elementPosition = targetElement.getBoundingClientRect().top;
-                        const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
-
-                        window.scrollTo({
-                            top: offsetPosition,
-                            behavior: 'smooth'
-                        });
-                    }
-                } catch (error) {
-                    console.warn("Smooth scroll target not found or invalid selector:", hrefAttribute, error);
-                }
-            }
-        });
-    });
-
-    // --- Dynamic Year in Footer ---
-    const currentYearSpan = document.getElementById('currentYearNav');
-    if (currentYearSpan) {
-        currentYearSpan.textContent = new Date().getFullYear();
-    }
-
-    console.log("Kershaw Law Mobile - Final Attempt JS Initialized");
 });
