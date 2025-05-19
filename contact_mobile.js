@@ -1,4 +1,4 @@
-// contact_mobile.js
+// contact_desktop.js
 
 // --- Strict Mode & Global Constants ---
 "use strict";
@@ -100,6 +100,7 @@ window.addEventListener('pageshow', (event) => {
             mainContent.style.visibility = 'hidden';
             mainContent.style.opacity = '0';
         } else if (mainContent && mainContent.style.visibility === 'hidden') {
+            // This case might be redundant if initPageLoad correctly shows content
             mainContent.style.visibility = 'visible';
             mainContent.style.opacity = '1';
         }
@@ -143,7 +144,9 @@ document.addEventListener('DOMContentLoaded', () => {
     // 2. Footer Year
     function updateFooterYear() {
         const yearSpan = document.getElementById('current-year');
-        if (yearSpan) yearSpan.textContent = '2025'; // As requested
+        if (yearSpan) {
+            yearSpan.textContent = new Date().getFullYear(); // Dynamically set current year
+        }
     }
     updateFooterYear();
 
@@ -151,7 +154,26 @@ document.addEventListener('DOMContentLoaded', () => {
     if (typeof window.initScrollAnimations === 'function') window.initScrollAnimations();
 
     // 4. Smooth Scroll (if anchors are used)
-    function initSmoothScroll() { /* ... same as faq_mobile.js ... */ }
+    function initSmoothScroll() {
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                const targetId = this.getAttribute('href');
+                if (targetId.length > 1 && targetId.startsWith('#')) {
+                    try {
+                        const targetElement = document.querySelector(targetId);
+                        if (targetElement) {
+                            e.preventDefault();
+                            const header = document.getElementById('site-header');
+                            const headerOffset = header ? header.offsetHeight : (parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--header-height-mobile').replace('px', '')) || 70);
+                            const elementPosition = targetElement.getBoundingClientRect().top;
+                            const offsetPosition = elementPosition + window.pageYOffset - headerOffset - 20; // 20px buffer
+                            window.scrollTo({ top: offsetPosition, behavior: "smooth" });
+                        }
+                    } catch (error) { console.warn(`Smooth scroll target not found: ${targetId}`); }
+                }
+            });
+        });
+    }
     initSmoothScroll();
 
     // 5. Sticky Header
@@ -215,7 +237,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (nameInput.value.trim()) {
                 userNameSpan.textContent = nameInput.value.trim().split(' ')[0]; // Show first name
             } else {
-                userNameSpan.textContent = "Valued Client";
+                userNameSpan.textContent = "Valued Client"; // Fallback if name is empty but form somehow submitted
             }
 
             form.style.display = 'none';
