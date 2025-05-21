@@ -32,6 +32,7 @@
                     <h1 class="firm-name-header">The Kershaw Law Firm <span class="firm-name-pc">P.C.</span></h1>
                  </a>
             </div>
+            <!-- Desktop navigation would typically go here if not part of .mobile-tabs -->
         </div>
     </header>
 
@@ -43,7 +44,7 @@
                     Take the first step towards securing your workforce. Please provide the following details, and our experienced team will contact you promptly to discuss your H-2A or H-2B visa needs.
                 </p>
 
-                <div class="consultation-form-container animate-on-scroll fade-in-up" data-animation-delay="200" id="consultation-form-section">
+                <div class="consultation-form-container animate-on-scroll fade-in-up" data-animation-delay="200" id="consultation-form-wrapper"> <!-- Changed ID for clarity -->
                     <form id="consultation-request-form" class="consultation-form-element">
                         <div class="form-grid">
                             <div class="form-group">
@@ -60,7 +61,7 @@
                             </div>
                             <div class="form-group">
                                 <label for="phone"><i class="fa-solid fa-phone-volume form-icon"></i> Phone Number <span class="required-asterisk">*</span></label>
-                                <input type="tel" id="phone" name="phone" required placeholder="(555) 123-4567">
+                                <input type="tel" id="phone" name="phone" required placeholder="e.g., 555-123-4567" maxlength="12"> <!-- Placeholder and maxlength for XXX-XXX-XXXX -->
                             </div>
                             <div class="form-group">
                                 <label for="position-title"><i class="fa-solid fa-id-card-clip form-icon"></i> Your Position/Job Title <span class="required-asterisk">*</span></label>
@@ -102,9 +103,12 @@
                                 </select>
                             </div>
                         </div>
+                        <!-- Form Error Message Placeholder -->
+                        <div id="form-error-message" class="form-error-message" style="display: none;"></div>
+
                         <div class="form-group form-submit-group">
-                            <button type="submit" class="cta-button form-submit-button">
-                                <i class="fa-solid fa-paper-plane"></i> Submit Consultation Request
+                            <button type="submit" class="cta-button form-submit-button" id="consultation-submit-button"> <!-- Added ID -->
+                                <i class="fa-solid fa-paper-plane"></i> <span class="submit-button-text">Submit Consultation Request</span> <!-- Added span -->
                             </button>
                         </div>
                     </form>
@@ -113,7 +117,7 @@
                 <div id="thank-you-message" class="thank-you-message" style="display: none;">
                     <i class="fas fa-check-circle thank-you-icon"></i>
                     <h3 class="thank-you-title">Consultation Request Sent!</h3>
-                    <p>Thank you for reaching out to The Kershaw Law Firm P.C. We have received your consultation request and will be in touch via email shortly to schedule a convenient time to discuss your needs. We typically respond within 1-2 business days.</p>
+                    <p id="thank-you-backend-message">Thank you for reaching out to The Kershaw Law Firm P.C. We have received your consultation request and will be in touch via email shortly to schedule a convenient time to discuss your needs. We typically respond within 1-2 business days.</p> <!-- Backend message will go here -->
                     <p>We look forward to speaking with you!</p>
                     <button id="reset-form-button" class="secondary-button">Request Another Consultation</button>
                 </div>
@@ -121,22 +125,14 @@
         </section>
     </main>
 
-    <nav class="mobile-tabs">
-        <a href="index_desktop.html" class="tab-item">
-            <i class="fas fa-home tab-icon"></i><span class="tab-label">Home</span>
-        </a>
-        <a href="aboutus_desktop.html" class="tab-item">
-            <i class="fas fa-building-columns tab-icon"></i><span class="tab-label">About Us</span>
-        </a>
-        <a href="services_desktop.html" class="tab-item">
-            <i class="fas fa-briefcase tab-icon"></i><span class="tab-label">Services</span>
-        </a>
-        <a href="faq_desktop.html" class="tab-item">
-            <i class="fas fa-lightbulb tab-icon"></i><span class="tab-label">FAQ</span>
-        </a>
-        <a href="contact_desktop.html" class="tab-item">
-            <i class="fas fa-envelope-open-text tab-icon"></i><span class="tab-label">Contact</span>
-        </a>
+    <nav class="desktop-navigation"> <!-- Changed class from mobile-tabs to desktop-navigation -->
+        <a href="index_desktop.html" class="nav-item">Home</a>
+        <a href="aboutus_desktop.html" class="nav-item">About Us</a>
+        <a href="services_desktop.html" class="nav-item">Services</a>
+        <a href="faq_desktop.html" class="nav-item">FAQ</a>
+        <a href="contact_desktop.html" class="nav-item">Contact</a>
+        <!-- Get Started could be a CTA button or a link here -->
+        <a href="getstarted_desktop.html" class="nav-item active cta-nav-link">Request Consultation</a>
     </nav>
 
     <footer class="site-footer">
@@ -158,7 +154,7 @@
                  <span class="footer-link-separator">•</span>
                 <a href="sitemap_desktop.html">Sitemap</a>
             </nav>
-            <p class="footer-copyright">© <span id="current-year">2025</span> The Kershaw Law Firm P.C. All Rights Reserved.</p>
+            <p class="footer-copyright">© <span id="current-year">2025</span> The Kershaw Law Firm P.C. All Rights Reserved.</p> <!-- Year will be updated by JS -->
             <p class="footer-disclaimer">This website is for informational purposes only and does not constitute legal advice. Submission of this form does not create an attorney-client relationship. Attorney Advertising. Results may vary.</p>
         </div>
     </footer>
