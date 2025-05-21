@@ -9,7 +9,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const items = carousel ? carousel.querySelectorAll('.testimonial-item') : null;
     const prevButton = carouselWrapper.querySelector('.carousel-control.prev'); // Kept for potential re-enablement
     const nextButton = carouselWrapper.querySelector('.carousel-control.next'); // Kept for potential re-enablement
-    const dotsContainer = carouselWrapper.querySelector('.carousel-dots');                                  
+    const dotsContainer = carouselWrapper.querySelector('.carousel-dots');
     if (!carousel || !items || items.length === 0 || !dotsContainer) {
         // console.log("Essential Google Reviews Carousel elements missing or no items.");
         if(prevButton) prevButton.style.display = 'none';
