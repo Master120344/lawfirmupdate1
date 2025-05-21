@@ -43,7 +43,7 @@
                     Take the first step towards securing your workforce. Please provide the following details, and our experienced team will contact you promptly to discuss your H-2A or H-2B visa needs.
                 </p>
 
-                <div class="consultation-form-container animate-on-scroll fade-in-up" data-animation-delay="200" id="consultation-form-section">
+                <div class="consultation-form-container animate-on-scroll fade-in-up" data-animation-delay="200" id="consultation-form-wrapper"> <!-- Changed ID for clarity -->
                     <form id="consultation-request-form" class="consultation-form-element">
                         <div class="form-grid">
                             <div class="form-group">
@@ -60,7 +60,7 @@
                             </div>
                             <div class="form-group">
                                 <label for="phone"><i class="fa-solid fa-phone-volume form-icon"></i> Phone Number <span class="required-asterisk">*</span></label>
-                                <input type="tel" id="phone" name="phone" required placeholder="(555) 123-4567">
+                                <input type="tel" id="phone" name="phone" required placeholder="e.g., 555-123-4567" maxlength="12"> <!-- Placeholder and maxlength for XXX-XXX-XXXX -->
                             </div>
                             <div class="form-group">
                                 <label for="position-title"><i class="fa-solid fa-id-card-clip form-icon"></i> Your Position/Job Title <span class="required-asterisk">*</span></label>
@@ -102,9 +102,12 @@
                                 </select>
                             </div>
                         </div>
+                        <!-- Form Error Message Placeholder -->
+                        <div id="form-error-message" class="form-error-message" style="display: none;"></div>
+
                         <div class="form-group form-submit-group">
-                            <button type="submit" class="cta-button form-submit-button">
-                                <i class="fa-solid fa-paper-plane"></i> Submit Consultation Request
+                            <button type="submit" class="cta-button form-submit-button" id="consultation-submit-button"> <!-- Added ID -->
+                                <i class="fa-solid fa-paper-plane"></i> <span class="submit-button-text">Submit Consultation Request</span> <!-- Added span -->
                             </button>
                         </div>
                     </form>
@@ -113,7 +116,7 @@
                 <div id="thank-you-message" class="thank-you-message" style="display: none;">
                     <i class="fas fa-check-circle thank-you-icon"></i>
                     <h3 class="thank-you-title">Consultation Request Sent!</h3>
-                    <p>Thank you for reaching out to The Kershaw Law Firm P.C. We have received your consultation request and will be in touch via email shortly to schedule a convenient time to discuss your needs. We typically respond within 1-2 business days.</p>
+                    <p id="thank-you-backend-message">Thank you for reaching out to The Kershaw Law Firm P.C. We have received your consultation request and will be in touch via email shortly to schedule a convenient time to discuss your needs. We typically respond within 1-2 business days.</p> <!-- Backend message will go here -->
                     <p>We look forward to speaking with you!</p>
                     <button id="reset-form-button" class="secondary-button">Request Another Consultation</button>
                 </div>
