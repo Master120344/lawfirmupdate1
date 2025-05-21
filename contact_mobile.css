@@ -513,7 +513,7 @@ select:disabled {
 .footer-social-media .social-icon.linkedin i { color: #0A66C2; } /* LinkedIn Blue */
 .footer-social-media .social-icon.x-twitter i { color: #FFFFFF; } /* X White (as requested) */
 .footer-social-media .social-icon.instagram i { color: #E1306C; } /* Instagram Pink */
-.footer-social-media .social-icon.tiktok i { color: #25F4EE; } /* TikTok Cyan (Bright "lit up" brand accent) */
+.footer-social-media .social-icon.tiktok i { color: #E1306C; } /* TikTok Pink/Red (matching Instagram) */
 
 /* Hover effect for transform, color is static */
 .footer-social-media a:hover,
