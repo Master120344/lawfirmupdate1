@@ -498,19 +498,34 @@ select:disabled {
 .footer-firm-identity { margin-bottom: calc(var(--spacing-unit) * 2.5); display: flex; flex-direction: column; align-items: center; gap: var(--spacing-unit); }
 .footer-firm-name { font-family: var(--font-headings); font-size: 1.2rem; color: var(--color-text-light); font-weight: 600; margin: 0; }
 .footer-social-media { margin-bottom: calc(var(--spacing-unit) * 2.5); }
-.footer-social-media a { color: #ced4da !important; font-size: 1.6rem; margin: 0 calc(var(--spacing-unit) * 1.25); transition: color var(--transition-fast), transform var(--transition-fast); display: inline-block; }
 
-/* MODIFIED: Social Icons Light Up White on Hover */
-.footer-social-media a:hover i,
-.footer-social-media a:focus i {
-    color: #FFFFFF !important; /* All social icons turn white on hover/focus */
+.footer-social-media a {
+    color: #ced4da; /* Fallback color for <a> tag, direct <i> styling will override for icons */
+    font-size: 1.6rem;
+    margin: 0 calc(var(--spacing-unit) * 1.25);
+    transition: transform var(--transition-fast); /* Only transform is animated on hover now */
+    display: inline-block;
+    text-decoration: none; /* Ensure no underline on icons */
 }
+
+/* Social Icons Always Lit Up In Respective Colors */
+.footer-social-media .social-icon.facebook i { color: #1877F2; } /* Facebook Blue */
+.footer-social-media .social-icon.linkedin i { color: #0A66C2; } /* LinkedIn Blue */
+.footer-social-media .social-icon.x-twitter i { color: #FFFFFF; } /* X White (as requested) */
+.footer-social-media .social-icon.instagram i { color: #E1306C; } /* Instagram Pink */
+.footer-social-media .social-icon.tiktok i { color: #25F4EE; } /* TikTok Cyan (Bright "lit up" brand accent) */
+
+/* Hover effect for transform, color is static */
 .footer-social-media a:hover,
 .footer-social-media a:focus {
-    transform: scale(1.15); /* Keep existing scale transform */
+    transform: scale(1.15);
+    text-decoration: none; /* Reinforce no underline */
+}
+/* Ensure icons don't get an underline from the <a> tag's :hover state if browser defaults kick in. */
+.footer-social-media a:hover i,
+.footer-social-media a:focus i {
     text-decoration: none;
 }
-/* Removed specific brand color hovers for social icons to enforce white "light up" */
 
 .footer-links { margin-bottom: calc(var(--spacing-unit) * 1.5); font-size: 0.8rem; }
 .footer-links a { color: #b0bec5 !important; margin: 0 calc(var(--spacing-unit) * 0.4); transition: color var(--transition-fast); }
