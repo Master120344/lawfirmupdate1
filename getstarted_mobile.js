@@ -2,8 +2,9 @@
 
 // --- Strict Mode & Global Constants ---
 "use strict";
-const INITIAL_SPLASH_DURATION_MS = 50; // Very brief splash
+const INITIAL_SPLASH_DURATION_MS = 50;
 const PAGE_TRANSITION_ANIMATION_MS = 300;
+const CONSULTATION_PHP_SCRIPT_URL = 'send_consultation_request.php'; // New PHP script URL
 
 // --- Utility Functions ---
 function debounce(func, wait, immediate) {
@@ -42,24 +43,17 @@ function initPageLoad() {
     mainContent.style.opacity = '0';
     document.documentElement.style.setProperty('--loader-display-duration', `${INITIAL_SPLASH_DURATION_MS / 1000}s`);
 
-    // No artificial delay beyond the CSS transition for the splash loader
-    splashLoader.classList.add('hidden'); // Start hiding immediately
+    splashLoader.classList.add('hidden');
     mainContent.style.visibility = 'visible';
-    mainContent.style.transition = `opacity ${PAGE_TRANSITION_ANIMATION_MS / 1000}s ease-out ${INITIAL_SPLASH_DURATION_MS / 1000}s`; // Delay main content fade-in until splash is gone
+    // Delay main content fade-in slightly longer than splash CSS transition to ensure splash is gone
+    mainContent.style.transition = `opacity ${PAGE_TRANSITION_ANIMATION_MS / 1000}s ease-out ${ (INITIAL_SPLASH_DURATION_MS + 10) / 1000}s`;
     mainContent.style.opacity = '1';
-    bodyElement.classList.add('loaded'); // Make body visible
+    bodyElement.classList.add('loaded');
 
     splashLoader.addEventListener('transitionend', () => {
-        if (splashLoader.classList.contains('hidden')) {
-             // splashLoader.remove(); // Optional: remove from DOM
-        }
+        if (splashLoader.classList.contains('hidden')) { /* splashLoader.remove(); */ }
     }, { once: true });
 }
-// Using DOMContentLoaded for faster perceived load, then 'load' for full assets
-document.addEventListener('DOMContentLoaded', () => {
-    // This can run parts of initPageLoad that don't depend on all assets like images in main content
-    // For simplicity here, we'll stick to 'load' for the main sequence.
-});
 window.addEventListener('load', initPageLoad);
 
 
@@ -95,22 +89,21 @@ window.addEventListener('pageshow', (event) => {
     if (event.persisted) {
         if (bodyElement) bodyElement.classList.add('loaded');
         if (mainContent) {
-            mainContent.style.transition = 'none'; // No transition for instant display from bfcache
+            mainContent.style.transition = 'none';
             mainContent.style.opacity = '1';
             mainContent.style.visibility = 'visible';
-            setTimeout(() => { // Re-apply transition for future interactions
+            setTimeout(() => {
                 mainContent.style.transition = `opacity ${PAGE_TRANSITION_ANIMATION_MS / 1000}s ease-out`;
             }, 50);
         }
         if (typeof window.initScrollAnimations === 'function') setTimeout(window.initScrollAnimations, 100);
-    } else { // Fresh load
-        // Ensure content is visible if splash is already gone or wasn't there
-        // and initPageLoad might not have run yet or fully completed
-        if (mainContent && (!splashLoader || splashLoader.classList.contains('hidden'))) {
-             if (mainContent.style.visibility === 'hidden') { // Only if it's still hidden
-                mainContent.style.visibility = 'visible';
-                mainContent.style.opacity = '1';
-            }
+    } else {
+        if (mainContent && splashLoader && !splashLoader.classList.contains('hidden')) {
+            mainContent.style.visibility = 'hidden';
+            mainContent.style.opacity = '0';
+        } else if (mainContent && mainContent.style.visibility === 'hidden') {
+            mainContent.style.visibility = 'visible';
+            mainContent.style.opacity = '1';
         }
     }
 });
@@ -119,8 +112,7 @@ window.addEventListener('pageshow', (event) => {
 document.addEventListener('DOMContentLoaded', () => {
     const mainContent = document.getElementById('main-content');
 
-    // 1. Page Transition Logic
-    function initPageTransitions() {
+    function initPageTransitions() { /* ... (same as previous JS files) ... */
         const transitionLoader = document.getElementById('page-transition-loader');
         if (!transitionLoader || !mainContent) return;
         const internalLinks = document.querySelectorAll(
@@ -149,22 +141,16 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     initPageTransitions();
 
-    // 2. Footer Year
-    function updateFooterYear() {
+    function updateFooterYear() { /* ... (same as previous JS files, e.g., '2025' or dynamic) ... */
         const yearSpan = document.getElementById('current-year');
-        if (yearSpan) yearSpan.textContent = '2025'; // As requested
+        if (yearSpan) yearSpan.textContent = '2025';
     }
     updateFooterYear();
 
-    // 3. Scroll Animations
     if (typeof window.initScrollAnimations === 'function') window.initScrollAnimations();
-
-    // 4. Smooth Scroll (if anchors are used)
-    function initSmoothScroll() { /* ... same as other pages ... */ }
+    function initSmoothScroll() { /* ... (same as previous JS files) ... */ }
     initSmoothScroll();
-
-    // 5. Sticky Header
-    function initStickyHeaderBehavior() {
+    function initStickyHeaderBehavior() { /* ... (same as previous JS files) ... */
         const header = document.getElementById('site-header');
         if (!header) return;
         let lastScrollTop = 0; const delta = 10; const headerHeight = header.offsetHeight; let isHidden = false;
@@ -182,78 +168,146 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     initStickyHeaderBehavior();
 
-    // 6. Consultation Form Submission Handling
+    // Phone Number Formatting
+    function initPhoneFormatting() {
+        const phoneInput = document.getElementById('phone'); // ID of phone input in getstarted_mobile.html
+        if (!phoneInput) return;
+
+        phoneInput.addEventListener('input', (e) => {
+            let input = e.target.value.replace(/\D/g, '');
+            let formattedInput = '';
+            if (input.length > 0) {
+                formattedInput = input.substring(0, 3);
+            }
+            if (input.length > 3) {
+                formattedInput += '-' + input.substring(3, 6);
+            }
+            if (input.length > 6) {
+                formattedInput += '-' + input.substring(6, 10);
+            }
+            e.target.value = formattedInput;
+        });
+    }
+    initPhoneFormatting();
+
+    // Consultation Form Submission Handling
     function initConsultationForm() {
-        const consultationForm = document.getElementById('consultation-request-form');
-        const consultationSection = document.getElementById('consultation-form-section');
-        const thankYouSection = document.getElementById('thank-you-message'); // Corrected ID
-        const submitButton = consultationForm ? consultationForm.querySelector('button[type="submit"]') : null;
+        const form = document.getElementById('consultation-request-form');
+        const formWrapper = document.getElementById('consultation-form-wrapper'); // The div containing the form
+        const thankYouDiv = document.getElementById('thank-you-message');
+        const thankYouBackendMessage = document.getElementById('thank-you-backend-message');
+        const submitButton = document.getElementById('consultation-submit-button');
+        const submitButtonTextSpan = submitButton ? submitButton.querySelector('.submit-button-text') : null;
+        const formErrorMessageDiv = document.getElementById('form-error-message');
         const resetButton = document.getElementById('reset-form-button');
 
-
-        if (!consultationForm || !consultationSection || !thankYouSection || !submitButton || !resetButton) {
-            console.warn('Consultation form elements not found. Check IDs: consultation-request-form, consultation-form-section, thank-you-message, reset-form-button, and submit button.');
+        if (!form || !formWrapper || !thankYouDiv || !thankYouBackendMessage || !submitButton || !submitButtonTextSpan || !formErrorMessageDiv || !resetButton) {
+            console.warn('One or more consultation form elements are missing. Check IDs.');
             return;
         }
 
-        consultationForm.addEventListener('submit', function(event) {
-            event.preventDefault(); // Prevent actual submission for this mock
+        form.addEventListener('submit', async function(event) {
+            event.preventDefault();
+            
+            formErrorMessageDiv.style.display = 'none';
+            formErrorMessageDiv.textContent = '';
+            form.querySelectorAll('.input-error').forEach(el => el.classList.remove('input-error'));
 
-            if (!consultationForm.checkValidity()) {
-                // Find first invalid field and focus it
-                const firstInvalid = consultationForm.querySelector(':invalid');
+            let isValid = true;
+            const requiredFields = form.querySelectorAll('[required]');
+            requiredFields.forEach(input => {
+                if ((input.type === 'checkbox' && !input.checked) || (input.type !== 'checkbox' && !input.value.trim())) {
+                    isValid = false;
+                    input.classList.add('input-error');
+                } else {
+                    input.classList.remove('input-error');
+                }
+                if (input.type === 'email' && input.value.trim() && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(input.value.trim())) {
+                    isValid = false;
+                    input.classList.add('input-error');
+                }
+                 if (input.type === 'number' && input.value.trim() && parseInt(input.value) < (parseInt(input.min) || 0) ) {
+                    isValid = false;
+                    input.classList.add('input-error');
+                }
+            });
+
+            if (!isValid) {
+                formErrorMessageDiv.textContent = 'Please fill out all highlighted required fields correctly.';
+                formErrorMessageDiv.style.display = 'block';
+                const firstInvalid = form.querySelector('.input-error, [required]:invalid, [required]:placeholder-shown');
                 if(firstInvalid) {
                     firstInvalid.focus();
-                    // Optionally, provide a more user-friendly general message
-                    // e.g., by adding a summary error message above the form
+                    // Scroll to error message
+                    const errorMsgTop = formErrorMessageDiv.getBoundingClientRect().top + window.pageYOffset - (document.getElementById('site-header')?.offsetHeight || 70) - 20;
+                    window.scrollTo({ top: errorMsgTop, behavior: 'smooth' });
                 }
                 return;
             }
 
             submitButton.disabled = true;
-            submitButton.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Sending...';
+            submitButtonTextSpan.textContent = 'Sending...';
+            const originalButtonIconClass = submitButton.querySelector('i').className;
+            submitButton.querySelector('i').className = 'fas fa-spinner fa-spin';
 
+            const formDataObject = {};
+            new FormData(form).forEach((value, key) => formDataObject[key] = value);
 
-            // Simulate a delay for "submission" then show thank you message
-            setTimeout(() => {
-                consultationSection.style.opacity = '0'; // Start fade out of form
-                consultationSection.style.display = 'none'; // Hide after fade
-                
-                thankYouSection.style.display = 'block'; // Make visible before animating opacity
-                requestAnimationFrame(() => { // Ensure display:block is applied
-                    thankYouSection.classList.add('visible'); // Trigger opacity transition
-                     // Scroll to the thank you message if it's out of view
-                    const headerHeight = document.getElementById('site-header')?.offsetHeight || 70;
-                    const messageTop = thankYouSection.getBoundingClientRect().top + window.pageYOffset - headerHeight - 20;
-                    window.scrollTo({ top: messageTop, behavior: 'smooth' });
+            try {
+                const response = await fetch(CONSULTATION_PHP_SCRIPT_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify(formDataObject)
                 });
+                const result = await response.json();
 
-                // Reset button state after "submission"
-                // submitButton.disabled = false;
-                // submitButton.innerHTML = '<i class="fa-solid fa-paper-plane"></i> Submit Consultation Request';
+                if (response.ok && result.status === 'success') {
+                    thankYouBackendMessage.textContent = result.message || 'Your consultation request has been sent successfully!';
+                    formWrapper.style.display = 'none'; // Hide form container
+                    thankYouDiv.style.display = 'block';
+                    setTimeout(() => {
+                        thankYouDiv.classList.add('visible'); // Animate in thank you message
+                    }, 10);
 
-            }, 1000); // 1 second "submission" delay
+                    const headerHeight = document.getElementById('site-header')?.offsetHeight || 70;
+                    const messageTop = thankYouDiv.getBoundingClientRect().top + window.pageYOffset - headerHeight - 20;
+                    window.scrollTo({ top: messageTop, behavior: 'smooth' });
+                } else {
+                    formErrorMessageDiv.textContent = result.message || 'An unexpected error occurred.';
+                    formErrorMessageDiv.style.display = 'block';
+                    const errorMsgTop = formErrorMessageDiv.getBoundingClientRect().top + window.pageYOffset - (document.getElementById('site-header')?.offsetHeight || 70) - 20;
+                    window.scrollTo({ top: errorMsgTop, behavior: 'smooth' });
+                }
+            } catch (error) {
+                console.error('Consultation form submission error:', error);
+                formErrorMessageDiv.textContent = 'A network error occurred. Please check your connection.';
+                formErrorMessageDiv.style.display = 'block';
+                const errorMsgTop = formErrorMessageDiv.getBoundingClientRect().top + window.pageYOffset - (document.getElementById('site-header')?.offsetHeight || 70) - 20;
+                window.scrollTo({ top: errorMsgTop, behavior: 'smooth' });
+            } finally {
+                submitButton.disabled = false;
+                submitButtonTextSpan.textContent = 'Submit Consultation Request';
+                submitButton.querySelector('i').className = originalButtonIconClass;
+            }
         });
 
         resetButton.addEventListener('click', () => {
-            thankYouSection.classList.remove('visible');
-            thankYouSection.style.display = 'none';
+            thankYouDiv.classList.remove('visible');
+            thankYouDiv.style.display = 'none';
             
-            consultationForm.reset(); // Clear form fields
-            consultationForm.querySelectorAll('[required]').forEach(input => {
-                 input.style.borderColor = ''; // Reset border color if modified
-            });
+            form.reset();
+            form.querySelectorAll('.input-error').forEach(el => el.classList.remove('input-error'));
+            formErrorMessageDiv.style.display = 'none';
+            formErrorMessageDiv.textContent = '';
             
-            consultationSection.style.display = 'block'; // Show the form again
-            requestAnimationFrame(() => {
-                 consultationSection.style.opacity = '1'; // Fade form back in
-            });
+            formWrapper.style.display = 'block'; // Show form container again
+            formWrapper.style.opacity = '1'; // Ensure it's visible
 
-            submitButton.disabled = false;
-            submitButton.innerHTML = '<i class="fa-solid fa-paper-plane"></i> Submit Consultation Request';
-
-            const firstInput = consultationForm.querySelector('input, select, textarea');
-            if (firstInput) firstInput.focus(); // Focus on the first field
+            const firstInput = form.querySelector('input, select, textarea');
+            if (firstInput) firstInput.focus();
         });
     }
     initConsultationForm();
