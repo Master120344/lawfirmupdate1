@@ -1,23 +1,15 @@
-// aboutus_mobile.js
-
-// --- Strict Mode & Global Constants ---
-"use strict";
+// aboutus_mobile.js                                  
+// --- Strict Mode & Global Constants ---             "use strict";
 const INITIAL_SPLASH_DURATION_MS = 100; // Changed from 5000ms to 100ms (0.1 second)
 const PAGE_TRANSITION_ANIMATION_MS = 300;
-
-// --- Utility Functions (Ideally from a shared utils.js) ---
-function debounce(func, wait, immediate) {
-    let timeout;
-    return function executedFunction() {
-        const context = this;
-        const args = arguments;
+                                                      // --- Utility Functions (Ideally from a shared utils.js) ---
+function debounce(func, wait, immediate) {                let timeout;                                          return function executedFunction() {                      const context = this;                                 const args = arguments;
         const later = function() {
             timeout = null;
             if (!immediate) func.apply(context, args);
         };
         const callNow = immediate && !timeout;
-        clearTimeout(timeout);
-        timeout = setTimeout(later, wait);
+        clearTimeout(timeout);                                timeout = setTimeout(later, wait);
         if (callNow) func.apply(context, args);
     };
 }
