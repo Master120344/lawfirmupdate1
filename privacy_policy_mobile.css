@@ -4,7 +4,10 @@
 :root {
     --color-primary-brand: #003366;
     --color-secondary-brand: #0A58A6;
-    --color-accent-gold: #B08D57;
+    --color-accent-gold: #B08D57; /* Main gold for accents */
+    --color-accent-gold-text: #8c6d40; /* Darker gold for text on light backgrounds for readability */
+    --color-accent-gold-bg: #fffaf0; /* Very light gold/cream for subtle backgrounds */
+
     --color-text-dark: #1a232f;
     --color-text-medium: #4a5568;
     --color-text-light: #f0f2f5;
@@ -101,6 +104,26 @@ body {
     font-style: italic;
 }
 
+/* Privacy Commitment Statement ("Yellow Text") */
+.privacy-commitment-statement {
+    background-color: var(--color-accent-gold-bg);
+    border-left: 5px solid var(--color-accent-gold);
+    padding: calc(var(--spacing-unit) * 2.5) calc(var(--spacing-unit) * 3);
+    margin-top: calc(var(--spacing-unit) * 1);
+    margin-bottom: calc(var(--spacing-unit) * 4);
+    font-size: 1.1rem; /* Slightly larger for emphasis */
+    line-height: 1.8;
+    color: var(--color-accent-gold-text); /* Use darker gold for readability */
+    border-radius: 0 var(--spacing-unit) var(--spacing-unit) 0;
+    font-style: normal; /* Ensure it's not italic if other p tags might be */
+    font-weight: 500; /* EB Garamond Medium */
+}
+.privacy-commitment-statement strong { /* If you use strong tags inside */
+    color: var(--color-primary-brand);
+    font-weight: 700; /* EB Garamond Bold */
+}
+
+
 /* Important Notice Box */
 .important-notice {
     background-color: #fff3cd; /* Light yellow */
@@ -141,7 +164,7 @@ body {
     padding-left: var(--spacing-unit);
 }
 .policy-container h4 {
-    font-family: var(--font-body);
+    font-family: var(--font-body); /* Changed to EB Garamond for sub-sub-headings */
     font-size: clamp(1.1rem, 3.5vw, 1.3rem);
     color: var(--color-text-dark);
     margin-top: calc(var(--spacing-unit) * 2.5);
@@ -159,6 +182,11 @@ body {
     margin-bottom: calc(var(--spacing-unit) * 2);
     padding-left: var(--spacing-unit);
 }
+.policy-container ul ul { /* Nested lists */
+    margin-top: calc(var(--spacing-unit) * 1);
+    margin-bottom: calc(var(--spacing-unit) * 1);
+    margin-left: calc(var(--spacing-unit) * 2);
+}
 .policy-container li {
     margin-bottom: var(--spacing-unit);
 }
@@ -171,13 +199,21 @@ body {
     line-height: 1.6;
     margin-top: var(--spacing-unit);
     background-color: var(--color-bg-off-white);
-    padding: var(--spacing-unit) * 1.5;
+    padding: calc(var(--spacing-unit) * 1.5);
     border-left: 3px solid var(--color-accent-gold);
+    border-radius: var(--spacing-unit);
 }
+.policy-container address a {
+    color: var(--color-secondary-brand);
+}
+.policy-container address a:hover {
+    color: var(--color-accent-gold);
+}
+
 
 .placeholder-section {
     background-color: #e9ecef;
-    padding: var(--spacing-unit) * 2 !important; /* Override section padding */
+    padding: calc(var(--spacing-unit) * 2) !important; /* Override section padding */
     border-radius: var(--spacing-unit);
     border: 1px solid #ced4da;
 }
@@ -227,7 +263,7 @@ body {
     outline: 3px solid var(--color-secondary-brand);
     outline-offset: 2px;
     box-shadow: 0 0 0 4px rgba(10, 88, 166, 0.2);
-    border-radius: var(--spacing-unit) * 0.5;
+    border-radius: calc(var(--spacing-unit) * 0.5);
 }
 
 /* Small screen adjustments */
@@ -239,4 +275,8 @@ body {
     .policy-main-title { font-size: clamp(1.8rem, 6vw, 2.4rem); }
     .policy-container h3 { font-size: clamp(1.3rem, 3.8vw, 1.6rem); }
     .policy-container h4 { font-size: clamp(1.05rem, 3.3vw, 1.2rem); }
+    .privacy-commitment-statement {
+        font-size: 1.05rem;
+        padding: calc(var(--spacing-unit) * 2);
+    }
 }
