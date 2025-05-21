@@ -505,11 +505,10 @@ img {
     padding: calc(var(--spacing-unit) * 2.5) calc(var(--spacing-unit) * 3);
     text-align: left;
     box-sizing: border-box;
-    /* UPDATED: Added min-height for consistent review box height */
     min-height: 200px; /* Adjust as needed based on typical content length */
-    display: flex; /* To help with vertical alignment if needed */
-    flex-direction: column; /* To stack elements vertically */
-    justify-content: space-between; /* Pushes source to bottom if item grows */
+    display: flex; 
+    flex-direction: column; 
+    justify-content: space-between; 
 }
 
 .review-header {
@@ -550,8 +549,7 @@ img {
     font-family: var(--font-body);
     font-style: normal;
     font-size: 1rem;
-    /* UPDATED: Slightly increased line-height for better readability */
-    line-height: 1.7;
+    line-height: 1.6; /* UPDATED: Slightly reduced line-height for better compactness */
     color: var(--color-text-dark);
     margin-bottom: calc(var(--spacing-unit) * 1.5);
     font-weight: 400;
