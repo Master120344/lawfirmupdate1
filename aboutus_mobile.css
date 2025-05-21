@@ -1,25 +1,19 @@
-/* TABLE OF CONTENTS
---------------------------------------------------
+/* TABLE OF CONTENTS                                  --------------------------------------------------
 1. Variables & Global Resets
 2. Body & Typography Base
 3. Loader Styles
-4. Background Styles
-5. Header Styles
-6. Page Content Wrapper & Section Base
-7. Hero Section (About Us Specific)
+4. Background Styles                                  5. Header Styles
+6. Page Content Wrapper & Section Base                7. Hero Section (About Us Specific)
 8. Content Sections (Mission, Expertise, etc.)
 9. Call to Action (CTA) Sections & Buttons
 10. Mobile Tabs Navigation
-11. Footer Styles
-12. Animation & Utility Classes
+11. Footer Styles                                     12. Animation & Utility Classes
 13. Responsive Adjustments
 -------------------------------------------------- */
-
 /* 1. VARIABLES & GLOBAL RESETS
 -------------------------------------------------- */
 :root {
-    /* Primary Palette */
-    --color-primary-brand: #003366; /* Deep Navy Blue */
+    /* Primary Palette */                                 --color-primary-brand: #003366; /* Deep Navy Blue */
     --color-primary-brand-rgb: 0, 51, 102; /* For RGBA */
     --color-secondary-brand: #0A58A6; /* Brighter Blue */
     --color-accent-gold: #B08D57; /* Sophisticated Gold */
@@ -630,7 +624,7 @@ img {
 /* Social icons always their brand color */
 .footer-social-media a.facebook i { color: #1877F2 !important; }
 .footer-social-media a.linkedin i { color: #0A66C2 !important; }
-.footer-social-media a.x-twitter i { color: #000000 !important; }
+.footer-social-media a.x-twitter i { color: #FFFFFF !important; } /* UPDATED: X icon white */
 .footer-social-media a.instagram i { color: #E1306C !important; }
 .footer-social-media a.tiktok i { color: #EE1D52 !important; }
 
