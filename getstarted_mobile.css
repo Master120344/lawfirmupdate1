@@ -10,6 +10,7 @@
    - .get-started-page-section
    - .consultation-form-container
    - Form Element Styling (grid, group, label, input, select, textarea, button)
+   - .form-error-message (NEW)
    - .thank-you-message
 8. CTA Buttons (Covered by global)
 9. Mobile Tabs Navigation
@@ -26,7 +27,7 @@
     --color-secondary-brand: #0A58A6;
     --color-secondary-brand-rgb: 10, 88, 166;
     --color-accent-gold: #B08D57;
-    --color-accent-gold-rgb: 176, 141, 87; /* Added for consistency */
+    --color-accent-gold-rgb: 176, 141, 87;
     --color-accent-gold-darker: #8c6d40;
 
     /* Neutral Palette */
@@ -47,7 +48,7 @@
     --color-loader-text: var(--color-text-light);
     --color-loader-bar-track: rgba(255, 255, 255, 0.2);
     --color-loader-bar-fill: var(--color-accent-gold);
-    --loader-display-duration: 0.05s; /* Very fast for getstarted page */
+    --loader-display-duration: 0.05s;
 
     /* UI Elements */
     --color-border-subtle: rgba(0, 0, 0, 0.08);
@@ -55,6 +56,9 @@
     --color-shadow-soft: rgba(26, 43, 72, 0.05);
     --color-shadow-medium: rgba(26, 43, 72, 0.1);
     --color-shadow-strong: rgba(26, 43, 72, 0.18);
+    --color-error-text: #d9534f; /* Bootstrap's danger color */
+    --color-error-bg: #f2dede;
+    --color-error-border: #ebccd1;
 
     /* Typography */
     --font-display: 'Cinzel Decorative', cursive;
@@ -75,13 +79,14 @@
     --transition-medium: 0.35s ease-in-out;
     --transition-slow: 0.5s ease-in-out;
 
-    /* Form Specific (Consistent with contact_mobile.css) */
+    /* Form Specific */
     --form-input-bg: rgba(var(--color-secondary-brand-rgb), 0.05);
     --form-input-bg-focus: rgba(var(--color-secondary-brand-rgb), 0.08);
     --form-input-border: var(--color-secondary-brand);
     --form-input-border-focus: var(--color-accent-gold);
     --form-input-text-color: var(--color-text-dark);
     --form-input-placeholder-color: #778ca3;
+    --form-input-error-border: var(--color-error-text); /* Added for input error state */
 }
 
 *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
@@ -197,7 +202,7 @@ img { max-width:100%; height:auto; display:block; }
 }
 .section-intro-text {
     font-size: 1.1rem; line-height: 1.75; color: var(--color-text-medium); text-align: center;
-    max-width: 580px; margin: 0 auto calc(var(--spacing-unit) * 3) auto; /* Reduced bottom margin slightly for forms */
+    max-width: 580px; margin: 0 auto calc(var(--spacing-unit) * 3) auto;
 }
 
 /* 7. GET STARTED PAGE SPECIFIC STYLES
@@ -207,15 +212,17 @@ img { max-width:100%; height:auto; display:block; }
 }
 
 .consultation-form-container {
-    background-color: rgba(255,255,255,0.92); /* Consistent with contact form */
+    background-color: rgba(255,255,255,0.92);
     padding: calc(var(--spacing-unit) * 3) calc(var(--spacing-unit) * 2.5);
     border-radius: var(--border-radius-medium);
     box-shadow: 0 4px 15px var(--color-shadow-medium);
+    /* Adding transition for opacity for fade in/out */
+    transition: opacity var(--transition-medium) ease-in-out;
 }
 
 .consultation-form-element .form-grid {
     display: grid;
-    grid-template-columns: 1fr; /* Default to single column */
+    grid-template-columns: 1fr;
     gap: calc(var(--spacing-unit) * 2);
     margin-bottom: calc(var(--spacing-unit) * 2.5);
 }
@@ -225,7 +232,7 @@ img { max-width:100%; height:auto; display:block; }
     width: 100%;
 }
 .form-group.form-group-span-2 {
-    /* On larger screens, this might span two columns if grid changes */
+    /* Spanning handled by media query below */
 }
 
 .form-group label {
@@ -244,7 +251,7 @@ img { max-width:100%; height:auto; display:block; }
     width: 1em; text-align: center;
 }
 .required-asterisk {
-    color: var(--color-accent-gold-darker); /* Or a red color like #D32F2F */
+    color: var(--color-accent-gold-darker);
     margin-left: calc(var(--spacing-unit) * 0.5);
     font-weight: bold;
 }
@@ -275,10 +282,17 @@ input:focus,
 select:focus,
 textarea:focus {
     outline: none;
-    border-color: var(--form-input-border-focus);
-    background-color: var(--form-input-bg-focus);
-    box-shadow: 0 0 0 3px rgba(var(--color-accent-gold-rgb), 0.2);
+    border-color: var(--form-input-border-focus) !important; /* Ensure gold border */
+    background-color: var(--form-input-bg-focus) !important; /* Ensure lighter blue background */
+    box-shadow: 0 0 0 3px rgba(var(--color-accent-gold-rgb), 0.25) !important; /* Ensure gold glow */
 }
+input.input-error, /* NEW */
+select.input-error,
+textarea.input-error {
+    border-color: var(--form-input-error-border) !important;
+    box-shadow: 0 0 0 3px rgba(217, 83, 79, 0.2) !important; /* Red shadow for error */
+}
+
 select {
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath fill='none' stroke='%230A58A6' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2 5l6 6 6-6'/%3E%3C/svg%3E");
     background-repeat: no-repeat;
@@ -299,24 +313,40 @@ input[type="number"] {
   -moz-appearance: textfield; /* Firefox */
 }
 
+.form-error-message { /* NEW STYLE */
+    color: var(--color-error-text);
+    background-color: var(--color-error-bg);
+    border: 1px solid var(--color-error-border);
+    padding: calc(var(--spacing-unit) * 1.5);
+    border-radius: var(--border-radius-small);
+    margin-bottom: calc(var(--spacing-unit) * 2);
+    font-size: 0.9rem;
+    text-align: left;
+}
+
 .form-submit-group {
     text-align: center;
-    margin-top: calc(var(--spacing-unit) * 1.5); /* Slightly less margin for this form */
+    margin-top: calc(var(--spacing-unit) * 1.5);
 }
-.form-submit-button {
+/* Submit button uses .cta-button styling by default */
+.form-submit-button { /* This class is on the button in HTML */
     width: 100%;
-    max-width: 320px; /* Slightly wider button */
-    padding: calc(var(--spacing-unit) * 1.75) calc(var(--spacing-unit) * 3);
+    max-width: 320px;
+    /* Specific overrides for the submit button if needed beyond .cta-button */
 }
 .form-submit-button:disabled {
-    background: var(--color-text-medium);
-    box-shadow: none;
-    cursor: wait;
-    opacity: 0.7;
+    background: var(--color-text-medium) !important; /* Ensure override */
+    box-shadow: none !important;
+    cursor: wait !important;
+    opacity: 0.7 !important;
+    transform: none !important;
+}
+.form-submit-button:disabled:hover {
+    background: var(--color-text-medium) !important;
 }
 
 
-.thank-you-message { /* Consistent with contact page */
+.thank-you-message {
     text-align: center;
     padding: calc(var(--spacing-unit) * 4) calc(var(--spacing-unit) * 2);
     background-color: rgba(var(--color-accent-gold-rgb), 0.05);
@@ -347,13 +377,20 @@ input[type="number"] {
     cursor: pointer; text-transform: uppercase; letter-spacing: 0.6px;
     min-width: 220px; text-align: center;
 }
-.cta-button i { font-size: 1em; }
-.cta-button:hover, .cta-button:focus {
+.cta-button i { font-size: 1em; } /* Ensure icon size is relative */
+
+.cta-button:not(:disabled):hover, 
+.cta-button:not(:disabled):focus {
     background: linear-gradient(145deg, var(--color-accent-gold-darker), var(--color-accent-gold));
     box-shadow: 0 6px 18px rgba(var(--color-accent-gold-rgb), 0.5);
     transform: translateY(-2px) scale(1.01);
     color: var(--color-text-on-gold) !important;
 }
+.cta-button:not(:disabled):active {
+    transform: translateY(0px) scale(1);
+    box-shadow: 0 3px 10px rgba(var(--color-accent-gold-rgb), 0.3);
+}
+
 /* Secondary Button Style for "Request Another Consultation" */
 .secondary-button {
     display: inline-block;
@@ -412,13 +449,12 @@ input[type="number"] {
 .footer-firm-name { font-family: var(--font-headings); font-size: 1.2rem; color: var(--color-text-light); font-weight: 600; margin: 0; }
 .footer-social-media { margin-bottom: calc(var(--spacing-unit) * 2.5); }
 .footer-social-media a { color: #ced4da !important; font-size: 1.6rem; margin: 0 calc(var(--spacing-unit) * 1.25); transition: color var(--transition-fast), transform var(--transition-fast); display: inline-block; }
-.footer-social-media a:hover i, .footer-social-media a:focus i { color: var(--color-accent-gold); }
-.footer-social-media a:hover, .footer-social-media a:focus { transform: scale(1.15); }
 .footer-social-media a.facebook:hover i, .footer-social-media a.facebook:focus i { color: #1877F2 !important; }
 .footer-social-media a.linkedin:hover i, .footer-social-media a.linkedin:focus i { color: #0A66C2 !important; }
-.footer-social-media a.x-twitter:hover i, .footer-social-media a.x-twitter:focus i { color: #000000 !important; }
+.footer-social-media a.x-twitter:hover i, .footer-social-media a.x-twitter:focus i { color: #FFFFFF !important; } /* Adjusted to white for X/Twitter */
 .footer-social-media a.instagram:hover i, .footer-social-media a.instagram:focus i { color: #E1306C !important; }
-.footer-social-media a.tiktok:hover i, .footer-social-media a.tiktok:focus i { color: #EE1D52 !important; }
+.footer-social-media a.tiktok:hover i, .footer-social-media a.tiktok:focus i { color: #E1306C !important; } /* TikTok to match Instagram's pink/red */
+.footer-social-media a:hover, .footer-social-media a:focus { transform: scale(1.15); }
 .footer-links { margin-bottom: calc(var(--spacing-unit) * 1.5); font-size: 0.8rem; }
 .footer-links a { color: #b0bec5 !important; margin: 0 calc(var(--spacing-unit) * 0.4); transition: color var(--transition-fast); }
 .footer-links a:hover, .footer-links a:focus { color: var(--color-accent-gold) !important; text-decoration: underline; }
@@ -454,14 +490,4 @@ input[type="number"] {
     body { font-size: 1.1rem; }
     :root { --content-max-width: 88vw; --content-max-width-capped: 760px; }
     .section-title { font-size: clamp(2rem, 5.5vw, 2.8rem); }
-}
-
-/* Specific styling for form input focus to ensure high visibility */
-input:focus,
-select:focus,
-textarea:focus {
-    outline: none;
-    border-color: var(--form-input-border-focus) !important; /* Gold border */
-    background-color: var(--form-input-bg-focus) !important; /* Lighter blue background */
-    box-shadow: 0 0 0 3px rgba(var(--color-accent-gold-rgb), 0.25) !important; /* Gold glow */
 }
