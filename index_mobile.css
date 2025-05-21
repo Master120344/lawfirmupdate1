@@ -18,8 +18,7 @@
 
 /* 1. VARIABLES & GLOBAL RESETS
 -------------------------------------------------- */
-:root {
-    /* Primary Palette */
+:root {                                                   /* Primary Palette */
     --color-primary-brand: #003366; /* Deep Navy Blue */
     --color-primary-brand-rgb: 0, 51, 102; /* For RGBA */
     --color-secondary-brand: #0A58A6; /* Brighter Blue */
