@@ -11,9 +11,10 @@
    - .contact-info-grid, .contact-detail-item
    - .contact-form-container, .form-title
    - Form Element Styling (.form-group, label, input, select, textarea, button)
+   - .form-error-message (NEW)
    - .thank-you-message
 8. CTA Buttons (Send Inquiry Button Styled)
-9. Mobile Tabs Navigation
+9. Navigation (Formerly Mobile Tabs)
 10. Footer Styles
 11. Animation & Utility Classes
 12. Responsive Adjustments
@@ -28,7 +29,7 @@
     --color-secondary-brand: #0A58A6; /* Brighter Blue */
     --color-secondary-brand-rgb: 10, 88, 166;
     --color-accent-gold: #B08D57;
-    --color-accent-gold-rgb: 176, 141, 87; /* Added for consistency */
+    --color-accent-gold-rgb: 176, 141, 87;
     --color-accent-gold-darker: #8c6d40;
 
     /* Neutral Palette */
@@ -57,6 +58,10 @@
     --color-shadow-soft: rgba(26, 43, 72, 0.05);
     --color-shadow-medium: rgba(26, 43, 72, 0.1);
     --color-shadow-strong: rgba(26, 43, 72, 0.18);
+    --color-error-text: #d9534f; /* Bootstrap's danger color */
+    --color-error-bg: #f2dede;
+    --color-error-border: #ebccd1;
+
 
     /* Typography */
     --font-display: 'Cinzel Decorative', cursive;
@@ -65,10 +70,11 @@
 
     /* Spacing & Sizing */
     --spacing-unit: 8px;
-    --header-height-mobile: 65px;
-    --tabs-height-mobile: 60px;
+    /* Desktop specific header/nav heights if different, otherwise keep mobile or adjust */
+    --header-height-desktop: 75px; /* Example desktop header height */
+    --nav-height-desktop: 0px; /* If main nav is in header, this might be 0 or for a sub-nav */
     --content-max-width: 90vw;
-    --content-max-width-capped: 720px;
+    --content-max-width-capped: 1100px; /* Typical desktop capped width */
     --border-radius-small: 5px;
     --border-radius-medium: 10px;
 
@@ -84,6 +90,7 @@
     --form-input-border-focus: var(--color-accent-gold);
     --form-input-text-color: var(--color-text-dark);
     --form-input-placeholder-color: #778ca3;
+    --form-input-error-border: var(--color-error-text);
 }
 
 *, *::before, *::after {
@@ -92,29 +99,32 @@
 }
 html { scroll-behavior: smooth; font-size: 100%; }
 
-/* 2. BODY & TYPOGRAPHY BASE (Consistent with other pages) */
+/* 2. BODY & TYPOGRAPHY BASE */
 body {
-    font-family: var(--font-body); font-size: 1.05rem; line-height: 1.7;
+    font-family: var(--font-body); font-size: 1.1rem; /* Slightly larger base for desktop */
+    line-height: 1.75;
     color: var(--color-text-dark); background-color: var(--color-bg-off-white);
     overflow-x: hidden; position: relative; opacity: 0;
     transition: opacity 0.8s ease-in-out;
-    padding-top: var(--header-height-mobile); padding-bottom: var(--tabs-height-mobile);
+    padding-top: var(--header-height-desktop); /* Use desktop header height */
+    /* padding-bottom: var(--nav-height-desktop); Adjust if there's a bottom fixed nav for desktop, otherwise remove or set to 0 */
+    padding-bottom: 0; /* Assuming no fixed bottom nav on desktop */
     display: flex; flex-direction: column; min-height: 100vh;
 }
 body.loaded { opacity: 1; }
 h1, h2, h3, h4, h5, h6 {
     font-family: var(--font-headings); color: var(--color-primary-brand);
-    line-height: 1.25; margin-bottom: calc(var(--spacing-unit) * 2.5); font-weight: 700;
+    line-height: 1.25; margin-bottom: calc(var(--spacing-unit) * 3); font-weight: 700;
 }
-h1 { font-size: clamp(2rem, 7vw, 3rem); font-weight: 800; }
-h2 { font-size: clamp(1.6rem, 6vw, 2.4rem); }
-h3 { font-size: clamp(1.3rem, 5vw, 1.8rem); }
-p { margin-bottom: calc(var(--spacing-unit) * 2); font-weight: 400; }
+h1 { font-size: clamp(2.2rem, 5vw, 3.5rem); font-weight: 800; }
+h2 { font-size: clamp(1.8rem, 4vw, 2.8rem); }
+h3 { font-size: clamp(1.4rem, 3.5vw, 2rem); }
+p { margin-bottom: calc(var(--spacing-unit) * 2.5); font-weight: 400; }
 p:last-child { margin-bottom: 0; }
 a { color: var(--color-secondary-brand); text-decoration: none; transition: color var(--transition-fast); }
 a:hover, a:focus { color: var(--color-accent-gold); text-decoration: underline; }
-ul, ol { margin-bottom: calc(var(--spacing-unit) * 2); padding-left: calc(var(--spacing-unit) * 3.5); }
-li { margin-bottom: var(--spacing-unit); }
+ul, ol { margin-bottom: calc(var(--spacing-unit) * 2.5); padding-left: calc(var(--spacing-unit) * 4); }
+li { margin-bottom: calc(var(--spacing-unit) * 1.5); }
 img { max-width: 100%; height: auto; display: block; }
 
 /* 3. LOADER STYLES (Consistent) */
@@ -129,13 +139,14 @@ img { max-width: 100%; height: auto; display: block; }
 .splash-loader.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
 .splash-loader .splash-text-content { text-align: center; }
 .splash-loader .splash-main-title {
-    font-family: var(--font-headings); font-size: clamp(1.8rem, 6vw, 2.5rem);
+    font-family: var(--font-headings); font-size: clamp(2rem, 7vw, 3rem); /* Desktop splash title */
     color: var(--color-loader-text); font-weight: 700; letter-spacing: 0.5px;
     margin-bottom: var(--spacing-unit); text-shadow: 1px 1px 2px rgba(0,0,0,0.15);
     animation: pulseLogoSplash 2.5s infinite ease-in-out alternate;
 }
 .splash-loader .splash-main-title .splash-main-pc { font-weight: 600; font-size: 0.8em; display: inline-block; }
 @keyframes pulseLogoSplash { from { transform: scale(0.98); opacity: 0.85; } to { transform: scale(1.02); opacity: 1; } }
+
 .page-transition-loader {
     position: fixed; top: 0; left: 0; width: 100%; height: 100vh;
     background-color: rgba(var(--color-primary-brand-rgb), 0.85);
@@ -146,106 +157,117 @@ img { max-width: 100%; height: auto; display: block; }
 }
 .page-transition-loader.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
 .page-transition-loader .spinner {
-    width: 50px; height: 50px; border: 5px solid var(--color-loader-bar-track);
+    width: 60px; height: 60px; border: 6px solid var(--color-loader-bar-track); /* Larger spinner */
     border-top-color: var(--color-accent-gold); border-radius: 50%;
     animation: spinLoader 1s linear infinite;
 }
 @keyframes spinLoader { to { transform: rotate(360deg); } }
 
-/* 4. BACKGROUND STYLES */
+/* 4. BACKGROUND STYLES (Consistent with mobile, might need adjustments for desktop aspect ratios if image changes) */
 #background-static {
     position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -2;
     background-image: url('austin.jpg'); background-size: cover; background-position: center center;
     background-repeat: no-repeat; animation: subtleZoomInOutBg 70s infinite alternate ease-in-out;
-    filter: saturate(0.7) brightness(0.75); /* MODIFIED: Brightened wallpaper */
+    filter: saturate(0.7) brightness(0.75);
 }
 @keyframes subtleZoomInOutBg { 0% { transform: scale(1); } 100% { transform: scale(1.03); } }
 #background-overlay {
     position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1;
-    background: linear-gradient(180deg, rgba(var(--color-primary-brand-rgb), 0.15) 0%, rgba(var(--color-primary-brand-rgb), 0.35) 60%, rgba(var(--color-primary-brand-rgb), 0.55) 100%); /* MODIFIED: More transparent overlay */
+    background: linear-gradient(180deg, rgba(var(--color-primary-brand-rgb), 0.15) 0%, rgba(var(--color-primary-brand-rgb), 0.35) 60%, rgba(var(--color-primary-brand-rgb), 0.55) 100%);
     pointer-events: none;
 }
 
-/* 5. HEADER STYLES (Consistent) */
+/* 5. HEADER STYLES */
 .site-header {
     position: fixed; top: 0; left: 0; width: 100%; z-index: 1000;
-    height: var(--header-height-mobile); background-color: rgba(255, 255, 255, 0.85); /* MODIFIED: Slightly more transparent */
-    backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
-    box-shadow: 0 1px 8px var(--color-shadow-medium);
+    height: var(--header-height-desktop); background-color: rgba(255, 255, 255, 0.9); /* Desktop header bg */
+    backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+    box-shadow: 0 2px 10px var(--color-shadow-medium);
     border-bottom: 1px solid var(--color-border-subtle);
-    display: flex; align-items: center; padding: 0 calc(var(--spacing-unit) * 2);
-    transition: transform var(--transition-medium);
+    display: flex; align-items: center; padding: 0 calc(var(--spacing-unit) * 4); /* More padding for desktop */
+    transition: transform var(--transition-medium), background-color var(--transition-medium);
 }
-.header-content { width: 100%; display: flex; justify-content: flex-start; align-items: center; }
+.header-content {
+    width: 100%; max-width: var(--content-max-width-capped); margin: 0 auto; /* Center content */
+    display: flex; justify-content: space-between; /* Adjust for potential nav items */
+    align-items: center;
+}
 .firm-title-container { display: flex; align-items: center; }
 .firm-title-link { display: flex; align-items: center; text-decoration: none !important; }
 .firm-title-link:hover .firm-name-header { color: var(--color-accent-gold); }
 .firm-name-header {
-    font-family: var(--font-headings); font-size: clamp(1.05rem, 4.2vw, 1.3rem);
-    color: var(--color-primary-brand); font-weight: 600; margin: 0; line-height: 1.2;
-    letter-spacing: 0.2px; transition: color var(--transition-fast);
-    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    font-family: var(--font-headings); font-size: clamp(1.4rem, 3vw, 1.8rem); /* Desktop firm name size */
+    color: var(--color-primary-brand); font-weight: 700; margin: 0; line-height: 1.2;
+    letter-spacing: 0.3px; transition: color var(--transition-fast);
 }
-.firm-name-header .firm-name-pc { font-weight: 500; font-size: 0.9em; margin-left: calc(var(--spacing-unit) * 0.5); }
+.firm-name-header .firm-name-pc { font-weight: 600; font-size: 0.85em; margin-left: calc(var(--spacing-unit) * 0.75); }
+
+/* Desktop Navigation (if it's part of the header) */
+/* .header-nav { display: flex; gap: calc(var(--spacing-unit) * 3); } */
+/* .header-nav a { font-family: var(--font-body); font-weight: 600; font-size: 1rem; color: var(--color-primary-brand); } */
+/* .header-nav a:hover, .header-nav a.active { color: var(--color-accent-gold); text-decoration: none; } */
+
 
 /* 6. PAGE CONTENT WRAPPER & SECTION BASE */
 .page-content-wrapper { flex-grow: 1; width: 100%; position: relative; z-index: 1; }
 .content-section {
-    width: 100%; padding: calc(var(--spacing-unit) * 6) calc(var(--spacing-unit) * 2);
+    width: 100%; padding: calc(var(--spacing-unit) * 8) calc(var(--spacing-unit) * 3); /* More padding for desktop sections */
     margin: 0 auto; position: relative;
 }
-.content-section, .content-section:nth-child(odd) { background-color: rgba(255, 255, 255, 0.82); } /* MODIFIED: More transparent */
-.content-section:nth-child(even) { background-color: rgba(248, 249, 250, 0.85); } /* MODIFIED: More transparent */
+.content-section, .content-section:nth-child(odd) { background-color: rgba(255, 255, 255, 0.85); }
+.content-section:nth-child(even) { background-color: rgba(248, 249, 250, 0.88); }
 .section-container { max-width: var(--content-max-width-capped); margin: 0 auto; width: var(--content-max-width); }
 .section-title {
-    font-family: var(--font-headings); font-size: clamp(1.8rem, 6vw, 2.6rem); text-align: center;
-    margin-bottom: calc(var(--spacing-unit) * 1.5); font-weight: 700;
-    color: var(--color-primary-brand); position: relative; padding-bottom: calc(var(--spacing-unit) * 1.5);
+    font-family: var(--font-headings); font-size: clamp(2.2rem, 5vw, 3rem); /* Desktop section title */
+    text-align: center; margin-bottom: calc(var(--spacing-unit) * 2);
+    font-weight: 700; color: var(--color-primary-brand);
+    position: relative; padding-bottom: calc(var(--spacing-unit) * 2);
 }
 .section-title.decorative-title::after {
     content: ''; position: absolute; bottom: 0; left: 50%; transform: translateX(-50%);
-    width: 70px; height: 3px; background-color: var(--color-accent-gold); border-radius: 2px;
+    width: 80px; height: 3.5px; background-color: var(--color-accent-gold); border-radius: 2px;
 }
 .section-intro-text {
-    font-size: 1.1rem; line-height: 1.75; color: var(--color-text-medium); text-align: center;
-    max-width: 580px; margin: 0 auto calc(var(--spacing-unit) * 4) auto;
+    font-size: 1.15rem; line-height: 1.8; color: var(--color-text-medium); text-align: center;
+    max-width: 650px; margin: 0 auto calc(var(--spacing-unit) * 5) auto; /* Larger max-width for intro */
 }
 
-/* 7. CONTACT PAGE SPECIFIC STYLES
--------------------------------------------------- */
+/* 7. CONTACT PAGE SPECIFIC STYLES */
 .contact-page-section .section-intro-text {
-    margin-bottom: calc(var(--spacing-unit) * 5);
+    margin-bottom: calc(var(--spacing-unit) * 6);
 }
 
 .contact-info-grid {
     display: grid;
-    grid-template-columns: 1fr;
-    gap: calc(var(--spacing-unit) * 3);
-    margin-bottom: calc(var(--spacing-unit) * 5);
-    text-align: center;
+    /* For desktop, explicitly 3 columns if that's the design */
+    grid-template-columns: repeat(3, 1fr);
+    gap: calc(var(--spacing-unit) * 4); /* Larger gap for desktop */
+    margin-bottom: calc(var(--spacing-unit) * 6);
+    text-align: left; /* Align text left within items for desktop */
 }
 
 .contact-detail-item {
     background-color: rgba(var(--color-primary-brand-rgb), 0.03);
-    padding: calc(var(--spacing-unit) * 2.5);
+    padding: calc(var(--spacing-unit) * 3.5); /* More padding */
     border-radius: var(--border-radius-medium);
     border: 1px solid rgba(var(--color-primary-brand-rgb), 0.1);
+    text-align: center; /* Center content within the item */
 }
 .detail-icon {
-    font-size: 1.8rem;
+    font-size: 2rem; /* Larger icons */
     color: var(--color-accent-gold);
-    margin-bottom: var(--spacing-unit) * 1.5;
+    margin-bottom: calc(var(--spacing-unit) * 2);
     display: block;
 }
 .detail-title {
-    font-size: 1.25rem;
+    font-size: 1.4rem; /* Larger titles */
     color: var(--color-primary-brand);
-    margin-bottom: var(--spacing-unit);
+    margin-bottom: calc(var(--spacing-unit) * 1.5);
 }
 .contact-detail-item p {
-    font-size: 0.95rem;
+    font-size: 1rem;
     color: var(--color-text-medium);
-    margin-bottom: calc(var(--spacing-unit) * 0.5);
+    margin-bottom: calc(var(--spacing-unit) * 0.75);
 }
 .contact-detail-item p a {
     color: var(--color-secondary-brand);
@@ -256,12 +278,12 @@ img { max-width: 100%; height: auto; display: block; }
 }
 .map-link {
     display: inline-block;
-    margin-top: var(--spacing-unit);
-    font-size: 0.9rem;
+    margin-top: calc(var(--spacing-unit) * 1.5);
+    font-size: 0.95rem;
     font-weight: 600;
     color: var(--color-secondary-brand);
     text-decoration: none;
-    padding: calc(var(--spacing-unit)*0.75) calc(var(--spacing-unit)*1.5);
+    padding: calc(var(--spacing-unit)*1) calc(var(--spacing-unit)*2);
     border: 1px solid var(--color-secondary-brand);
     border-radius: var(--border-radius-small);
     transition: all var(--transition-fast);
@@ -271,50 +293,47 @@ img { max-width: 100%; height: auto; display: block; }
     color: var(--color-text-on-primary) !important;
     border-color: var(--color-secondary-brand);
 }
-.map-link i { margin-left: calc(var(--spacing-unit)*0.5); font-size: 0.8em;}
-
+.map-link i { margin-left: calc(var(--spacing-unit)*0.75); font-size: 0.85em;}
 
 .contact-form-container {
-    margin-top: calc(var(--spacing-unit) * 3);
-    background-color: rgba(255,255,255,0.86); /* MODIFIED: Slightly more transparent form background */
-    padding: calc(var(--spacing-unit) * 3) calc(var(--spacing-unit) * 2.5);
+    margin-top: calc(var(--spacing-unit) * 4);
+    background-color: rgba(255,255,255,0.9); /* Slightly more opaque for desktop */
+    padding: calc(var(--spacing-unit) * 4) calc(var(--spacing-unit) * 3.5);
     border-radius: var(--border-radius-medium);
-    box-shadow: 0 4px 15px var(--color-shadow-medium);
+    box-shadow: 0 5px 20px var(--color-shadow-medium);
 }
 .form-title {
     text-align: center;
-    font-size: clamp(1.5rem, 5.5vw, 2rem);
-    margin-bottom: calc(var(--spacing-unit) * 3);
-    position: relative;
+    font-size: clamp(1.6rem, 4.5vw, 2.2rem);
+    margin-bottom: calc(var(--spacing-unit) * 4);
 }
-.form-title.decorative-title::after { width: 60px; height: 2.5px; }
+.form-title.decorative-title::after { width: 70px; height: 3px; }
 
 .contact-form-element .form-row {
     display: flex;
-    flex-direction: column;
-    gap: calc(var(--spacing-unit) * 2);
-    margin-bottom: calc(var(--spacing-unit) * 2);
+    flex-direction: row; /* Rows for desktop */
+    gap: calc(var(--spacing-unit) * 3); /* Gap between items in a row */
+    margin-bottom: calc(var(--spacing-unit) * 2.5);
 }
-.contact-form-element .form-row:last-child { margin-bottom: 0; }
 
 .form-group {
     display: flex;
     flex-direction: column;
-    width: 100%;
+    width: 100%; /* Each group takes full width available in its flex item context */
 }
 .form-group label {
     font-family: var(--font-headings);
-    font-size: 0.95rem;
+    font-size: 1rem; /* Slightly larger labels */
     font-weight: 600;
     color: var(--color-primary-brand);
-    margin-bottom: calc(var(--spacing-unit) * 0.75);
+    margin-bottom: calc(var(--spacing-unit) * 1);
     display: flex;
     align-items: center;
 }
 .form-icon {
-    margin-right: calc(var(--spacing-unit) * 1);
+    margin-right: calc(var(--spacing-unit) * 1.25);
     color: var(--color-accent-gold);
-    font-size: 0.9em;
+    font-size: 0.95em;
     width: 1em;
     text-align: center;
 }
@@ -324,9 +343,9 @@ input[type="tel"],
 select,
 textarea {
     width: 100%;
-    padding: calc(var(--spacing-unit) * 1.5) calc(var(--spacing-unit) * 1.75);
+    padding: calc(var(--spacing-unit) * 1.75) calc(var(--spacing-unit) * 2); /* More padding for desktop inputs */
     font-family: var(--font-body);
-    font-size: 1rem;
+    font-size: 1.05rem;
     color: var(--form-input-text-color);
     background-color: var(--form-input-bg);
     border: 1px solid var(--form-input-border);
@@ -347,14 +366,21 @@ textarea:focus {
     outline: none;
     border-color: var(--form-input-border-focus);
     background-color: var(--form-input-bg-focus);
-    box-shadow: 0 0 0 3px rgba(var(--color-accent-gold-rgb), 0.2); /* Uses --color-accent-gold-rgb */
+    box-shadow: 0 0 0 3px rgba(var(--color-accent-gold-rgb), 0.25);
 }
+input.input-error, /* NEW CLASS FOR DESKTOP */
+select.input-error,
+textarea.input-error {
+    border-color: var(--form-input-error-border) !important;
+    box-shadow: 0 0 0 3px rgba(217, 83, 79, 0.2); /* Red shadow for error */
+}
+
 select {
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath fill='none' stroke='%230A58A6' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2 5l6 6 6-6'/%3E%3C/svg%3E");
     background-repeat: no-repeat;
-    background-position: right calc(var(--spacing-unit) * 1.5) center;
-    background-size: 1em;
-    padding-right: calc(var(--spacing-unit) * 4);
+    background-position: right calc(var(--spacing-unit) * 1.75) center;
+    background-size: 1.1em;
+    padding-right: calc(var(--spacing-unit) * 4.5);
 }
 select:disabled {
     background-color: rgba(var(--color-secondary-brand-rgb), 0.03);
@@ -362,95 +388,116 @@ select:disabled {
     cursor: not-allowed;
 }
 
-.form-submit-group {
-    text-align: center;
-    margin-top: calc(var(--spacing-unit) * 2);
+.form-error-message { /* NEW STYLE FOR DESKTOP */
+    color: var(--color-error-text);
+    background-color: var(--color-error-bg);
+    border: 1px solid var(--color-error-border);
+    padding: calc(var(--spacing-unit) * 1.5) calc(var(--spacing-unit) * 2);
+    border-radius: var(--border-radius-small);
+    margin-bottom: calc(var(--spacing-unit) * 2.5); /* Space before submit button */
+    font-size: 0.95rem;
+    text-align: left;
 }
 
-/* MODIFIED: Send Inquiry Button Styling */
+.form-submit-group {
+    text-align: center;
+    margin-top: calc(var(--spacing-unit) * 3);
+}
+
 .form-submit-button {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 100%;
-    max-width: 320px;
-    padding: calc(var(--spacing-unit) * 1.8) calc(var(--spacing-unit) * 2.5);
+    width: auto; /* Auto width for desktop button */
+    min-width: 280px; /* Min width for better appearance */
+    max-width: 350px;
+    padding: calc(var(--spacing-unit) * 2) calc(var(--spacing-unit) * 3.5); /* Larger padding for desktop button */
     font-family: var(--font-headings);
-    font-size: 1.05rem; /* Adjusted for mobile better fit */
-    font-weight: 700; /* Bolder */
-    letter-spacing: 0.5px;
+    font-size: 1.15rem;
+    font-weight: 700;
+    letter-spacing: 0.75px;
     color: var(--color-text-on-primary);
     background-color: var(--color-secondary-brand);
     border: none;
     border-radius: var(--border-radius-medium);
-    box-shadow: 0 4px 10px rgba(var(--color-secondary-brand-rgb), 0.3), 0 1px 3px rgba(0,0,0,0.1);
+    box-shadow: 0 4px 12px rgba(var(--color-secondary-brand-rgb), 0.3), 0 1px 4px rgba(0,0,0,0.1);
     cursor: pointer;
-    transition: background-color var(--transition-medium), color var(--transition-medium), transform var(--transition-fast), box-shadow var(--transition-fast);
+    transition: background-color var(--transition-medium), color var(--transition-medium), transform var(--transition-fast), box-shadow var(--transition-fast), opacity var(--transition-fast);
     text-transform: uppercase;
-    line-height: 1.3; /* Ensure icon and text align well */
+    line-height: 1.3;
+}
+.form-submit-button:disabled { /* NEW STYLE FOR DESKTOP */
+    opacity: 0.65;
+    cursor: wait;
+    background-color: var(--color-text-medium);
+}
+.form-submit-button:disabled:hover,
+.form-submit-button:disabled:focus-visible { /* NEW STYLE FOR DESKTOP */
+    background-color: var(--color-text-medium);
+    transform: none;
+    box-shadow: 0 4px 12px rgba(var(--color-secondary-brand-rgb), 0.3), 0 1px 4px rgba(0,0,0,0.1);
 }
 
 .form-submit-button i {
-    margin-right: calc(var(--spacing-unit) * 1.25);
-    font-size: 1em; /* Relative to button's font size */
-    line-height: 1; /* Prevents icon from misaligning text */
+    margin-right: calc(var(--spacing-unit) * 1.5);
+    font-size: 1.05em;
+    line-height: 1;
 }
 
-.form-submit-button:hover,
-.form-submit-button:focus-visible { /* Using focus-visible for better accessibility */
+.form-submit-button:not(:disabled):hover,
+.form-submit-button:not(:disabled):focus-visible {
     background-color: var(--color-accent-gold);
     color: var(--color-text-on-gold);
-    transform: translateY(-2px) scale(1.02);
-    box-shadow: 0 6px 15px rgba(var(--color-accent-gold-rgb), 0.35), 0 2px 5px rgba(0,0,0,0.15);
+    transform: translateY(-3px) scale(1.03); /* Slightly more pronounced hover effect */
+    box-shadow: 0 7px 18px rgba(var(--color-accent-gold-rgb), 0.35), 0 3px 6px rgba(0,0,0,0.15);
     text-decoration: none;
-    outline: none; /* Custom focus style handled by box-shadow */
+    outline: none;
 }
 
-.form-submit-button:active {
+.form-submit-button:not(:disabled):active {
     transform: translateY(0px) scale(1);
-    box-shadow: 0 3px 8px rgba(var(--color-accent-gold-rgb), 0.3), 0 1px 2px rgba(0,0,0,0.1);
+    box-shadow: 0 3px 10px rgba(var(--color-accent-gold-rgb), 0.3), 0 1px 3px rgba(0,0,0,0.1);
 }
-
 
 .thank-you-message {
     text-align: center;
-    padding: calc(var(--spacing-unit) * 4) calc(var(--spacing-unit) * 2);
-    background-color: rgba(var(--color-accent-gold-rgb), 0.05); /* Uses --color-accent-gold-rgb */
-    border: 1px solid rgba(var(--color-accent-gold-rgb), 0.3); /* Uses --color-accent-gold-rgb */
+    padding: calc(var(--spacing-unit) * 5) calc(var(--spacing-unit) * 3);
+    background-color: rgba(var(--color-accent-gold-rgb), 0.06);
+    border: 1px solid rgba(var(--color-accent-gold-rgb), 0.35);
     border-radius: var(--border-radius-medium);
-    margin-top: calc(var(--spacing-unit) * 3);
+    margin-top: calc(var(--spacing-unit) * 4);
     opacity: 0;
     transition: opacity var(--transition-medium);
 }
 .thank-you-message.visible {
-    display: block !important;
+    display: block !important; /* Ensure it overrides inline style if any */
     opacity: 1;
 }
 .thank-you-icon {
-    font-size: 3rem;
+    font-size: 3.5rem; /* Larger icon */
     color: var(--color-accent-gold);
-    margin-bottom: var(--spacing-unit) * 1.5;
+    margin-bottom: calc(var(--spacing-unit) * 2);
 }
 .thank-you-title {
     color: var(--color-primary-brand);
-    font-size: 1.5rem;
-    margin-bottom: var(--spacing-unit);
+    font-size: 1.8rem; /* Larger title */
+    margin-bottom: calc(var(--spacing-unit) * 1.5);
 }
 .thank-you-message p {
-    font-size: 1rem;
+    font-size: 1.1rem;
     color: var(--color-text-medium);
-    margin-bottom: var(--spacing-unit) * 1.5;
+    margin-bottom: calc(var(--spacing-unit) * 2);
 }
 .thank-you-message #reset-form-button {
-    margin-top: calc(var(--spacing-unit) * 2);
-    /* Basic styling for reset button to match theme, can be expanded */
+    margin-top: calc(var(--spacing-unit) * 2.5);
     font-family: var(--font-headings);
-    padding: calc(var(--spacing-unit) * 1.25) calc(var(--spacing-unit) * 2);
+    padding: calc(var(--spacing-unit) * 1.5) calc(var(--spacing-unit) * 2.5);
     background-color: transparent;
     color: var(--color-secondary-brand);
-    border: 1px solid var(--color-secondary-brand);
+    border: 1.5px solid var(--color-secondary-brand); /* Slightly thicker border */
     border-radius: var(--border-radius-small);
     cursor: pointer;
+    font-size: 1rem;
     transition: background-color var(--transition-fast), color var(--transition-fast);
 }
 .thank-you-message #reset-form-button:hover {
@@ -459,99 +506,168 @@ select:disabled {
 }
 
 
-/* 8. CTA BUTTONS (Covered by .form-submit-button now) */
-
-/* 9. MOBILE TABS NAVIGATION (Consistent) */
+/* 9. NAVIGATION (Formerly Mobile Tabs) - Desktop might hide this or have a different main nav */
 .mobile-tabs {
-    position: fixed; bottom: 0; left: 0; width: 100%; height: var(--tabs-height-mobile);
-    background-color: rgba(255, 255, 255, 0.94); /* MODIFIED: Slightly more transparent */
-    backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
-    box-shadow: 0 -2px 12px var(--color-shadow-medium);
-    border-top: 1px solid var(--color-border-subtle);
-    display: flex; justify-content: space-around; align-items: stretch; z-index: 1000;
+    /* On desktop, this might be hidden or styled differently.
+       If it's truly a desktop top navigation, it should be in the header.
+       For now, assuming it's a carry-over and might be hidden on desktop views. */
+    display: none; /* Hide mobile-tabs on desktop by default */
 }
-.tab-item {
-    flex-grow: 1; flex-basis: 0; display: flex; flex-direction: column;
-    align-items: center; justify-content: center;
-    padding: calc(var(--spacing-unit) * 0.5) calc(var(--spacing-unit) * 0.5);
-    color: var(--color-text-medium) !important; text-decoration: none !important;
-    font-family: var(--font-body); font-size: 0.7rem; font-weight: 600;
-    text-align: center; transition: color var(--transition-fast), background-color var(--transition-fast);
-    position: relative;
+
+/* If you have a dedicated desktop navigation in the header, style it there.
+   Example for desktop top navigation:
+.desktop-nav {
+    display: flex;
+    align-items: center;
 }
-.tab-icon { font-size: 1.35rem; margin-bottom: calc(var(--spacing-unit) * 0.35); line-height: 1; }
-.tab-label { line-height: 1.1; display: block; }
-.tab-item:hover, .tab-item:focus { color: var(--color-primary-brand) !important; background-color: rgba(176, 141, 87, 0.06); }
-.tab-item.active { color: var(--color-primary-brand) !important; font-weight: 700; }
-.tab-item.active::before {
-    content: ''; position: absolute; top: 0; left: 15%; right: 15%;
-    height: 3px; background-color: var(--color-accent-gold); border-radius: 0 0 3px 3px;
+.desktop-nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    gap: calc(var(--spacing-unit) * 3);
 }
+.desktop-nav ul li a {
+    font-family: var(--font-headings);
+    font-weight: 600;
+    color: var(--color-primary-brand);
+    text-decoration: none;
+    padding: calc(var(--spacing-unit) * 1) calc(var(--spacing-unit) * 1.5);
+    border-radius: var(--border-radius-small);
+    transition: color var(--transition-fast), background-color var(--transition-fast);
+}
+.desktop-nav ul li a:hover,
+.desktop-nav ul li a.active {
+    color: var(--color-accent-gold);
+    background-color: rgba(var(--color-accent-gold-rgb), 0.1);
+}
+*/
+
 
 /* 10. FOOTER STYLES */
 .site-footer {
     background-color: var(--color-bg-footer); color: #b0bec5; text-align: center;
-    padding: calc(var(--spacing-unit) * 4) calc(var(--spacing-unit) * 2) calc(var(--spacing-unit) * 2.5);
-    font-size: 0.85rem; line-height: 1.6;
+    padding: calc(var(--spacing-unit) * 5) calc(var(--spacing-unit) * 3) calc(var(--spacing-unit) * 3);
+    font-size: 0.9rem; line-height: 1.65;
 }
 .footer-content { max-width: var(--content-max-width-capped); margin: 0 auto; width: var(--content-max-width); }
-.footer-firm-identity { margin-bottom: calc(var(--spacing-unit) * 2.5); display: flex; flex-direction: column; align-items: center; gap: var(--spacing-unit); }
-.footer-firm-name { font-family: var(--font-headings); font-size: 1.2rem; color: var(--color-text-light); font-weight: 600; margin: 0; }
-.footer-social-media { margin-bottom: calc(var(--spacing-unit) * 2.5); }
-.footer-social-media a { color: #ced4da !important; font-size: 1.6rem; margin: 0 calc(var(--spacing-unit) * 1.25); transition: color var(--transition-fast), transform var(--transition-fast); display: inline-block; }
-
-/* MODIFIED: Social Icons Light Up White on Hover */
-.footer-social-media a:hover i,
-.footer-social-media a:focus i {
-    color: #FFFFFF !important; /* All social icons turn white on hover/focus */
-}
-.footer-social-media a:hover,
-.footer-social-media a:focus {
-    transform: scale(1.15); /* Keep existing scale transform */
+.footer-firm-identity { margin-bottom: calc(var(--spacing-unit) * 3); display: flex; flex-direction: column; align-items: center; gap: calc(var(--spacing-unit)*1.5); }
+.footer-firm-name { font-family: var(--font-headings); font-size: 1.3rem; color: var(--color-text-light); font-weight: 600; margin: 0; }
+.footer-social-media { margin-bottom: calc(var(--spacing-unit) * 3); }
+.footer-social-media a {
+    color: #ced4da; /* Default color for icons */
+    font-size: 1.8rem; /* Larger social icons for desktop */
+    margin: 0 calc(var(--spacing-unit) * 1.5);
+    transition: color var(--transition-fast), transform var(--transition-fast);
+    display: inline-block;
     text-decoration: none;
 }
-/* Removed specific brand color hovers for social icons to enforce white "light up" */
 
-.footer-links { margin-bottom: calc(var(--spacing-unit) * 1.5); font-size: 0.8rem; }
-.footer-links a { color: #b0bec5 !important; margin: 0 calc(var(--spacing-unit) * 0.4); transition: color var(--transition-fast); }
+/* Social Icons Hover - Brand Colors */
+.footer-social-media .social-icon.facebook:hover i,
+.footer-social-media .social-icon.facebook:focus i { color: #1877F2 !important; } /* Facebook Blue */
+.footer-social-media .social-icon.linkedin:hover i,
+.footer-social-media .social-icon.linkedin:focus i { color: #0A66C2 !important; } /* LinkedIn Blue */
+.footer-social-media .social-icon.x-twitter:hover i,
+.footer-social-media .social-icon.x-twitter:focus i { color: #FFFFFF !important; } /* X White */
+.footer-social-media .social-icon.instagram:hover i,
+.footer-social-media .social-icon.instagram:focus i { color: #E1306C !important; } /* Instagram Pink */
+.footer-social-media .social-icon.tiktok:hover i,
+.footer-social-media .social-icon.tiktok:focus i { color: #E1306C !important; } /* TikTok Pink/Red (matching Instagram) */
+
+.footer-social-media a:hover,
+.footer-social-media a:focus {
+    transform: scale(1.2); /* Slightly larger scale on hover */
+    text-decoration: none;
+}
+/* Ensure icons don't get an underline from the <a> tag's :hover state if browser defaults kick in. */
+.footer-social-media a:hover i,
+.footer-social-media a:focus i {
+    text-decoration: none;
+}
+
+.footer-links { margin-bottom: calc(var(--spacing-unit) * 2); font-size: 0.85rem; }
+.footer-links a { color: #b0bec5 !important; margin: 0 calc(var(--spacing-unit) * 0.75); transition: color var(--transition-fast); }
 .footer-links a:hover, .footer-links a:focus { color: var(--color-accent-gold) !important; text-decoration: underline; }
-.footer-link-separator { margin: 0 calc(var(--spacing-unit) * 0.4); opacity: 0.7; }
-.footer-copyright { margin-bottom: var(--spacing-unit); font-size: 0.75rem; }
-.footer-disclaimer { font-size: 0.7rem; opacity: 0.6; margin-top: calc(var(--spacing-unit) * 1.25); }
+.footer-link-separator { margin: 0 calc(var(--spacing-unit) * 0.75); opacity: 0.7; }
+.footer-copyright { margin-bottom: var(--spacing-unit) * 1.5; font-size: 0.8rem; }
+.footer-disclaimer { font-size: 0.75rem; opacity: 0.65; margin-top: calc(var(--spacing-unit) * 1.5); }
 
 /* 11. ANIMATION & UTILITY CLASSES (Consistent) */
-*:focus-visible { outline: 2px solid var(--color-secondary-brand); outline-offset: 1px; box-shadow: 0 0 0 3px rgba(var(--color-secondary-brand-rgb), 0.2); }
+*:focus-visible { outline: 2px solid var(--color-secondary-brand); outline-offset: 2px; box-shadow: 0 0 0 4px rgba(var(--color-secondary-brand-rgb), 0.25); }
 .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
 .text-center { text-align: center !important; }
 .animate-on-scroll { opacity: 0; transition-property: opacity, transform; transition-duration: 0.7s; transition-timing-function: cubic-bezier(0.175, 0.885, 0.32, 1.275); }
-.animate-on-scroll.fade-in { transform: translateY(20px); }
-.animate-on-scroll.fade-in-up { transform: translateY(40px); }
+.animate-on-scroll.fade-in { transform: translateY(25px); } /* Slightly more Y offset for desktop animations */
+.animate-on-scroll.fade-in-up { transform: translateY(50px); }
 .animate-on-scroll.is-visible { opacity: 1; transform: translateY(0) translateX(0) scale(1); }
 
-/* 12. RESPONSIVE ADJUSTMENTS (Consistent) */
-@media (min-width: 480px) {
-    body { font-size: 1.075rem; }
-    :root { --header-height-mobile: 70px; --tabs-height-mobile: 65px; }
-    .firm-name-header { font-size: clamp(1.1rem, 4vw, 1.35rem); }
-    .tab-icon { font-size: 1.45rem; }
-    .tab-label { font-size: 0.75rem; }
+/* 12. RESPONSIVE ADJUSTMENTS */
+/* This file is contact_desktop.css, so it primarily defines desktop styles.
+   If specific adjustments are needed for very large screens or smaller "desktop" sizes,
+   they can be added here. The mobile styles are in contact_mobile.css.
+   This section assumes the base styles are for a common desktop width (~1024px+).
+*/
 
+@media (min-width: 768px) { /* Example: Tablet to smaller desktop adjustments if needed */
+    /* The .mobile-tabs nav is hidden by default in this CSS.
+       If you have a different navigation for tablet that's not the full desktop version,
+       you might adjust its display here.
+    */
     .contact-info-grid {
-        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-        text-align: left;
-    }
-    .contact-detail-item {
-        text-align: center;
-    }
-     .contact-form-element .form-row {
-        flex-direction: row;
-    }
-    .form-submit-button {
-        font-size: 1.1rem; /* Slightly larger font for button on wider small screens */
+        /* Ensure 3 columns on tablets too, or adjust if needed */
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
     }
 }
-@media (min-width: 600px) {
-    body { font-size: 1.1rem; }
-     :root { --content-max-width: 88vw; --content-max-width-capped: 760px; }
-    .section-title { font-size: clamp(2rem, 5.5vw, 2.8rem); }
+
+@media (min-width: 1024px) {
+    /* Styles specifically for larger desktop screens */
+    :root {
+        --header-height-desktop: 80px; /* Potentially larger header for wider screens */
+        --content-max-width-capped: 1200px; /* Wider content cap */
+    }
+    .firm-name-header { font-size: clamp(1.5rem, 2.5vw, 2rem); }
+    .section-title { font-size: clamp(2.5rem, 4.5vw, 3.2rem); }
+    .contact-form-element .form-row { gap: calc(var(--spacing-unit) * 3.5); }
 }
+
+/* If .mobile-tabs is indeed a desktop horizontal navigation, it needs complete restyling */
+/* For example, if it's meant to be a top bar navigation for desktop: */
+nav.mobile-tabs { /* Renaming class to 'desktop-navigation' or similar would be clearer */
+    display: none; /* Default: Hide if it's mobile-specific */
+
+    /* If it IS the desktop nav, it should be styled as such: */
+    /*
+    display: flex;
+    position: static; // Not fixed at bottom
+    height: auto;
+    background-color: transparent; // Or header background
+    box-shadow: none;
+    border-top: none;
+    justify-content: center; // Or flex-end if in header
+    padding: var(--spacing-unit) 0;
+    margin-bottom: calc(var(--spacing-unit) * 3); // Spacing if it's a standalone bar
+    */
+}
+/*
+nav.mobile-tabs .tab-item {
+    flex-direction: row; // Horizontal items
+    align-items: center;
+    padding: calc(var(--spacing-unit)*1) calc(var(--spacing-unit)*2);
+    font-size: 1rem; // Desktop font size
+    font-weight: 600;
+    border-radius: var(--border-radius-small);
+}
+nav.mobile-tabs .tab-icon {
+    font-size: 1.1rem;
+    margin-bottom: 0;
+    margin-right: var(--spacing-unit);
+}
+nav.mobile-tabs .tab-item.active::before {
+    display: none; // Remove top bar indicator, use different active state
+}
+nav.mobile-tabs .tab-item.active {
+    background-color: rgba(var(--color-accent-gold-rgb), 0.1);
+    color: var(--color-accent-gold) !important;
+}
+*/
