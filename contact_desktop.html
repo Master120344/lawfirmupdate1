@@ -82,7 +82,7 @@
                         <div class="form-row">
                             <div class="form-group">
                                 <label for="contact-phone"><i class="fa-solid fa-phone-volume form-icon"></i> Phone (Optional)</label>
-                                <input type="tel" id="contact-phone" name="phone" placeholder="e.g., (555) 123-4567">
+                                <input type="tel" id="contact-phone" name="phone" placeholder="e.g., 555-123-4567" maxlength="12"> <!-- Updated placeholder and maxlength -->
                             </div>
                             <div class="form-group">
                                 <label for="contact-service"><i class="fa-solid fa-briefcase form-icon"></i> Service Needed</label>
@@ -100,16 +100,19 @@
                             <label for="contact-message"><i class="fa-solid fa-pen-to-square form-icon"></i> Your Message</label>
                             <textarea id="contact-message" name="message" rows="5" required placeholder="Please describe your business needs or question..."></textarea>
                         </div>
+                        <!-- Form Error Message Placeholder -->
+                        <div id="form-error-message" class="form-error-message" style="display: none;"></div>
+
                         <div class="form-group form-submit-group">
-                            <button type="submit" class="cta-button form-submit-button">
-                                <i class="fa-solid fa-paper-plane"></i> Send Inquiry
+                            <button type="submit" class="cta-button form-submit-button" id="form-submit-button">
+                                <i class="fa-solid fa-paper-plane"></i> <span class="submit-button-text">Send Inquiry</span>
                             </button>
                         </div>
                     </form>
                     <div id="thank-you-message" class="thank-you-message" style="display: none;">
                         <i class="fas fa-check-circle thank-you-icon"></i>
                         <h3 class="thank-you-title">Thank You, <span id="thank-you-user-name"></span>!</h3>
-                        <p>Your message has been successfully sent to The Kershaw Law Firm P.C. We appreciate you contacting us and will respond as soon as possible, typically within 1-2 business days.</p>
+                        <p id="thank-you-backend-message">Your message has been successfully sent to The Kershaw Law Firm P.C. We appreciate you contacting us and will respond as soon as possible, typically within 1-2 business days.</p> <!-- Default/backend message here -->
                         <p>If your matter is urgent, please call us directly at <a href="tel:737-204-0093">(737) 204-0093</a>.</p>
                         <button id="reset-form-button" class="secondary-button">Send Another Message</button>
                     </div>
@@ -118,7 +121,7 @@
         </section>
     </main>
 
-    <nav class="mobile-tabs">
+    <nav class="mobile-tabs"> <!-- This is named mobile-tabs, consider renaming if it's a desktop nav or styling differently -->
         <a href="index_desktop.html" class="tab-item">
             <i class="fas fa-home tab-icon"></i><span class="tab-label">Home</span>
         </a>
@@ -155,7 +158,7 @@
                  <span class="footer-link-separator">•</span>
                 <a href="sitemap_desktop.html">Sitemap</a>
             </nav>
-            <p class="footer-copyright">© <span id="current-year">2025</span> The Kershaw Law Firm P.C. All Rights Reserved.</p>
+            <p class="footer-copyright">© <span id="current-year">2024</span> The Kershaw Law Firm P.C. All Rights Reserved.</p> <!-- Year will be updated by JS -->
             <p class="footer-disclaimer">This website is for informational purposes only and does not constitute legal advice. Attorney Advertising. Results may vary depending on your particular facts and legal circumstances.</p>
         </div>
     </footer>
