@@ -61,7 +61,7 @@
 
     /* Spacing & Sizing */
     --spacing-unit: 8px;
-    --header-height-mobile: 65px;
+    --header-height-mobile: 65px; /* Will be adjusted in responsive if needed */
     --tabs-height-mobile: 60px;
     --content-max-width: 90vw;
     --content-max-width-capped: 720px;
@@ -92,14 +92,14 @@ html {
 -------------------------------------------------- */
 body {
     font-family: var(--font-body);
-    font-size: 1.05rem; /* Adjusted for EB Garamond's typical rendering */
+    font-size: 1.05rem;
     line-height: 1.7;
     color: var(--color-text-dark);
     background-color: var(--color-bg-off-white);
     overflow-x: hidden;
     position: relative;
     opacity: 0;
-    transition: opacity 0.8s ease-in-out; /* Keep body fade-in simpler */
+    transition: opacity 0.8s ease-in-out;
     padding-top: var(--header-height-mobile);
     padding-bottom: var(--tabs-height-mobile);
     display: flex;
@@ -116,16 +116,16 @@ h1, h2, h3, h4, h5, h6 {
     color: var(--color-primary-brand);
     line-height: 1.25;
     margin-bottom: calc(var(--spacing-unit) * 2.5);
-    font-weight: 700; /* Cinzel Bold */
+    font-weight: 700; /* Default Cinzel Bold for headings */
 }
 
-h1 { font-size: clamp(2rem, 7vw, 3rem); font-weight: 900; /* Cinzel Black for main page titles */ }
-h2 { font-size: clamp(1.6rem, 6vw, 2.4rem); } /* Section titles */
+h1 { font-size: clamp(2rem, 7vw, 3rem); font-weight: 900; /* Cinzel Black for main page titles if needed elsewhere */ }
+h2 { font-size: clamp(1.6rem, 6vw, 2.4rem); }
 h3 { font-size: clamp(1.3rem, 5vw, 1.8rem); }
 
 p {
     margin-bottom: calc(var(--spacing-unit) * 2);
-    font-weight: 400; /* EB Garamond Regular */
+    font-weight: 400;
 }
 p:last-child { margin-bottom: 0; }
 
@@ -153,10 +153,9 @@ img {
 
 /* 3. LOADER STYLES
 -------------------------------------------------- */
-/* Base for all loaders (splash, page transition, general) */
 .splash-loader,
 .page-transition-loader,
-.loader /* A generic loader class if ever used elsewhere */ {
+.loader {
     position: fixed; top: 0; left: 0; width: 100%; height: 100vh;
     display: flex;
     flex-direction: column;
@@ -166,34 +165,29 @@ img {
     z-index: 10000;
     opacity: 1;
     visibility: visible;
-    transition: opacity 0.5s ease-out, visibility 0s linear 0s; /* Visibility changes instantly with opacity */
-    padding: calc(var(--spacing-unit) * 3); /* Padding for splash content if any */
+    transition: opacity 0.5s ease-out, visibility 0s linear 0s;
+    padding: calc(var(--spacing-unit) * 3);
 }
 
-/* Default background for loaders that need a full opaque background */
 .splash-loader, .loader {
     background-color: var(--color-loader-bg);
 }
 
-/* Specific background for page transition loader - more subtle */
 .page-transition-loader {
-    background-color: rgba(var(--color-primary-brand-rgb), 0.25); /* Subtle branded overlay */
-    backdrop-filter: blur(2px); /* Optional: slight blur effect */
+    background-color: rgba(var(--color-primary-brand-rgb), 0.25);
+    backdrop-filter: blur(2px);
     -webkit-backdrop-filter: blur(2px);
 }
 
-/* Hidden state for all loaders */
 .splash-loader.hidden,
 .page-transition-loader.hidden,
 .loader.hidden {
     opacity: 0;
     visibility: hidden;
     pointer-events: none;
-    transition: opacity 0.4s ease-out, visibility 0s linear 0.4s; /* Delay visibility change until opacity is 0 */
+    transition: opacity 0.4s ease-out, visibility 0s linear 0.4s;
 }
 
-
-/* Styles for the text-based splash screen */
 .splash-loader .splash-text-content {
     text-align: center;
 }
@@ -218,7 +212,6 @@ img {
     to { transform: scale(1.02); opacity: 1; }
 }
 
-/* Original loader text styles (can be used if a loader needs more text) */
 .loader-text-wrapper { margin-bottom: calc(var(--spacing-unit) * 4); }
 .loader-main-title {
     font-family: var(--font-headings);
@@ -257,7 +250,6 @@ img {
     100% { width: 100%; }
 }
 
-/* Page transition spinner */
 .page-transition-loader .spinner {
     width: 50px;
     height: 50px;
@@ -270,18 +262,17 @@ img {
     to { transform: rotate(360deg); }
 }
 
-
 /* 4. BACKGROUND STYLES
 -------------------------------------------------- */
 #background-static {
     position: fixed; top: 0; left: 0; width: 100%; height: 100%;
     z-index: -2;
-    background-image: url('austin.jpg'); /* Ensure this path is correct */
+    background-image: url('austin.jpg');
     background-size: cover;
     background-position: center center;
     background-repeat: no-repeat;
     animation: subtleZoomInOut 70s infinite alternate ease-in-out;
-    filter: saturate(0.7) brightness(0.7); /* MODIFIED: Brighter background image */
+    filter: saturate(0.7) brightness(0.7);
 }
 @keyframes subtleZoomInOut {
     0% { transform: scale(1); }
@@ -313,10 +304,15 @@ img {
 .header-content {
     width: 100%;
     display: flex;
-    justify-content: flex-start; /* Align logo to left */
+    /* UPDATED: Changed from flex-start to center for title alignment */
+    justify-content: center;
+    align-items: center;
+    text-align: center; /* Ensures text within firm-title-container is centered if it wraps */
+}
+.firm-title-container {
+    display: flex;
     align-items: center;
 }
-.firm-title-container { display: flex; align-items: center; }
 
 .firm-title-link {
     display: flex;
@@ -326,34 +322,20 @@ img {
 .firm-title-link:hover .firm-name-header {
     color: var(--color-accent-gold);
 }
-.firm-title-link:hover .firm-name-header .firm-name-pc {
-    color: var(--color-accent-gold);
-}
-
 
 .firm-name-header {
-    font-family: var(--font-headings);
-    font-size: clamp(1.05rem, 4.2vw, 1.3rem);
+    font-family: var(--font-headings); /* Cinzel */
+    /* UPDATED: Font size to match privacy policy's header title */
+    font-size: clamp(1.5rem, 5vw, 2rem);
     color: var(--color-primary-brand);
-    font-weight: 600; /* Cinzel Semibold */
+    /* UPDATED: Font weight to match privacy policy's header title */
+    font-weight: 700;
     margin: 0;
     line-height: 1.2;
-    letter-spacing: 0.4px; /* MODIFIED: Slightly increased letter spacing */
-    text-shadow: 0px 1px 3px rgba(var(--color-primary-brand-rgb), 0.2); /* MODIFIED: Added subtle text shadow */
     transition: color var(--transition-fast);
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    /* Removed letter-spacing, text-shadow, and white-space/overflow properties for consistency and natural wrapping */
 }
-.firm-name-header .firm-name-pc {
-    font-weight: 400; /* Cinzel Regular (lighter) */
-    font-size: 0.85em; /* Slightly smaller */
-    color: var(--color-secondary-brand); /* Brighter Blue for distinction */
-    margin-left: calc(var(--spacing-unit) * 0.35); /* Adjusted spacing */
-    vertical-align: baseline; /* Ensure good alignment */
-    transition: color var(--transition-fast); /* Allow color transition for P.C. part */
-    /* Text shadow will be inherited from .firm-name-header */
-}
+/* Removed .firm-name-header .firm-name-pc styles as the span was removed from HTML */
 
 
 /* 6. PAGE CONTENT WRAPPER & SECTION BASE
@@ -366,7 +348,7 @@ img {
 }
 .content-section {
     width: 100%;
-    padding: calc(var(--spacing-unit) * 6) calc(var(--spacing-unit) * 2); /* Horizontal padding */
+    padding: calc(var(--spacing-unit) * 6) calc(var(--spacing-unit) * 2);
     margin: 0 auto;
     position: relative;
 }
@@ -382,10 +364,10 @@ img {
     width: var(--content-max-width);
 }
 .section-title {
-    font-family: var(--font-headings); /* Cinzel */
+    font-family: var(--font-headings);
     font-size: clamp(1.8rem, 6vw, 2.6rem);
     text-align: center;
-    margin-bottom: calc(var(--spacing-unit) * 1.5); /* Reduced margin for subtitle */
+    margin-bottom: calc(var(--spacing-unit) * 1.5);
     font-weight: 700;
     color: var(--color-primary-brand);
     position: relative;
@@ -408,13 +390,13 @@ img {
     color: var(--color-text-medium);
     text-align: center;
     max-width: 580px;
-    margin: 0 auto calc(var(--spacing-unit) * 4) auto; /* Adjusted margin */
+    margin: 0 auto calc(var(--spacing-unit) * 4) auto;
 }
 
 /* 7. HERO SECTION
 -------------------------------------------------- */
 .hero-section {
-    min-height: 65vh; /* Adjusted height */
+    min-height: 65vh;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -426,7 +408,7 @@ img {
     overflow: hidden;
 }
 .hero-content-box {
-    background-color: rgba(var(--color-primary-brand-rgb), 0.75); /* Darker overlay for readability */
+    background-color: rgba(var(--color-primary-brand-rgb), 0.75);
     padding: calc(var(--spacing-unit) * 4) calc(var(--spacing-unit) * 3);
     border-radius: var(--border-radius-medium);
     box-shadow: 0 6px 25px rgba(0,0,0,0.25);
@@ -435,13 +417,12 @@ img {
     z-index: 1;
 }
 .hero-main-title {
-    /* font-family: var(--font-display); */ /* Cinzel Decorative - Original (Cursive) */
-    font-family: var(--font-headings);   /* UPDATED: Cinzel - Regular heading font */
-    font-size: clamp(2rem, 8vw, 3.2rem); /* Impactful size */
+    font-family: var(--font-headings); /* Was --font-display, changed to standard heading font */
+    font-size: clamp(2rem, 8vw, 3.2rem);
     color: var(--color-text-light);
     text-shadow: 1px 1px 5px rgba(0,0,0,0.4);
     margin-bottom: calc(var(--spacing-unit) * 1.5);
-    font-weight: 700; /* Cinzel is typically bold (700) for headings */
+    font-weight: 700;
     letter-spacing: 1px;
 }
 .hero-subtitle {
@@ -449,7 +430,7 @@ img {
     font-size: clamp(1.05rem, 4vw, 1.3rem);
     color: rgba(255,255,255,0.85);
     margin-bottom: calc(var(--spacing-unit) * 3.5);
-    font-weight: 500; /* EB Garamond Medium */
+    font-weight: 500;
     line-height: 1.6;
 }
 .hero-cta { margin-top: calc(var(--spacing-unit) * 1); }
@@ -470,7 +451,6 @@ img {
 }
 .service-list-detailed li {
     font-size: 1.05rem;
-    /* Increased padding-left for more space between icon and text */
     padding: calc(var(--spacing-unit) * 1.25) 0 calc(var(--spacing-unit) * 1.25) calc(var(--spacing-unit) * 5.5);
     position: relative;
     border-bottom: 1px dashed var(--color-border-subtle);
@@ -480,24 +460,23 @@ img {
 .service-list-detailed li:last-child { border-bottom: none; }
 .service-list-detailed li:hover { background-color: rgba(176, 141, 87, 0.04); }
 
-/* Updated selector to target all Font Awesome solid icons directly within li */
 .service-list-detailed li > i.fa-solid {
     position: absolute;
-    left: var(--spacing-unit); /* Icon position from left */
+    left: var(--spacing-unit);
     top: 50%;
     transform: translateY(-50%);
-    color: var(--color-accent-gold); /* Golden color for icons */
-    font-size: 1.4em; /* Icon size */
-    width: calc(var(--spacing-unit) * 3); /* Space allocated for icon width */
-    text-align: center; /* Center icon within its allocated space */
-    line-height: 1; /* Ensure icon is vertically centered if it has intrinsic line height */
+    color: var(--color-accent-gold);
+    font-size: 1.4em;
+    width: calc(var(--spacing-unit) * 3);
+    text-align: center;
+    line-height: 1;
 }
 .service-list-detailed strong {
     color: var(--color-primary-brand);
-    font-weight: 600; /* EB Garamond Semibold/Bold */
-    font-family: var(--font-headings); /* Use Cinzel for list item titles */
+    font-weight: 600;
+    font-family: var(--font-headings);
     font-size: 1.1em;
-    display: inline-block; /* Helps with alignment if needed */
+    display: inline-block;
 }
 
 
@@ -505,38 +484,43 @@ img {
 -------------------------------------------------- */
 .testimonials-section {
     background-color: var(--color-bg-medium-grey) !important;
-    padding-bottom: calc(var(--spacing-unit) * 7); /* Ensure space for dots */
+    padding-bottom: calc(var(--spacing-unit) * 7); /* Space for dots */
 }
 .testimonial-carousel-wrapper {
     position: relative;
     max-width: 580px;
-    margin: 0 auto calc(var(--spacing-unit) * 5) auto; /* Increased bottom margin for dots */
-    overflow: hidden; /* Crucial for slide effect */
+    margin: 0 auto calc(var(--spacing-unit) * 5) auto;
+    overflow: hidden;
     border-radius: var(--border-radius-medium);
     box-shadow: 0 6px 20px var(--color-shadow-medium);
 }
 .testimonial-carousel {
-    display: flex; /* Crucial for side-by-side items */
-    transition: transform var(--transition-slow) ease-in-out; /* Smooth sliding */
+    display: flex;
+    transition: transform var(--transition-slow) ease-in-out;
 }
 .testimonial-item {
-    min-width: 100%; /* Each item takes full width of wrapper */
-    flex-shrink: 0; /* Prevent items from shrinking */
+    min-width: 100%;
+    flex-shrink: 0;
     background-color: var(--color-bg-light);
-    padding: calc(var(--spacing-unit) * 2.5) calc(var(--spacing-unit) * 3); /* Adjusted padding */
+    padding: calc(var(--spacing-unit) * 2.5) calc(var(--spacing-unit) * 3);
     text-align: left;
-    box-sizing: border-box; /* Include padding in width calculation */
+    box-sizing: border-box;
+    /* UPDATED: Added min-height for consistent review box height */
+    min-height: 200px; /* Adjust as needed based on typical content length */
+    display: flex; /* To help with vertical alignment if needed */
+    flex-direction: column; /* To stack elements vertically */
+    justify-content: space-between; /* Pushes source to bottom if item grows */
 }
 
 .review-header {
     display: flex;
     align-items: center;
-    margin-bottom: calc(var(--spacing-unit) * 1.5); /* Slightly reduced margin */
+    margin-bottom: calc(var(--spacing-unit) * 1.5);
 }
 .review-profile-pic {
-    font-size: 2.8rem; /* Adjusted size */
+    font-size: 2.8rem;
     color: var(--color-text-medium);
-    margin-right: calc(var(--spacing-unit) * 1.5); /* Adjusted margin */
+    margin-right: calc(var(--spacing-unit) * 1.5);
     flex-shrink: 0;
 }
 .reviewer-info {
@@ -546,18 +530,18 @@ img {
 .review-stars {
     color: var(--color-accent-gold);
     font-size: 0.9rem;
-    margin-top: calc(var(--spacing-unit) * 0.25); /* Reduced margin */
+    margin-top: calc(var(--spacing-unit) * 0.25);
 }
 .review-stars .fa-star {
     margin-right: calc(var(--spacing-unit) * 0.25);
 }
 .review-stars .far.fa-star {
-    color: var(--color-accent-gold);
+    color: var(--color-accent-gold); /* Ensure outlined star is also gold */
 }
 .review-source {
     font-size: 0.85rem;
     color: var(--color-text-medium);
-    margin-top: calc(var(--spacing-unit) * 2); /* Increased margin for separation */
+    margin-top: calc(var(--spacing-unit) * 2);
     text-align: right;
     font-style: italic;
 }
@@ -566,19 +550,20 @@ img {
     font-family: var(--font-body);
     font-style: normal;
     font-size: 1rem;
-    line-height: 1.65;
+    /* UPDATED: Slightly increased line-height for better readability */
+    line-height: 1.7;
     color: var(--color-text-dark);
     margin-bottom: calc(var(--spacing-unit) * 1.5);
     font-weight: 400;
-    /* Ensure text wraps within the box */
-    white-space: normal;
-    overflow-wrap: break-word;
-    word-break: break-word;
-    -webkit-hyphens: auto; /* For Safari */
-    -moz-hyphens: auto;    /* For Firefox */
-    hyphens: auto;         /* Standard */
-    /* If text still feels cramped, consider minor adjustments to font-size or padding,
-       but the current settings should allow for proper wrapping. */
+    flex-grow: 1; /* Allows text to take available space if item height is fixed */
+
+    /* CRUCIAL FOR TEXT WRAPPING: Ensure these are active */
+    white-space: normal;       /* Allow text to wrap to the next line */
+    overflow-wrap: break-word; /* Break long words if they would overflow */
+    word-break: break-word;    /* Alternative/additional word breaking */
+    -webkit-hyphens: auto;     /* Enable hyphenation in WebKit browsers (Safari, Chrome) */
+    -moz-hyphens: auto;        /* Enable hyphenation in Firefox */
+    hyphens: auto;             /* Standard hyphenation property */
 }
 .testimonial-author {
     font-family: var(--font-headings);
@@ -588,7 +573,7 @@ img {
     margin-top: 0;
     text-align: left;
 }
-.testimonial-author::before { content: ""; }
+.testimonial-author::before { content: ""; } /* Remove default pseudo-element content if any */
 
 .carousel-control {
     position: absolute;
@@ -607,27 +592,19 @@ img {
     box-shadow: 0 1px 4px rgba(0,0,0,0.15);
     display: flex; align-items: center; justify-content: center;
 }
-/* HIDE ARROWS AS REQUESTED */
+/* Arrows are hidden by default as per earlier request */
 .carousel-control.prev,
 .carousel-control.next {
     display: none;
 }
-/* You can re-enable them by removing the display:none if JS needs them
-.carousel-control:hover, .carousel-control:focus {
-    background-color: var(--color-primary-brand);
-    transform: translateY(-50%) scale(1.05);
-}
-.carousel-control.prev { left: calc(var(--spacing-unit) * 1.5); }
-.carousel-control.next { right: calc(var(--spacing-unit) * 1.5); }
-*/
 
 .carousel-dots {
     text-align: center;
     position: absolute;
-    bottom: calc(var(--spacing-unit) * -2.5); /* Adjust if needed to prevent overlap */
+    bottom: calc(var(--spacing-unit) * -2.5);
     left: 50%;
     transform: translateX(-50%);
-    padding-top: calc(var(--spacing-unit) * 1); /* Reduced top padding */
+    padding-top: calc(var(--spacing-unit) * 1);
 }
 .carousel-dot {
     display: inline-block;
@@ -637,8 +614,8 @@ img {
     margin: 0 calc(var(--spacing-unit) * 0.6);
     cursor: pointer;
     transition: background-color var(--transition-fast), transform var(--transition-fast);
-    border: none; /* Ensure button reset for dots */
-    padding: 0; /* Ensure button reset for dots */
+    border: none;
+    padding: 0;
 }
 .carousel-dot.active {
     background-color: var(--color-primary-brand);
@@ -646,7 +623,7 @@ img {
 }
 
 .google-reviews-callout {
-    margin-top: calc(var(--spacing-unit) * 7); /* Increased margin to accommodate dots below carousel */
+    margin-top: calc(var(--spacing-unit) * 7);
     padding: calc(var(--spacing-unit) * 3) calc(var(--spacing-unit) * 2.5);
     background-color: var(--color-bg-light);
     border-radius: var(--border-radius-medium);
@@ -668,7 +645,7 @@ img {
     padding: calc(var(--spacing-unit) * 1.5) calc(var(--spacing-unit) * 3);
     background-color: #DB4437;
     color: var(--color-text-light);
-    font-family: var(--font-headings); /* Cinzel */
+    font-family: var(--font-headings);
     font-size: 1rem;
     font-weight: 600;
     border-radius: var(--border-radius-small);
@@ -694,7 +671,7 @@ img {
     background: linear-gradient(145deg, var(--color-accent-gold), var(--color-accent-gold-darker));
     color: var(--color-text-on-gold) !important;
     text-decoration: none !important;
-    font-family: var(--font-headings); /* Cinzel */
+    font-family: var(--font-headings);
     font-size: 1.1rem;
     font-weight: 700;
     border-radius: var(--border-radius-medium);
@@ -726,7 +703,7 @@ img {
     color: var(--color-secondary-brand) !important;
     border: 2px solid var(--color-secondary-brand);
     border-radius: var(--border-radius-small);
-    font-family: var(--font-headings); /* Cinzel */
+    font-family: var(--font-headings);
     font-size: 1rem;
     font-weight: 600;
     transition: all var(--transition-medium);
@@ -777,14 +754,14 @@ img {
     color: var(--color-text-medium) !important;
     text-decoration: none !important;
     font-family: var(--font-body);
-    font-size: 0.7rem; /* Smaller for compact tabs */
-    font-weight: 600; /* EB Garamond Semibold */
+    font-size: 0.7rem;
+    font-weight: 600;
     text-align: center;
     transition: color var(--transition-fast), background-color var(--transition-fast);
     position: relative;
 }
 .tab-icon {
-    font-size: 1.35rem; /* Slightly smaller icons */
+    font-size: 1.35rem;
     margin-bottom: calc(var(--spacing-unit) * 0.35);
     line-height: 1;
 }
@@ -796,12 +773,12 @@ img {
 }
 .tab-item.active {
     color: var(--color-primary-brand) !important;
-    font-weight: 700; /* EB Garamond Bold */
+    font-weight: 700;
 }
 .tab-item.active::before {
     content: '';
     position: absolute;
-    top: 0; left: 15%; right: 15%; /* Make indicator narrower */
+    top: 0; left: 15%; right: 15%;
     height: 3px;
     background-color: var(--color-accent-gold);
     border-radius: 0 0 3px 3px;
@@ -811,7 +788,7 @@ img {
 -------------------------------------------------- */
 .site-footer {
     background-color: var(--color-bg-footer);
-    color: #b0bec5; /* Softer grey */
+    color: #b0bec5;
     text-align: center;
     padding: calc(var(--spacing-unit) * 4) calc(var(--spacing-unit) * 2) calc(var(--spacing-unit) * 2.5);
     font-size: 0.85rem;
@@ -830,7 +807,7 @@ img {
     gap: var(--spacing-unit);
 }
 .footer-firm-name {
-    font-family: var(--font-headings); /* Cinzel */
+    font-family: var(--font-headings);
     font-size: 1.2rem;
     color: var(--color-text-light);
     font-weight: 600;
@@ -840,15 +817,12 @@ img {
     margin-bottom: calc(var(--spacing-unit) * 2.5);
 }
 .footer-social-media a {
-    color: #ced4da !important; /* Base color for <a> tag. Icon color will be set specifically. */
+    color: #ced4da !important;
     font-size: 1.6rem;
     margin: 0 calc(var(--spacing-unit) * 1.25);
-    transition: transform var(--transition-fast); /* Only transform on <a> tag */
-    display: inline-block; /* Helps with transform */
+    transition: transform var(--transition-fast);
+    display: inline-block;
     text-decoration: none !important;
-}
-.footer-social-media a i {
-    /* MODIFIED: Removed color transition from here as colors are static */
 }
 
 .footer-social-media a:hover,
@@ -856,10 +830,9 @@ img {
     transform: scale(1.15);
 }
 
-/* MODIFIED: Apply brand colors directly to icons, not just on hover/focus */
 .footer-social-media a.facebook i { color: #1877F2 !important; }
 .footer-social-media a.linkedin i { color: #0A66C2 !important; }
-.footer-social-media a.x-twitter i { color: #FFFFFF !important; } /* MODIFIED: White for X on dark background */
+.footer-social-media a.x-twitter i { color: #FFFFFF !important; }
 .footer-social-media a.instagram i { color: #E1306C !important; }
 .footer-social-media a.tiktok i { color: #EE1D52 !important; }
 
@@ -895,7 +868,7 @@ img {
     outline-offset: 1px;
     box-shadow: 0 0 0 3px rgba(var(--color-secondary-brand-rgb), 0.2);
 }
-.sr-only { /* Screen reader only */
+.sr-only {
     position: absolute; width: 1px; height: 1px;
     padding: 0; margin: -1px; overflow: hidden;
     clip: rect(0,0,0,0); white-space: nowrap; border: 0;
@@ -906,7 +879,7 @@ img {
     opacity: 0;
     transition-property: opacity, transform;
     transition-duration: 0.7s;
-    transition-timing-function: cubic-bezier(0.175, 0.885, 0.32, 1.275); /* "Ease out back" like */
+    transition-timing-function: cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 .animate-on-scroll.fade-in { transform: translateY(20px); }
 .animate-on-scroll.fade-in-up { transform: translateY(40px); }
@@ -922,19 +895,21 @@ img {
 
 /* 14. RESPONSIVE ADJUSTMENTS
 -------------------------------------------------- */
-@media (min-width: 480px) { /* Slightly larger mobile screens */
-    body { font-size: 1.075rem; } /* ~17.2px */
+@media (min-width: 480px) {
+    body { font-size: 1.075rem; }
     :root {
-        --header-height-mobile: 70px;
+        --header-height-mobile: 70px; /* Adjusted height for potentially larger title */
         --tabs-height-mobile: 65px;
     }
-    .firm-name-header { font-size: clamp(1.1rem, 4vw, 1.35rem); }
+    /* .firm-name-header font-size is already responsive with clamp, 
+       but ensure it doesn't get too small or too large disproportionately.
+       The clamp(1.5rem, 5vw, 2rem) should work well. */
     .tab-icon { font-size: 1.45rem; }
     .tab-label { font-size: 0.75rem; }
 }
 
-@media (min-width: 600px) { /* "Tablet" sized mobile or landscape */
-    body { font-size: 1.1rem; } /* ~17.6px */
+@media (min-width: 600px) {
+    body { font-size: 1.1rem; }
      :root {
         --content-max-width: 88vw;
         --content-max-width-capped: 760px;
