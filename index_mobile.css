@@ -18,7 +18,8 @@
 
 /* 1. VARIABLES & GLOBAL RESETS
 -------------------------------------------------- */
-:root {                                                   /* Primary Palette */
+:root {
+    /* Primary Palette */
     --color-primary-brand: #003366; /* Deep Navy Blue */
     --color-primary-brand-rgb: 0, 51, 102; /* For RGBA */
     --color-secondary-brand: #0A58A6; /* Brighter Blue */
@@ -434,12 +435,13 @@ img {
     z-index: 1;
 }
 .hero-main-title {
-    font-family: var(--font-display); /* Cinzel Decorative */
+    /* font-family: var(--font-display); */ /* Cinzel Decorative - Original (Cursive) */
+    font-family: var(--font-headings);   /* UPDATED: Cinzel - Regular heading font */
     font-size: clamp(2rem, 8vw, 3.2rem); /* Impactful size */
     color: var(--color-text-light);
     text-shadow: 1px 1px 5px rgba(0,0,0,0.4);
     margin-bottom: calc(var(--spacing-unit) * 1.5);
-    font-weight: 700; /* Decorative bold */
+    font-weight: 700; /* Cinzel is typically bold (700) for headings */
     letter-spacing: 1px;
 }
 .hero-subtitle {
@@ -568,11 +570,15 @@ img {
     color: var(--color-text-dark);
     margin-bottom: calc(var(--spacing-unit) * 1.5);
     font-weight: 400;
-    /* ADDED FOR TEXT WRAPPING */
-    white-space: normal; /* Allow wrapping */
-    overflow-wrap: break-word; /* Break long words if necessary */
-    word-break: break-word; /* Alternative for robust breaking */
-    hyphens: auto; /* Optional: allow hyphenation */
+    /* Ensure text wraps within the box */
+    white-space: normal;
+    overflow-wrap: break-word;
+    word-break: break-word;
+    -webkit-hyphens: auto; /* For Safari */
+    -moz-hyphens: auto;    /* For Firefox */
+    hyphens: auto;         /* Standard */
+    /* If text still feels cramped, consider minor adjustments to font-size or padding,
+       but the current settings should allow for proper wrapping. */
 }
 .testimonial-author {
     font-family: var(--font-headings);
