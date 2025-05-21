@@ -4,6 +4,7 @@
 "use strict";
 const INITIAL_SPLASH_DURATION_MS = 100;
 const PAGE_TRANSITION_ANIMATION_MS = 300;
+const PHP_SCRIPT_URL = 'send_email.php'; // URL for the PHP mailer script
 
 // --- Utility Functions ---
 function debounce(func, wait, immediate) {
@@ -151,7 +152,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (typeof window.initScrollAnimations === 'function') window.initScrollAnimations();
 
     // 4. Smooth Scroll (if anchors are used)
-    function initSmoothScroll() { /* ... same as faq_mobile.js ... */ }
+    function initSmoothScroll() { /* ... (keep existing or implement as needed) ... */ }
     initSmoothScroll();
 
     // 5. Sticky Header
@@ -173,73 +174,155 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     initStickyHeaderBehavior();
 
-    // 6. Contact Form Submission Handling
+    // 6. Phone Number Formatting
+    function initPhoneFormatting() {
+        const phoneInput = document.getElementById('contact-phone');
+        if (!phoneInput) return;
+
+        phoneInput.addEventListener('input', (e) => {
+            let input = e.target.value.replace(/\D/g, ''); // Remove all non-digits
+            
+            // Format: (XXX) XXX-XXXX or XXX-XXX-XXXX as per user's "555-222-5555" example
+            // Let's go with XXX-XXX-XXXX for simplicity as requested in "555-222-5555"
+            
+            let formattedInput = '';
+            if (input.length > 0) {
+                formattedInput = input.substring(0, 3);
+            }
+            if (input.length > 3) {
+                formattedInput += '-' + input.substring(3, 6);
+            }
+            if (input.length > 6) {
+                formattedInput += '-' + input.substring(6, 10); // Max 10 digits
+            }
+            
+            e.target.value = formattedInput;
+        });
+    }
+    initPhoneFormatting();
+
+
+    // 7. Contact Form Submission Handling
     function initContactForm() {
         const form = document.getElementById('contact-form');
         const thankYouMessageDiv = document.getElementById('thank-you-message');
         const userNameSpan = document.getElementById('thank-you-user-name');
         const nameInput = document.getElementById('contact-name');
         const resetButton = document.getElementById('reset-form-button');
+        const submitButton = document.getElementById('form-submit-button');
+        const submitButtonTextSpan = submitButton ? submitButton.querySelector('.submit-button-text') : null;
+        const formErrorMessageDiv = document.getElementById('form-error-message');
+        const thankYouBackendMessage = document.getElementById('thank-you-backend-message');
 
 
-        if (!form || !thankYouMessageDiv || !userNameSpan || !nameInput || !resetButton) {
-            console.warn('Contact form elements not found.');
+        if (!form || !thankYouMessageDiv || !userNameSpan || !nameInput || !resetButton || !submitButton || !submitButtonTextSpan || !formErrorMessageDiv || !thankYouBackendMessage) {
+            console.warn('Contact form elements not found. Submission handling will not work.');
             return;
         }
 
-        form.addEventListener('submit', function(event) {
-            event.preventDefault(); // Prevent actual submission
+        form.addEventListener('submit', async function(event) {
+            event.preventDefault();
+            
+            // Clear previous errors
+            formErrorMessageDiv.style.display = 'none';
+            formErrorMessageDiv.textContent = '';
+            form.querySelectorAll('.input-error').forEach(el => el.classList.remove('input-error'));
 
-            // Basic validation check (HTML5 'required' handles most of this)
+            // Basic client-side validation (HTML5 'required' helps, but this is more explicit)
             let isValid = true;
-            form.querySelectorAll('[required]').forEach(input => {
+            const requiredFields = form.querySelectorAll('[required]');
+            requiredFields.forEach(input => {
                 if (!input.value.trim()) {
                     isValid = false;
-                    // Optionally, add a visual cue for invalid fields
-                    input.style.borderColor = 'red';
+                    input.classList.add('input-error');
                 } else {
-                    input.style.borderColor = ''; // Reset border color
+                    input.classList.remove('input-error');
+                }
+                 // Specific email validation
+                if (input.type === 'email' && input.value.trim() && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(input.value.trim())) {
+                    isValid = false;
+                    input.classList.add('input-error');
                 }
             });
 
             if (!isValid) {
-                // alert('Please fill out all required fields.');
-                // Find first invalid field and focus it
-                const firstInvalid = form.querySelector('[required]:invalid, [required]:placeholder-shown');
+                formErrorMessageDiv.textContent = 'Please fill out all highlighted required fields correctly.';
+                formErrorMessageDiv.style.display = 'block';
+                const firstInvalid = form.querySelector('.input-error, [required]:invalid, [required]:placeholder-shown');
                 if(firstInvalid) firstInvalid.focus();
                 return;
             }
 
+            // Disable button and show sending state
+            submitButton.disabled = true;
+            submitButtonTextSpan.textContent = 'Sending...';
+            const originalButtonIconClass = submitButton.querySelector('i').className;
+            submitButton.querySelector('i').className = 'fas fa-spinner fa-spin';
 
-            // Simulate successful submission
-            if (nameInput.value.trim()) {
-                userNameSpan.textContent = nameInput.value.trim().split(' ')[0]; // Show first name
-            } else {
-                userNameSpan.textContent = "Valued Client";
+
+            const formData = {
+                name: form.elements['name'].value,
+                email: form.elements['email'].value,
+                phone: form.elements['phone'].value,
+                service: form.elements['service'].value,
+                message: form.elements['message'].value,
+            };
+
+            try {
+                const response = await fetch(PHP_SCRIPT_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify(formData)
+                });
+
+                const result = await response.json();
+
+                if (response.ok && result.status === 'success') {
+                    if (nameInput.value.trim()) {
+                        userNameSpan.textContent = nameInput.value.trim().split(' ')[0];
+                    } else {
+                        userNameSpan.textContent = "Valued Client";
+                    }
+                    thankYouBackendMessage.textContent = result.message || 'Your message has been sent successfully.';
+                    form.style.display = 'none';
+                    thankYouMessageDiv.style.display = 'block';
+                    setTimeout(() => {
+                        thankYouMessageDiv.classList.add('visible');
+                    }, 10);
+
+                    const headerHeight = document.getElementById('site-header')?.offsetHeight || 70;
+                    const messageTop = thankYouMessageDiv.getBoundingClientRect().top + window.pageYOffset - headerHeight - 20;
+                    window.scrollTo({ top: messageTop, behavior: 'smooth' });
+                } else {
+                    // Handle server-side validation errors or other errors
+                    formErrorMessageDiv.textContent = result.message || 'An unexpected error occurred. Please try again.';
+                    formErrorMessageDiv.style.display = 'block';
+                }
+
+            } catch (error) {
+                console.error('Form submission error:', error);
+                formErrorMessageDiv.textContent = 'A network error occurred. Please check your connection and try again.';
+                formErrorMessageDiv.style.display = 'block';
+            } finally {
+                // Re-enable button and restore text/icon
+                submitButton.disabled = false;
+                submitButtonTextSpan.textContent = 'Send Inquiry';
+                submitButton.querySelector('i').className = originalButtonIconClass;
             }
-
-            form.style.display = 'none';
-            thankYouMessageDiv.style.display = 'block'; // Set display before animation
-            setTimeout(() => { // Allow display to apply before opacity transition
-                thankYouMessageDiv.classList.add('visible');
-            }, 10);
-
-
-            // Scroll to the thank you message if it's out of view
-            const headerHeight = document.getElementById('site-header')?.offsetHeight || 70;
-            const messageTop = thankYouMessageDiv.getBoundingClientRect().top + window.pageYOffset - headerHeight - 20;
-            window.scrollTo({ top: messageTop, behavior: 'smooth' });
         });
 
         resetButton.addEventListener('click', () => {
             thankYouMessageDiv.classList.remove('visible');
             thankYouMessageDiv.style.display = 'none';
-            form.reset(); // Clear form fields
-            form.querySelectorAll('[required]').forEach(input => {
-                 input.style.borderColor = ''; // Reset border color
-            });
-            form.style.display = 'block'; // Show the form again
-            if(nameInput) nameInput.focus(); // Focus on the first field
+            form.reset(); 
+            form.querySelectorAll('.input-error').forEach(el => el.classList.remove('input-error'));
+            formErrorMessageDiv.style.display = 'none';
+            formErrorMessageDiv.textContent = '';
+            form.style.display = 'block';
+            if(nameInput) nameInput.focus();
         });
     }
     initContactForm();
