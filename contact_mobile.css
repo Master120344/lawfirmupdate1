@@ -535,7 +535,8 @@ select:disabled {
 .footer-social-media { margin-bottom: calc(var(--spacing-unit) * 2.5); }
 
 .footer-social-media a {
-    color: #ced4da;
+    /* MODIFICATION: Removed default color for the <a> tag itself so icon colors are solely from their specific rules */
+    /* color: #ced4da; */ /* This line is commented out */
     font-size: 1.6rem;
     margin: 0 calc(var(--spacing-unit) * 1.25);
     transition: transform var(--transition-fast);
@@ -546,7 +547,8 @@ select:disabled {
 .footer-social-media .social-icon.linkedin i { color: #0A66C2; }
 .footer-social-media .social-icon.x-twitter i { color: #FFFFFF; }
 .footer-social-media .social-icon.instagram i { color: #E1306C; }
-.footer-social-media .social-icon.tiktok i { color: #E1306C; }
+.footer-social-media .social-icon.tiktok i { color: #E1306C; } /* Note: Same as Instagram in your original CSS */
+
 .footer-social-media a:hover,
 .footer-social-media a:focus {
     transform: scale(1.15);
