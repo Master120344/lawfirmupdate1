@@ -1,249 +1,139 @@
-// --- Strict Mode & Global Constants ---
-"use strict";
-const INITIAL_SPLASH_DURATION_MS = 100; // Extremely fast splash
-const PAGE_TRANSITION_ANIMATION_MS = 300;
-
-// --- Utility Functions ---
-function debounce(func, wait, immediate) {
-    let timeout;
-    return function executedFunction() {
-        const context = this;
-        const args = arguments;
-        const later = function() {
-            timeout = null;
-            if (!immediate) func.apply(context, args);
-        };
-        const callNow = immediate && !timeout;
-        clearTimeout(timeout);
-        timeout = setTimeout(later, wait);
-        if (callNow) func.apply(context, args);
-    };
-}
-
-// --- Initial Page Load & Splash Screen Logic ---
-function initPageLoad() {
-    const splashLoader = document.getElementById('splash-loader');
-    const bodyElement = document.body;
-    const mainContent = document.getElementById('main-content');
-
-    if (!splashLoader || !bodyElement || !mainContent) {
-        console.warn("Essential elements for page load (splashLoader, body, mainContent) not found.");
-        if (bodyElement) bodyElement.classList.add('loaded');
-        if (mainContent) {
-             mainContent.style.visibility = 'visible';
-             mainContent.style.opacity = '1';
-        }
+document.addEventListener('DOMContentLoaded', () => {
+    const carouselWrapper = document.querySelector('.testimonial-carousel-wrapper');
+    if (!carouselWrapper) {
+        // console.log("Google Reviews Carousel Wrapper not found.");
         return;
     }
 
-    mainContent.style.visibility = 'hidden';
-    mainContent.style.opacity = '0';
+    const carousel = carouselWrapper.querySelector('.testimonial-carousel');
+    const items = carousel ? carousel.querySelectorAll('.testimonial-item') : null;
+    const prevButton = carouselWrapper.querySelector('.carousel-control.prev'); // Kept for potential re-enablement
+    const nextButton = carouselWrapper.querySelector('.carousel-control.next'); // Kept for potential re-enablement
+    const dotsContainer = carouselWrapper.querySelector('.carousel-dots');
 
-    setTimeout(() => {
-        if (splashLoader) { 
-            splashLoader.classList.add('hidden');
+    // If essential elements are missing OR there are no items,
+    // hide controls and the carousel wrapper itself.
+    if (!carousel || !items || items.length === 0 || !dotsContainer) {
+        // console.log("Essential Google Reviews Carousel elements missing or no items.");
+        if(prevButton) prevButton.style.display = 'none';
+        if(nextButton) nextButton.style.display = 'none';
+        if(dotsContainer) dotsContainer.style.display = 'none';
+
+        // If there are no items, hide the entire carousel wrapper
+        if (carouselWrapper && (!items || items.length === 0)) {
+            carouselWrapper.style.display = 'none';
         }
-        
-        mainContent.style.visibility = 'visible';
-        mainContent.style.transition = `opacity ${PAGE_TRANSITION_ANIMATION_MS / 1000}s ease-out`;
-        mainContent.style.opacity = '1';
-        bodyElement.classList.add('loaded');
+        return; // Stop further carousel logic if it's not usable/empty
+    }
 
-        if (splashLoader) {
-            splashLoader.addEventListener('transitionend', () => {
-                if (splashLoader.classList.contains('hidden')) {
-                    // splashLoader.remove(); 
-                }
-            }, { once: true });
+    // If only one item, hide prev/next buttons and dots. Autoplay won't run.
+    if (items.length <= 1) {
+        if(prevButton) prevButton.style.display = 'none';
+        if(nextButton) nextButton.style.display = 'none';
+        if(dotsContainer) dotsContainer.style.display = 'none';
+        // Note: Autoplay logic below also checks for totalItems > 1
+    }
+
+    let currentIndex = 0;
+    const totalItems = items.length;
+    let autoPlayInterval;
+    const autoPlayDelay = 7000; // 7 seconds
+
+    function updateCarousel() {
+        if (carousel) {
+            carousel.style.transform = `translateX(-${currentIndex * 100}%)`;
         }
-    }, INITIAL_SPLASH_DURATION_MS);
-}
+        updateDots();
+    }
 
-window.addEventListener('load', initPageLoad);
+    function updateDots() {
+        if (!dotsContainer) return;
+        dotsContainer.innerHTML = ''; // Clear existing dots
+        if (totalItems <= 1) return; // Don't show dots for 0 or 1 item
 
-// Scroll-triggered Animations (defined globally for access by pageshow)
-window.initScrollAnimations = function() {
-    const animatedElements = document.querySelectorAll('.animate-on-scroll');
-    if (!animatedElements.length || !('IntersectionObserver' in window)) return;
-
-    const observerOptions = {
-        root: null,
-        rootMargin: '0px 0px -10% 0px', 
-        threshold: 0.1
-    };
-    const animationObserver = new IntersectionObserver((entries, observer) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                const delay = parseInt(entry.target.dataset.animationDelay) || 0;
-                setTimeout(() => entry.target.classList.add('is-visible'), delay);
-                observer.unobserve(entry.target);
+        for (let i = 0; i < totalItems; i++) {
+            const dot = document.createElement('button');
+            dot.classList.add('carousel-dot');
+            if (i === currentIndex) {
+                dot.classList.add('active');
             }
+            dot.setAttribute('aria-label', `Go to review ${i + 1}`);
+            dot.addEventListener('click', () => {
+                currentIndex = i;
+                updateCarousel();
+                resetAutoPlay();
+            });
+            dotsContainer.appendChild(dot);
+        }
+    }
+
+    function showNext() {
+        currentIndex = (currentIndex + 1) % totalItems;
+        updateCarousel();
+    }
+
+    function showPrev() { // Kept for completeness if arrows are re-enabled
+        currentIndex = (currentIndex - 1 + totalItems) % totalItems;
+        updateCarousel();
+    }
+
+    function startAutoPlay() {
+        stopAutoPlay(); // Clear existing interval
+        if (totalItems > 1) { // Only autoplay if more than one item
+             autoPlayInterval = setInterval(showNext, autoPlayDelay);
+        }
+    }
+
+    function stopAutoPlay() {
+        clearInterval(autoPlayInterval);
+    }
+
+    function resetAutoPlay() {
+        if (totalItems > 1) { // Only reset/restart autoplay if there's something to play
+            stopAutoPlay();
+            startAutoPlay();
+        }
+    }
+
+    // Event listeners for prev/next buttons (they are hidden by CSS but logic remains)
+    if (nextButton) {
+        nextButton.addEventListener('click', () => {
+            showNext();
+            resetAutoPlay();
         });
-    }, observerOptions);
-    animatedElements.forEach(el => {
-        if (!el.classList.contains('is-visible')) {
-            animationObserver.observe(el);
-        }
-    });
-};
+    }
+    if (prevButton) {
+        prevButton.addEventListener('click', () => {
+            showPrev();
+            resetAutoPlay();
+        });
+    }
+
+    // Initial setup
+    updateCarousel(); // Includes updateDots
+    if (totalItems > 1) { // Start autoplay only if more than one item
+        startAutoPlay();
+    }
 
 
-// Handle bfcache (back-forward cache)
-window.addEventListener('pageshow', (event) => {
-    const splashLoader = document.getElementById('splash-loader');
-    const pageTransitionLoader = document.getElementById('page-transition-loader');
-    const bodyElement = document.body;
-    const mainContent = document.getElementById('main-content');
-
-    if (splashLoader) splashLoader.classList.add('hidden');
-    if (pageTransitionLoader) pageTransitionLoader.classList.add('hidden');
-
-
-    if (event.persisted) { 
-        if (bodyElement) bodyElement.classList.add('loaded'); 
-        if (mainContent) {
-            mainContent.style.transition = 'none';
-            mainContent.style.opacity = '1';
-            mainContent.style.visibility = 'visible';
-            setTimeout(() => { 
-                mainContent.style.transition = `opacity ${PAGE_TRANSITION_ANIMATION_MS / 1000}s ease-out`;
-            }, 50); 
-        }
-        if (typeof window.initScrollAnimations === 'function') {
-            setTimeout(window.initScrollAnimations, 100); 
-        }
-        // Google Reviews Carousel will be re-initialized by its own 'pageshow' listener in google_reviews.js
-    } else { 
-        if (mainContent && splashLoader && !splashLoader.classList.contains('hidden')) {
-            mainContent.style.visibility = 'hidden';
-            mainContent.style.opacity = '0';
-        }
+    // Pause autoplay on hover/focus for UX and accessibility
+    // Ensure these only run if autoplay is relevant (more than 1 item)
+    if (totalItems > 1) {
+        carouselWrapper.addEventListener('mouseenter', stopAutoPlay);
+        carouselWrapper.addEventListener('mouseleave', startAutoPlay);
+        carouselWrapper.addEventListener('focusin', stopAutoPlay); // When wrapper or its children get focus
+        carouselWrapper.addEventListener('focusout', startAutoPlay); // When focus leaves wrapper and its children
     }
 });
 
-// --- DOMContentLoaded Event Listener ---
-document.addEventListener('DOMContentLoaded', () => {
-    const mainContent = document.getElementById('main-content');
-
-    // 1. Page Transition Logic for Internal Links
-    function initPageTransitions() {
-        const transitionLoader = document.getElementById('page-transition-loader');
-        if (!transitionLoader || !mainContent) return;
-
-        const internalLinks = document.querySelectorAll(
-            'a[href]:not([href^="#"]):not([href^="tel:"]):not([href^="mailto:"]):not([href^="javascript:"]):not([target="_blank"])'
-        );
-
-        internalLinks.forEach(link => {
-            link.addEventListener('click', (e) => {
-                const destination = link.getAttribute('href');
-                if (!destination || destination.startsWith('javascript:void(0)')) return;
-
-                let isExternalOrProtocol = false;
-                try {
-                    const currentHostname = window.location.hostname;
-                    const destinationUrl = new URL(destination, window.location.href); 
-                    if (destinationUrl.hostname !== currentHostname && destinationUrl.hostname !== "") {
-                        isExternalOrProtocol = true;
-                    }
-                } catch (error) {
-                    return; 
-                }
-                if (isExternalOrProtocol) return; 
-
-                const currentPagePath = window.location.pathname.replace(/\/$/, "");
-                const destinationPathObject = new URL(destination, window.location.href);
-                const destinationPathClean = destinationPathObject.pathname.replace(/\/$/, "");
-
-                if (destinationPathClean === currentPagePath && destinationPathObject.hash) return; 
-                
-                if (destinationPathClean === currentPagePath && !destinationPathObject.hash) {
-                    e.preventDefault(); 
-                    return; 
-                }
-
-                e.preventDefault();
-                mainContent.style.transition = `opacity ${PAGE_TRANSITION_ANIMATION_MS / 1000}s ease-out`;
-                mainContent.style.opacity = '0';
-                if (transitionLoader) transitionLoader.classList.remove('hidden'); 
-
-                setTimeout(() => { window.location.href = destination; }, PAGE_TRANSITION_ANIMATION_MS + 50); 
-            });
-        });
+// Handle bfcache (back-forward cache) for this specific carousel
+// This ensures if the page is loaded from bfcache, the carousel re-initializes correctly.
+window.addEventListener('pageshow', (event) => {
+    if (event.persisted) {
+        // Re-run the DOMContentLoaded logic if the page is from bfcache.
+        // This is a simple way to re-initialize.
+        // For more complex scenarios, you might need a more targeted re-init function.
+        const domContentLoadedEvent = new Event('DOMContentLoaded');
+        document.dispatchEvent(domContentLoadedEvent);
     }
-    initPageTransitions();
-
-    // 2. Set Current Year in Footer
-    function updateFooterYear() {
-        const yearSpan = document.getElementById('current-year');
-        if (yearSpan) yearSpan.textContent = new Date().getFullYear();
-    }
-    updateFooterYear();
-
-    // 3. Initialize Scroll Animations
-    if (typeof window.initScrollAnimations === 'function') {
-        window.initScrollAnimations();
-    }
-
-    // 4. Smooth Scroll for Anchor Links
-    function initSmoothScroll() {
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                const targetId = this.getAttribute('href');
-                if (targetId.length > 1 && targetId.startsWith('#')) { 
-                    try {
-                        const targetElement = document.querySelector(targetId);
-                        if (targetElement) {
-                            e.preventDefault();
-                            const header = document.getElementById('site-header');
-                            const headerOffset = header ? header.offsetHeight : 
-                                               (parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--header-height-mobile').replace('px', '')) || 70);
-                            
-                            const elementPosition = targetElement.getBoundingClientRect().top;
-                            const offsetPosition = elementPosition + window.pageYOffset - headerOffset - 20; 
-
-                            window.scrollTo({ top: offsetPosition, behavior: "smooth" });
-                        }
-                    } catch (error) { 
-                        console.warn(`Smooth scroll target not found or invalid selector: ${targetId}`, error); 
-                    }
-                }
-            });
-        });
-    }
-    initSmoothScroll();
-
-    // 5. Sticky Header Behavior
-    function initStickyHeaderBehavior() {
-        const header = document.getElementById('site-header');
-        if (!header) return;
-        let lastScrollTop = 0;
-        const delta = 10; 
-        const headerHeight = header.offsetHeight;
-        let isHeaderHidden = false;
-
-        const handleScroll = debounce(() => {
-            const nowScrollTop = window.pageYOffset || document.documentElement.scrollTop;
-            
-            if (Math.abs(lastScrollTop - nowScrollTop) <= delta) return;
-
-            if (nowScrollTop > lastScrollTop && nowScrollTop > headerHeight) { 
-                if (!isHeaderHidden) {
-                    header.style.transform = `translateY(-${headerHeight}px)`;
-                    isHeaderHidden = true;
-                }
-            } else { 
-                if (isHeaderHidden || nowScrollTop <= headerHeight / 2 ) { 
-                    header.style.transform = 'translateY(0)';
-                    isHeaderHidden = false;
-                }
-            }
-            lastScrollTop = nowScrollTop <= 0 ? 0 : nowScrollTop; 
-        }, 30); 
-        window.addEventListener('scroll', handleScroll, { passive: true });
-    }
-    initStickyHeaderBehavior();
-
-    // Google Reviews Carousel is now initialized in google_reviews.js
-
-}); // End DOMContentLoaded
+});
