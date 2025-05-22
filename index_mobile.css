@@ -11,7 +11,7 @@
 9. Testimonial Section & Carousel
 10. Call to Action (CTA) Sections & Buttons
 11. Mobile Tabs Navigation
-12. Footer Styles
+12. Footer Styles  <-- MODIFICATIONS HERE
 13. Animation & Utility Classes
 14. Responsive Adjustments
 -------------------------------------------------- */
@@ -835,29 +835,52 @@ body.loaded .site-header {
     font-weight: 600; /* Cinzel SemiBold */
     margin: 0;
 }
+
+/* --- MODIFIED SOCIAL MEDIA ICON STYLES --- */
 .footer-social-media {
     margin-bottom: calc(var(--spacing-unit) * 2.5);
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: calc(var(--spacing-unit) * 1.5); /* Increased gap slightly for better spacing */
 }
-.footer-social-media a {
-    color: #ced4da !important; /* Consistent light grey for icons */
-    font-size: 1.6rem;
-    margin: 0 calc(var(--spacing-unit) * 1.25);
-    transition: transform var(--transition-fast), color var(--transition-fast); /* Added color transition */
-    display: inline-block;
+
+.footer-social-media a.social-icon {
+    display: inline-flex; /* Use flex to help center icon if needed */
+    align-items: center;
+    justify-content: center;
+    font-size: 1.6rem; /* Base size for the icon container */
     text-decoration: none !important;
+    width: 40px; /* Give a consistent width */
+    height: 40px; /* Give a consistent height */
+    border-radius: 50%; /* Make them circular if desired, or remove for square */
+    /* background-color: rgba(255,255,255,0.1); Optional: subtle background for the circle */
+    /* transition: background-color var(--transition-fast), transform var(--transition-fast); */ /* Moved transform to icon */
 }
 
-.footer-social-media a:hover,
-.footer-social-media a:focus {
-    transform: scale(1.15);
-    /* Specific hover colors */
+.footer-social-media a.social-icon i {
+    transition: transform var(--transition-fast); /* For hover effect on icon */
+    line-height: 1; /* Ensure icon is vertically centered if font size causes issues */
 }
-.footer-social-media a.facebook:hover i { color: #1877F2 !important; }
-.footer-social-media a.linkedin:hover i { color: #0A66C2 !important; }
-.footer-social-media a.x-twitter:hover i { color: #FFFFFF !important; } /* White for X/Twitter */
-.footer-social-media a.instagram:hover i { color: #E1306C !important; }
-.footer-social-media a.tiktok:hover i { color: #EE1D52 !important; /* TikTok pink/red */ }
 
+/* Apply brand colors directly and ALWAYS */
+.footer-social-media a.facebook i { color: #1877F2 !important; }
+.footer-social-media a.linkedin i { color: #0A66C2 !important; }
+.footer-social-media a.x-twitter i { color: #000000 !important; } /* X Black. For white: #FFFFFF */
+.footer-social-media a.instagram i { color: #E1306C !important; }
+.footer-social-media a.tiktok i { color: #EE1D52 !important; }
+
+
+/* Optional: Hover/focus effect (e.g., scale the icon) */
+.footer-social-media a.social-icon:hover i,
+.footer-social-media a.social-icon:focus i {
+    transform: scale(1.2); /* Icon scales slightly */
+}
+.footer-social-media a.social-icon:focus { /* Accessibility: ensure focus is clear */
+    outline: 2px solid var(--color-accent-gold);
+    outline-offset: 2px;
+}
+/* --- END OF MODIFIED SOCIAL MEDIA ICON STYLES --- */
 
 .footer-links {
     margin-bottom: calc(var(--spacing-unit) * 1.5);
