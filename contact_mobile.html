@@ -1,21 +1,34 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
+<html lang="en"><head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>Contact Us - The Kershaw Law Firm P.C.</title>
-    <meta name="description" content="Contact The Kershaw Law Firm P.C. for expert H-2A and H-2B visa assistance. Reach out via phone, email, or our online form for a consultation. Mobile optimized.">
-    <link rel="stylesheet" href="contact_mobile.css">
+    <meta name="viewport" content="width=device-width,
+initial-scale=1.0, viewport-fit=cover">
+    <title>The Kershaw Law Firm P.C.</title>
+    <meta name="description" content="The
+Kershaw Law Firm P.C. provides dedicated legal
+services for H-2A and H-2B work visas.
+Focused on guiding businesses through
+complex immigration law. Mobile optimized
+site.">
+    <link rel="stylesheet" href="index_mobile.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;800&family=EB+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <!-- Add favicon links here if available -->
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=EB+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer">
+    <!-- Add favicon links here -->
+    <!-- <link rel="apple-touch-icon"
+sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png"
+sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png"
+sizes="16x16" href="/favicon-16x16.png">
+    <link rel="manifest"
+href="/site.webmanifest"> -->
 </head>
-<body>
-    <div id="splash-loader" class="splash-loader">
+<body class="loaded"> <!-- JS will handle "loaded" state after splash/animations -->
+    <div id="splash-loader" class="splash-loader hidden"> <!-- JS will manage visibility -->
         <div class="splash-text-content">
-            <h1 class="splash-main-title">The Kershaw Law Firm <span class="splash-main-pc">P.C.</span></h1>
+            <h1 class="splash-main-title">The
+Kershaw Law Firm <span class="splash-main-pc">P.C.</span></h1>
         </div>
     </div>
     <div id="page-transition-loader" class="page-transition-loader hidden">
@@ -25,145 +38,192 @@
     <div id="background-static"></div>
     <div id="background-overlay"></div>
 
-    <header class="site-header" id="site-header">
+    <header class="site-header" id="site-header"> <!-- Removed inline style, JS will handle animation -->
         <div class="header-content">
             <div class="firm-title-container">
-                 <a href="index_mobile.html" class="firm-title-link" aria-label="Home - The Kershaw Law Firm P.C.">
-                    <h1 class="firm-name-header">The Kershaw Law Firm <span class="firm-name-pc">P.C.</span></h1>
+                 <a href="index_mobile.html" class="firm-title-link" aria-label="Home - The
+Kershaw Law Firm P.C.">
+                    <h1 class="firm-name-header">The Kershaw Law Firm P.C.</h1>
                  </a>
             </div>
         </div>
     </header>
 
-    <main class="page-content-wrapper" id="main-content">
-        <section class="content-section contact-page-section">
+    <main class="page-content-wrapper" id="main-content"> <!-- JS will handle initial visibility -->
+        <section class="hero-section">
+            <div class="hero-content-box animate-on-scroll fade-in-up" data-animation-delay="200"> <!-- is-visible will be added by JS -->
+                <h2 class="hero-main-title">H-2A & H-2B Visa Solutions</h2>
+                <p class="hero-subtitle">Professional Guidance for Your Workforce Immigration Needs.</p>
+                <a href="getstarted_mobile.html" class="cta-button hero-cta">
+                    <i class="fa-solid
+fa-handshake-angle"></i> Request a
+Consultation
+                </a>
+            </div>
+        </section>
+
+        <section id="about" class="content-section about-section">
             <div class="section-container">
-                <h2 class="section-title decorative-title animate-on-scroll fade-in-up">Get In Touch</h2>
-                <p class="section-intro-text animate-on-scroll fade-in-up" data-animation-delay="100">
-                    We're here to help. Whether you have questions about H-2A or H-2B visas, or you're ready to start the process, please reach out.
-                </p>
+                <h2 class="section-title decorative-title animate-on-scroll fade-in-up">Our Commitment to You</h2>
+                <p class="section-intro-text animate-on-scroll fade-in-up" data-animation-delay="100">At The Kershaw Law
+Firm, P.C., we operate with integrity,
+in-depth legal knowledge, and a strong
+dedication to our clients. We assist U.S.
+businesses in managing the H-2A (agricultural)
+and H-2B (non-agricultural) temporary foreign
+worker visa programs.</p>
+                <p class="animate-on-scroll fade-in-up" data-animation-delay="200">Our
+skilled legal team carefully works through the
+detailed regulations from the Department of
+Labor (DOL) and U.S. Citizenship and
+Immigration Services (USCIS). We prepare your
+petitions accurately and aim for efficient
+processing, recognizing that timely workforce
+solutions are vital for your business.</p>
+                <a href="aboutus_mobile.html" class="secondary-button animate-on-scroll fade-in" data-animation-delay="300">Discover
+Our Approach <i class="fa-solid
+fa-arrow-right-long"></i></a>
+            </div>
+        </section>
 
-                <div class="contact-info-grid animate-on-scroll fade-in-up" data-animation-delay="200">
-                    <div class="contact-detail-item">
-                        <i class="fas fa-map-marker-alt detail-icon"></i>
-                        <h3 class="detail-title">Our Office</h3>
-                        <p>The Kershaw Law Firm P.C.<br>
-                           3355 Bee Caves Rd, Suite 307<br>
-                           Austin, TX 78746</p>
-                        <a href="https://tinyurl.com/2zsennf7" target="_blank" rel="noopener noreferrer" class="map-link">View on Map <i class="fa-solid fa-external-link-alt"></i></a>
-                    </div>
-                    <div class="contact-detail-item">
-                        <i class="fas fa-phone-alt detail-icon"></i>
-                        <h3 class="detail-title">Phone / Fax</h3>
-                        <p>Tel: <a href="tel:737-204-0093">(737) 204-0093</a></p>
-                        <p>Fax: (737) 204-0094</p>
-                    </div>
-                    <div class="contact-detail-item">
-                        <i class="fas fa-envelope detail-icon"></i>
-                        <h3 class="detail-title">Email Us</h3>
-                        <p>General Inquiries & Support</p>
-                        <p><a href="mailto:info@kershawlaw.com">info@kershawlaw.com</a></p>
-                    </div>
+        <section id="services-overview" class="content-section
+services-overview-section">
+             <div class="section-container">
+                <h2 class="section-title decorative-title animate-on-scroll fade-in-up">Professional H2B & H2A Visa Representation</h2>
+                <p class="section-intro-text animate-on-scroll fade-in-up" data-animation-delay="100"><b>Our Firm has over 20 Years Experience in H2B & H2A Visa Representation<b>
+</b></b></p>
+                <ul class="service-list-detailed">
+                    <li class="animate-on-scroll slide-in-left" data-animation-delay="150"><i class="fa-solid
+fa-briefcase"></i><strong>Case Evaluation & Strategy:</strong> We thoroughly assess your needs to develop a tailored visa strategy.</li>
+                    <li class="animate-on-scroll slide-in-left" data-animation-delay="250"><i class="fa-solid
+fa-file-signature"></i><strong>Petition Preparation & Filing:</strong> Our team meticulously prepares and files all H-2A/H-2B applications and supporting documents.</li>
+                    <li class="animate-on-scroll slide-in-left" data-animation-delay="350"><i class="fa-solid
+fa-users-gear"></i><strong>DOL Compliance Guidance:</strong> We provide clear, step-by-step guidance on Department of Labor recruitment and compliance mandates.</li>
+                    <li class="animate-on-scroll slide-in-left" data-animation-delay="450"><i class="fa-solid
+fa-shield-halved"></i><strong>Audit & RFE Support:</strong> Count on our proactive assistance in responding to government audits and Requests for Evidence (RFEs).</li>
+                    <li class="animate-on-scroll slide-in-left" data-animation-delay="550"><i class="fa-solid
+fa-clipboard-check"></i><strong>Ongoing Compliance Assistance:</strong> We offer continued support to help your business maintain all H-2 program obligations.</li>
+                </ul>
+                <p class="animate-on-scroll fade-in-up" data-animation-delay="600">Let our
+experience simplify your H2B & H2Atemporary
+labor certification and visa journey.</p>
+                <a href="services_mobile.html" class="secondary-button animate-on-scroll fade-in" data-animation-delay="650">Full
+Service Spectrum <i class="fa-solid
+fa-arrow-right-long"></i></a>
+             </div>
+        </section>
+
+        <section id="testimonials" class="content-section testimonials-section">
+             <div class="section-container">
+                <h2 class="section-title decorative-title animate-on-scroll fade-in-up">Google Reviews</h2>
+                 <div class="testimonial-carousel-wrapper animate-on-scroll fade-in-scale" data-animation-delay="100">
+                     <div class="testimonial-carousel">
+                         <!-- Testimonial items have been removed as per request. -->
+                         <!-- The google_reviews.js script will hide this carousel-wrapper if no items are present. -->
+                         <!-- If you want to display specific reviews, add them here manually in the .testimonial-item format -->
+                     </div>
+                     <button class="carousel-control prev" aria-label="Previous testimonial"><i class="fas fa-chevron-left"></i></button>
+                     <button class="carousel-control next" aria-label="Next testimonial"><i class="fas fa-chevron-right"></i></button>
+                     <div class="carousel-dots"></div>
+                 </div>
+                <div class="google-reviews-callout animate-on-scroll fade-in-up" data-animation-delay="300">
+                     <!-- Title "Valued by Our Clients" can be kept or removed based on preference -->
+                     <h3 class="google-reviews-title">
+                        <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                        Valued by Our Clients
+                     </h3>
+                     <!-- UPDATED TEXT AS PER REQUEST -->
+                     <p>Please leave a Google review.</p>
+                     <a href="https://g.co/kgs/6jVBWbH" class="google-reviews-button" aria-label="Leave a Google Review for The Kershaw Law Firm P.C." target="_blank" rel="noopener noreferrer">
+                         <i class="fab fa-google"></i> Leave a Review
+                     </a>
                 </div>
+             </div>
+        </section>
 
-                <div class="contact-form-container animate-on-scroll fade-in-up" data-animation-delay="300">
-                    <h3 class="form-title decorative-title">Send Us a Secure Message</h3>
-                    <form id="contact-form" class="contact-form-element">
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label for="contact-name"><i class="fa-solid fa-user form-icon"></i> Full Name</label>
-                                <input type="text" id="contact-name" name="name" required placeholder="e.g., Jane Doe">
-                            </div>
-                            <div class="form-group">
-                                <label for="contact-email"><i class="fa-solid fa-at form-icon"></i> Email Address</label>
-                                <input type="email" id="contact-email" name="email" required placeholder="e.g., jane.doe@example.com">
-                            </div>
-                        </div>
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label for="contact-phone"><i class="fa-solid fa-phone-volume form-icon"></i> Phone (Optional)</label>
-                                <input type="tel" id="contact-phone" name="phone" placeholder="e.g., (555) 123-4567" maxlength="14"> <!-- Added maxlength for (XXX) XXX-XXXX -->
-                            </div>
-                            <div class="form-group">
-                                <label for="contact-service"><i class="fa-solid fa-briefcase form-icon"></i> Service Needed</label>
-                                <select id="contact-service" name="service" required>
-                                    <option value="" disabled selected>-- Please Select a Service --</option>
-                                    <option value="h2a_visa">H-2A Visa (Agricultural)</option>
-                                    <option value="h2b_visa">H-2B Visa (Non-Agricultural)</option>
-                                    <option value="initial_consultation">Initial Consultation</option>
-                                    <option value="general_inquiry">General Inquiry</option>
-                                    <option value="other_service">Other</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="contact-message"><i class="fa-solid fa-pen-to-square form-icon"></i> Your Message</label>
-                            <textarea id="contact-message" name="message" rows="5" required placeholder="Please describe your business needs or question..."></textarea>
-                        </div>
-                        <!-- Form Error Message Placeholder -->
-                        <div id="form-error-message" class="form-error-message" style="display: none;"></div>
-
-                        <div class="form-group form-submit-group">
-                            <button type="submit" class="cta-button form-submit-button" id="form-submit-button">
-                                <i class="fa-solid fa-paper-plane"></i> <span class="submit-button-text">Send Inquiry</span>
-                            </button>
-                        </div>
-                    </form>
-                    <div id="thank-you-message" class="thank-you-message" style="display: none;">
-                        <i class="fas fa-check-circle thank-you-icon"></i>
-                        <h3 class="thank-you-title">Thank You, <span id="thank-you-user-name"></span>!</h3>
-                        <p>Your message has been successfully sent to The Kershaw Law Firm P.C. We appreciate you contacting us and will respond as soon as possible, typically within 1-2 business days.</p>
-                        <p id="thank-you-backend-message"></p> <!-- For messages from backend -->
-                        <p>If your matter is urgent, please call us directly at <a href="tel:737-204-0093">(737) 204-0093</a>.</p>
-                        <button id="reset-form-button" class="secondary-button">Send Another Message</button>
-                    </div>
-                </div>
+        <section class="content-section
+final-cta-section">
+            <div class="section-container
+text-center animate-on-scroll fade-in-up">
+                 <h2 class="section-title
+decorative-title">Ready to Address Your Workforce Needs?</h2>
+                 <p class="section-intro-text">Contact our
+experienced legal team to discuss your
+business's H-2A or H-2B visa requirements.
+Let's work together to achieve your business objectives.</p>
+                 <a href="contact_mobile.html" class="cta-button large-cta">
+                    <i class="fa-solid
+fa-handshake-angle"></i> Schedule Consultation
+                </a>
             </div>
         </section>
     </main>
 
     <nav class="mobile-tabs">
-        <a href="index_mobile.html" class="tab-item">
-            <i class="fas fa-home tab-icon"></i><span class="tab-label">Home</span>
+        <a href="index_mobile.html" class="tab-item active" aria-current="page">
+            <i class="fas fa-home
+tab-icon"></i><span class="tab-label">Home</span>
         </a>
         <a href="aboutus_mobile.html" class="tab-item">
-            <i class="fas fa-building-columns tab-icon"></i><span class="tab-label">About Us</span>
+            <i class="fas fa-building-columns
+tab-icon"></i><span class="tab-label">About
+Us</span>
         </a>
         <a href="services_mobile.html" class="tab-item">
-            <i class="fas fa-briefcase tab-icon"></i><span class="tab-label">Services</span>
+            <i class="fas fa-briefcase
+tab-icon"></i><span class="tab-label">Services</span>
         </a>
         <a href="faq_mobile.html" class="tab-item">
-            <i class="fas fa-lightbulb tab-icon"></i><span class="tab-label">FAQ</span>
+            <i class="fas fa-lightbulb
+tab-icon"></i><span class="tab-label">FAQ</span>
         </a>
-        <a href="contact_mobile.html" class="tab-item active" aria-current="page">
-            <i class="fas fa-envelope-open-text tab-icon"></i><span class="tab-label">Contact</span>
+        <a href="contact_mobile.html" class="tab-item">
+            <i class="fas
+fa-envelope-open-text tab-icon"></i><span class="tab-label">Contact</span>
         </a>
     </nav>
 
     <footer class="site-footer">
         <div class="footer-content">
             <div class="footer-firm-identity">
-                <p class="footer-firm-name">The Kershaw Law Firm P.C.</p>
+                <p class="footer-firm-name">The Kershaw Law Firm
+P.C.</p>
             </div>
             <div class="footer-social-media">
-                <a href="YOUR_FACEBOOK_LINK_HERE" class="social-icon facebook" aria-label="Visit The Kershaw Law Firm P.C. on Facebook" target="_blank" rel="noopener noreferrer"><i class="fab fa-facebook-f"></i></a>
-                <a href="YOUR_LINKEDIN_LINK_HERE" class="social-icon linkedin" aria-label="Connect with The Kershaw Law Firm P.C. on LinkedIn" target="_blank" rel="noopener noreferrer"><i class="fab fa-linkedin-in"></i></a>
-                <a href="YOUR_X_TWITTER_LINK_HERE" class="social-icon x-twitter" aria-label="Follow The Kershaw Law Firm P.C. on X" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-x-twitter"></i></a>
-                <a href="YOUR_INSTAGRAM_LINK_HERE" class="social-icon instagram" aria-label="Follow The Kershaw Law Firm P.C. on Instagram" target="_blank" rel="noopener noreferrer"><i class="fab fa-instagram"></i></a>
-                <a href="YOUR_TIKTOK_LINK_HERE" class="social-icon tiktok" aria-label="Follow The Kershaw Law Firm P.C. on TikTok" target="_blank" rel="noopener noreferrer"><i class="fab fa-tiktok"></i></a>
+                <a href="YOUR_FACEBOOK_LINK_HERE" class="social-icon facebook" aria-label="Visit
+The Kershaw Law Firm P.C. on Facebook" target="_blank" rel="noopener noreferrer"><i class="fab fa-facebook-f"></i></a>
+                <a href="YOUR_LINKEDIN_LINK_HERE" class="social-icon linkedin" aria-label="Connect with The Kershaw Law Firm
+P.C. on LinkedIn" target="_blank" rel="noopener noreferrer"><i class="fab
+fa-linkedin-in"></i></a>
+                <a href="YOUR_X_TWITTER_LINK_HERE" class="social-icon x-twitter" aria-label="Follow The Kershaw Law Firm P.C.
+on X" target="_blank" rel="noopener
+noreferrer"><i class="fa-brands
+fa-x-twitter"></i></a>
+                <a href="YOUR_INSTAGRAM_LINK_HERE" class="social-icon instagram" aria-label="Follow The Kershaw Law Firm P.C.
+on Instagram" target="_blank" rel="noopener
+noreferrer"><i class="fab
+fa-instagram"></i></a>
+                <a href="YOUR_TIKTOK_LINK_HERE" class="social-icon tiktok" aria-label="Follow
+The Kershaw Law Firm P.C. on TikTok" target="_blank" rel="noopener noreferrer"><i class="fab fa-tiktok"></i></a>
             </div>
             <nav class="footer-links">
-                <a href="privacy_policy_mobile.html">Privacy Policy</a>
+                <a href="privacy_policy_mobile.html">Privacy
+Policy</a>
                 <span class="footer-link-separator">•</span>
-                <a href="terms_of_service_mobile.html">Terms of Service</a>
+                <a href="terms_of_service_mobile.html">Terms of
+Service</a>
                  <span class="footer-link-separator">•</span>
                 <a href="sitemap_mobile.html">Sitemap</a>
             </nav>
-            <p class="footer-copyright">© <span id="current-year">2025</span> The Kershaw Law Firm P.C. All Rights Reserved.</p>
-            <p class="footer-disclaimer">This website is for informational purposes only and does not constitute legal advice. Attorney Advertising. Results may vary depending on your particular facts and legal circumstances.</p>
+            <p class="footer-copyright">©
+<span id="current-year">2025</span> The
+Kershaw Law Firm P.C. All Rights Reserved.</p>
+            <p class="footer-disclaimer">The content provided on this website by The Kershaw Law Firm P.C. is for general informational purposes concerning H-2A and H-2B visa matters and does not constitute legal advice. This is Attorney Advertising. Legal outcomes are dependent on the specific facts and legal circumstances of each individual case.</p>
         </div>
     </footer>
 
-    <script src="contact_mobile.js" defer></script>
-</body>
-</html>
+    <script src="google_reviews.js" defer=""></script>
+    <script src="index_mobile.js" defer=""></script>
+
+
+</body></html>
