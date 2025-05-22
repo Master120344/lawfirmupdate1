@@ -534,30 +534,41 @@ select:disabled {
 .footer-firm-name { font-family: var(--font-headings); font-size: 1.2rem; color: var(--color-text-light); font-weight: 600; margin: 0; }
 .footer-social-media { margin-bottom: calc(var(--spacing-unit) * 2.5); }
 
-.footer-social-media a {
-    /* MODIFICATION: Removed default color for the <a> tag itself so icon colors are solely from their specific rules */
-    /* color: #ced4da; */ /* This line is commented out */
+/* MODIFICATION START: Ensure anchor tags housing icons don't interfere with icon color */
+.footer-social-media a,
+.footer-social-media a:link,
+.footer-social-media a:visited,
+.footer-social-media a:hover,
+.footer-social-media a:focus,
+.footer-social-media a:active {
+    color: inherit !important; /* Force anchor to not have its own color, allowing icon to dictate */
     font-size: 1.6rem;
     margin: 0 calc(var(--spacing-unit) * 1.25);
-    transition: transform var(--transition-fast);
+    transition: transform var(--transition-fast); /* Only transition transform */
     display: inline-block;
-    text-decoration: none;
+    text-decoration: none !important; /* Ensure no underline from any state */
 }
-.footer-social-media .social-icon.facebook i { color: #1877F2; }
-.footer-social-media .social-icon.linkedin i { color: #0A66C2; }
-.footer-social-media .social-icon.x-twitter i { color: #FFFFFF; }
-.footer-social-media .social-icon.instagram i { color: #E1306C; }
-.footer-social-media .social-icon.tiktok i { color: #E1306C; } /* Note: Same as Instagram in your original CSS */
+/* MODIFICATION END */
 
+/* MODIFICATION: Added !important to ensure these brand colors are applied */
+.footer-social-media .social-icon.facebook i { color: #1877F2 !important; }
+.footer-social-media .social-icon.linkedin i { color: #0A66C2 !important; }
+.footer-social-media .social-icon.x-twitter i { color: #FFFFFF !important; } /* X icon is white */
+.footer-social-media .social-icon.instagram i { color: #E1306C !important; }
+.footer-social-media .social-icon.tiktok i { color: #E1306C !important; } /* Kept as per original, though common TikTok is black/white/cyan/magenta */
+
+
+/* Hover/focus effect for the anchor tag: only scaling */
 .footer-social-media a:hover,
 .footer-social-media a:focus {
-    transform: scale(1.15);
-    text-decoration: none;
+    transform: scale(1.15); /* Keeps the zoom effect on hover */
 }
-.footer-social-media a:hover i,
-.footer-social-media a:focus i {
-    text-decoration: none;
+
+/* Ensure i tags (icons) do not get underlines if 'a' somehow tries to apply it */
+.footer-social-media a i {
+    text-decoration: none !important;
 }
+
 
 .footer-links { margin-bottom: calc(var(--spacing-unit) * 1.5); font-size: 0.8rem; }
 .footer-links a { color: #b0bec5 !important; margin: 0 calc(var(--spacing-unit) * 0.4); transition: color var(--transition-fast); }
