@@ -1,18 +1,24 @@
-document.addEventListener('DOMContentLoaded', () => {
-    // --- Splash Screen Logic ---
+// index_mobile.js
+
+function initSplashAndContent() {
     const splashLoader = document.getElementById('splash-loader');
     const mainContent = document.getElementById('main-content');
     const siteHeader = document.getElementById('site-header');
+    const body = document.body;
 
+    // If already loaded (e.g., from bfcache and logic ran), don't re-run splash
+    if (body.classList.contains('loaded') && splashLoader && splashLoader.classList.contains('hidden')) {
+        if (mainContent) mainContent.style.visibility = 'visible';
+        if (siteHeader) siteHeader.style.transform = 'translateY(0)';
+        return;
+    }
+    
     if (splashLoader) {
-        splashLoader.classList.remove('hidden'); // Ensure it's visible if JS is running
-
-        // Hide main content and header initially if splash is active
+        splashLoader.classList.remove('hidden');
         if (mainContent) mainContent.style.visibility = 'hidden';
         if (siteHeader) siteHeader.style.transform = 'translateY(-100%)';
 
-
-        let loaderDuration = 2500; // Default 2.5 seconds
+        let loaderDuration = 2500;
         const loaderDurationCSS = getComputedStyle(document.documentElement).getPropertyValue('--loader-display-duration').trim();
         if (loaderDurationCSS) {
             const parsedSeconds = parseFloat(loaderDurationCSS.replace('s', ''));
@@ -22,58 +28,73 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         
         const loadingBarProgress = splashLoader.querySelector('.loading-bar-progress');
-        if(loadingBarProgress && loaderDurationCSS) { // Ensure loading bar matches CSS variable if present
+        if(loadingBarProgress && loaderDurationCSS) {
              loadingBarProgress.style.animationDuration = loaderDurationCSS;
         }
 
         setTimeout(() => {
             splashLoader.classList.add('hidden');
             if (mainContent) {
-                mainContent.style.visibility = 'visible'; // Make it part of the layout
-                // Opacity transition is handled by CSS: .page-content-wrapper
+                mainContent.style.visibility = 'visible';
             }
             if (siteHeader) {
-                 siteHeader.style.transform = 'translateY(0)'; // Animate header in
+                 siteHeader.style.transform = 'translateY(0)';
             }
-            document.body.classList.add('loaded'); // Allows CSS to fade in body and content
+            body.classList.add('loaded');
         }, loaderDuration);
     } else {
-        // No splash loader, ensure content and header are visible and body is marked loaded
         if (mainContent) mainContent.style.visibility = 'visible';
         if (siteHeader) siteHeader.style.transform = 'translateY(0)';
-        document.body.classList.add('loaded');
+        body.classList.add('loaded');
     }
+}
 
-    // --- Page Transition Loader (Show on link clicks, hide on page load) ---
+function initPageTransitions() {
     const pageTransitionLoader = document.getElementById('page-transition-loader');
     if (pageTransitionLoader) {
         const allInternalLinks = document.querySelectorAll('a[href]:not([href^="#"]):not([href^="mailto:"]):not([href^="tel:"]):not([target="_blank"])');
         allInternalLinks.forEach(link => {
+            // Check if listener already attached to prevent duplicates if this function is called multiple times
+            if (link.dataset.pageTransitionAttached) return;
+
             link.addEventListener('click', function(e) {
                 const href = this.getAttribute('href');
-                // Basic check to avoid showing for external links if any were missed by selector
                 if (href && (href.startsWith('.') || href.startsWith('/') || !href.includes(':'))) {
+                    // Prevent default navigation if it's the current page without a hash
+                    const currentPath = window.location.pathname.split('/').pop();
+                    const targetPath = href.split('/').pop().split('#')[0]; // Get filename part of href
+                    if (currentPath === targetPath && !href.includes('#')) {
+                        if (currentPath === '' && targetPath === 'index_mobile.html' && !href.includes('#')){
+                            // Allow if current is root and target is index_mobile.html
+                        } else {
+                            e.preventDefault(); 
+                            return; // Don't show loader for same-page clicks without hash
+                        }
+                    }
+
                     e.preventDefault();
                     pageTransitionLoader.classList.remove('hidden');
                     setTimeout(() => {
                         window.location.href = href;
-                    }, 250); // Small delay for loader to appear
+                    }, 250);
                 }
             });
+            link.dataset.pageTransitionAttached = 'true'; // Mark as attached
         });
 
-        // Hide page transition loader on page load (bfcache might keep it visible)
+        // This pageshow listener specifically handles the pageTransitionLoader
         window.addEventListener('pageshow', function(event) {
-            // No matter if from bfcache or not, hide it.
-            // It should only show during active navigation initiated by click.
             pageTransitionLoader.classList.add('hidden');
         });
     }
+}
 
-
-    // --- Animate on Scroll ---
+function initScrollAnimations() {
     const animatedElements = document.querySelectorAll('.animate-on-scroll');
     if (animatedElements.length > 0 && "IntersectionObserver" in window) {
+        // Clear existing visible classes if re-initializing for bfcache
+        animatedElements.forEach(el => el.classList.remove('is-visible'));
+
         const observer = new IntersectionObserver((entries, observerInstance) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
@@ -88,45 +109,58 @@ document.addEventListener('DOMContentLoaded', () => {
         }, { threshold: 0.1 });
 
         animatedElements.forEach(el => {
-            // Add 'is-visible' directly if element is already in viewport on load
-            // This can happen if it's very high on the page.
-            // However, for a more consistent animation reveal, we let the observer handle it.
-            // To ensure elements above the fold also animate, they should initially not have 'is-visible'.
             observer.observe(el);
         });
     } else {
-        animatedElements.forEach(el => el.classList.add('is-visible')); // Fallback
+        animatedElements.forEach(el => el.classList.add('is-visible'));
     }
+}
 
-    // --- Current Year in Footer ---
+function initFooterYear() {
     const currentYearSpan = document.getElementById('current-year');
     if (currentYearSpan) {
         currentYearSpan.textContent = new Date().getFullYear();
     }
+}
 
-    // --- Active Tab in Mobile Navigation ---
-    // This logic assumes that the href of the active tab matches the current page's filename.
-    // e.g., on 'index_mobile.html', the tab with href 'index_mobile.html' will be active.
+function initMobileNavActiveTab() {
     const mobileTabs = document.querySelectorAll('.mobile-tabs .tab-item');
-    const currentPage = window.location.pathname.split('/').pop(); // Gets 'index_mobile.html' or similar
+    let currentPage = window.location.pathname.split('/').pop();
+    if (currentPage === '' && window.location.pathname.endsWith('/')) { // Handles root path properly
+        currentPage = 'index_mobile.html'; // Assume index_mobile.html for root
+    }
+
 
     mobileTabs.forEach(tab => {
         const tabTarget = tab.getAttribute('href');
-        tab.classList.remove('active'); // Remove active from all first
+        tab.classList.remove('active');
         tab.removeAttribute('aria-current');
-        if (tabTarget === currentPage || (currentPage === '' && tabTarget === 'index_mobile.html')) {
+        if (tabTarget === currentPage || (currentPage === 'index_mobile.html' && tabTarget === 'index_mobile.html')) { // Explicit check for index
             tab.classList.add('active');
             tab.setAttribute('aria-current', 'page');
         }
     });
-});
+}
+
+// Main DOMContentLoaded Function
+function onDomReady() {
+    initSplashAndContent();
+    initPageTransitions();
+    initScrollAnimations();
+    initFooterYear();
+    initMobileNavActiveTab();
+}
+
+document.addEventListener('DOMContentLoaded', onDomReady);
 
 // Handle bfcache for general JS re-initializations
 window.addEventListener('pageshow', (event) => {
     if (event.persisted) {
-        // Re-run the DOMContentLoaded logic if the page is from bfcache.
-        // This helps re-initialize scripts that depend on DOM state.
-        const domContentLoadedEvent = new Event('DOMContentLoaded');
-        document.dispatchEvent(domContentLoadedEvent);
+        // Re-run specific initializations needed after bfcache restoration
+        // Splash screen should not re-run if page was already loaded.
+        // Page transitions listeners are typically fine.
+        initScrollAnimations(); // Important to re-trigger animations
+        initMobileNavActiveTab(); // Ensure correct tab is active
+        // initFooterYear(); // Year won't change, not strictly necessary but harmless
     }
 });
