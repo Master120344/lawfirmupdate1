@@ -58,15 +58,11 @@
 
             // Function to check if device is mobile
             function isMobileDevice() {
-                // Check user agent for common mobile identifiers
                 const userAgent = navigator.userAgent.toLowerCase();
                 const mobilePatterns = /android|iphone|ipod|ipad|mobile|tablet|windows phone/i;
                 const isTouchDevice = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
-
-                // Use matchMedia to check screen size as a fallback
                 const isSmallScreen = window.matchMedia("(max-width: 768px)").matches;
 
-                // Log for debugging
                 console.log('User Agent:', userAgent);
                 console.log('Is Touch Device:', isTouchDevice);
                 console.log('Is Small Screen:', isSmallScreen);
@@ -94,7 +90,6 @@
 
                 console.log('Target URL:', fullUrl);
 
-                // Check if target URL exists
                 const urlExists = await checkUrlExists(fullUrl);
                 if (urlExists) {
                     window.location.assign(fullUrl);
@@ -119,7 +114,7 @@
             const redirectTimeout = setTimeout(() => {
                 console.error('Redirect timed out');
                 showErrorMessage(isMobileDevice() ? 'index_mobile.html' : 'index_desktop.html');
-            }, 5000); // 5-second timeout
+            }, 5000);
 
             // Start redirect process
             redirectToPage().then(() => clearTimeout(redirectTimeout));
