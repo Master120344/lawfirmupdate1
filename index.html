@@ -6,7 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="description" content="Kershaw Law - Redirecting to the appropriate page">
     <meta name="robots" content="noindex, nofollow">
-    <title>The Kershaw LawFirm - Redirecting</title>
+    <title>The Kershaw Law Firm - Redirecting</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -29,6 +29,11 @@
         .message a:hover {
             text-decoration: underline;
         }
+        .error-message {
+            color: #d32f2f;
+            font-weight: bold;
+            margin-top: 10px;
+        }
     </style>
 </head>
 <body>
@@ -41,18 +46,76 @@
     </div>
 
     <script>
-        function isMobileDevice() {
-            const userAgent = navigator.userAgent || navigator.vendor || window.opera;
-            const isTouch = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
-            const isSmallScreen = window.innerWidth <= 768;
-            const isMobileUA = /android|blackberry|iphone|ipod|ipad|iemobile|opera mini|mobile/i.test(userAgent);
-            return isMobileUA || (isTouch && isSmallScreen);
-        }
-        if (isMobileDevice()) {
-            window.location.href = "/index_mobile.html";
-        } else {
-            window.location.href = "/index_desktop.html";
-        }
+        (function() {
+            'use strict';
+
+            // Function to check if device is mobile
+            function isMobileDevice() {
+                const userAgent = navigator.userAgent.toLowerCase();
+                const isTouch = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+                const isSmallScreen = window.innerWidth <= 768;
+                const isMobileUA = /android|blackberry|iphone|ipod|ipad|iemobile|opera mini|mobile/i.test(userAgent);
+
+                console.log('User Agent:', userAgent);
+                console.log('Is Touch Device:', isTouch);
+                console.log('Is Small Screen:', isSmallScreen);
+                console.log('Is Mobile UA:', isMobileUA);
+
+                return isMobileUA || (isTouch && isSmallScreen);
+            }
+
+            // Function to verify if a URL exists
+            async function checkUrlExists(url) {
+                try {
+                    const response = await fetch(url, { method: 'HEAD', cache: 'no-store' });
+                    return response.ok;
+                } catch (error) {
+                    console.error('Error checking URL:', url, error);
+                    return false;
+                }
+            }
+
+            // Main redirect logic
+            async function redirectToPage() {
+                const isMobile = isMobileDevice();
+                const baseUrl = window.location.origin;
+                const targetUrl = isMobile ? '/index_mobile.html' : '/index_desktop.html';
+                const fullUrl = baseUrl + targetUrl;
+
+                console.log('Target URL:', fullUrl);
+
+                const urlExists = await checkUrlExists(fullUrl);
+                if (urlExists) {
+                    window.location.href = fullUrl;
+                } else {
+                    console.error('Target URL not found:', fullUrl);
+                    const messageDiv = document.querySelector('.message');
+                    messageDiv.innerHTML += `
+                        <p class="error-message">Failed to load the ${isMobile ? 'mobile' : 'desktop'} version.</p>
+                        <p>Please choose: 
+                            <a href="/index_desktop.html">Desktop</a> | 
+                            <a href="/index_mobile.html">Mobile</a>
+                        </p>
+                    `;
+                }
+            }
+
+            // Set a timeout to handle slow redirects
+            const redirectTimeout = setTimeout(() => {
+                console.error('Redirect timed out');
+                const messageDiv = document.querySelector('.message');
+                messageDiv.innerHTML += `
+                    <p class="error-message">Redirect timed out.</p>
+                    <p>Please choose: 
+                        <a href="/index_desktop.html">Desktop</a> | 
+                        <a href="/index_mobile.html">Mobile</a>
+                    </p>
+                `;
+            }, 5000);
+
+            // Start redirect process
+            redirectToPage().then(() => clearTimeout(redirectTimeout));
+        })();
     </script>
 </body>
 </html>
