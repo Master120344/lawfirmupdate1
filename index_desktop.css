@@ -165,11 +165,11 @@ img {
     display: block;
 }
 
-/* 3. LOADER STYLES (Identical)
+/* 3. LOADER STYLES
 -------------------------------------------------- */
 .splash-loader,
 .page-transition-loader,
-.loader {
+.loader { /* Added .loader to match services_desktop.css pattern, though not used in index_desktop.html */
     position: fixed; top: 0; left: 0; width: 100%; height: 100vh;
     display: flex;
     flex-direction: column;
@@ -198,7 +198,7 @@ img {
     pointer-events: none;
     transition: opacity 0.4s ease-out, visibility 0s linear 0.4s;
 }
-.splash-loader .splash-text-content { text-align: center; }
+.splash-loader .splash-text-content { text-align: center; } /* For text splash */
 .splash-loader .splash-main-title {
     font-family: var(--font-headings);
     font-size: clamp(2rem, 5vw, 2.8rem);
@@ -209,7 +209,7 @@ img {
     text-shadow: 1px 1px 2px rgba(0,0,0,0.15);
     animation: pulseLogo 2.5s infinite ease-in-out alternate;
 }
-.splash-loader .splash-main-title .splash-main-pc {
+.splash-loader .splash-main-title .splash-main-pc { /* Matching services for potential future use */
     font-weight: 600;
     font-size: 0.8em;
     display: inline-block;
@@ -218,6 +218,8 @@ img {
     from { transform: scale(0.98); opacity: 0.85; }
     to { transform: scale(1.02); opacity: 1; }
 }
+
+/* Styles for bar loader (if splash-loader had a bar, not currently in index_desktop.html but for consistency) */
 .loader-text-wrapper { margin-bottom: calc(var(--spacing-unit) * 4); }
 .loader-main-title {
     font-family: var(--font-headings);
@@ -255,8 +257,10 @@ img {
     0% { width: 0%; }
     100% { width: 100%; }
 }
+
+/* Page transition spinner */
 .page-transition-loader .spinner {
-    width: 60px;
+    width: 60px; /* services_desktop.css uses 50px, keeping index original for now */
     height: 60px;
     border: 6px solid var(--color-loader-bar-track);
     border-top-color: var(--color-accent-gold);
@@ -267,7 +271,7 @@ img {
     to { transform: rotate(360deg); }
 }
 
-/* 4. BACKGROUND STYLES (Identical)
+/* 4. BACKGROUND STYLES
 -------------------------------------------------- */
 #background-static {
     position: fixed; top: 0; left: 0; width: 100%; height: 100%;
@@ -304,10 +308,10 @@ img {
     display: flex;
     align-items: center;
     padding: 0 calc(var(--spacing-unit) * 4);
-    transform: translateY(-100%);
-    transition: transform 0.5s ease-out;
+    transform: translateY(-100%); /* JS handles initial hide/show */
+    transition: transform 0.5s ease-out; /* Matched JS for initial show */
 }
-body.loaded .site-header {
+body.loaded .site-header { /* Ensure header shows when body is loaded */
     transform: translateY(0);
 }
 
@@ -334,18 +338,18 @@ body.loaded .site-header {
 }
 .firm-name-header {
     font-family: var(--font-headings);
-    font-size: clamp(1.8rem, 3.5vw, 2.4rem); /* Adjusted title size */
+    font-size: clamp(1.8rem, 3.5vw, 2.4rem);
     color: var(--color-primary-brand);
     font-weight: 700;
     margin: 0;
     line-height: 1.2;
     transition: color var(--transition-fast);
 }
+/* Desktop Nav Styles (Top Bar) REMOVED as per design */
 
-/* Desktop Nav Styles (Top Bar) REMOVED */
 
-
-/* 6. PAGE CONTENT WRAPPER & SECTION BASE (Largely same as previous desktop) */
+/* 6. PAGE CONTENT WRAPPER & SECTION BASE
+-------------------------------------------------- */
 .content-section {
     width: 100%;
     padding: calc(var(--spacing-unit) * 7) calc(var(--spacing-unit) * 4);
@@ -353,10 +357,10 @@ body.loaded .site-header {
     position: relative;
 }
 .content-section:nth-child(odd) {
-     background-color: rgba(255, 255, 255, 0.85);
+     background-color: rgba(255, 255, 255, 0.85); /* Slightly different opacity from services, kept original */
 }
 .content-section:nth-child(even) {
-     background-color: rgba(248, 249, 250, 0.92);
+     background-color: rgba(248, 249, 250, 0.92); /* Slightly different opacity from services, kept original */
 }
 .section-container {
     max-width: var(--content-max-width-capped);
@@ -393,7 +397,8 @@ body.loaded .site-header {
     margin: 0 auto calc(var(--spacing-unit) * 5) auto;
 }
 
-/* 7. HERO SECTION (Largely same as previous desktop) */
+/* 7. HERO SECTION
+-------------------------------------------------- */
 .hero-section {
     min-height: 70vh;
     display: flex;
@@ -403,7 +408,7 @@ body.loaded .site-header {
     padding: calc(var(--spacing-unit) * 6) calc(var(--spacing-unit) * 4);
     color: var(--color-text-light);
     position: relative;
-    background: none;
+    background: none; /* Matches services_desktop.css, no explicit hero background image */
     overflow: hidden;
 }
 .hero-content-box {
@@ -416,7 +421,7 @@ body.loaded .site-header {
     z-index: 1;
 }
 .hero-main-title {
-    font-family: var(--font-headings);
+    font-family: var(--font-headings); /* services_desktop.css uses --font-display for page-hero-title */
     font-size: clamp(2.5rem, 6vw, 3.8rem);
     color: var(--color-text-light);
     text-shadow: 1px 1px 6px rgba(0,0,0,0.45);
@@ -434,7 +439,8 @@ body.loaded .site-header {
 }
 .hero-cta { margin-top: calc(var(--spacing-unit) * 1.5); }
 
-/* 8. CONTENT SECTIONS (About, Services, etc.) (Largely same as previous desktop) */
+/* 8. CONTENT SECTIONS (About, Services, etc.)
+-------------------------------------------------- */
 .about-section .secondary-button,
 .services-overview-section .secondary-button {
     display: block;
@@ -476,9 +482,10 @@ body.loaded .site-header {
     display: inline-block;
 }
 
-/* 9. TESTIMONIAL SECTION & CAROUSEL (Largely same as previous desktop) */
+/* 9. TESTIMONIAL SECTION & CAROUSEL
+-------------------------------------------------- */
 .testimonials-section {
-    background-color: var(--color-bg-medium-grey) !important;
+    background-color: var(--color-bg-medium-grey) !important; /* !important to override nth-child if needed */
     padding-bottom: calc(var(--spacing-unit) * 8);
 }
 .testimonial-carousel-wrapper {
@@ -498,33 +505,38 @@ body.loaded .site-header {
     flex-shrink: 0;
     background-color: var(--color-bg-light);
     padding: calc(var(--spacing-unit) * 3) calc(var(--spacing-unit) * 3.5);
-    text-align: left;
+    text-align: left; /* services_desktop.css .service-item is left-aligned by default */
     box-sizing: border-box;
-    min-height: 220px;
+    min-height: 220px; /* Fixed height */
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
+    justify-content: space-between; /* Aligns author to bottom */
 }
+/* Added review specific styles for more detail, similar to a service item card */
 .review-header {
     display: flex;
     align-items: center;
     margin-bottom: calc(var(--spacing-unit) * 2);
 }
 .review-profile-pic {
-    font-size: 3rem;
-    color: var(--color-text-medium);
+    font-size: 3rem; /* Example size */
+    color: var(--color-text-medium); /* Placeholder color */
     margin-right: calc(var(--spacing-unit) * 2);
     flex-shrink: 0;
 }
-.reviewer-info { display: flex; flex-direction: column; }
+.reviewer-info {
+    display: flex;
+    flex-direction: column;
+}
 .review-stars {
     color: var(--color-accent-gold);
     font-size: 1rem;
     margin-top: calc(var(--spacing-unit) * 0.35);
 }
 .review-stars .fa-star { margin-right: calc(var(--spacing-unit) * 0.3); }
-.review-stars .far.fa-star { color: var(--color-accent-gold); }
-.review-source {
+.review-stars .far.fa-star { color: var(--color-accent-gold); } /* For empty stars if used */
+
+.review-source { /* Optional: If you add a "Source: Google" text */
     font-size: 0.9rem;
     color: var(--color-text-medium);
     margin-top: calc(var(--spacing-unit) * 2.5);
@@ -538,8 +550,8 @@ body.loaded .site-header {
     color: var(--color-text-dark);
     margin-bottom: calc(var(--spacing-unit) * 2);
     font-weight: 400;
-    flex-grow: 1;
-    white-space: normal;
+    flex-grow: 1; /* Ensures text takes available space */
+    white-space: normal; /* Allow text to wrap */
     overflow-wrap: break-word;
     word-break: break-word;
     hyphens: auto;
@@ -549,10 +561,10 @@ body.loaded .site-header {
     font-weight: 600;
     color: var(--color-primary-brand);
     font-size: 1.05rem;
-    margin-top: 0;
-    text-align: left;
+    margin-top: 0; /* Removed default margin if any */
+    text-align: left; /* Explicitly left, though default for block */
 }
-.testimonial-author::before { content: ""; }
+.testimonial-author::before { content: ""; } /* Removed --- if not desired */
 
 .carousel-control {
     position: absolute;
@@ -561,7 +573,7 @@ body.loaded .site-header {
     background-color: rgba(var(--color-primary-brand-rgb), 0.6);
     color: var(--color-text-on-primary);
     border: none;
-    padding: 0;
+    padding: 0; /* Reset padding */
     border-radius: 50%;
     width: 45px; height: 45px;
     font-size: 1.5rem;
@@ -569,13 +581,14 @@ body.loaded .site-header {
     transition: background-color var(--transition-fast), transform var(--transition-fast);
     z-index: 10;
     box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-    display: flex; align-items: center; justify-content: center;
+    display: flex; align-items: center; justify-content: center; /* For icon centering */
 }
+/* Hide controls by default, JS will show them if multiple items */
 .carousel-control.prev,
 .carousel-control.next {
     display: none;
 }
-.carousel-control.prev { left: calc(var(--spacing-unit) * -2); }
+.carousel-control.prev { left: calc(var(--spacing-unit) * -2); } /* Position outside slightly */
 .carousel-control.next { right: calc(var(--spacing-unit) * -2); }
 .carousel-control:hover, .carousel-control:focus {
     background-color: rgba(var(--color-primary-brand-rgb), 0.8);
@@ -584,21 +597,21 @@ body.loaded .site-header {
 .carousel-dots {
     text-align: center;
     position: absolute;
-    bottom: calc(var(--spacing-unit) * -3);
+    bottom: calc(var(--spacing-unit) * -3); /* Position below carousel */
     left: 50%;
     transform: translateX(-50%);
-    padding-top: calc(var(--spacing-unit) * 1.5);
+    padding-top: calc(var(--spacing-unit) * 1.5); /* Space from carousel */
 }
 .carousel-dot {
-    display: inline-block;
+    display: inline-block; /* Changed from button to div for easier styling if no JS interaction needed for this */
     width: 10px; height: 10px;
     background-color: rgba(var(--color-primary-brand-rgb), 0.35);
     border-radius: 50%;
     margin: 0 calc(var(--spacing-unit) * 0.7);
     cursor: pointer;
     transition: background-color var(--transition-fast), transform var(--transition-fast);
-    border: none;
-    padding: 0;
+    border: none; /* Reset button border if it was a button */
+    padding: 0; /* Reset button padding */
 }
 .carousel-dot.active {
     background-color: var(--color-primary-brand);
@@ -606,7 +619,7 @@ body.loaded .site-header {
 }
 
 .google-reviews-callout {
-    margin-top: calc(var(--spacing-unit) * 8);
+    margin-top: calc(var(--spacing-unit) * 8); /* Increased space from carousel */
     padding: calc(var(--spacing-unit) * 3.5) calc(var(--spacing-unit) * 3);
     background-color: var(--color-bg-light);
     border-radius: var(--border-radius-medium);
@@ -616,14 +629,14 @@ body.loaded .site-header {
 }
 .google-reviews-title {
     font-family: var(--font-headings);
-    font-size: 1.5rem;
+    font-size: 1.5rem; /* Original size */
     color: var(--color-primary-brand);
     margin-bottom: calc(var(--spacing-unit) * 1.5);
     display: flex; align-items: center; justify-content: center; gap: calc(var(--spacing-unit) * 0.8);
 }
 .google-reviews-title i.fa-star { color: var(--color-accent-gold); font-size: 1em; }
 .google-reviews-callout p {
-    font-size: 1.05rem;
+    font-size: 1.05rem; /* Original size */
     color: var(--color-text-medium);
     margin-bottom: calc(var(--spacing-unit) * 2);
 }
@@ -631,7 +644,7 @@ body.loaded .site-header {
     display: inline-flex; align-items: center; gap: calc(var(--spacing-unit) * 1.2);
     margin-top: calc(var(--spacing-unit) * 2);
     padding: calc(var(--spacing-unit) * 1.75) calc(var(--spacing-unit) * 3.5);
-    background-color: #DB4437;
+    background-color: #DB4437; /* Google Red */
     color: var(--color-text-light) !important;
     font-family: var(--font-headings);
     font-size: 1.05rem;
@@ -643,14 +656,15 @@ body.loaded .site-header {
     letter-spacing: 0.4px;
 }
 .google-reviews-button:hover, .google-reviews-button:focus {
-    background-color: #c53727;
+    background-color: #c53727; /* Darker Google Red */
     transform: translateY(-1.5px);
     color: var(--color-text-light) !important;
     text-decoration: none;
 }
 .google-reviews-button i.fab { font-size: 1.25em; }
 
-/* 10. CALL TO ACTION (CTA) SECTIONS & BUTTONS (Largely same as previous desktop) */
+/* 10. CALL TO ACTION (CTA) SECTIONS & BUTTONS
+-------------------------------------------------- */
 .cta-button {
     display: inline-flex; align-items: center; justify-content: center;
     gap: calc(var(--spacing-unit) * 1.3);
@@ -719,8 +733,11 @@ body.loaded .site-header {
 
 /* 11. BOTTOM TABS NAVIGATION (RESTORED & Adapted from Mobile)
 -------------------------------------------------- */
-.bottom-tabs-nav { /* Renamed class from .mobile-tabs for clarity if needed, or keep as is */
-    position: fixed; bottom: 0; left: 0; width: 100%;
+.bottom-tabs-nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
     height: var(--tabs-height-desktop);
     background-color: rgba(255, 255, 255, 0.96);
     backdrop-filter: blur(12px);
@@ -738,11 +755,11 @@ body.loaded .site-header {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding: calc(var(--spacing-unit) * 0.75) calc(var(--spacing-unit) * 0.75); /* Adjusted padding for desktop */
+    padding: calc(var(--spacing-unit) * 0.75) calc(var(--spacing-unit) * 0.75);
     color: var(--color-text-medium) !important;
     text-decoration: none !important;
     font-family: var(--font-body);
-    font-size: 0.85rem; /* Slightly larger label text for desktop tabs */
+    font-size: 0.85rem;
     font-weight: 600;
     text-align: center;
     transition: color var(--transition-fast), background-color var(--transition-fast);
@@ -750,7 +767,7 @@ body.loaded .site-header {
     -webkit-tap-highlight-color: transparent;
 }
 .tab-icon {
-    font-size: 1.5rem; /* Larger icon for desktop tabs */
+    font-size: 1.5rem;
     margin-bottom: calc(var(--spacing-unit) * 0.5);
     line-height: 1;
 }
@@ -758,7 +775,7 @@ body.loaded .site-header {
 
 .tab-item:hover, .tab-item:focus {
     color: var(--color-primary-brand) !important;
-    background-color: rgba(176, 141, 87, 0.08); /* Slightly more pronounced hover */
+    background-color: rgba(176, 141, 87, 0.08);
 }
 .tab-item.active {
     color: var(--color-primary-brand) !important;
@@ -767,13 +784,13 @@ body.loaded .site-header {
 .tab-item.active::before {
     content: '';
     position: absolute;
-    top: 0; left: 20%; right: 20%; /* Adjusted width/position of indicator line */
+    top: 0; left: 20%; right: 20%;
     height: 3px;
     background-color: var(--color-accent-gold);
     border-radius: 0 0 3px 3px;
 }
 
-/* 12. FOOTER STYLES (Largely same as previous desktop)
+/* 12. FOOTER STYLES
 -------------------------------------------------- */
 .site-footer {
     background-color: var(--color-bg-footer);
@@ -810,31 +827,32 @@ body.loaded .site-header {
     flex-wrap: wrap;
     gap: calc(var(--spacing-unit) * 2);
 }
-.footer-social-media a.social-icon {
+.footer-social-media a.social-icon { /* Copied from services_desktop.css for consistency */
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    font-size: 1.7rem;
+    font-size: 1.7rem; /* services_desktop.css was 1.6rem, but this is from original index_desktop.css */
     text-decoration: none !important;
     width: 44px;
     height: 44px;
     border-radius: 50%;
+    /* Removed individual icon color here, it's below per brand */
 }
 .footer-social-media a.social-icon i {
     transition: transform var(--transition-fast);
-    line-height: 1;
+    line-height: 1; /* Helps vertical alignment */
 }
 .footer-social-media a.facebook i { color: #1877F2 !important; }
 .footer-social-media a.linkedin i { color: #0A66C2 !important; }
-.footer-social-media a.x-twitter i { color: #FFFFFF !important; }
+.footer-social-media a.x-twitter i { color: #FFFFFF !important; } /* White for X */
 .footer-social-media a.instagram i { color: #E1306C !important; }
-.footer-social-media a.tiktok i { color: #EE1D52 !important; }
+.footer-social-media a.tiktok i { color: #EE1D52 !important; } /* Common TikTok color */
 
 .footer-social-media a.social-icon:hover i,
 .footer-social-media a.social-icon:focus i {
     transform: scale(1.2);
 }
-.footer-social-media a.social-icon:focus {
+.footer-social-media a.social-icon:focus { /* Added focus state like services_desktop.css */
     outline: 2px solid var(--color-accent-gold);
     outline-offset: 2px;
 }
@@ -863,7 +881,7 @@ body.loaded .site-header {
     margin-top: calc(var(--spacing-unit) * 1.5);
 }
 
-/* 13. ANIMATION & UTILITY CLASSES (Identical)
+/* 13. ANIMATION & UTILITY CLASSES
 -------------------------------------------------- */
 *:focus-visible {
     outline: 2px solid var(--color-secondary-brand);
@@ -896,4 +914,6 @@ body.loaded .site-header {
 
 /* 14. RESPONSIVE ADJUSTMENTS (Primarily for larger screens if needed)
 -------------------------------------------------- */
-/* No specific overrides needed here for this setup as base is desktop */
+/* No specific overrides needed here for this setup as base is desktop,
+   unlike services_desktop.css which had mobile-first type adjustments.
+   If specific responsive changes are needed for index_desktop.css they would go here. */
