@@ -15,7 +15,7 @@ function initSplashAndContent() {
     if (splashLoader) {
         splashLoader.classList.remove('hidden');
         if (mainContent) mainContent.style.visibility = 'hidden';
-        if (siteHeader) siteHeader.style.transform = 'translateY(-100%)'; // Keep initial hide
+        if (siteHeader) siteHeader.style.transform = 'translateY(-100%)';
 
         let loaderDuration = 2500;
         const loaderDurationCSS = getComputedStyle(document.documentElement).getPropertyValue('--loader-display-duration').trim();
@@ -26,8 +26,8 @@ function initSplashAndContent() {
             }
         }
         
-        const loadingBarProgress = splashLoader.querySelector('.loading-bar-progress');
-        if(loadingBarProgress && loaderDurationCSS) {
+        const loadingBarProgress = splashLoader.querySelector('.loading-bar-progress'); // This element is not in index_desktop.html splash
+        if (loadingBarProgress && loaderDurationCSS) { 
              loadingBarProgress.style.animationDuration = loaderDurationCSS;
         }
 
@@ -35,10 +35,9 @@ function initSplashAndContent() {
             splashLoader.classList.add('hidden');
             if (mainContent) {
                 mainContent.style.visibility = 'visible';
-                // mainContent.style.opacity = '1'; // CSS handles this via .loaded on body
             }
             if (siteHeader) {
-                 siteHeader.style.transform = 'translateY(0)'; // Show header
+                 siteHeader.style.transform = 'translateY(0)';
             }
             body.classList.add('loaded');
         }, loaderDuration);
@@ -58,35 +57,37 @@ function initPageTransitions() {
 
             link.addEventListener('click', function(e) {
                 const href = this.getAttribute('href');
-                if (href && (href.startsWith('.') || href.startsWith('/') || !href.includes(':'))) {
+                if (href && (href.startsWith('.') || href.startsWith('/') || !href.includes(':'))) { // Basic check for internal/relative
                     const currentPath = window.location.pathname.split('/').pop();
-                    const targetPath = href.split('/').pop().split('#')[0];
+                    const targetPath = href.split('/').pop().split('#')[0]; // Get target filename without hash
                     
-                    // Updated for desktop: index_desktop.html
+                    // Prevent reload if already on the page (and no hash)
                     if (currentPath === targetPath && !href.includes('#')) {
-                         if ( (currentPath === '' || currentPath === 'index_desktop.html') && targetPath === 'index_desktop.html' && !href.includes('#')){
-                            // Allow if current is root or index_desktop.html and target is index_desktop.html
+                         // Special case: if current is root or index_desktop.html and target is index_desktop.html, allow only if it's a new navigation intent (not a redundant click on current page's link)
+                         // This logic might need refinement based on exact desired behavior for same-page links.
+                         // The original "if" was complex, simplified here to generally prevent same-page reloads without hash.
+                         if ( (currentPath === '' && targetPath === 'index_desktop.html') || (currentPath === 'index_desktop.html' && targetPath === 'index_desktop.html') ){
+                            // Allow for now, but consider if truly needed. Often better to just let browser handle.
+                            // e.preventDefault(); return; // Potentially uncomment this to stop all same-page no-hash clicks
                         } else {
                             e.preventDefault(); 
                             return; 
                         }
                     }
                     
-                    // Prevent default navigation only if it's not a hash link on the same page
-                    if (!href.startsWith('#')) {
+                    if (!href.startsWith('#')) { // Don't do transition for hash links
                         e.preventDefault();
                         pageTransitionLoader.classList.remove('hidden');
                         setTimeout(() => {
                             window.location.href = href;
-                        }, 250); // Duration for loader visibility before navigation
+                        }, 250); // Duration for transition
                     }
                 }
             });
             link.dataset.pageTransitionAttached = 'true';
         });
 
-        window.addEventListener('pageshow', function(event) {
-            // Hide transition loader if user navigates back/forward
+        window.addEventListener('pageshow', function(event) { // Hide loader if user navigates back
             pageTransitionLoader.classList.add('hidden');
         });
     }
@@ -95,7 +96,7 @@ function initPageTransitions() {
 function initScrollAnimations() {
     const animatedElements = document.querySelectorAll('.animate-on-scroll');
     if (animatedElements.length > 0 && "IntersectionObserver" in window) {
-        animatedElements.forEach(el => el.classList.remove('is-visible'));
+        animatedElements.forEach(el => el.classList.remove('is-visible')); // Ensure they start hidden
 
         const observer = new IntersectionObserver((entries, observerInstance) => {
             entries.forEach(entry => {
@@ -105,16 +106,16 @@ function initScrollAnimations() {
                     setTimeout(() => {
                         el.classList.add('is-visible');
                     }, delay);
-                    observerInstance.unobserve(el);
+                    observerInstance.unobserve(el); // Animate only once
                 }
             });
-        }, { threshold: 0.1 });
+        }, { threshold: 0.1 }); // Trigger when 10% visible
 
         animatedElements.forEach(el => {
             observer.observe(el);
         });
-    } else {
-        animatedElements.forEach(el => el.classList.add('is-visible')); // Fallback for older browsers
+    } else { // Fallback if IntersectionObserver is not supported
+        animatedElements.forEach(el => el.classList.add('is-visible'));
     }
 }
 
@@ -125,34 +126,29 @@ function initFooterYear() {
     }
 }
 
-function initDesktopNavActiveTab() {
-    const desktopNavLinks = document.querySelectorAll('.desktop-nav .nav-link'); // Updated selector
+function initBottomTabsActiveState() {
+    const bottomTabs = document.querySelectorAll('.bottom-tabs-nav .tab-item');
     let currentPage = window.location.pathname.split('/').pop();
-
-    // Handle root path for index_desktop.html
-    if (currentPage === '' && (window.location.pathname === '/' || window.location.pathname.endsWith('/index_desktop.html'))) {
+    
+    if (currentPage === '' && (window.location.pathname === '/' || window.location.pathname.endsWith('/index_desktop.html') || window.location.pathname.endsWith('/'))) {
         currentPage = 'index_desktop.html';
-    } else if (currentPage === '' && !window.location.pathname.endsWith('/')) {
-         // Handles cases like example.com/folder -> implies index file in folder
-         // For simplicity, if it's a directory, and index_desktop.html is the default, this logic might need refinement
-         // or server-side rewrite to ensure currentPage becomes 'index_desktop.html'
-         // For now, we assume direct file names or root as 'index_desktop.html'
     }
 
+    bottomTabs.forEach(tab => {
+        const tabTarget = tab.getAttribute('href').split('/').pop();
+        tab.classList.remove('active');
+        tab.removeAttribute('aria-current');
 
-    desktopNavLinks.forEach(link => {
-        const linkTarget = link.getAttribute('href').split('/').pop();
-        link.classList.remove('active');
-        link.removeAttribute('aria-current');
-
-        if (linkTarget === currentPage) {
-            link.classList.add('active');
-            link.setAttribute('aria-current', 'page');
+        if (tabTarget === currentPage) {
+            tab.classList.add('active');
+            tab.setAttribute('aria-current', 'page');
         }
-        // Special case for root "Home" link if current page is the root index
-        if ((currentPage === 'index_desktop.html' || currentPage === '') && linkTarget === 'index_desktop.html') {
-            link.classList.add('active');
-            link.setAttribute('aria-current', 'page');
+        // Ensure "Home" tab is active on index_desktop.html even if path is just "/"
+        if ((currentPage === 'index_desktop.html' || currentPage === '') && tabTarget === 'index_desktop.html') {
+            if (!tab.classList.contains('active')) {
+                 tab.classList.add('active');
+                 tab.setAttribute('aria-current', 'page');
+            }
         }
     });
 }
@@ -162,22 +158,20 @@ function onDomReady() {
     initPageTransitions();
     initScrollAnimations();
     initFooterYear();
-    initDesktopNavActiveTab(); // Updated function call
+    initBottomTabsActiveState();
 }
 
 document.addEventListener('DOMContentLoaded', onDomReady);
 
-window.addEventListener('pageshow', (event) => {
-    if (event.persisted) { // From bfcache
-        // Splash screen is handled by its own logic (doesn't re-run if body.loaded)
-        initScrollAnimations(); // Re-trigger animations as elements might be in viewport
-        initDesktopNavActiveTab(); // Ensure correct nav item is active
-        // initFooterYear(); // Not strictly necessary, year usually doesn't change in a session
+window.addEventListener('pageshow', (event) => { // Handle bfcache
+    if (event.persisted) {
+        initScrollAnimations(); // Re-run scroll animations
+        initBottomTabsActiveState(); // Re-set active tab
         
-        // Re-hide page transition loader if it was somehow stuck
         const pageTransitionLoader = document.getElementById('page-transition-loader');
         if (pageTransitionLoader) {
-            pageTransitionLoader.classList.add('hidden');
+            pageTransitionLoader.classList.add('hidden'); // Ensure transition loader is hidden
         }
+        // May need to re-initialize other dynamic content if it's affected by bfcache
     }
 });
