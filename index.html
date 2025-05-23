@@ -77,15 +77,15 @@
             }
             // 3. iOS devices (iPhone, iPod, and iPads not in 'desktop' mode)
             // !window.MSStream is a check for older IE11 on Windows Phone that might try to emulate iOS UAs.
-            else if (/ipad|iphone|ipod/.test(userAgent) && !window.MSStream) {
+            else if (/ipad|iphone|ipod/.test(userAgent) && !window.MSStream) { // Ensure this is &&
                 isMobileDevice = true;
             }
             // 4. Modern iPads (iPadOS 13+) that may identify as 'Macintosh' (desktop Safari).
             // We check for 'macintosh' in UA string and touch capability.
             // Ensure navigator.maxTouchPoints exists and is a number.
             else if (
-                /macintosh/i.test(userAgent) &&
-                typeof navigator.maxTouchPoints === 'number' &&
+                /macintosh/i.test(userAgent) && // Ensure this is &&
+                typeof navigator.maxTouchPoints === 'number' && // Ensure this is &&
                 navigator.maxTouchPoints > 1
             ) {
                 isMobileDevice = true;
