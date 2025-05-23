@@ -1,131 +1,106 @@
-document.addEventListener('DOMContentLoaded', () => {
-    // --- Splash Screen Logic ---
+// index_desktop.js
+
+function initSplashAndContent() {
     const splashLoader = document.getElementById('splash-loader');
-    const mainContentForSplash = document.getElementById('main-content'); // Or body
-    const siteHeaderForSplash = document.getElementById('site-header');
+    const mainContent = document.getElementById('main-content');
+    const siteHeader = document.getElementById('site-header');
+    const body = document.body;
 
+    if (body.classList.contains('loaded') && splashLoader && splashLoader.classList.contains('hidden')) {
+        if (mainContent) mainContent.style.visibility = 'visible';
+        if (siteHeader) siteHeader.style.transform = 'translateY(0)';
+        return;
+    }
+    
     if (splashLoader) {
-        // Ensure it's visible initially if not already by CSS
         splashLoader.classList.remove('hidden');
-        if (mainContentForSplash) mainContentForSplash.style.visibility = 'hidden';
-        if (siteHeaderForSplash) siteHeaderForSplash.style.transform = 'translateY(-100%)'; // Hide header initially
+        if (mainContent) mainContent.style.visibility = 'hidden';
+        if (siteHeader) {
+            // Get header height from CSS variable to correctly hide it initially
+            const headerHeight = getComputedStyle(document.documentElement).getPropertyValue('--header-height').trim() || '80px';
+            siteHeader.style.transform = `translateY(-${headerHeight})`;
+        }
 
 
-        // Determine loader duration from CSS variable or set a default
-        let loaderDuration = 3000; // Default 3 seconds
-        const loaderDurationCSS = getComputedStyle(document.documentElement).getPropertyValue('--loader-display-duration');
+        let loaderDuration = 2500;
+        const loaderDurationCSS = getComputedStyle(document.documentElement).getPropertyValue('--loader-display-duration').trim();
         if (loaderDurationCSS) {
-            const parsedDuration = parseFloat(loaderDurationCSS) * 1000;
-            if (!isNaN(parsedDuration)) {
-                loaderDuration = parsedDuration;
+            const parsedSeconds = parseFloat(loaderDurationCSS.replace('s', ''));
+            if (!isNaN(parsedSeconds) && parsedSeconds > 0) {
+                loaderDuration = parsedSeconds * 1000;
             }
         }
         
-        // If there's a loading bar, its animation should ideally match this duration
         const loadingBarProgress = splashLoader.querySelector('.loading-bar-progress');
-        if(loadingBarProgress) {
-             loadingBarProgress.style.animationDuration = (loaderDuration / 1000) + 's';
+        if(loadingBarProgress && loaderDurationCSS) {
+             loadingBarProgress.style.animationDuration = loaderDurationCSS;
         }
-
 
         setTimeout(() => {
             splashLoader.classList.add('hidden');
-            if (mainContentForSplash) {
-                mainContentForSplash.style.visibility = 'visible';
-                mainContentForSplash.style.opacity = '0'; // Start fade in
-                setTimeout(() => mainContentForSplash.style.opacity = '1', 50); // Trigger fade in
+            if (mainContent) {
+                mainContent.style.visibility = 'visible';
             }
-            if (siteHeaderForSplash) {
-                 siteHeaderForSplash.style.transform = 'translateY(0)';
+            if (siteHeader) {
+                 siteHeader.style.transform = 'translateY(0)';
             }
-            document.body.classList.add('loaded'); // For general body fade-in if CSS uses it
+            body.classList.add('loaded');
         }, loaderDuration);
     } else {
-        // No splash loader, make sure content is visible
-        if (mainContentForSplash) {
-            mainContentForSplash.style.visibility = 'visible';
-            mainContentForSplash.style.opacity = '1';
-        }
-         if (siteHeaderForSplash) {
-            siteHeaderForSplash.style.transform = 'translateY(0)';
-        }
-        document.body.classList.add('loaded');
+        if (mainContent) mainContent.style.visibility = 'visible';
+        if (siteHeader) siteHeader.style.transform = 'translateY(0)';
+        body.classList.add('loaded');
     }
+}
 
-    // --- Page Transition Loader (Example, if used between pages) ---
+function initPageTransitions() {
     const pageTransitionLoader = document.getElementById('page-transition-loader');
-    const allLinks = document.querySelectorAll('a');
+    if (pageTransitionLoader) {
+        const allInternalLinks = document.querySelectorAll('a[href]:not([href^="#"]):not([href^="mailto:"]):not([href^="tel:"]):not([target="_blank"])');
+        allInternalLinks.forEach(link => {
+            if (link.dataset.pageTransitionAttached) return;
 
-    allLinks.forEach(link => {
-        link.addEventListener('click', function(e) {
-            const href = this.getAttribute('href');
-            const target = this.getAttribute('target');
+            link.addEventListener('click', function(e) {
+                const href = this.getAttribute('href');
+                if (href && (href.startsWith('.') || href.startsWith('/') || !href.includes(':'))) {
+                    const currentPath = window.location.pathname.split('/').pop();
+                    const targetPath = href.split('/').pop().split('#')[0];
+                    
+                    // Handle case where currentPath might be empty (root) and target is index_desktop.html
+                    const isCurrentRootAndTargetIndex = (currentPath === '' || currentPath === '/') && targetPath === 'index_desktop.html';
+                    const isCurrentIndexAndTargetIndex = currentPath === 'index_desktop.html' && targetPath === 'index_desktop.html';
 
-            // Check if it's an internal link, not a new tab, and not a hash link
-            if (href && !href.startsWith('#') && !href.startsWith('mailto:') && !href.startsWith('tel:') && target !== '_blank') {
-                // Check if it's navigating away from the current domain
-                const isExternal = new URL(href, window.location.origin).origin !== window.location.origin;
-                
-                if (!isExternal && pageTransitionLoader) {
+                    if ((isCurrentIndexAndTargetIndex || isCurrentRootAndTargetIndex) && !href.includes('#')) {
+                         e.preventDefault(); 
+                         return; 
+                    }
+                    if (currentPath === targetPath && !href.includes('#') && !isCurrentRootAndTargetIndex) {
+                        e.preventDefault();
+                        return;
+                    }
+
+
                     e.preventDefault();
                     pageTransitionLoader.classList.remove('hidden');
                     setTimeout(() => {
                         window.location.href = href;
-                    }, 300); // Small delay for loader to appear
+                    }, 250); // Duration for the loader to show
                 }
-            }
+            });
+            link.dataset.pageTransitionAttached = 'true';
         });
-    });
-    
-    // Hide page transition loader on page load (bfcache might keep it visible)
-    if (pageTransitionLoader) {
-      window.addEventListener('pageshow', function(event) {
-        if (!event.persisted) { // Not from bfcache
-          pageTransitionLoader.classList.add('hidden');
-        } else { // From bfcache, ensure it's hidden quickly
-          setTimeout(() => pageTransitionLoader.classList.add('hidden'), 0);
-        }
-      });
+
+        window.addEventListener('pageshow', function(event) {
+            pageTransitionLoader.classList.add('hidden');
+        });
     }
+}
 
-
-    // --- Header Scroll Behavior ---
-    const siteHeader = document.getElementById('site-header');
-    let lastScrollTop = 0;
-    const scrollThreshold = 10; // Pixels to scroll before reacting
-
-    if (siteHeader) {
-        window.addEventListener('scroll', () => {
-            let scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-
-            if (Math.abs(scrollTop - lastScrollTop) > scrollThreshold) {
-                if (scrollTop > lastScrollTop && scrollTop > siteHeader.offsetHeight) {
-                    // Scroll Down
-                    siteHeader.style.transform = `translateY(-${siteHeader.offsetHeight}px)`;
-                    siteHeader.classList.remove('scrolled'); // Optional: remove scrolled class if hiding
-                } else {
-                    // Scroll Up
-                    siteHeader.style.transform = 'translateY(0)';
-                    if (scrollTop > 50) { // Add 'scrolled' class when not at the very top
-                        siteHeader.classList.add('scrolled');
-                    } else {
-                        siteHeader.classList.remove('scrolled');
-                    }
-                }
-                lastScrollTop = scrollTop <= 0 ? 0 : scrollTop; // For Mobile or negative scrolling
-            }
-             // Ensure header is visible and not 'scrolled' if at the very top
-            if (scrollTop <= 50) { // Use a small threshold for being "at the top"
-                siteHeader.style.transform = 'translateY(0)';
-                siteHeader.classList.remove('scrolled');
-            }
-        }, { passive: true });
-    }
-
-
-    // --- Animate on Scroll ---
+function initScrollAnimations() {
     const animatedElements = document.querySelectorAll('.animate-on-scroll');
     if (animatedElements.length > 0 && "IntersectionObserver" in window) {
+        animatedElements.forEach(el => el.classList.remove('is-visible'));
+
         const observer = new IntersectionObserver((entries, observerInstance) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
@@ -134,50 +109,65 @@ document.addEventListener('DOMContentLoaded', () => {
                     setTimeout(() => {
                         el.classList.add('is-visible');
                     }, delay);
-                    observerInstance.unobserve(el); // Stop observing once visible
+                    observerInstance.unobserve(el);
                 }
             });
-        }, { threshold: 0.1 }); // Trigger when 10% of the element is visible
+        }, { threshold: 0.1 });
 
         animatedElements.forEach(el => {
             observer.observe(el);
         });
-    } else { // Fallback for older browsers or if no elements
+    } else {
         animatedElements.forEach(el => el.classList.add('is-visible'));
     }
+}
 
-    // --- Current Year in Footer ---
+function initFooterYear() {
     const currentYearSpan = document.getElementById('current-year');
     if (currentYearSpan) {
         currentYearSpan.textContent = new Date().getFullYear();
     }
+}
 
-    // --- Active Nav Link highlighting based on URL (Simple Version) ---
-    // (More robust solution would check sections in view for single-page apps)
-    const desktopNavLinks = document.querySelectorAll('.desktop-navigation .nav-link');
-    const currentPath = window.location.pathname.split("/").pop(); // Gets the current file name
+function initDesktopNavActiveTab() {
+    const desktopNavLinks = document.querySelectorAll('.desktop-nav .nav-link');
+    let currentPage = window.location.pathname.split('/').pop();
 
+    // If on root path (e.g. "www.example.com/"), consider it 'index_desktop.html'
+    if (currentPage === '' && (window.location.pathname === '/' || window.location.pathname.endsWith('/'))) {
+        currentPage = 'index_desktop.html';
+    }
+    
     desktopNavLinks.forEach(link => {
-        const linkPath = link.getAttribute('href').split("/").pop();
-        link.classList.remove('active'); // Remove active from all
+        const linkTarget = link.getAttribute('href').split('/').pop();
+        link.classList.remove('active');
         link.removeAttribute('aria-current');
 
-        if (currentPath === linkPath || (currentPath === '' && linkPath === 'index_desktop.html')) {
+        if (linkTarget === currentPage) {
             link.classList.add('active');
             link.setAttribute('aria-current', 'page');
         }
     });
+}
 
-});
 
-// Handle bfcache for JS initializations
+// Main DOMContentLoaded Function
+function onDomReady() {
+    initSplashAndContent();
+    initPageTransitions();
+    initScrollAnimations();
+    initFooterYear();
+    initDesktopNavActiveTab(); // Use desktop navigation handler
+}
+
+document.addEventListener('DOMContentLoaded', onDomReady);
+
+// Handle bfcache
 window.addEventListener('pageshow', (event) => {
     if (event.persisted) {
-        // Re-run the DOMContentLoaded logic if the page is from bfcache.
-        // This is a simple way to re-initialize.
-        // For more complex scenarios, you might need a more targeted re-init function for each module.
-        // console.log("Page loaded from bfcache, re-running DOMContentLoaded logic.");
-        const domContentLoadedEvent = new Event('DOMContentLoaded');
-        document.dispatchEvent(domContentLoadedEvent);
+        initScrollAnimations();
+        initDesktopNavActiveTab(); // Use desktop navigation handler
+        // initFooterYear(); // Not strictly necessary but harmless
+        // The splash screen should not re-run if body.loaded is true, handled in initSplashAndContent
     }
 });
