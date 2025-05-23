@@ -1,8 +1,10 @@
-<html lang="en"><head>
+<!DOCTYPE html>
+<html lang="en">
+<head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>The Kershaw Law Firm P.C. - Desktop</title>
-    <meta name="description" content="The Kershaw Law Firm P.C. provides dedicated legal services for H-2A and H-2B work visas. Focused on guiding businesses through complex immigration law. Desktop site.">
+    <meta name="description" content="The Kershaw Law Firm P.C. provides dedicated legal services for H-2A and H-2B work visas. Focused on guiding businesses through complex immigration law. Desktop optimized site.">
     <link rel="stylesheet" href="index_desktop.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
@@ -14,8 +16,8 @@
     <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
     <link rel="manifest" href="/site.webmanifest"> -->
 </head>
-<body class="loaded"> <!-- Add "loaded" if splash screen handled by JS -->
-    <div id="splash-loader" class="splash-loader hidden"> <!-- Assume hidden by default, JS shows/hides -->
+<body class="loaded">
+    <div id="splash-loader" class="splash-loader hidden">
         <div class="splash-text-content">
             <h1 class="splash-main-title">The Kershaw Law Firm <span class="splash-main-pc">P.C.</span></h1>
         </div>
@@ -27,27 +29,28 @@
     <div id="background-static"></div>
     <div id="background-overlay"></div>
 
-    <header class="site-header" id="site-header">
+    <header class="site-header" id="site-header" style="transform: translateY(-80px);"> <!-- Adjusted default transform based on typical desktop header height -->
         <div class="header-content">
             <div class="firm-title-container">
                  <a href="index_desktop.html" class="firm-title-link" aria-label="Home - The Kershaw Law Firm P.C.">
                     <h1 class="firm-name-header">The Kershaw Law Firm P.C.</h1>
                  </a>
             </div>
-            <!-- Desktop navigation could be placed here or integrated -->
-            <nav class="desktop-navigation">
-                <a href="index_desktop.html" class="nav-link active" aria-current="page">Home</a>
-                <a href="aboutus_desktop.html" class="nav-link">About Us</a>
-                <a href="services_desktop.html" class="nav-link">Services</a>
-                <a href="faq_desktop.html" class="nav-link">FAQ</a>
-                <a href="contact_desktop.html" class="nav-link">Contact</a>
+            <nav class="desktop-nav">
+                <ul>
+                    <li><a href="index_desktop.html" class="nav-link">Home</a></li>
+                    <li><a href="aboutus_desktop.html" class="nav-link">About Us</a></li>
+                    <li><a href="services_desktop.html" class="nav-link">Services</a></li>
+                    <li><a href="faq_desktop.html" class="nav-link">FAQ</a></li>
+                    <li><a href="contact_desktop.html" class="nav-link">Contact</a></li>
+                </ul>
             </nav>
         </div>
     </header>
 
-    <main class="page-content-wrapper" id="main-content">
+    <main class="page-content-wrapper" id="main-content" style="visibility: visible; opacity: 1; transition: opacity 0.3s ease-out;">
         <section class="hero-section">
-            <div class="hero-content-box animate-on-scroll fade-in-up" data-animation-delay="200">
+            <div class="hero-content-box animate-on-scroll fade-in-up is-visible" data-animation-delay="200">
                 <h2 class="hero-main-title">H-2A & H-2B Visa Solutions</h2>
                 <p class="hero-subtitle">Professional Guidance for Your Workforce Immigration Needs.</p>
                 <a href="getstarted_desktop.html" class="cta-button hero-cta">
@@ -58,36 +61,36 @@
 
         <section id="about" class="content-section about-section">
             <div class="section-container">
-                <h2 class="section-title decorative-title animate-on-scroll fade-in-up">Our Commitment to You</h2>
-                <p class="section-intro-text animate-on-scroll fade-in-up" data-animation-delay="100">At The Kershaw Law Firm, P.C., we operate with integrity, in-depth legal knowledge, and a strong dedication to our clients. We assist U.S. businesses in managing the H-2A (agricultural) and H-2B (non-agricultural) temporary foreign worker visa programs.</p>
-                <p class="animate-on-scroll fade-in-up" data-animation-delay="200">Our skilled legal team carefully works through the detailed regulations from the Department of Labor (DOL) and U.S. Citizenship and Immigration Services (USCIS). We prepare your petitions accurately and aim for efficient processing, recognizing that timely workforce solutions are vital for your business.</p>
-                <a href="aboutus_desktop.html" class="secondary-button animate-on-scroll fade-in" data-animation-delay="300">Discover Our Approach <i class="fa-solid fa-arrow-right-long"></i></a>
+                <h2 class="section-title decorative-title animate-on-scroll fade-in-up is-visible">Our Commitment to You</h2>
+                <p class="section-intro-text animate-on-scroll fade-in-up is-visible" data-animation-delay="100">At The Kershaw Law Firm, P.C., we operate with integrity, in-depth legal knowledge, and a strong dedication to our clients. We assist U.S. businesses in managing the H-2A (agricultural) and H-2B (non-agricultural) temporary foreign worker visa programs.</p>
+                <p class="animate-on-scroll fade-in-up is-visible" data-animation-delay="200">Our skilled legal team carefully works through the detailed regulations from the Department of Labor (DOL) and U.S. Citizenship and Immigration Services (USCIS). We prepare your petitions accurately and aim for efficient processing, recognizing that timely workforce solutions are vital for your business.</p>
+                <a href="aboutus_desktop.html" class="secondary-button animate-on-scroll fade-in is-visible" data-animation-delay="300">Discover Our Approach <i class="fa-solid fa-arrow-right-long"></i></a>
             </div>
         </section>
 
         <section id="services-overview" class="content-section services-overview-section">
              <div class="section-container">
-                <h2 class="section-title decorative-title animate-on-scroll fade-in-up">Professional H2B & H2A Visa Representation</h2>
-                <p class="section-intro-text animate-on-scroll fade-in-up" data-animation-delay="100"><b>Our Firm has over 20 Years Experience in H2B & H2A Visa Representation</b></p>
+                <h2 class="section-title decorative-title animate-on-scroll fade-in-up is-visible">Professional H2B & H2A Visa Representation</h2>
+                <p class="section-intro-text animate-on-scroll fade-in-up is-visible" data-animation-delay="100"><b>Our Firm has over 20 Years Experience in H2B & H2A Visa Representation<b></b></b></p>
                 <ul class="service-list-detailed">
-                    <li class="animate-on-scroll slide-in-left" data-animation-delay="150"><i class="fa-solid fa-briefcase"></i><strong>Case Evaluation & Strategy:</strong> We thoroughly assess your needs to develop a tailored visa strategy.</li>
-                    <li class="animate-on-scroll slide-in-left" data-animation-delay="250"><i class="fa-solid fa-file-signature"></i><strong>Petition Preparation & Filing:</strong> Our team meticulously prepares and files all H-2A/H-2B applications and supporting documents.</li>
-                    <li class="animate-on-scroll slide-in-left" data-animation-delay="350"><i class="fa-solid fa-users-gear"></i><strong>DOL Compliance Guidance:</strong> We provide clear, step-by-step guidance on Department of Labor recruitment and compliance mandates.</li>
-                    <li class="animate-on-scroll slide-in-left" data-animation-delay="450"><i class="fa-solid fa-shield-halved"></i><strong>Audit & RFE Support:</strong> Count on our proactive assistance in responding to government audits and Requests for Evidence (RFEs).</li>
-                    <li class="animate-on-scroll slide-in-left" data-animation-delay="550"><i class="fa-solid fa-clipboard-check"></i><strong>Ongoing Compliance Assistance:</strong> We offer continued support to help your business maintain all H-2 program obligations.</li>
+                    <li class="animate-on-scroll slide-in-left is-visible" data-animation-delay="150"><i class="fa-solid fa-briefcase"></i><strong>Case Evaluation & Strategy:</strong> We thoroughly assess your needs to develop a tailored visa strategy.</li>
+                    <li class="animate-on-scroll slide-in-left is-visible" data-animation-delay="250"><i class="fa-solid fa-file-signature"></i><strong>Petition Preparation & Filing:</strong> Our team meticulously prepares and files all H-2A/H-2B applications and supporting documents.</li>
+                    <li class="animate-on-scroll slide-in-left is-visible" data-animation-delay="350"><i class="fa-solid fa-users-gear"></i><strong>DOL Compliance Guidance:</strong> We provide clear, step-by-step guidance on Department of Labor recruitment and compliance mandates.</li>
+                    <li class="animate-on-scroll slide-in-left is-visible" data-animation-delay="450"><i class="fa-solid fa-shield-halved"></i><strong>Audit & RFE Support:</strong> Count on our proactive assistance in responding to government audits and Requests for Evidence (RFEs).</li>
+                    <li class="animate-on-scroll slide-in-left is-visible" data-animation-delay="550"><i class="fa-solid fa-clipboard-check"></i><strong>Ongoing Compliance Assistance:</strong> We offer continued support to help your business maintain all H-2 program obligations.</li>
                 </ul>
-                <p class="animate-on-scroll fade-in-up" data-animation-delay="600">Let our experience simplify your H2B & H2A temporary labor certification and visa journey.</p>
-                <a href="services_desktop.html" class="secondary-button animate-on-scroll fade-in" data-animation-delay="650">Full Service Spectrum <i class="fa-solid fa-arrow-right-long"></i></a>
+                <p class="animate-on-scroll fade-in-up is-visible" data-animation-delay="600">Let our experience simplify your H2B & H2Atemporary labor certification and visa journey.</p>
+                <a href="services_desktop.html" class="secondary-button animate-on-scroll fade-in is-visible" data-animation-delay="650">Full Service Spectrum <i class="fa-solid fa-arrow-right-long"></i></a>
              </div>
         </section>
 
         <section id="testimonials" class="content-section testimonials-section">
              <div class="section-container">
-                <h2 class="section-title decorative-title animate-on-scroll fade-in-up">Google Reviews</h2>
+                <h2 class="section-title decorative-title animate-on-scroll fade-in-up is-visible">Google Reviews</h2>
                  <div class="testimonial-carousel-wrapper animate-on-scroll fade-in-scale" data-animation-delay="100">
-                     <div class="testimonial-carousel">
-                         <!-- Testimonial items are removed. Add manually if needed. -->
-                         <!-- Carousel JS will hide this if no items are present -->
+                     <div class="testimonial-carousel" style="transform: translateX(0%);">
+                         <!-- Testimonial items have been removed as per request. -->
+                         <!-- If you want to display specific reviews, add them here manually in the same .testimonial-item format -->
                      </div>
                      <button class="carousel-control prev" aria-label="Previous testimonial"><i class="fas fa-chevron-left"></i></button>
                      <button class="carousel-control next" aria-label="Next testimonial"><i class="fas fa-chevron-right"></i></button>
@@ -117,8 +120,6 @@
         </section>
     </main>
 
-    <!-- Mobile tabs navigation removed for desktop -->
-
     <footer class="site-footer">
         <div class="footer-content">
             <div class="footer-firm-identity">
@@ -143,7 +144,8 @@
         </div>
     </footer>
 
-    <script src="google_reviews_desktop.js" defer=""></script>
+    <script src="google_reviews.js" defer=""></script>
     <script src="index_desktop.js" defer=""></script>
 
-</body></html>
+</body>
+</html>
