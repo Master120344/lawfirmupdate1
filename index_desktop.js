@@ -15,10 +15,7 @@ function initSplashAndContent() {
     if (splashLoader) {
         splashLoader.classList.remove('hidden');
         if (mainContent) mainContent.style.visibility = 'hidden';
-        if (siteHeader) {
-            const headerHeight = getComputedStyle(document.documentElement).getPropertyValue('--header-height').trim() || '80px';
-            siteHeader.style.transform = `translateY(-${headerHeight})`;
-        }
+        if (siteHeader) siteHeader.style.transform = 'translateY(-100%)'; // Keep initial hide
 
         let loaderDuration = 2500;
         const loaderDurationCSS = getComputedStyle(document.documentElement).getPropertyValue('--loader-display-duration').trim();
@@ -38,9 +35,10 @@ function initSplashAndContent() {
             splashLoader.classList.add('hidden');
             if (mainContent) {
                 mainContent.style.visibility = 'visible';
+                // mainContent.style.opacity = '1'; // CSS handles this via .loaded on body
             }
             if (siteHeader) {
-                 siteHeader.style.transform = 'translateY(0)';
+                 siteHeader.style.transform = 'translateY(0)'; // Show header
             }
             body.classList.add('loaded');
         }, loaderDuration);
@@ -64,29 +62,31 @@ function initPageTransitions() {
                     const currentPath = window.location.pathname.split('/').pop();
                     const targetPath = href.split('/').pop().split('#')[0];
                     
-                    const isCurrentRootAndTargetIndex = (currentPath === '' || currentPath === '/') && targetPath === 'index_desktop.html';
-                    const isCurrentIndexAndTargetIndex = currentPath === 'index_desktop.html' && targetPath === 'index_desktop.html';
-
-                    if ((isCurrentIndexAndTargetIndex || isCurrentRootAndTargetIndex) && !href.includes('#')) {
-                         e.preventDefault(); 
-                         return; 
+                    // Updated for desktop: index_desktop.html
+                    if (currentPath === targetPath && !href.includes('#')) {
+                         if ( (currentPath === '' || currentPath === 'index_desktop.html') && targetPath === 'index_desktop.html' && !href.includes('#')){
+                            // Allow if current is root or index_desktop.html and target is index_desktop.html
+                        } else {
+                            e.preventDefault(); 
+                            return; 
+                        }
                     }
-                    if (currentPath === targetPath && !href.includes('#') && !isCurrentRootAndTargetIndex) {
+                    
+                    // Prevent default navigation only if it's not a hash link on the same page
+                    if (!href.startsWith('#')) {
                         e.preventDefault();
-                        return;
+                        pageTransitionLoader.classList.remove('hidden');
+                        setTimeout(() => {
+                            window.location.href = href;
+                        }, 250); // Duration for loader visibility before navigation
                     }
-
-                    e.preventDefault();
-                    pageTransitionLoader.classList.remove('hidden');
-                    setTimeout(() => {
-                        window.location.href = href;
-                    }, 250);
                 }
             });
             link.dataset.pageTransitionAttached = 'true';
         });
 
         window.addEventListener('pageshow', function(event) {
+            // Hide transition loader if user navigates back/forward
             pageTransitionLoader.classList.add('hidden');
         });
     }
@@ -114,7 +114,7 @@ function initScrollAnimations() {
             observer.observe(el);
         });
     } else {
-        animatedElements.forEach(el => el.classList.add('is-visible'));
+        animatedElements.forEach(el => el.classList.add('is-visible')); // Fallback for older browsers
     }
 }
 
@@ -125,42 +125,59 @@ function initFooterYear() {
     }
 }
 
-function initBottomTabsActiveState() { // Renamed function
-    const bottomTabs = document.querySelectorAll('.bottom-tabs .tab-item'); // Updated selector
+function initDesktopNavActiveTab() {
+    const desktopNavLinks = document.querySelectorAll('.desktop-nav .nav-link'); // Updated selector
     let currentPage = window.location.pathname.split('/').pop();
 
-    if (currentPage === '' && (window.location.pathname === '/' || window.location.pathname.endsWith('/'))) {
+    // Handle root path for index_desktop.html
+    if (currentPage === '' && (window.location.pathname === '/' || window.location.pathname.endsWith('/index_desktop.html'))) {
         currentPage = 'index_desktop.html';
+    } else if (currentPage === '' && !window.location.pathname.endsWith('/')) {
+         // Handles cases like example.com/folder -> implies index file in folder
+         // For simplicity, if it's a directory, and index_desktop.html is the default, this logic might need refinement
+         // or server-side rewrite to ensure currentPage becomes 'index_desktop.html'
+         // For now, we assume direct file names or root as 'index_desktop.html'
     }
-    
-    bottomTabs.forEach(tab => {
-        const tabTarget = tab.getAttribute('href').split('/').pop();
-        tab.classList.remove('active');
-        tab.removeAttribute('aria-current');
 
-        if (tabTarget === currentPage) {
-            tab.classList.add('active');
-            tab.setAttribute('aria-current', 'page');
+
+    desktopNavLinks.forEach(link => {
+        const linkTarget = link.getAttribute('href').split('/').pop();
+        link.classList.remove('active');
+        link.removeAttribute('aria-current');
+
+        if (linkTarget === currentPage) {
+            link.classList.add('active');
+            link.setAttribute('aria-current', 'page');
+        }
+        // Special case for root "Home" link if current page is the root index
+        if ((currentPage === 'index_desktop.html' || currentPage === '') && linkTarget === 'index_desktop.html') {
+            link.classList.add('active');
+            link.setAttribute('aria-current', 'page');
         }
     });
 }
 
-
-// Main DOMContentLoaded Function
 function onDomReady() {
     initSplashAndContent();
     initPageTransitions();
     initScrollAnimations();
     initFooterYear();
-    initBottomTabsActiveState(); // Call the correct function
+    initDesktopNavActiveTab(); // Updated function call
 }
 
 document.addEventListener('DOMContentLoaded', onDomReady);
 
-// Handle bfcache
 window.addEventListener('pageshow', (event) => {
-    if (event.persisted) {
-        initScrollAnimations();
-        initBottomTabsActiveState(); // Call the correct function
+    if (event.persisted) { // From bfcache
+        // Splash screen is handled by its own logic (doesn't re-run if body.loaded)
+        initScrollAnimations(); // Re-trigger animations as elements might be in viewport
+        initDesktopNavActiveTab(); // Ensure correct nav item is active
+        // initFooterYear(); // Not strictly necessary, year usually doesn't change in a session
+        
+        // Re-hide page transition loader if it was somehow stuck
+        const pageTransitionLoader = document.getElementById('page-transition-loader');
+        if (pageTransitionLoader) {
+            pageTransitionLoader.classList.add('hidden');
+        }
     }
 });
