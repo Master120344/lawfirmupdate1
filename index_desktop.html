@@ -1,120 +1,162 @@
-/* index_desktop.css */
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Kershaw Law Firm P.C. - Desktop</title>
+    <meta name="description" content="The Kershaw Law Firm P.C. provides dedicated legal services for H-2A and H-2B work visas. Focused on guiding businesses through complex immigration law. Desktop optimized site.">
+    <link rel="stylesheet" href="index_desktop.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=EB+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer">
+    <!-- Add favicon links here -->
+    <!-- <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="manifest" href="/site.webmanifest"> -->
+</head>
+<body class="loaded">
+    <div id="splash-loader" class="splash-loader hidden">
+        <div class="splash-text-content">
+            <h1 class="splash-main-title">The Kershaw Law Firm <span class="splash-main-pc">P.C.</span></h1>
+        </div>
+    </div>
+    <div id="page-transition-loader" class="page-transition-loader hidden">
+        <div class="spinner"></div>
+    </div>
 
-/* 1. VARIABLES & GLOBAL RESETS
--------------------------------------------------- */
-:root {
-    /* ... other variables ... */
-    --tabs-height-desktop: 70px; /* Height for bottom tabs on desktop */
-    /* ... other variables ... */
-}
+    <div id="background-static"></div>
+    <div id="background-overlay"></div>
 
-/* ... other global resets ... */
+    <header class="site-header" id="site-header" style="transform: translateY(0px);">
+        <div class="header-content">
+            <div class="firm-title-container">
+                 <a href="index_desktop.html" class="firm-title-link" aria-label="Home - The Kershaw Law Firm P.C.">
+                    <h1 class="firm-name-header">The Kershaw Law Firm P.C.</h1>
+                 </a>
+            </div>
+            <!-- Desktop nav removed from here -->
+        </div>
+    </header>
 
-/* 2. BODY & TYPOGRAPHY BASE
--------------------------------------------------- */
-body {
-    /* ... other body styles ... */
-    padding-top: var(--header-height-desktop);
-    padding-bottom: var(--tabs-height-desktop); /* CRUCIAL: Space for fixed bottom tabs */
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
-}
+    <main class="page-content-wrapper" id="main-content" style="visibility: visible; opacity: 1; transition: opacity 0.3s ease-out;">
+        <section class="hero-section">
+            <div class="hero-content-box animate-on-scroll fade-in-up is-visible" data-animation-delay="200">
+                <h2 class="hero-main-title">H-2A & H-2B Visa Solutions</h2>
+                <p class="hero-subtitle">Professional Guidance for Your Workforce Immigration Needs.</p>
+                <a href="getstarted_desktop.html" class="cta-button hero-cta">
+                    <i class="fa-solid fa-handshake-angle"></i> Request a Consultation
+                </a>
+            </div>
+        </section>
 
-/* ... other styles ... */
+        <section id="about" class="content-section about-section">
+            <div class="section-container">
+                <h2 class="section-title decorative-title animate-on-scroll fade-in-up is-visible">Our Commitment to You</h2>
+                <p class="section-intro-text animate-on-scroll fade-in-up is-visible" data-animation-delay="100">At The Kershaw Law Firm, P.C., we operate with integrity, in-depth legal knowledge, and a strong dedication to our clients. We assist U.S. businesses in managing the H-2A (agricultural) and H-2B (non-agricultural) temporary foreign worker visa programs.</p>
+                <p class="animate-on-scroll fade-in-up is-visible" data-animation-delay="200">Our skilled legal team carefully works through the detailed regulations from the Department of Labor (DOL) and U.S. Citizenship and Immigration Services (USCIS). We prepare your petitions accurately and aim for efficient processing, recognizing that timely workforce solutions are vital for your business.</p>
+                <a href="aboutus_desktop.html" class="secondary-button animate-on-scroll fade-in is-visible" data-animation-delay="300">Discover Our Approach <i class="fa-solid fa-arrow-right-long"></i></a>
+            </div>
+        </section>
 
+        <section id="services-overview" class="content-section services-overview-section">
+            <div class="section-container">
+                <h2 class="section-title decorative-title animate-on-scroll fade-in-up is-visible">Professional H2B & H2A Visa Representation</h2>
+                <p class="section-intro-text animate-on-scroll fade-in-up is-visible" data-animation-delay="100"><b>Our Firm has over 20 Years Experience in H2B & H2A Visa Representation</b></p>
+                <ul class="service-list-detailed">
+                    <li class="animate-on-scroll slide-in-left is-visible" data-animation-delay="150"><i class="fa-solid fa-briefcase"></i><strong>Case Evaluation & Strategy:</strong> We thoroughly assess your needs to develop a tailored visa strategy.</li>
+                    <li class="animate-on-scroll slide-in-left is-visible" data-animation-delay="250"><i class="fa-solid fa-file-signature"></i><strong>Petition Preparation & Filing:</strong> Our team meticulously prepares and files all H-2A/H-2B applications and supporting documents.</li>
+                    <li class="animate-on-scroll slide-in-left is-visible" data-animation-delay="350"><i class="fa-solid fa-users-gear"></i><strong>DOL Compliance Guidance:</strong> We provide clear, step-by-step guidance on Department of Labor recruitment and compliance mandates.</li>
+                    <li class="animate-on-scroll slide-in-left is-visible" data-animation-delay="450"><i class="fa-solid fa-shield-halved"></i><strong>Audit & RFE Support:</strong> Count on our proactive assistance in responding to government audits and Requests for Evidence (RFEs).</li>
+                    <li class="animate-on-scroll slide-in-left is-visible" data-animation-delay="550"><i class="fa-solid fa-clipboard-check"></i><strong>Ongoing Compliance Assistance:</strong> We offer continued support to help your business maintain all H-2 program obligations.</li>
+                </ul>
+                <p class="animate-on-scroll fade-in-up is-visible" data-animation-delay="600">Let our experience simplify your H2B & H2Atemporary labor certification and visa journey.</p>
+                <a href="services_desktop.html" class="secondary-button animate-on-scroll fade-in is-visible" data-animation-delay="650">Full Service Spectrum <i class="fa-solid fa-arrow-right-long"></i></a>
+            </div>
+        </section>
 
-/* 5. HEADER STYLES (Desktop Modified - Simpler)
-   This is for the TOP bar with the firm name, NOT the navigation tabs.
--------------------------------------------------- */
-.site-header {
-    position: fixed; top: 0; left: 0; width: 100%;
-    z-index: 1000;
-    height: var(--header-height-desktop);
-    background-color: rgba(255, 255, 255, 0.92);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    box-shadow: 0 1px 8px var(--color-shadow-medium);
-    border-bottom: 1px solid var(--color-border-subtle);
-    display: flex;
-    align-items: center;
-    padding: 0 calc(var(--spacing-unit) * 4);
-    /* transform: translateY(-100%); */ /* JS handles initial hide/show */
-    transition: transform 0.5s ease-out;
-}
-/* ... other header styles ... */
-.firm-name-header {
-    font-family: var(--font-headings);
-    font-size: clamp(1.8rem, 3.5vw, 2.4rem); /* Adjusted title size */
-    color: var(--color-primary-brand);
-    font-weight: 700;
-    margin: 0;
-    line-height: 1.2;
-    transition: color var(--transition-fast);
-}
+        <section id="testimonials" class="content-section testimonials-section">
+            <div class="section-container">
+                <h2 class="section-title decorative-title animate-on-scroll fade-in-up is-visible">Google Reviews</h2>
+                 <div class="testimonial-carousel-wrapper animate-on-scroll fade-in-scale" data-animation-delay="100">
+                     <div class="testimonial-carousel" style="transform: translateX(0%);">
+                         <!-- Testimonial items have been removed as per request. -->
+                         <!-- If you want to display specific reviews, add them here manually in the same .testimonial-item format -->
+                     </div>
+                     <button class="carousel-control prev" aria-label="Previous testimonial"><i class="fas fa-chevron-left"></i></button>
+                     <button class="carousel-control next" aria-label="Next testimonial"><i class="fas fa-chevron-right"></i></button>
+                     <div class="carousel-dots"></div>
+                 </div>
+                <div class="google-reviews-callout animate-on-scroll fade-in-up" data-animation-delay="300">
+                     <h3 class="google-reviews-title">
+                        <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                        Valued by Our Clients
+                     </h3>
+                     <p>Client satisfaction is central to our work. Read genuine feedback from businesses we've assisted.</p>
+                     <a href="https://g.co/kgs/6jVBWbH" class="google-reviews-button" aria-label="Read Google Reviews for The Kershaw Law Firm P.C." target="_blank" rel="noopener noreferrer">
+                         <i class="fab fa-google"></i> Read Our Google Reviews
+                     </a>
+                </div>
+            </div>
+        </section>
 
+        <section class="content-section final-cta-section">
+            <div class="section-container text-center animate-on-scroll fade-in-up">
+                 <h2 class="section-title decorative-title">Ready to Address Your Workforce Needs?</h2>
+                 <p class="section-intro-text">Contact our experienced legal team to discuss your business's H-2A or H-2B visa requirements. Let's work together to achieve your business objectives.</p>
+                 <a href="contact_desktop.html" class="cta-button large-cta">
+                    <i class="fa-solid fa-handshake-angle"></i> Schedule Consultation
+                </a>
+            </div>
+        </section>
+    </main>
 
-/* ... other styles ... */
+    <!-- Bottom Tabs Navigation Restored -->
+    <nav class="bottom-tabs-nav">
+        <a href="index_desktop.html" class="tab-item active" aria-current="page">
+            <i class="fas fa-home tab-icon"></i><span class="tab-label">Home</span>
+        </a>
+        <a href="aboutus_desktop.html" class="tab-item">
+            <i class="fas fa-building-columns tab-icon"></i><span class="tab-label">About Us</span>
+        </a>
+        <a href="services_desktop.html" class="tab-item">
+            <i class="fas fa-briefcase tab-icon"></i><span class="tab-label">Services</span>
+        </a>
+        <a href="faq_desktop.html" class="tab-item">
+            <i class="fas fa-lightbulb tab-icon"></i><span class="tab-label">FAQ</span>
+        </a>
+        <a href="contact_desktop.html" class="tab-item">
+            <i class="fas fa-envelope-open-text tab-icon"></i><span class="tab-label">Contact</span>
+        </a>
+    </nav>
 
+    <footer class="site-footer">
+        <div class="footer-content">
+            <div class="footer-firm-identity">
+                <p class="footer-firm-name">The Kershaw Law Firm P.C.</p>
+            </div>
+            <div class="footer-social-media">
+                <a href="YOUR_FACEBOOK_LINK_HERE" class="social-icon facebook" aria-label="Visit The Kershaw Law Firm P.C. on Facebook" target="_blank" rel="noopener noreferrer"><i class="fab fa-facebook-f"></i></a>
+                <a href="YOUR_LINKEDIN_LINK_HERE" class="social-icon linkedin" aria-label="Connect with The Kershaw Law Firm P.C. on LinkedIn" target="_blank" rel="noopener noreferrer"><i class="fab fa-linkedin-in"></i></a>
+                <a href="YOUR_X_TWITTER_LINK_HERE" class="social-icon x-twitter" aria-label="Follow The Kershaw Law Firm P.C. on X" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-x-twitter"></i></a>
+                <a href="YOUR_INSTAGRAM_LINK_HERE" class="social-icon instagram" aria-label="Follow The Kershaw Law Firm P.C. on Instagram" target="_blank" rel="noopener noreferrer"><i class="fab fa-instagram"></i></a>
+                <a href="YOUR_TIKTOK_LINK_HERE" class="social-icon tiktok" aria-label="Follow The Kershaw Law Firm P.C. on TikTok" target="_blank" rel="noopener noreferrer"><i class="fab fa-tiktok"></i></a>
+            </div>
+            <nav class="footer-links">
+                <a href="privacy_policy_desktop.html">Privacy Policy</a>
+                <span class="footer-link-separator">•</span>
+                <a href="terms_of_service_desktop.html">Terms of Service</a>
+                 <span class="footer-link-separator">•</span>
+                <a href="sitemap_desktop.html">Sitemap</a>
+            </nav>
+            <p class="footer-copyright">© <span id="current-year">2025</span> The Kershaw Law Firm P.C. All Rights Reserved.</p>
+            <p class="footer-disclaimer">The content provided on this website by The Kershaw Law Firm P.C. is for general informational purposes concerning H-2A and H-2B visa matters and does not constitute legal advice. This is Attorney Advertising. Legal outcomes are dependent on the specific facts and legal circumstances of each individual case.</p>
+        </div>
+    </footer>
 
-/* 11. BOTTOM TABS NAVIGATION (RESTORED & Adapted from Mobile)
-   THIS IS THE "WHITE BAR AT THE BOTTOM" FOR NAVIGATION TABS
--------------------------------------------------- */
-.bottom-tabs-nav {
-    position: fixed; /* CRUCIAL */
-    bottom: 0;       /* CRUCIAL */
-    left: 0;         /* CRUCIAL */
-    width: 100%;     /* CRUCIAL */
-    height: var(--tabs-height-desktop);
-    background-color: rgba(255, 255, 255, 0.96); /* This makes it the "white bar" */
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    box-shadow: 0 -2px 12px var(--color-shadow-medium);
-    border-top: 1px solid var(--color-border-subtle);
-    display: flex;
-    justify-content: space-around;
-    align-items: stretch;
-    z-index: 1000; /* Ensures it's above other content */
-}
-.tab-item {
-    flex-grow: 1; flex-basis: 0;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: calc(var(--spacing-unit) * 0.75) calc(var(--spacing-unit) * 0.75);
-    color: var(--color-text-medium) !important;
-    text-decoration: none !important;
-    font-family: var(--font-body);
-    font-size: 0.85rem;
-    font-weight: 600;
-    text-align: center;
-    transition: color var(--transition-fast), background-color var(--transition-fast);
-    position: relative;
-    -webkit-tap-highlight-color: transparent;
-}
-.tab-icon {
-    font-size: 1.5rem;
-    margin-bottom: calc(var(--spacing-unit) * 0.5);
-    line-height: 1;
-}
-.tab-label { line-height: 1.1; display: block; }
+    <script src="google_reviews.js" defer></script>
+    <script src="index_desktop.js" defer></script>
 
-.tab-item:hover, .tab-item:focus {
-    color: var(--color-primary-brand) !important;
-    background-color: rgba(176, 141, 87, 0.08);
-}
-.tab-item.active {
-    color: var(--color-primary-brand) !important;
-    font-weight: 700;
-}
-.tab-item.active::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 20%; right: 20%;
-    height: 3px;
-    background-color: var(--color-accent-gold);
-    border-radius: 0 0 3px 3px;
-}
-
-/* ... rest of the CSS ... */
+</body>
+</html>
