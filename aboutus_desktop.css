@@ -1,25 +1,19 @@
-/* TABLE OF CONTENTS
---------------------------------------------------
+/* TABLE OF CONTENTS                                  --------------------------------------------------
 1. Variables & Global Resets
 2. Body & Typography Base
 3. Loader Styles
-4. Background Styles
-5. Header Styles
-6. Page Content Wrapper & Section Base
-7. Hero Section (About Us Specific)
+4. Background Styles                                  5. Header Styles
+6. Page Content Wrapper & Section Base                7. Hero Section (About Us Specific)
 8. Content Sections (Mission, Expertise, etc.)
 9. Call to Action (CTA) Sections & Buttons
 10. Mobile Tabs Navigation
-11. Footer Styles
-12. Animation & Utility Classes
+11. Footer Styles                                     12. Animation & Utility Classes
 13. Responsive Adjustments
 -------------------------------------------------- */
-
 /* 1. VARIABLES & GLOBAL RESETS
 -------------------------------------------------- */
 :root {
-    /* Primary Palette */
-    --color-primary-brand: #003366; /* Deep Navy Blue */
+    /* Primary Palette */                                 --color-primary-brand: #003366; /* Deep Navy Blue */
     --color-primary-brand-rgb: 0, 51, 102; /* For RGBA */
     --color-secondary-brand: #0A58A6; /* Brighter Blue */
     --color-accent-gold: #B08D57; /* Sophisticated Gold */
@@ -151,10 +145,9 @@ img {
 
 /* 3. LOADER STYLES
 -------------------------------------------------- */
-/* General loader styles (splash, page transition) */
-.splash-loader, /* ID for splash loader */
-.page-transition-loader, /* Class for page transition loader */
-.loader /* Generic class if needed */ {
+.splash-loader,
+.page-transition-loader,
+.loader {
     position: fixed; top: 0; left: 0; width: 100%; height: 100vh;
     display: flex;
     flex-direction: column;
@@ -168,17 +161,16 @@ img {
     padding: calc(var(--spacing-unit) * 3);
 }
 
-.splash-loader { /* Specific for initial splash */
+.splash-loader {
     background-color: var(--color-loader-bg);
 }
 
-.page-transition-loader { /* Specific for page transitions */
+.page-transition-loader {
     background-color: rgba(var(--color-primary-brand-rgb), 0.25);
     backdrop-filter: blur(2px);
     -webkit-backdrop-filter: blur(2px);
 }
 
-/* Hidden state for all loaders */
 .splash-loader.hidden,
 .page-transition-loader.hidden,
 .loader.hidden {
@@ -188,7 +180,6 @@ img {
     transition: opacity 0.4s ease-out, visibility 0s linear 0.4s;
 }
 
-/* Spinner for page transition loader */
 .page-transition-loader .spinner {
     width: 50px;
     height: 50px;
@@ -201,9 +192,6 @@ img {
     to { transform: rotate(360deg); }
 }
 
-/* Removed .loader-logo-img as the image is removed from HTML */
-
-/* General loader text (if splash becomes text-based like index) */
 .loader-text-wrapper { margin-bottom: calc(var(--spacing-unit) * 4); }
 .loader-main-title {
     font-family: var(--font-headings);
@@ -221,7 +209,6 @@ img {
     font-style: italic;
     margin: 0;
 }
-/* Loading bar (if needed for splash) */
 .loading-bar-container {
     width: 70%;
     max-width: 300px;
@@ -286,11 +273,11 @@ img {
 .header-content {
     width: 100%;
     display: flex;
-    justify-content: flex-start;
+    justify-content: center; /* MODIFIED: Centered header content */
     align-items: center;
+    text-align: center; /* Ensure text within is centered if needed */
 }
 
-/* Updated header title styles to match index_desktop.html */
 .firm-title-container { display: flex; align-items: center; }
 
 .firm-title-link {
@@ -301,13 +288,11 @@ img {
 .firm-title-link:hover .firm-name-header {
     color: var(--color-accent-gold);
 }
-.firm-title-link:hover .firm-name-header .firm-name-pc {
-    color: var(--color-accent-gold); /* Or var(--color-secondary-brand) to keep it blue */
-}
+/* Removed specific hover for .firm-name-pc as it will inherit from .firm-name-header */
 
 .firm-name-header {
     font-family: var(--font-headings);
-    font-size: clamp(1.05rem, 4.2vw, 1.3rem);
+    font-size: clamp(1.3rem, 5vw, 1.65rem); /* MODIFIED: Slightly larger */
     color: var(--color-primary-brand);
     font-weight: 600; /* Cinzel Semibold */
     margin: 0;
@@ -319,12 +304,12 @@ img {
     text-overflow: ellipsis;
 }
 .firm-name-header .firm-name-pc {
-    font-weight: 400; /* Cinzel Regular (lighter) */
-    font-size: 0.85em; /* Slightly smaller */
-    color: var(--color-secondary-brand); /* Brighter Blue for distinction */
-    margin-left: calc(var(--spacing-unit) * 0.35);
+    font-weight: inherit; /* MODIFIED: Inherit from H1 */
+    font-size: 1em;    /* MODIFIED: Same size as H1 */
+    color: inherit; /* MODIFIED: Inherit color from H1 */
+    margin-left: calc(var(--spacing-unit) * 0.45); /* Adjusted spacing */
     vertical-align: baseline;
-    transition: color var(--transition-fast);
+    transition: color var(--transition-fast); /* Will transition with parent */
 }
 
 /* 6. PAGE CONTENT WRAPPER & SECTION BASE
@@ -342,10 +327,10 @@ img {
     position: relative;
 }
 .content-section:nth-child(odd) {
-     background-color: rgba(255, 255, 255, 0.70); /* MODIFIED: Increased transparency */
+     background-color: rgba(255, 255, 255, 0.70);
 }
 .content-section:nth-child(even) {
-     background-color: rgba(248, 249, 250, 0.75); /* MODIFIED: Increased transparency */
+     background-color: rgba(248, 249, 250, 0.75);
 }
 .section-container {
     max-width: var(--content-max-width-capped);
@@ -354,7 +339,7 @@ img {
 }
 .section-title { /* Applies to H3 on this page */
     font-family: var(--font-headings);
-    font-size: clamp(1.8rem, 6vw, 2.6rem); /* Existing size, adjust if H3 needs different */
+    font-size: clamp(1.8rem, 6vw, 2.6rem);
     text-align: center;
     margin-bottom: calc(var(--spacing-unit) * 1.5);
     font-weight: 700;
@@ -385,8 +370,8 @@ img {
 /* 7. HERO SECTION (About Us Specific)
 -------------------------------------------------- */
 .page-hero-banner {
-    min-height: 30vh; /* Adjusted from original template */
-    padding: calc(var(--spacing-unit) * 4) calc(var(--spacing-unit) * 2);
+    min-height: 30vh;
+    padding: calc(var(--spacing-unit) * 5) calc(var(--spacing-unit) * 2); /* Increased padding slightly */
     display: flex;
     align-items: center;
     justify-content: center;
@@ -397,23 +382,40 @@ img {
 }
 .page-hero-banner.about-us-banner {
     background-color: rgba(var(--color-primary-brand-rgb), 0.65);
-    min-height: 25vh; /* Reduced height as content is removed */
+    min-height: auto; /* Let content define height, with padding */
 }
 .page-hero-content {
     background-color: rgba(var(--color-primary-brand-rgb), 0.15);
-    padding: calc(var(--spacing-unit) * 3) calc(var(--spacing-unit) * 2.5);
+    padding: calc(var(--spacing-unit) * 3.5) calc(var(--spacing-unit) * 3); /* Adjusted padding */
     border-radius: var(--border-radius-medium);
     box-shadow: 0 4px 15px rgba(0,0,0,0.15);
-    max-width: calc(var(--content-max-width-capped) - 40px);
+    max-width: calc(var(--content-max-width-capped) - 20px); /* Adjusted max-width */
     width: var(--content-max-width);
     z-index: 1;
-    /* Content (h2, p) removed from HTML, so this div will be empty but styled */
 }
-/* Removed .page-hero-title and .page-hero-subtitle styles as elements are effectively removed */
 
+/* ADDED: Styles for new h2 and p in hero */
+.page-hero-content h2 {
+    font-family: var(--font-headings);
+    font-size: clamp(1.7rem, 5vw, 2.3rem);
+    color: var(--color-text-light);
+    font-weight: 700;
+    margin-bottom: calc(var(--spacing-unit) * 2);
+    text-shadow: 1px 1px 3px rgba(0,0,0,0.3);
+}
+
+.page-hero-content p {
+    font-family: var(--font-body);
+    font-size: clamp(1rem, 3.2vw, 1.1rem);
+    color: rgba(255,255,255,0.95);
+    line-height: 1.65;
+    max-width: 620px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 0;
+}
 
 /* 8. CONTENT SECTIONS (Mission, Expertise, etc.) */
-/* Styles for icon lists, approach grid, values grid are specific to aboutus page */
 .icon-list {
     list-style: none;
     padding-left: 0;
@@ -433,15 +435,15 @@ img {
     text-align: center;
 }
 
-.approach-section { background-color: rgba(255, 255, 255, 0.70) !important; } /* Ensure consistent transparency */
+.approach-section { background-color: rgba(255, 255, 255, 0.70) !important; }
 .approach-grid {
     display: grid;
-    grid-template-columns: 1fr; /* Single column for mobile */
+    grid-template-columns: 1fr;
     gap: calc(var(--spacing-unit) * 3);
     margin-top: calc(var(--spacing-unit) * 3);
 }
 .approach-item {
-    background-color: var(--color-bg-light); /* White background for items */
+    background-color: var(--color-bg-light);
     padding: calc(var(--spacing-unit) * 3);
     border-radius: var(--border-radius-medium);
     box-shadow: var(--color-shadow-medium);
@@ -463,7 +465,7 @@ img {
 .commitment-section { background-color: rgba(248, 249, 250, 0.75) !important; }
 .values-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); /* Responsive columns */
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
     gap: calc(var(--spacing-unit) * 2.5);
     margin-top: calc(var(--spacing-unit) * 3);
 }
@@ -620,24 +622,22 @@ img {
     font-size: 1.6rem;
     margin: 0 calc(var(--spacing-unit) * 1.25);
     transition: transform var(--transition-fast);
-    display: inline-block; /* For transform */
+    display: inline-block;
     text-decoration: none !important;
 }
-.footer-social-media a i { /* Target the icon directly for color */
-    transition: color var(--transition-fast); /* Keep if there's any other interaction changing color */
+.footer-social-media a i {
+    transition: color var(--transition-fast);
 }
 
-/* Social icons always their brand color */
 .footer-social-media a.facebook i { color: #1877F2 !important; }
 .footer-social-media a.linkedin i { color: #0A66C2 !important; }
-.footer-social-media a.x-twitter i { color: #000000 !important; }
+.footer-social-media a.x-twitter i { color: #FFFFFF !important; } /* X icon white */
 .footer-social-media a.instagram i { color: #E1306C !important; }
-.footer-social-media a.tiktok i { color: #EE1D52 !important; }
+.footer-social-media a.tiktok i { color: #EE1D52 !important; } /* Assuming this was intended for pink/red, if should be white too, change to #FFFFFF */
 
 .footer-social-media a:hover,
 .footer-social-media a:focus {
     transform: scale(1.15);
-    /* Icon color should not change on <a> hover due to !important on specific icon rules */
 }
 
 .footer-links {
@@ -703,7 +703,7 @@ img {
         --header-height-mobile: 70px;
         --tabs-height-mobile: 65px;
     }
-    .firm-name-header { font-size: clamp(1.1rem, 4vw, 1.35rem); }
+    .firm-name-header { font-size: clamp(1.35rem, 4.5vw, 1.7rem); } /* Adjusted responsive size */
     .tab-icon { font-size: 1.45rem; }
     .tab-label { font-size: 0.75rem; }
 }
@@ -715,16 +715,17 @@ img {
         --content-max-width-capped: 760px;
     }
     .section-title { font-size: clamp(2rem, 5.5vw, 2.8rem); }
-    /* .page-hero-title { font-size: clamp(2.1rem, 6.5vw, 3rem); } - Removed */
-    /* .page-hero-subtitle { font-size: clamp(1.1rem, 3.5vw, 1.3rem); } - Removed */
+    .page-hero-content h2 { font-size: clamp(1.8rem, 5.5vw, 2.4rem); } /* Responsive hero h2 */
+    .page-hero-content p { font-size: clamp(1.05rem, 3.5vw, 1.15rem); } /* Responsive hero p */
 
     .approach-grid {
-        grid-template-columns: repeat(2, 1fr); /* Two columns for tablet */
+        grid-template-columns: repeat(2, 1fr);
     }
 }
 
-@media (min-width: 768px) { /* Larger tablets / small desktops */
+@media (min-width: 768px) {
     .values-grid {
-         grid-template-columns: repeat(4, 1fr); /* Four columns for values */
+         grid-template-columns: repeat(4, 1fr);
     }
+     .firm-name-header { font-size: clamp(1.4rem, 4vw, 1.75rem); } /* Further refinement for larger screens */
 }
