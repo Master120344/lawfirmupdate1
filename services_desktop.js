@@ -41,8 +41,6 @@ function initPageLoad() {
     mainContent.style.visibility = 'hidden';
     mainContent.style.opacity = '0';
 
-    // document.documentElement.style.setProperty('--loader-display-duration', `${INITIAL_SPLASH_DURATION_MS / 1000}s`); // Not needed for text splash
-
     setTimeout(() => {
         if (splashLoader) {
             splashLoader.classList.add('hidden');
@@ -113,13 +111,10 @@ window.addEventListener('pageshow', (event) => {
             setTimeout(window.initScrollAnimations, 100);
         }
     } else {
-        // For fresh loads, initPageLoad handles initial splash and main content visibility.
-        // This ensures main content is hidden if splash is still (briefly) visible.
         if (mainContent && splashLoader && !splashLoader.classList.contains('hidden')) {
             mainContent.style.visibility = 'hidden';
             mainContent.style.opacity = '0';
         }
-        // Note: initPageLoad is primary controller for fresh load main content appearance.
     }
 });
 
@@ -224,7 +219,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     isHeaderHidden = true;
                 }
             } else {
-                if (isHeaderHidden || nowScrollTop <= headerHeight / 2 ) {
+                if (isHeaderHidden || nowScrollTop <= headerHeight / 2 ) { // Show a bit sooner on scroll up
                     header.style.transform = 'translateY(0)';
                     isHeaderHidden = false;
                 }
