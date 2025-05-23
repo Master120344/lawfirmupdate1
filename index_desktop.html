@@ -2,15 +2,19 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>The Kershaw Law Firm P.C. - Desktop</title>
     <meta name="description" content="The Kershaw Law Firm P.C. provides dedicated legal services for H-2A and H-2B work visas. Focused on guiding businesses through complex immigration law. Desktop optimized site.">
     <link rel="stylesheet" href="index_desktop.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=EB+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer">
     <!-- Add favicon links here -->
+    <!-- <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="manifest" href="/site.webmanifest"> -->
 </head>
 <body class="loaded">
     <div id="splash-loader" class="splash-loader hidden">
@@ -25,14 +29,22 @@
     <div id="background-static"></div>
     <div id="background-overlay"></div>
 
-    <header class="site-header" id="site-header" style="transform: translateY(-80px);">
+    <header class="site-header" id="site-header" style="transform: translateY(0px);">
         <div class="header-content">
             <div class="firm-title-container">
                  <a href="index_desktop.html" class="firm-title-link" aria-label="Home - The Kershaw Law Firm P.C.">
                     <h1 class="firm-name-header">The Kershaw Law Firm P.C.</h1>
                  </a>
             </div>
-            <!-- Desktop nav removed from here -->
+            <nav class="desktop-nav" aria-label="Main navigation">
+                <ul class="nav-list">
+                    <li><a href="index_desktop.html" class="nav-link">Home</a></li>
+                    <li><a href="aboutus_desktop.html" class="nav-link">About Us</a></li>
+                    <li><a href="services_desktop.html" class="nav-link">Services</a></li>
+                    <li><a href="faq_desktop.html" class="nav-link">FAQ</a></li>
+                    <li><a href="contact_desktop.html" class="nav-link">Contact</a></li>
+                </ul>
+            </nav>
         </div>
     </header>
 
@@ -59,7 +71,7 @@
         <section id="services-overview" class="content-section services-overview-section">
              <div class="section-container">
                 <h2 class="section-title decorative-title animate-on-scroll fade-in-up is-visible">Professional H2B & H2A Visa Representation</h2>
-                <p class="section-intro-text animate-on-scroll fade-in-up is-visible" data-animation-delay="100"><b>Our Firm has over 20 Years Experience in H2B & H2A Visa Representation<b></b></b></p>
+                <p class="section-intro-text animate-on-scroll fade-in-up is-visible" data-animation-delay="100"><b>Our Firm has over 20 Years Experience in H2B & H2A Visa Representation</b></p>
                 <ul class="service-list-detailed">
                     <li class="animate-on-scroll slide-in-left is-visible" data-animation-delay="150"><i class="fa-solid fa-briefcase"></i><strong>Case Evaluation & Strategy:</strong> We thoroughly assess your needs to develop a tailored visa strategy.</li>
                     <li class="animate-on-scroll slide-in-left is-visible" data-animation-delay="250"><i class="fa-solid fa-file-signature"></i><strong>Petition Preparation & Filing:</strong> Our team meticulously prepares and files all H-2A/H-2B applications and supporting documents.</li>
@@ -77,7 +89,8 @@
                 <h2 class="section-title decorative-title animate-on-scroll fade-in-up is-visible">Google Reviews</h2>
                  <div class="testimonial-carousel-wrapper animate-on-scroll fade-in-scale" data-animation-delay="100">
                      <div class="testimonial-carousel" style="transform: translateX(0%);">
-                         <!-- Testimonial items -->
+                         <!-- Testimonial items have been removed as per request. -->
+                         <!-- If you want to display specific reviews, add them here manually in the same .testimonial-item format -->
                      </div>
                      <button class="carousel-control prev" aria-label="Previous testimonial"><i class="fas fa-chevron-left"></i></button>
                      <button class="carousel-control next" aria-label="Next testimonial"><i class="fas fa-chevron-right"></i></button>
@@ -107,24 +120,6 @@
         </section>
     </main>
 
-    <nav class="bottom-tabs"> <!-- Changed class name for clarity, can be 'mobile-tabs' if preferred -->
-        <a href="index_desktop.html" class="tab-item active" aria-current="page">
-            <i class="fas fa-home tab-icon"></i><span class="tab-label">Home</span>
-        </a>
-        <a href="aboutus_desktop.html" class="tab-item">
-            <i class="fas fa-building-columns tab-icon"></i><span class="tab-label">About Us</span>
-        </a>
-        <a href="services_desktop.html" class="tab-item">
-            <i class="fas fa-briefcase tab-icon"></i><span class="tab-label">Services</span>
-        </a>
-        <a href="faq_desktop.html" class="tab-item">
-            <i class="fas fa-lightbulb tab-icon"></i><span class="tab-label">FAQ</span>
-        </a>
-        <a href="contact_desktop.html" class="tab-item">
-            <i class="fas fa-envelope-open-text tab-icon"></i><span class="tab-label">Contact</span>
-        </a>
-    </nav>
-
     <footer class="site-footer">
         <div class="footer-content">
             <div class="footer-firm-identity">
@@ -149,8 +144,8 @@
         </div>
     </footer>
 
-    <script src="google_reviews.js" defer=""></script>
-    <script src="index_desktop.js" defer=""></script>
+    <script src="google_reviews.js" defer></script>
+    <script src="index_desktop.js" defer></script>
 
 </body>
 </html>
