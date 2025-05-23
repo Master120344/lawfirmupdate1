@@ -866,7 +866,7 @@ body.loaded .site-header {
 /* Apply brand colors directly and ALWAYS */
 .footer-social-media a.facebook i { color: #1877F2 !important; }
 .footer-social-media a.linkedin i { color: #0A66C2 !important; }
-.footer-social-media a.x-twitter i { color: #000000 !important; } /* X Black. For white: #FFFFFF */
+.footer-social-media a.x-twitter i { color: #FFFFFF !important; } /* X White (CHANGED FROM BLACK) */
 .footer-social-media a.instagram i { color: #E1306C !important; }
 .footer-social-media a.tiktok i { color: #EE1D52 !important; }
 
