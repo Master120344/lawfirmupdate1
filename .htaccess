@@ -1,0 +1,86 @@
+# Apache Configuration File
+# Correct filename: .htaccess
+
+# --- Basic Security and Engine Setup ---
+# Prevent directory listing
+Options -Indexes
+# Turn on the rewriting engine
+RewriteEngine On
+
+# --- Define RewriteBase ---
+# Since your files are in /public_html/kershawlaw/ and kershawlaw.com likely points here,
+# RewriteBase / is appropriate.
+RewriteBase /
+
+# --- Security: Block access to .git directory and other sensitive files ---
+RewriteRule ^\.git - [F,L]
+RewriteRule ^LICENSE$ - [F,L] # If you don't want LICENSE file to be public
+
+# --- Force HTTPS and Canonical Hostname (remove www) ---
+RewriteCond %{HTTPS} off [OR]
+RewriteCond %{HTTP_HOST} ^www\. [NC]
+RewriteCond %{HTTP_HOST} ^(?:www\.)?(.+)$ [NC]
+RewriteRule ^ https://%1%{REQUEST_URI} [L,R=301,NE]
+
+# --- Directory Index for the root path / ---
+# This serves index.html (from above), which then uses JavaScript to redirect
+# to index_desktop.html or index_mobile.html.
+# The files index_desktop.html and index_mobile.html will then be served directly by their names.
+DirectoryIndex index.html
+
+# --- External Redirects for .html files ---
+# If someone types yoursite.com/about_desktop.html, redirect to yoursite.com/about
+# This does NOT apply to index_desktop.html or index_mobile.html for the homepage.
+RewriteCond %{THE_REQUEST} \s/+(.+?)_(desktop|mobile)\.html[\s?] [NC]
+RewriteCond %1 !^index$ [NC] # Ensure the base name (captured in %1) is not "index"
+RewriteRule ^(.+?)_(desktop|mobile)\.html$ /$1 [R=301,L,NE]
+
+
+# --- Internal Rewrites for Clean URLs to Device-Specific Files ---
+# These rules handle requests for "clean" URLs like /contact or /aboutus
+
+# Common conditions for the following rewrite rules:
+# 1. The request is not for an existing file.
+RewriteCond %{REQUEST_FILENAME} !-f
+# 2. The request is not for an existing directory.
+RewriteCond %{REQUEST_FILENAME} !-d
+# 3. The request URI is not the root / (handled by DirectoryIndex)
+#    and not specifically /index (which should also effectively be the root via DirectoryIndex).
+RewriteCond %{REQUEST_URI} !^/$
+RewriteCond %{REQUEST_URI} !^/index/?$ [NC]
+
+# --- MOBILE USER AGENT DETECTED ---
+RewriteCond %{HTTP_USER_AGENT} (android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|blazer|compal|elaine|fennec|hiptop|iemobile|ip(hone|od)|iris|kindle|lge\ |maemo|midp|mmp|mobile.+firefox|netfront|opera\ m(ob|in)i|palm(\ os)?|phone|p(ixi|rim)|plucker|pocket|psp|series(4|6)0|symbian|treo|up\.(browser|link)|vodafone|wap|windows\ ce|xda|xiino|android|ipad|playbook|silk [NC]
+
+# Attempt 1 (Mobile): Serve <pagename>_mobile.html if it exists
+RewriteCond %{DOCUMENT_ROOT}/$1_mobile.html -f
+RewriteRule ^([^/.]+)$ $1_mobile.html [L]
+
+# Attempt 2 (Mobile Fallback): If <pagename>_mobile.html doesn't exist, serve <pagename>_desktop.html for mobile user
+RewriteCond %{HTTP_USER_AGENT} (android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|blazer|compal|elaine|fennec|hiptop|iemobile|ip(hone|od)|iris|kindle|lge\ |maemo|midp|mmp|mobile.+firefox|netfront|opera\ m(ob|in)i|palm(\ os)?|phone|p(ixi|rim)|plucker|pocket|psp|series(4|6)0|symbian|treo|up\.(browser|link)|vodafone|wap|windows\ ce|xda|xiino|android|ipad|playbook|silk [NC] # Re-check UA as it's a new rule block context
+RewriteCond %{DOCUMENT_ROOT}/$1_mobile.html !-f
+RewriteCond %{DOCUMENT_ROOT}/$1_desktop.html -f
+RewriteRule ^([^/.]+)$ $1_desktop.html [L]
+# --- END MOBILE USER AGENT ---
+
+
+# --- DESKTOP USER AGENT (OR FALLBACK IF MOBILE NOT CAUGHT/FILES NOT FOUND) ---
+# Common conditions (repeated for this new context if mobile rules were skipped):
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_URI} !^/$
+RewriteCond %{REQUEST_URI} !^/index/?$ [NC]
+
+# Attempt 3 (Desktop): Serve <pagename>_desktop.html if it exists
+RewriteCond %{DOCUMENT_ROOT}/$1_desktop.html -f
+RewriteRule ^([^/.]+)$ $1_desktop.html [L]
+
+# Attempt 4 (Desktop Fallback): If <pagename>_desktop.html doesn't exist, serve <pagename>_mobile.html
+# This handles cases like "privacy_policy" where only privacy_policy_mobile.html exists.
+RewriteCond %{REQUEST_FILENAME} !-f # Re-assert conditions for this specific rule
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_URI} !^/$
+RewriteCond %{REQUEST_URI} !^/index/?$ [NC]
+RewriteCond %{DOCUMENT_ROOT}/$1_desktop.html !-f
+RewriteCond %{DOCUMENT_ROOT}/$1_mobile.html -f
+RewriteRule ^([^/.]+)$ $1_mobile.html [L]
