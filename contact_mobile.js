@@ -3,7 +3,7 @@
 // --- Strict Mode & Global Constants ---
 "use strict";
 const INITIAL_SPLASH_DURATION_MS = 100;
-const PAGE_TRANSITION_ANIMATION_MS = 300;
+const PAGE_TRANSITION_ANIMATION_MS = 250; // Slightly faster for mobile
 const PHP_SCRIPT_URL = 'send_email.php'; // URL for the PHP mailer script
 
 // --- Utility Functions ---
@@ -30,7 +30,7 @@ function initPageLoad() {
     const mainContent = document.getElementById('main-content');
 
     if (!splashLoader || !bodyElement || !mainContent) {
-        console.warn("Essential elements for page load not found on Contact page.");
+        console.warn("Essential elements for page load not found on Contact (Mobile) page.");
         if (bodyElement) bodyElement.classList.add('loaded');
         if (mainContent) {
              mainContent.style.visibility = 'visible';
@@ -60,7 +60,7 @@ window.addEventListener('load', initPageLoad);
 window.initScrollAnimations = function() {
     const animatedElements = document.querySelectorAll('.animate-on-scroll');
     if (!animatedElements.length || !('IntersectionObserver' in window)) return;
-    const observerOptions = { root: null, rootMargin: '0px 0px -10% 0px', threshold: 0.1 };
+    const observerOptions = { root: null, rootMargin: '0px 0px -8% 0px', threshold: 0.1 }; // Adjusted rootMargin for mobile
     const animationObserver = new IntersectionObserver((entries, observer) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
@@ -123,14 +123,18 @@ document.addEventListener('DOMContentLoaded', () => {
                 const dest = link.getAttribute('href');
                 if (!dest || dest.startsWith('javascript:')) return;
                 try {
-                    const curHost = window.location.hostname; const destUrl = new URL(dest, window.location.href);
+                    const curHost = window.location.hostname;
+                    const destUrl = new URL(dest, window.location.href);
                     if (destUrl.hostname !== curHost && destUrl.hostname !== "") return;
                 } catch (error) { return; }
+                
                 const curPath = window.location.pathname.replace(/\/$/, "");
                 const destPathObj = new URL(dest, window.location.href);
                 const destPath = destPathObj.pathname.replace(/\/$/, "");
+
                 if (destPath === curPath && destPathObj.hash) return;
                 if (destPath === curPath && !destPathObj.hash) { e.preventDefault(); return; }
+
                 e.preventDefault();
                 mainContent.style.transition = `opacity ${PAGE_TRANSITION_ANIMATION_MS / 1000}s ease-out`;
                 mainContent.style.opacity = '0';
@@ -144,33 +148,68 @@ document.addEventListener('DOMContentLoaded', () => {
     // 2. Footer Year
     function updateFooterYear() {
         const yearSpan = document.getElementById('current-year');
-        if (yearSpan) yearSpan.textContent = '2025'; // As requested
+        if (yearSpan) {
+            yearSpan.textContent = new Date().getFullYear();
+        }
     }
     updateFooterYear();
 
     // 3. Scroll Animations
     if (typeof window.initScrollAnimations === 'function') window.initScrollAnimations();
 
-    // 4. Smooth Scroll (if anchors are used)
-    function initSmoothScroll() { /* ... (keep existing or implement as needed) ... */ }
+    // 4. Smooth Scroll
+    function initSmoothScroll() {
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                const targetId = this.getAttribute('href');
+                if (targetId.length > 1 && targetId.startsWith('#')) {
+                    try {
+                        const targetElement = document.querySelector(targetId);
+                        if (targetElement) {
+                            e.preventDefault();
+                            const header = document.getElementById('site-header');
+                            // Use mobile header height from CSS variable, fallback if not set
+                            const headerOffset = header ? header.offsetHeight : (parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--header-height-mobile').replace('px', '')) || 60);
+                            const elementPosition = targetElement.getBoundingClientRect().top;
+                            const offsetPosition = elementPosition + window.pageYOffset - headerOffset - 15; // 15px buffer for mobile
+                            window.scrollTo({ top: offsetPosition, behavior: "smooth" });
+                        }
+                    } catch (error) { console.warn(`Smooth scroll target not found or invalid: ${targetId}`); }
+                }
+            });
+        });
+    }
     initSmoothScroll();
 
-    // 5. Sticky Header
+    // 5. Sticky Header Behavior
     function initStickyHeaderBehavior() {
         const header = document.getElementById('site-header');
         if (!header) return;
-        let lastScrollTop = 0; const delta = 10; const headerHeight = header.offsetHeight; let isHidden = false;
+
+        let lastScrollTop = 0;
+        const delta = 5; // Smaller delta for more responsive hide/show on mobile
+        const headerHeight = header.offsetHeight;
+
         const handleScroll = debounce(() => {
             const nowST = window.pageYOffset || document.documentElement.scrollTop;
-            if (Math.abs(lastScrollTop - nowST) <= delta) return;
+
+            if (Math.abs(lastScrollTop - nowST) <= delta && nowST > 0) return;
+
             if (nowST > lastScrollTop && nowST > headerHeight) {
-                if (!isHidden) { header.style.transform = `translateY(-${headerHeight}px)`; isHidden = true; }
+                header.classList.add('scrolled-down');
             } else {
-                if (isHidden || nowST <= headerHeight / 2) { header.style.transform = 'translateY(0)'; isHidden = false; }
+                 if (nowST <= lastScrollTop || nowST <= headerHeight / 2 ) { // Show if scrolling up or near top
+                     header.classList.remove('scrolled-down');
+                 }
             }
             lastScrollTop = nowST <= 0 ? 0 : nowST;
-        }, 30);
+        }, 25); // Slightly quicker debounce for mobile
+
         window.addEventListener('scroll', handleScroll, { passive: true });
+        // Ensure header is visible on initial load if at top
+        if (window.pageYOffset <= headerHeight / 2) {
+             header.classList.remove('scrolled-down');
+        }
     }
     initStickyHeaderBehavior();
 
@@ -180,29 +219,17 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!phoneInput) return;
 
         phoneInput.addEventListener('input', (e) => {
-            let input = e.target.value.replace(/\D/g, ''); // Remove all non-digits
-            
-            // Format: (XXX) XXX-XXXX or XXX-XXX-XXXX as per user's "555-222-5555" example
-            // Let's go with XXX-XXX-XXXX for simplicity as requested in "555-222-5555"
-            
+            let input = e.target.value.replace(/\D/g, '');
             let formattedInput = '';
-            if (input.length > 0) {
-                formattedInput = input.substring(0, 3);
-            }
-            if (input.length > 3) {
-                formattedInput += '-' + input.substring(3, 6);
-            }
-            if (input.length > 6) {
-                formattedInput += '-' + input.substring(6, 10); // Max 10 digits
-            }
-            
+            if (input.length > 0) formattedInput = input.substring(0, 3);
+            if (input.length > 3) formattedInput += '-' + input.substring(3, 6);
+            if (input.length > 6) formattedInput += '-' + input.substring(6, 10);
             e.target.value = formattedInput;
         });
     }
     initPhoneFormatting();
 
-
-    // 7. Contact Form Submission Handling
+    // 7. Contact Form Submission Handling & Live Validation
     function initContactForm() {
         const form = document.getElementById('contact-form');
         const thankYouMessageDiv = document.getElementById('thank-you-message');
@@ -213,52 +240,94 @@ document.addEventListener('DOMContentLoaded', () => {
         const submitButtonTextSpan = submitButton ? submitButton.querySelector('.submit-button-text') : null;
         const formErrorMessageDiv = document.getElementById('form-error-message');
         const thankYouBackendMessage = document.getElementById('thank-you-backend-message');
+        const messageTextarea = document.getElementById('contact-message');
+        const charCountDisplay = document.getElementById('message-char-count');
 
-
-        if (!form || !thankYouMessageDiv || !userNameSpan || !nameInput || !resetButton || !submitButton || !submitButtonTextSpan || !formErrorMessageDiv || !thankYouBackendMessage) {
-            console.warn('Contact form elements not found. Submission handling will not work.');
+        if (!form || !thankYouMessageDiv || !userNameSpan || !nameInput || !resetButton || !submitButton || !submitButtonTextSpan || !formErrorMessageDiv || !thankYouBackendMessage || !messageTextarea || !charCountDisplay) {
+            console.warn('Contact form elements (Mobile) not found. Submission/validation/char count might not work fully.');
             return;
         }
 
+        // Character Count for Textarea
+        if (messageTextarea && charCountDisplay) {
+            const maxLength = parseInt(messageTextarea.getAttribute('maxlength'), 10);
+            const updateCharCount = () => {
+                const currentLength = messageTextarea.value.length;
+                charCountDisplay.textContent = `${currentLength}/${maxLength}`;
+                if (currentLength > maxLength) {
+                    charCountDisplay.style.color = 'red';
+                    messageTextarea.classList.add('input-error');
+                } else if (currentLength > maxLength * 0.9) {
+                    charCountDisplay.style.color = 'orange';
+                } else {
+                    charCountDisplay.style.color = 'var(--color-text-medium)';
+                }
+            };
+            messageTextarea.addEventListener('input', updateCharCount);
+            updateCharCount();
+        }
+
+        // Live Input Validation Logic
+        function liveValidateInput(inputElement) {
+            inputElement.classList.remove('input-error', 'input-valid');
+            let isValid = true;
+            const value = inputElement.value.trim();
+
+            if (inputElement.required && !value) isValid = false;
+            if (inputElement.type === 'email' && value && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) isValid = false;
+            if (inputElement.tagName === 'SELECT' && inputElement.required && !value) isValid = false;
+            if (inputElement.tagName === 'TEXTAREA' && inputElement.maxLength > 0 && value.length > inputElement.maxLength) isValid = false;
+            
+            const isTouched = inputElement.dataset.touched === "true";
+
+            if (!value && !inputElement.required) return;
+
+            if (isTouched || form.dataset.submitted === "true") {
+                if (isValid && value) {
+                     inputElement.classList.add('input-valid');
+                } else if (!isValid && (inputElement.required || value)) {
+                     inputElement.classList.add('input-error');
+                }
+            }
+        }
+
+        const formInputsForLiveValidation = form.querySelectorAll('input, select, textarea');
+        formInputsForLiveValidation.forEach(input => {
+            input.addEventListener('blur', () => {
+                input.dataset.touched = "true";
+                liveValidateInput(input);
+            });
+            if (input.type === 'email' || input.tagName === 'TEXTAREA') {
+                input.addEventListener('input', () => liveValidateInput(input));
+            }
+        });
+
         form.addEventListener('submit', async function(event) {
             event.preventDefault();
+            form.dataset.submitted = "true";
             
-            // Clear previous errors
             formErrorMessageDiv.style.display = 'none';
             formErrorMessageDiv.textContent = '';
-            form.querySelectorAll('.input-error').forEach(el => el.classList.remove('input-error'));
 
-            // Basic client-side validation (HTML5 'required' helps, but this is more explicit)
-            let isValid = true;
-            const requiredFields = form.querySelectorAll('[required]');
-            requiredFields.forEach(input => {
-                if (!input.value.trim()) {
-                    isValid = false;
-                    input.classList.add('input-error');
-                } else {
-                    input.classList.remove('input-error');
-                }
-                 // Specific email validation
-                if (input.type === 'email' && input.value.trim() && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(input.value.trim())) {
-                    isValid = false;
-                    input.classList.add('input-error');
-                }
+            let isFormFullyValid = true;
+            formInputsForLiveValidation.forEach(input => {
+                liveValidateInput(input);
+                if (input.classList.contains('input-error')) isFormFullyValid = false;
             });
 
-            if (!isValid) {
+            if (!isFormFullyValid) {
                 formErrorMessageDiv.textContent = 'Please fill out all highlighted required fields correctly.';
                 formErrorMessageDiv.style.display = 'block';
-                const firstInvalid = form.querySelector('.input-error, [required]:invalid, [required]:placeholder-shown');
-                if(firstInvalid) firstInvalid.focus();
+                const firstInvalid = form.querySelector('.input-error');
+                if (firstInvalid) firstInvalid.focus();
+                delete form.dataset.submitted;
                 return;
             }
 
-            // Disable button and show sending state
             submitButton.disabled = true;
             submitButtonTextSpan.textContent = 'Sending...';
             const originalButtonIconClass = submitButton.querySelector('i').className;
             submitButton.querySelector('i').className = 'fas fa-spinner fa-spin';
-
 
             const formData = {
                 name: form.elements['name'].value,
@@ -271,46 +340,42 @@ document.addEventListener('DOMContentLoaded', () => {
             try {
                 const response = await fetch(PHP_SCRIPT_URL, {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Accept': 'application/json'
-                    },
+                    headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
                     body: JSON.stringify(formData)
                 });
-
                 const result = await response.json();
 
                 if (response.ok && result.status === 'success') {
-                    if (nameInput.value.trim()) {
-                        userNameSpan.textContent = nameInput.value.trim().split(' ')[0];
-                    } else {
-                        userNameSpan.textContent = "Valued Client";
-                    }
-                    thankYouBackendMessage.textContent = result.message || 'Your message has been sent successfully.';
+                    userNameSpan.textContent = nameInput.value.trim() ? nameInput.value.trim().split(' ')[0] : "Valued Client";
+                    thankYouBackendMessage.textContent = result.message || 'Your message has been successfully sent.';
                     form.style.display = 'none';
                     thankYouMessageDiv.style.display = 'block';
-                    setTimeout(() => {
-                        thankYouMessageDiv.classList.add('visible');
-                    }, 10);
-
-                    const headerHeight = document.getElementById('site-header')?.offsetHeight || 70;
-                    const messageTop = thankYouMessageDiv.getBoundingClientRect().top + window.pageYOffset - headerHeight - 20;
+                    setTimeout(() => thankYouMessageDiv.classList.add('visible'), 10);
+                    const header = document.getElementById('site-header');
+                    const headerOffset = header ? header.offsetHeight : (parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--header-height-mobile').replace('px', '')) || 60);
+                    const messageTop = thankYouMessageDiv.getBoundingClientRect().top + window.pageYOffset - headerOffset - 15;
                     window.scrollTo({ top: messageTop, behavior: 'smooth' });
                 } else {
-                    // Handle server-side validation errors or other errors
                     formErrorMessageDiv.textContent = result.message || 'An unexpected error occurred. Please try again.';
                     formErrorMessageDiv.style.display = 'block';
+                    const header = document.getElementById('site-header');
+                    const headerOffset = header ? header.offsetHeight : (parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--header-height-mobile').replace('px', '')) || 60);
+                    const errorMsgTop = formErrorMessageDiv.getBoundingClientRect().top + window.pageYOffset - headerOffset - 15;
+                    window.scrollTo({ top: errorMsgTop, behavior: 'smooth' });
                 }
-
             } catch (error) {
-                console.error('Form submission error:', error);
+                console.error('Form submission error (Mobile):', error);
                 formErrorMessageDiv.textContent = 'A network error occurred. Please check your connection and try again.';
                 formErrorMessageDiv.style.display = 'block';
+                const header = document.getElementById('site-header');
+                const headerOffset = header ? header.offsetHeight : (parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--header-height-mobile').replace('px', '')) || 60);
+                const errorMsgTop = formErrorMessageDiv.getBoundingClientRect().top + window.pageYOffset - headerOffset - 15;
+                window.scrollTo({ top: errorMsgTop, behavior: 'smooth' });
             } finally {
-                // Re-enable button and restore text/icon
                 submitButton.disabled = false;
                 submitButtonTextSpan.textContent = 'Send Inquiry';
                 submitButton.querySelector('i').className = originalButtonIconClass;
+                delete form.dataset.submitted;
             }
         });
 
@@ -318,11 +383,20 @@ document.addEventListener('DOMContentLoaded', () => {
             thankYouMessageDiv.classList.remove('visible');
             thankYouMessageDiv.style.display = 'none';
             form.reset(); 
-            form.querySelectorAll('.input-error').forEach(el => el.classList.remove('input-error'));
+            formInputsForLiveValidation.forEach(el => {
+                el.classList.remove('input-error', 'input-valid');
+                delete el.dataset.touched;
+            });
+            delete form.dataset.submitted;
             formErrorMessageDiv.style.display = 'none';
             formErrorMessageDiv.textContent = '';
             form.style.display = 'block';
-            if(nameInput) nameInput.focus();
+            if (charCountDisplay && messageTextarea) {
+                 const maxLength = parseInt(messageTextarea.getAttribute('maxlength'), 10);
+                 charCountDisplay.textContent = `0/${maxLength}`;
+                 charCountDisplay.style.color = 'var(--color-text-medium)';
+            }
+            if (nameInput) nameInput.focus();
         });
     }
     initContactForm();
