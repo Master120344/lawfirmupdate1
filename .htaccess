@@ -2,20 +2,18 @@
 # Correct filename: .htaccess
 
 # --- Basic Security and Engine Setup ---
-Options -Indexes
+# Options -Indexes  # <-- IMPORTANT: Temporarily commented out. This can cause 500 if not allowed by AllowOverride.
+#                   # Try uncommenting ONLY if the site works without it first.
 RewriteEngine On
 
 # --- Define RewriteBase ---
-# If kershawlaw.com points directly to /public_html/kershawlaw/ then / is correct.
-# If kershawlaw.com points to public_html and your site is in a 'kershawlaw' subdir,
-# and you access via kershawlaw.com/ (not kershawlaw.com/kershawlaw/), then / is still correct.
-# If you access via kershawlaw.com/kershawlaw/, then RewriteBase /kershawlaw/ would be needed.
-# Assuming kershawlaw.com root IS /public_html/kershawlaw/
+# Assuming kershawlaw.com root IS /public_html/kershawlaw/ (or your actual web root for the domain)
 RewriteBase /
 
 # --- Security: Block access to .git directory and other sensitive files ---
-RewriteRule ^\.git - [F,L]
-RewriteRule ^LICENSE$ - [F,L]
+# Ensure these paths are relative to the RewriteBase if they are not at the true root.
+RewriteRule ^\.git/? - [F,L,NC]
+RewriteRule ^LICENSE(\.txt)?$ - [F,L,NC]
 
 # --- Force HTTPS and Canonical Hostname (remove www) ---
 RewriteCond %{HTTPS} off [OR]
@@ -24,56 +22,51 @@ RewriteCond %{HTTP_HOST} ^(?:www\.)?(.+)$ [NC]
 RewriteRule ^ https://%1%{REQUEST_URI} [L,R=301,NE]
 
 # --- Directory Index for the root path / ---
+# This tells Apache to serve index.html when a directory (like the root /) is requested.
+# Your index.html will then do the client-side JS redirect to index_desktop.html or index_mobile.html
 DirectoryIndex index.html
 
-# --- External Redirects for .html files ---
-# If someone types yoursite.com/about_desktop.html, redirect to yoursite.com/about
-# Exclude index_desktop.html and index_mobile.html from this type of redirect
-RewriteCond %{THE_REQUEST} \s/+(.+?)_(desktop|mobile)\.html[\s?] [NC]
-RewriteCond %1 !^index$ [NC]
-RewriteRule ^(.+?)_(desktop|mobile)\.html$ /$1 [R=301,L,NE]
+# --- External Redirects: Remove .html from direct requests to _desktop.html or _mobile.html ---
+# If someone types yoursite.com/page_desktop.html, redirect to yoursite.com/page
+# This rule should NOT apply to index_desktop.html or index_mobile.html, as they are targets
+# of your client-side redirect from index.html and not meant to be accessed via a "clean URL" version.
+RewriteCond %{THE_REQUEST} \s/([^/]+?_(?:desktop|mobile))\.html [NC]
+RewriteCond %1 !^index_(?:desktop|mobile)$ [NC]
+RewriteRule ^(.+?_(?:desktop|mobile))\.html$ /$1 [R=301,L,NE]
 
-# --- Internal Rewrites for Clean URLs to Device-Specific Files ---
+# --- Internal Rewrites for Clean URLs (e.g., /about -> /about_desktop.html or /about_mobile.html) ---
 
-# Common conditions for the pagename rewrites:
-# 1. The request is not for an existing file.
+# Condition: The request is not for an existing file
 RewriteCond %{REQUEST_FILENAME} !-f
-# 2. The request is not for an existing directory.
+# Condition: The request is not for an existing directory
 RewriteCond %{REQUEST_FILENAME} !-d
-# 3. The request URI is not the root / or /index
-RewriteCond %{REQUEST_URI} !^/$
-RewriteCond %{REQUEST_URI} !^/index/?$ [NC]
+# Condition: The request is not for the root /, /index, or /index.html (handled by DirectoryIndex and client-side JS)
+RewriteCond %{REQUEST_URI} !^/(index(\.html)?)?$ [NC]
+# Condition: The request is not for index_desktop.html or index_mobile.html directly
+RewriteCond %{REQUEST_URI} !^/index_(desktop|mobile)\.html$ [NC]
+
+# Capture the requested pagename (e.g., "contact" from "/contact")
+RewriteCond %{REQUEST_URI} ^/([^/.]+)$
+# Let's call the captured pagename %{ENV:PAGE_NAME} for clarity in subsequent conditions
+RewriteRule ^([^/.]+)$ - [E=PAGE_NAME:$1]
 
 # Rule 1: MOBILE user, try to serve <pagename>_mobile.html
-# Check User Agent for mobile
 RewriteCond %{HTTP_USER_AGENT} (android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|blazer|compal|elaine|fennec|hiptop|iemobile|ip(hone|od)|iris|kindle|lge\ |maemo|midp|mmp|mobile.+firefox|netfront|opera\ m(ob|in)i|palm(\ os)?|phone|p(ixi|rim)|plucker|pocket|psp|series(4|6)0|symbian|treo|up\.(browser|link)|vodafone|wap|windows\ ce|xda|xiino|android|ipad|playbook|silk [NC]
-# Capture the pagename (e.g., "contact" from "/contact") into %1
-RewriteCond %{REQUEST_URI} ^/([^/.]+)$
-# Check if <pagename>_mobile.html exists using the captured %1
-RewriteCond %{DOCUMENT_ROOT}/%1_mobile.html -f
-RewriteRule ^([^/.]+)$ $1_mobile.html [L]
+RewriteCond %{DOCUMENT_ROOT}/%{ENV:PAGE_NAME}_mobile.html -f
+RewriteRule ^([^/.]+)$ %{ENV:PAGE_NAME}_mobile.html [L]
 
 # Rule 2: MOBILE user, fallback to <pagename>_desktop.html if _mobile.html DNE
 RewriteCond %{HTTP_USER_AGENT} (android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|blazer|compal|elaine|fennec|hiptop|iemobile|ip(hone|od)|iris|kindle|lge\ |maemo|midp|mmp|mobile.+firefox|netfront|opera\ m(ob|in)i|palm(\ os)?|phone|p(ixi|rim)|plucker|pocket|psp|series(4|6)0|symbian|treo|up\.(browser|link)|vodafone|wap|windows\ ce|xda|xiino|android|ipad|playbook|silk [NC]
-RewriteCond %{REQUEST_URI} ^/([^/.]+)$ # Capture %1
-RewriteCond %{DOCUMENT_ROOT}/%1_mobile.html !-f      # Mobile version DNE
-RewriteCond %{DOCUMENT_ROOT}/%1_desktop.html -f    # Desktop version exists
-RewriteRule ^([^/.]+)$ $1_desktop.html [L]
+RewriteCond %{DOCUMENT_ROOT}/%{ENV:PAGE_NAME}_mobile.html !-f
+RewriteCond %{DOCUMENT_ROOT}/%{ENV:PAGE_NAME}_desktop.html -f
+RewriteRule ^([^/.]+)$ %{ENV:PAGE_NAME}_desktop.html [L]
 
-# The rules below apply if not a mobile user OR if mobile rules above didn't match and lead to [L]
-# Common conditions re-stated for clarity and to ensure they apply before this next set of rules
-RewriteCond %{REQUEST_FILENAME} !-f
-RewriteCond %{REQUEST_FILENAME} !-d
-RewriteCond %{REQUEST_URI} !^/$
-RewriteCond %{REQUEST_URI} !^/index/?$ [NC]
+# Rule 3: DESKTOP user (or non-mobile fallback), try to serve <pagename>_desktop.html
+# This rule will be reached if the user is not mobile OR if they are mobile but the mobile-specific rules above didn't find a file and didn't use [L]
+RewriteCond %{DOCUMENT_ROOT}/%{ENV:PAGE_NAME}_desktop.html -f
+RewriteRule ^([^/.]+)$ %{ENV:PAGE_NAME}_desktop.html [L]
 
-# Rule 3: DESKTOP user (or fallback), try to serve <pagename>_desktop.html
-RewriteCond %{REQUEST_URI} ^/([^/.]+)$ # Capture %1
-RewriteCond %{DOCUMENT_ROOT}/%1_desktop.html -f
-RewriteRule ^([^/.]+)$ $1_desktop.html [L]
-
-# Rule 4: DESKTOP user (or fallback), fallback to <pagename>_mobile.html if _desktop.html DNE
-RewriteCond %{REQUEST_URI} ^/([^/.]+)$ # Capture %1
-RewriteCond %{DOCUMENT_ROOT}/%1_desktop.html !-f   # Desktop version DNE
-RewriteCond %{DOCUMENT_ROOT}/%1_mobile.html -f     # Mobile version exists
-RewriteRule ^([^/.]+)$ $1_mobile.html [L]
+# Rule 4: DESKTOP user (or non-mobile fallback), fallback to <pagename>_mobile.html if _desktop.html DNE
+RewriteCond %{DOCUMENT_ROOT}/%{ENV:PAGE_NAME}_desktop.html !-f
+RewriteCond %{DOCUMENT_ROOT}/%{ENV:PAGE_NAME}_mobile.html -f
+RewriteRule ^([^/.]+)$ %{ENV:PAGE_NAME}_mobile.html [L]
