@@ -60,7 +60,7 @@ window.addEventListener('load', initPageLoad);
 window.initScrollAnimations = function() {
     const animatedElements = document.querySelectorAll('.animate-on-scroll');
     if (!animatedElements.length || !('IntersectionObserver' in window)) return;
-    const observerOptions = { root: null, rootMargin: '0px 0px -10% 0px', threshold: 0.1 }; // Adjust rootMargin for desktop if needed
+    const observerOptions = { root: null, rootMargin: '0px 0px -10% 0px', threshold: 0.1 };
     const animationObserver = new IntersectionObserver((entries, observer) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
@@ -88,22 +88,19 @@ window.addEventListener('pageshow', (event) => {
     if (event.persisted) {
         if (bodyElement) bodyElement.classList.add('loaded');
         if (mainContent) {
-            mainContent.style.transition = 'none'; // Disable transition for immediate show
+            mainContent.style.transition = 'none';
             mainContent.style.opacity = '1';
             mainContent.style.visibility = 'visible';
-            setTimeout(() => { // Re-enable transition after a tick
+            setTimeout(() => {
                 mainContent.style.transition = `opacity ${PAGE_TRANSITION_ANIMATION_MS / 1000}s ease-out`;
             }, 50);
         }
-        if (typeof window.initScrollAnimations === 'function') setTimeout(window.initScrollAnimations, 100); // Re-run animations
+        if (typeof window.initScrollAnimations === 'function') setTimeout(window.initScrollAnimations, 100);
     } else {
-        // For non-persisted (normal) loads, initPageLoad handles visibility.
-        // This ensures content isn't prematurely shown if initPageLoad is still managing it.
         if (mainContent && splashLoader && !splashLoader.classList.contains('hidden')) {
             mainContent.style.visibility = 'hidden';
             mainContent.style.opacity = '0';
         } else if (mainContent && mainContent.style.visibility === 'hidden') {
-            // This state implies initPageLoad might not have run or completed fully
             mainContent.style.visibility = 'visible';
             mainContent.style.opacity = '1';
         }
@@ -124,25 +121,25 @@ document.addEventListener('DOMContentLoaded', () => {
         internalLinks.forEach(link => {
             link.addEventListener('click', (e) => {
                 const dest = link.getAttribute('href');
-                if (!dest || dest.startsWith('javascript:')) return; // Ignore JS links
-                try { // Check if it's an external link
+                if (!dest || dest.startsWith('javascript:')) return;
+                try {
                     const curHost = window.location.hostname;
                     const destUrl = new URL(dest, window.location.href);
-                    if (destUrl.hostname !== curHost && destUrl.hostname !== "") return; // Allow relative paths (hostname will be "")
-                } catch (error) { return; } // Invalid URL, let browser handle
+                    if (destUrl.hostname !== curHost && destUrl.hostname !== "") return;
+                } catch (error) { return; }
                 
-                const curPath = window.location.pathname.replace(/\/$/, ""); // Normalize current path
+                const curPath = window.location.pathname.replace(/\/$/, "");
                 const destPathObj = new URL(dest, window.location.href);
-                const destPath = destPathObj.pathname.replace(/\/$/, ""); // Normalize destination path
+                const destPath = destPathObj.pathname.replace(/\/$/, "");
 
-                if (destPath === curPath && destPathObj.hash) return; // Allow same-page anchor links
-                if (destPath === curPath && !destPathObj.hash) { e.preventDefault(); return; } // Prevent reload of same page without hash
+                if (destPath === curPath && destPathObj.hash) return;
+                if (destPath === curPath && !destPathObj.hash) { e.preventDefault(); return; }
 
                 e.preventDefault();
                 mainContent.style.transition = `opacity ${PAGE_TRANSITION_ANIMATION_MS / 1000}s ease-out`;
                 mainContent.style.opacity = '0';
                 transitionLoader.classList.remove('hidden');
-                setTimeout(() => { window.location.href = dest; }, PAGE_TRANSITION_ANIMATION_MS + 50); // Add a small buffer
+                setTimeout(() => { window.location.href = dest; }, PAGE_TRANSITION_ANIMATION_MS + 50);
             });
         });
     }
@@ -152,7 +149,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function updateFooterYear() {
         const yearSpan = document.getElementById('current-year');
         if (yearSpan) {
-            yearSpan.textContent = new Date().getFullYear(); // Dynamically set current year
+            yearSpan.textContent = new Date().getFullYear();
         }
     }
     updateFooterYear();
@@ -160,7 +157,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // 3. Scroll Animations
     if (typeof window.initScrollAnimations === 'function') window.initScrollAnimations();
 
-    // 4. Smooth Scroll (if anchors are used)
+    // 4. Smooth Scroll
     function initSmoothScroll() {
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
@@ -171,10 +168,9 @@ document.addEventListener('DOMContentLoaded', () => {
                         if (targetElement) {
                             e.preventDefault();
                             const header = document.getElementById('site-header');
-                            // Use desktop header height from CSS variable, fallback if not set
                             const headerOffset = header ? header.offsetHeight : (parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--header-height-desktop').replace('px', '')) || 75);
                             const elementPosition = targetElement.getBoundingClientRect().top;
-                            const offsetPosition = elementPosition + window.pageYOffset - headerOffset - 20; // 20px buffer
+                            const offsetPosition = elementPosition + window.pageYOffset - headerOffset - 20;
                             window.scrollTo({ top: offsetPosition, behavior: "smooth" });
                         }
                     } catch (error) { console.warn(`Smooth scroll target not found or invalid: ${targetId}`); }
@@ -184,42 +180,36 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     initSmoothScroll();
 
-    // 5. Sticky Header (Desktop often doesn't hide header, but keeping logic if needed)
+    // 5. Sticky Header Behavior
     function initStickyHeaderBehavior() {
         const header = document.getElementById('site-header');
         if (!header) return;
-        // Option: Disable hide-on-scroll for desktop, or adjust behavior
-        // For example, some desktop headers change style (e.g., shrink, different background) on scroll.
-        // The current logic hides it completely.
+
         let lastScrollTop = 0;
-        const delta = 10; // Scroll threshold
+        const delta = 10; 
         const headerHeight = header.offsetHeight;
-        let isHidden = false;
 
         const handleScroll = debounce(() => {
             const nowST = window.pageYOffset || document.documentElement.scrollTop;
-            if (Math.abs(lastScrollTop - nowST) <= delta) return;
 
-            if (nowST > lastScrollTop && nowST > headerHeight) { // Scrolling down
-                if (!isHidden) {
-                    // header.style.transform = `translateY(-${headerHeight}px)`; // Hide
-                    // isHidden = true;
-                    // OR: Add class for "scrolled" state
-                    header.classList.add('scrolled-down');
-                }
-            } else { // Scrolling up or at top
-                if (isHidden || nowST <= headerHeight / 2) {
-                    // header.style.transform = 'translateY(0)'; // Show
-                    // isHidden = false;
-                    header.classList.remove('scrolled-down');
-                }
+            if (Math.abs(lastScrollTop - nowST) <= delta && nowST > 0) return;
+
+            if (nowST > lastScrollTop && nowST > headerHeight) {
+                header.classList.add('scrolled-down');
+            } else {
+                 if (nowST <= lastScrollTop || nowST <= headerHeight / 2 ) {
+                     header.classList.remove('scrolled-down');
+                 }
             }
             lastScrollTop = nowST <= 0 ? 0 : nowST;
-        }, 30); // Debounce time
+        }, 30); 
 
         window.addEventListener('scroll', handleScroll, { passive: true });
+        if (window.pageYOffset <= headerHeight / 2) {
+             header.classList.remove('scrolled-down');
+        }
     }
-    initStickyHeaderBehavior(); // Call if you want this behavior on desktop
+    initStickyHeaderBehavior();
 
     // 6. Phone Number Formatting
     function initPhoneFormatting() {
@@ -227,25 +217,17 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!phoneInput) return;
 
         phoneInput.addEventListener('input', (e) => {
-            let input = e.target.value.replace(/\D/g, ''); // Remove all non-digits
-            
+            let input = e.target.value.replace(/\D/g, '');
             let formattedInput = '';
-            if (input.length > 0) {
-                formattedInput = input.substring(0, 3);
-            }
-            if (input.length > 3) {
-                formattedInput += '-' + input.substring(3, 6);
-            }
-            if (input.length > 6) {
-                formattedInput += '-' + input.substring(6, 10); // Max 10 digits for XXX-XXX-XXXX
-            }
-            
+            if (input.length > 0) formattedInput = input.substring(0, 3);
+            if (input.length > 3) formattedInput += '-' + input.substring(3, 6);
+            if (input.length > 6) formattedInput += '-' + input.substring(6, 10);
             e.target.value = formattedInput;
         });
     }
     initPhoneFormatting();
 
-    // 7. Contact Form Submission Handling
+    // 7. Contact Form Submission Handling & Live Validation
     function initContactForm() {
         const form = document.getElementById('contact-form');
         const thankYouMessageDiv = document.getElementById('thank-you-message');
@@ -256,39 +238,94 @@ document.addEventListener('DOMContentLoaded', () => {
         const submitButtonTextSpan = submitButton ? submitButton.querySelector('.submit-button-text') : null;
         const formErrorMessageDiv = document.getElementById('form-error-message');
         const thankYouBackendMessage = document.getElementById('thank-you-backend-message');
+        const messageTextarea = document.getElementById('contact-message');
+        const charCountDisplay = document.getElementById('message-char-count');
 
-        if (!form || !thankYouMessageDiv || !userNameSpan || !nameInput || !resetButton || !submitButton || !submitButtonTextSpan || !formErrorMessageDiv || !thankYouBackendMessage) {
-            console.warn('Contact form elements not found for desktop. Submission handling will not work.');
+        if (!form || !thankYouMessageDiv || !userNameSpan || !nameInput || !resetButton || !submitButton || !submitButtonTextSpan || !formErrorMessageDiv || !thankYouBackendMessage || !messageTextarea || !charCountDisplay) {
+            console.warn('Contact form elements not found. Submission/validation/char count might not work fully.');
             return;
         }
 
+        // Character Count for Textarea
+        if (messageTextarea && charCountDisplay) {
+            const maxLength = parseInt(messageTextarea.getAttribute('maxlength'), 10);
+            const updateCharCount = () => {
+                const currentLength = messageTextarea.value.length;
+                charCountDisplay.textContent = `${currentLength}/${maxLength}`;
+                if (currentLength > maxLength) {
+                    charCountDisplay.style.color = 'red';
+                     messageTextarea.classList.add('input-error'); // Also mark textarea as error if over limit
+                } else if (currentLength > maxLength * 0.9) {
+                    charCountDisplay.style.color = 'orange';
+                } else {
+                    charCountDisplay.style.color = 'var(--color-text-medium)';
+                    // Optionally remove error class if within limits, but liveValidateInput will handle this too
+                }
+            };
+            messageTextarea.addEventListener('input', updateCharCount);
+            updateCharCount(); // Initial count
+        }
+
+        // Live Input Validation Logic
+        function liveValidateInput(inputElement) {
+            inputElement.classList.remove('input-error', 'input-valid');
+            let isValid = true;
+            const value = inputElement.value.trim();
+
+            if (inputElement.required && !value) isValid = false;
+            if (inputElement.type === 'email' && value && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) isValid = false;
+            if (inputElement.tagName === 'SELECT' && inputElement.required && !value) isValid = false;
+            if (inputElement.tagName === 'TEXTAREA' && inputElement.maxLength > 0 && value.length > inputElement.maxLength) isValid = false;
+            
+            const isTouched = inputElement.dataset.touched === "true";
+
+            if (!value && !inputElement.required) return; // Optional and empty, no validation classes
+
+            if (isTouched || form.dataset.submitted === "true") { // Show validation if touched OR form submitted
+                if (isValid && value) { // Only show valid if there's a value and it's valid
+                     inputElement.classList.add('input-valid');
+                } else if (!isValid && (inputElement.required || value)) { // Show error if invalid & (required OR has a value)
+                     inputElement.classList.add('input-error');
+                }
+            }
+        }
+
+        const formInputsForLiveValidation = form.querySelectorAll('input, select, textarea');
+        formInputsForLiveValidation.forEach(input => {
+            input.addEventListener('blur', () => {
+                input.dataset.touched = "true";
+                liveValidateInput(input);
+            });
+            // For instant feedback on some types like email or textarea after char count change
+            if (input.type === 'email' || input.tagName === 'TEXTAREA') {
+                input.addEventListener('input', () => {
+                    // No need to set touched here, blur handles that. Input event is for immediate re-validation.
+                    liveValidateInput(input);
+                });
+            }
+        });
+
         form.addEventListener('submit', async function(event) {
             event.preventDefault();
+            form.dataset.submitted = "true"; // Mark form as submitted for validation logic
             
             formErrorMessageDiv.style.display = 'none';
             formErrorMessageDiv.textContent = '';
-            form.querySelectorAll('.input-error').forEach(el => el.classList.remove('input-error'));
 
-            let isValid = true;
-            const requiredFields = form.querySelectorAll('[required]');
-            requiredFields.forEach(input => {
-                if (!input.value.trim()) {
-                    isValid = false;
-                    input.classList.add('input-error');
-                } else {
-                    input.classList.remove('input-error');
-                }
-                if (input.type === 'email' && input.value.trim() && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(input.value.trim())) {
-                    isValid = false;
-                    input.classList.add('input-error');
+            let isFormFullyValid = true;
+            formInputsForLiveValidation.forEach(input => {
+                liveValidateInput(input); // Run validation for all fields
+                if (input.classList.contains('input-error')) {
+                    isFormFullyValid = false;
                 }
             });
 
-            if (!isValid) {
+            if (!isFormFullyValid) {
                 formErrorMessageDiv.textContent = 'Please fill out all highlighted required fields correctly.';
                 formErrorMessageDiv.style.display = 'block';
-                const firstInvalid = form.querySelector('.input-error, [required]:invalid, [required]:placeholder-shown');
-                if(firstInvalid) firstInvalid.focus();
+                const firstInvalid = form.querySelector('.input-error');
+                if (firstInvalid) firstInvalid.focus();
+                delete form.dataset.submitted; // Reset submitted flag after handling
                 return;
             }
 
@@ -308,39 +345,26 @@ document.addEventListener('DOMContentLoaded', () => {
             try {
                 const response = await fetch(PHP_SCRIPT_URL, {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Accept': 'application/json'
-                    },
+                    headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
                     body: JSON.stringify(formData)
                 });
-
                 const result = await response.json();
 
                 if (response.ok && result.status === 'success') {
-                    if (nameInput.value.trim()) {
-                        userNameSpan.textContent = nameInput.value.trim().split(' ')[0];
-                    } else {
-                        userNameSpan.textContent = "Valued Client";
-                    }
+                    userNameSpan.textContent = nameInput.value.trim() ? nameInput.value.trim().split(' ')[0] : "Valued Client";
                     thankYouBackendMessage.textContent = result.message || 'Your message has been successfully sent.';
                     form.style.display = 'none';
                     thankYouMessageDiv.style.display = 'block';
-                    setTimeout(() => {
-                        thankYouMessageDiv.classList.add('visible');
-                    }, 10);
-
+                    setTimeout(() => thankYouMessageDiv.classList.add('visible'), 10);
                     const headerHeight = document.getElementById('site-header')?.offsetHeight || 75;
                     const messageTop = thankYouMessageDiv.getBoundingClientRect().top + window.pageYOffset - headerHeight - 20;
                     window.scrollTo({ top: messageTop, behavior: 'smooth' });
                 } else {
                     formErrorMessageDiv.textContent = result.message || 'An unexpected error occurred. Please try again.';
                     formErrorMessageDiv.style.display = 'block';
-                     // Scroll to the error message if it's out of view
                     const errorMsgTop = formErrorMessageDiv.getBoundingClientRect().top + window.pageYOffset - (document.getElementById('site-header')?.offsetHeight || 75) - 20;
                     window.scrollTo({ top: errorMsgTop, behavior: 'smooth' });
                 }
-
             } catch (error) {
                 console.error('Form submission error:', error);
                 formErrorMessageDiv.textContent = 'A network error occurred. Please check your connection and try again.';
@@ -351,6 +375,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 submitButton.disabled = false;
                 submitButtonTextSpan.textContent = 'Send Inquiry';
                 submitButton.querySelector('i').className = originalButtonIconClass;
+                delete form.dataset.submitted; // Reset submitted flag
             }
         });
 
@@ -358,11 +383,20 @@ document.addEventListener('DOMContentLoaded', () => {
             thankYouMessageDiv.classList.remove('visible');
             thankYouMessageDiv.style.display = 'none';
             form.reset(); 
-            form.querySelectorAll('.input-error').forEach(el => el.classList.remove('input-error'));
+            formInputsForLiveValidation.forEach(el => {
+                el.classList.remove('input-error', 'input-valid');
+                delete el.dataset.touched;
+            });
+            delete form.dataset.submitted;
             formErrorMessageDiv.style.display = 'none';
             formErrorMessageDiv.textContent = '';
             form.style.display = 'block';
-            if(nameInput) nameInput.focus();
+            if (charCountDisplay && messageTextarea) { // Reset char count
+                 const maxLength = parseInt(messageTextarea.getAttribute('maxlength'), 10);
+                 charCountDisplay.textContent = `0/${maxLength}`;
+                 charCountDisplay.style.color = 'var(--color-text-medium)';
+            }
+            if (nameInput) nameInput.focus();
         });
     }
     initContactForm();
